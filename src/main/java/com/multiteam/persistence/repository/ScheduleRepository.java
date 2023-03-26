@@ -1,6 +1,6 @@
 package com.multiteam.persistence.repository;
 
-import com.multiteam.persistence.Schedule;
+import com.multiteam.persistence.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

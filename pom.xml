@@ -10,11 +10,10 @@
 	</parent>
 	<groupId>com.multiteam</groupId>
 	<artifactId>multiteam</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>multiteam</name>
-	<description>Demo project for Spring Boot</description>
+	<version>0.0.1</version>
 	<properties>
 		<java.version>17</java.version>
+		<liquibase-core.version>4.20.0</liquibase-core.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -38,6 +37,11 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>${liquibase-core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

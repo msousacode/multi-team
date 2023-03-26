@@ -1,14 +1,15 @@
-package com.multiteam.persistence.enuns;
+package com.multiteam.persistence.types;
 
-public enum SexEnuns {
+public enum SexType {
 
-    FAMALE("F", "Feminino"),
-    MALE("M", "Masculino");
+    FEMININO("F", "Feminino"),
+    MASCULINO("M", "Masculino"),
+    NAO_DECLARADO("M", "Não declarado");
 
     private final String description;
     private final String acronym;
 
-    SexEnuns(String description, String acronym) {
+    SexType(String description, String acronym) {
         this.description = description;
         this.acronym = acronym;
     }

@@ -1,46 +1,28 @@
-package com.multiteam.persistence;
+package com.multiteam.persistence.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
-@AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
-public class User implements UserDetails {
+@Table(name = "credentials")
+public record Credential(
 
-    public User() {
-    }
+        @Id
+        @GeneratedValue
+        @Column(name = "credential_id")
+        UUID id,
 
-    @Id
-    @GeneratedValue
-    @Column(name = "user_id")
-    private UUID id;
+        @Column(name = "username")
+        String username,
 
-    @Email(message = "invalid email format")
-    @Column(name = "username")
-    private String username;
+        @Column(name = "password")
+        String password
 
-    @NotEmpty(message = "invalid name format")
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "password")
-    @NotEmpty(message = "invalid password format")
-    private String password;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
+) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
