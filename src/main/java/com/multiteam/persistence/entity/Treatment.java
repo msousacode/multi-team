@@ -5,6 +5,7 @@ import com.multiteam.persistence.types.TreatmentType;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -38,8 +39,16 @@ public record Treatment(
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "patient_id", referencedColumnName = "patient_id")
-        Patient patient
+        Patient patient,
+
+        @ManyToMany
+                @JoinTable(name = "treatments_guests",
+                joinColumns = @JoinColumn(name = "treatment_id"),
+                inverseJoinColumns = @JoinColumn(name = "guest_id"))
+        Set<Guest> guests,
+
+        @OneToMany(mappedBy = "treatment")
+        Set<TreatmentProfessional> professionals
 ) {
 }
-
 

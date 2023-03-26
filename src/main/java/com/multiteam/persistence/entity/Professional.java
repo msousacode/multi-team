@@ -4,6 +4,7 @@ import com.multiteam.persistence.types.SexType;
 import com.multiteam.persistence.types.SpecialtyType;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -36,7 +37,10 @@ public record Professional(
 
         @OneToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "credential_id")
-        Credential credential
+        Credential credential,
+
+        @OneToMany(mappedBy = "professional")
+        Set<TreatmentProfessional> professionals
 ) {
 }
 

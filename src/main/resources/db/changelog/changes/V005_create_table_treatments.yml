@@ -45,9 +45,9 @@ databaseChangeLog:
                   type: uuid
                   constraints:
                     nullable: false
-              - addForeignKeyConstraint:
-                  baseColumnNames: patient_id
-                  baseTableName: patients
-                  constraintName: fk_patients_treatments
-                  referencedColumnNames: treatment_id
-                  referencedTableName: treatments
+        - addForeignKeyConstraint:
+            baseColumnNames: patient_id
+            baseTableName: patients
+            constraintName: fk_patients_treatments
+            referencedColumnNames: treatment_id
+            referencedTableName: treatments

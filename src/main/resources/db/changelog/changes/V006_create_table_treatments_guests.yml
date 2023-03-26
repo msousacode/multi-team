@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: v006
+      author: michael
+      changes:
+        - createTable:
+            tableName: treatments_guests
+            columns:
+              - column:
+                  name: treatment_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: guest_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: treatment_id
+            baseTableName: treatments_guests
+            constraintName: fk_treatments_guests_treatments
+            referencedColumnNames: treatment_id
+            referencedTableName: treatments
+        - addForeignKeyConstraint:
+            baseColumnNames: guest_id
+            baseTableName: treatments_guests
+            constraintName: fk_treatments_guests_guests
+            referencedColumnNames: guest_id
+            referencedTableName: guests

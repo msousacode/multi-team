@@ -1,13 +1,13 @@
 databaseChangeLog:
   - changeSet:
-      id: V003
+      id: V004
       author: michael
       changes:
         - createTable:
-            tableName: professionals
+            tableName: guests
             columns:
               - column:
-                  name: professional_id
+                  name: guest_id
                   type: uuid
                   defaultValue: uuid_generate_v4()
                   constraints:
@@ -24,21 +24,18 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: specialty
+                  name: relationship
                   type: varchar(100)
                   constraints:
                     nullable: false
               - column:
                   name: cell_phone
                   type: varchar(15)
-                  constraints:
-                    nullable: false
               - column:
                   name: email
                   type: varchar(100)
                   constraints:
                     nullable: false
-                    unique: true
               - column:
                   name: active
                   type: boolean
@@ -50,9 +47,9 @@ databaseChangeLog:
                   type: uuid
                   constraints:
                     nullable: false
-              - addForeignKeyConstraint:
-                  baseColumnNames: professional_id
-                  baseTableName: professionals
-                  constraintName: fk_professionals_credentials
-                  referencedColumnNames: credential_id
-                  referencedTableName: credentials
+        - addForeignKeyConstraint:
+            baseColumnNames: credential_id
+            baseTableName: guests
+            constraintName: fk_guests_credentials
+            referencedColumnNames: credential_id
+            referencedTableName: credentials

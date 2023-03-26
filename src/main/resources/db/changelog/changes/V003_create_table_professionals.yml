@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: V004
+      id: V003
       author: michael
       changes:
         - createTable:
@@ -50,9 +50,9 @@ databaseChangeLog:
                   type: uuid
                   constraints:
                     nullable: false
-              - addForeignKeyConstraint:
-                  baseColumnNames: professional_id
-                  baseTableName: professionals
-                  constraintName: fk_professionals_credentials
-                  referencedColumnNames: credential_id
-                  referencedTableName: credentials
+        - addForeignKeyConstraint:
+            baseColumnNames: credential_id
+            baseTableName: professionals
+            constraintName: fk_professionals_credentials
+            referencedColumnNames: credential_id
+            referencedTableName: credentials

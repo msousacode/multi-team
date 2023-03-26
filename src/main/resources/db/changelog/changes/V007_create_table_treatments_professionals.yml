@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: v007
+      author: michael
+      changes:
+        - createTable:
+            tableName: treatments_professionals
+            columns:
+              - column:
+                  name: treatment_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: professional_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: annotation
+                  type: varchar(500)
+              - column:
+                  name: situation_type
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: treatment_id
+            baseTableName: treatments_professionals
+            constraintName: fk_treatments_professionals_treatments
+            referencedColumnNames: treatment_id
+            referencedTableName: treatments
+        - addForeignKeyConstraint:
+            baseColumnNames: professional_id
+            baseTableName: treatments_professionals
+            constraintName: fk_treatments_professionals
+            referencedColumnNames: professional_id
+            referencedTableName: professionals
