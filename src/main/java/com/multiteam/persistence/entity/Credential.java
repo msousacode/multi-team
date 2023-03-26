@@ -2,27 +2,46 @@ package com.multiteam.persistence.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "credentials")
-public record Credential(
+public class Credential implements UserDetails {
 
-        @Id
-        @GeneratedValue
-        @Column(name = "credential_id")
-        UUID id,
+    @Id
+    @GeneratedValue
+    @Column(name = "credential_id")
+    private UUID id;
 
-        @Column(name = "username")
-        String username,
+    @Column(name = "username")
+    private String username;
 
-        @Column(name = "password")
-        String password
+    @Column(name = "password")
+    private String password;
 
-) implements UserDetails {
+    public Credential(String username, String password) {
+        if(username.isEmpty())
+            throw new IllegalArgumentException("username not be empty");
+
+        Objects.requireNonNull(username, "username not be null");
+        Objects.requireNonNull(password, "username not be null");
+        this.username = username;
+        this.password = password;
+    }
+
+    public Credential(UUID id, String username) {
+        this.id = id;
+        this.username = username;
+    }
+
+    public UUID getId() {
+        return id;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -36,7 +55,7 @@ public record Credential(
 
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override
