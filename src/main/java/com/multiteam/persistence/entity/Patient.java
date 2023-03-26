@@ -35,10 +35,7 @@ public record Patient(
         LocalDate internalObservation,
 
         @Column(name = "external_observation")
-        LocalDate externalObservation,
-
-        @OneToOne
-        Credential credential
+        LocalDate externalObservation
 ) {
 }
 

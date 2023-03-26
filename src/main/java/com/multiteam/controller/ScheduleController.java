@@ -1,4 +1,4 @@
-package com.multiteam.web.controller;
+package com.multiteam.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

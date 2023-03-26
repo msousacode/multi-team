@@ -34,7 +34,8 @@ public record Professional(
         @Column(name = "active")
         boolean active,
 
-        @OneToOne
+        @OneToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "credential_id")
         Credential credential
 ) {
 }

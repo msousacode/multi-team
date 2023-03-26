@@ -26,16 +26,17 @@ public record Guest(
         @Enumerated(EnumType.STRING)
         RelationshipType relationship,
 
-        @Column(name = "age")
-        SexType age,
+        @Column(name = "cell_phone")
+        String cellPhone,
 
-        @Column(name = "internal_observation")
-        LocalDate internalObservation,
+        @Column(name = "email")
+        String email,
 
-        @Column(name = "external_observation")
-        LocalDate externalObservation,
+        @Column(name = "active")
+        boolean active,
 
-        @OneToOne
+        @OneToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "credential_id")
         Credential credential
 ) {
 }

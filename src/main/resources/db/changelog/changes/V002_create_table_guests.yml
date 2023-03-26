@@ -1,45 +1,43 @@
 databaseChangeLog:
   - changeSet:
-      id: V001
+      id: V002
       author: michael
       changes:
-        - sql:
-            sql: CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; #Enable uuid-ossp module to use the function uuid_generate_v4()
         - createTable:
-            tableName: users
+            tableName: patients
             columns:
               - column:
-                  name: user_id
+                  name: patient_id
                   type: uuid
                   defaultValue: uuid_generate_v4()
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: username
+                  name: name
                   type: varchar(100)
                   constraints:
                     nullable: false
-                    unique: true
               - column:
-                  name: created_date
-                  type: timestamp
-                  constraints:
-                    updatable: false
-              - column:
-                  name: removed_date
-                  type: timestamp
-                  constraints:
-                    updatable: false
-              - column:
-                  name: updated_date
-                  type: timestamp
-              - column:
-                  name: created_by
+                  name: middle_name
                   type: varchar(100)
+                  constraints:
+                    nullable: false
               - column:
-                  name: modified_by
-                  type: varchar(100)
+                  name: sex
+                  type: varchar(15)
+              - column:
+                  name: age
+                  type: smallint
+              - column:
+                  name: months
+                  type: smallint
+              - column:
+                  name: internal_observation
+                  type: text
+              - column:
+                  name: external_observation
+                  type: text
               - column:
                   name: active
                   type: boolean

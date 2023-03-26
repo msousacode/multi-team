@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: V005
+      author: michael
+      changes:
+        - createTable:
+            tableName: treatments
+            columns:
+              - column:
+                  name: treatment_id
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(500)
+              - column:
+                  name: treatment_type
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: situation
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: initial_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: final_date
+                  type: timestamp
+              - column:
+                  name: active
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValue: "true"
+              - column:
+                  name: patient_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - addForeignKeyConstraint:
+                  baseColumnNames: patient_id
+                  baseTableName: patients
+                  constraintName: fk_patients_treatments
+                  referencedColumnNames: treatment_id
+                  referencedTableName: treatments

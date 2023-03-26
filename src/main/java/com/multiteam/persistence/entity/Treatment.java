@@ -34,7 +34,11 @@ public record Treatment(
         LocalDate finalDate,
 
         @Column(name = "active")
-        boolean active
+        boolean active,
+
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "patient_id", referencedColumnName = "patient_id")
+        Patient patient
 ) {
 }
 
