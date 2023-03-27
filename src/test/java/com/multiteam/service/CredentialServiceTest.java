@@ -20,7 +20,7 @@ class CredentialServiceTest {
     private CredentialService credentialService;
 
     @Test
-    @DisplayName("Deve criar uma nova credencial, então retornará sucesso.")
+    @DisplayName("deve criar uma nova credencial, então retornará sucesso.")
     void shouldCreateNewCredential_thenSuccess() {
 
         var email = UUID.randomUUID().toString().substring(0, 5) + "@email.com";
@@ -35,7 +35,7 @@ class CredentialServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar falha quando tentar criar nova credencidal sem o username.")
+    @DisplayName("deve retornar falha quando tentar criar nova credencidal sem o username.")
     void whenToTryCreateCredentialWithoutUsername_thenIllegalArgumentException() {
         var email = "";
         var password = "12345678";

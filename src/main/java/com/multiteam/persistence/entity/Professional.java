@@ -48,7 +48,7 @@ public class Professional {
 
     public Professional() {}
 
-    public Professional(Builder builder) {
+    private Professional(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
         this.middleName = builder.middleName;

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ClinicService {
@@ -34,5 +35,9 @@ public class ClinicService {
 
     public List<Clinic> getAll() {
         return clinicRespository.findAll();
+    }
+
+    public Clinic findById(UUID clinicId) {
+        return clinicRespository.findById(clinicId).orElseThrow(() -> null);//TODO criar a exception personalizada
     }
 }

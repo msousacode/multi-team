@@ -42,6 +42,8 @@ public class Clinic {
     @Column(name = "removed_date")
     private LocalDateTime removedDate;
 
+    public Clinic() {}
+
     public Clinic(Builder builder) {
         this.clinicName = builder.clinicName;
         this.cpfCnpj = builder.cpfCnpj;

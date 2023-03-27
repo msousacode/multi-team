@@ -16,19 +16,25 @@ class ProfessionalServiceTest {
     @Autowired
     private ProfessionalService professionalService;
 
+    @Autowired
+    private ClinicService clinicService;
+
     @Test
     @DisplayName("deve criar um novo profissonal e retornar sucesso")
     void shouldCreateNewProfessional_thenSuccess() {
 
-        String name = UUID.randomUUID().toString().substring(0, 5);
-        String middleName = UUID.randomUUID().toString().substring(0, 5);
-        SpecialtyType specialty = SpecialtyType.FONOAUDIOLOGIA;
-        String cellPhone = UUID.randomUUID().toString().substring(0, 5);
-        String email = UUID.randomUUID().toString().substring(0, 5) + "@email.com";
+        var clinicDefault = UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2");
 
-        var professional = new Professional.Builder(null, name, middleName, specialty, cellPhone, email, true, null).build();
+        var name = UUID.randomUUID().toString().substring(0, 5);
+        var middleName = UUID.randomUUID().toString().substring(0, 5);
+        var specialty = SpecialtyType.FONOAUDIOLOGIA;
+        var cellPhone = UUID.randomUUID().toString().substring(0, 5);
+        var email = UUID.randomUUID().toString().substring(0, 5) + "@email.com";
+        var clinic = clinicService.findById(clinicDefault);
 
-        var result = professionalService.createProfessional(professional);
+        var professional = new Professional.Builder(null, name, middleName, specialty, cellPhone, email, true, clinic).build();
+
+        var result = professionalService.createProfessional(professional, clinicDefault);
 
         Assertions.assertNotNull(result.getId());
         Assertions.assertEquals(result.getName(), name);

@@ -37,4 +37,11 @@ class ClinicServiceTest {
         Assertions.assertEquals(result.getEmail(), email);
         Assertions.assertEquals(result.getCpfCnpj(), cpfCnpj);
     }
+
+    @Test
+    @DisplayName("deve retornar todas as clinicas")
+    void shouldRetrieveAllClinics_thenSuccess() {
+        var result = clinicService.getAll();
+        Assertions.assertFalse(result.isEmpty());
+    }
 }
