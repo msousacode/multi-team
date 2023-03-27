@@ -34,7 +34,8 @@ public class ProfessionalService {
                 professional.getSpecialty(),
                 professional.getCellPhone(),
                 professional.getEmail(),
-                professional.isActive())
+                professional.isActive(),
+                null)
                 .credential(credential)
                 .build();
 

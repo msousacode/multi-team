@@ -26,7 +26,7 @@ class ProfessionalServiceTest {
         String cellPhone = UUID.randomUUID().toString().substring(0, 5);
         String email = UUID.randomUUID().toString().substring(0, 5) + "@email.com";
 
-        var professional = new Professional.Builder(null, name, middleName, specialty, cellPhone, email, true).build();
+        var professional = new Professional.Builder(null, name, middleName, specialty, cellPhone, email, true, null).build();
 
         var result = professionalService.createProfessional(professional);
 

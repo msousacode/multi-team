@@ -42,9 +42,7 @@ databaseChangeLog:
               - column:
                   name: active
                   type: boolean
-                  constraints:
-                    nullable: false
-                  defaultValue: "true"
+                  defaultValueBoolean: false
               - column:
                   name: credential_id
                   type: uuid

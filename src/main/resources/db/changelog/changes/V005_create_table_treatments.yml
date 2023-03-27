@@ -37,9 +37,9 @@ databaseChangeLog:
               - column:
                   name: active
                   type: boolean
+                  defaultValueBoolean: true
                   constraints:
                     nullable: false
-                  defaultValue: "true"
               - column:
                   name: patient_id
                   type: uuid

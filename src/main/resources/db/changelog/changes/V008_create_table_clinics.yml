@@ -44,3 +44,10 @@ databaseChangeLog:
               - column:
                   name: removed_date
                   type: timestamp
+              - column:
+                  name: observation
+                  type: varchar(500)
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: false
