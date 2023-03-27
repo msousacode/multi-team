@@ -37,10 +37,10 @@ public class Patient {
         @Column(name = "external_observation")
         LocalDate externalObservation;
 
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "clinic_id")
+        private Clinic clinic;
+
         public Patient() {
         }
-
-        @OneToMany(fetch = FetchType.LAZY)
-        @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id")
-        private Clinic clinic;
 }

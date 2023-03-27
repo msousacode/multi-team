@@ -1,10 +1,8 @@
 package com.multiteam.persistence.entity;
 
 import com.multiteam.persistence.types.RelationshipType;
-import com.multiteam.persistence.types.SexType;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity

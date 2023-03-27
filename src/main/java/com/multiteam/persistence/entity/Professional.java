@@ -57,6 +57,7 @@ public class Professional {
         this.email = builder.email;
         this.credential = builder.credential;
         this.active = builder.active;
+        this.clinic = builder.clinic;
     }
 
     public UUID getId() {
@@ -98,7 +99,7 @@ public class Professional {
     public static class Builder {
 
         //mandatory
-         UUID id;
+        private UUID id;
         private final String name;
         private final String middleName;
         private final SpecialtyType specialty;
@@ -106,6 +107,7 @@ public class Professional {
         private final String email;
         private final boolean active;
         private Credential credential;
+        private final Clinic clinic;
 
         //optional
         private Set<TreatmentProfessional> professionals;
@@ -117,13 +119,15 @@ public class Professional {
                 final SpecialtyType specialty,
                 final String cellPhone,
                 final String email,
-                final boolean active) {
+                final boolean active,
+                final Clinic clinic) {
 
             Assert.notNull(name, "professional name not be null");
             Assert.notNull(middleName, "professional middle name not be null");
             Assert.notNull(specialty, "professional specialty not be null");
             Assert.notNull(cellPhone, "professional cellphone not be null");
             Assert.notNull(email, "professional email not be null");
+            Assert.notNull(clinic, "professional needs to be associated with the clinic");
             Assert.isTrue(!name.isEmpty(), "professional name not be empty");
             Assert.isTrue(!middleName.isEmpty(), "professional middle name not be empty");
             Assert.isTrue(!cellPhone.isEmpty(), "professional cellphone not be empty");
@@ -135,8 +139,8 @@ public class Professional {
             this.specialty = specialty;
             this.cellPhone = cellPhone;
             this.email = email;
-            this.credential = credential;
             this.active = active;
+            this.clinic = clinic;
         }
 
         public Builder credential(Credential credential) {
