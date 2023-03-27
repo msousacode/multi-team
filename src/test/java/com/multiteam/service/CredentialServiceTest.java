@@ -36,7 +36,7 @@ class CredentialServiceTest {
 
     @Test
     @DisplayName("Deve retornar falha quando tentar criar nova credencidal sem o username.")
-    void whenToTryCreateCredentialWithoutUsername_thenIllegalArgumentException() throws Exception {
+    void whenToTryCreateCredentialWithoutUsername_thenIllegalArgumentException() {
         var email = "";
         var password = "12345678";
         Assertions.assertThrows(IllegalArgumentException.class, () -> new Credential(email, password));

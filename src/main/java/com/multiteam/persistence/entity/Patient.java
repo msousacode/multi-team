@@ -8,35 +8,39 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "patients")
-public record Patient(
+public class Patient {
 
         @Id
         @GeneratedValue
         @Column(name = "patient_id")
-        UUID id,
+        private UUID id;
 
         @Column(name = "name")
-        String name,
+        private String name;
 
         @Column(name = "middle_name")
-        String middleName,
+        private String middleName;
 
         @Column(name = "sex")
         @Enumerated(EnumType.STRING)
-        SexType sex,
+        private SexType sex;
 
         @Column(name = "age")
-        Integer age,
+        private Integer age;
 
         @Column(name = "months")
-        Integer months,
+        private Integer months;
 
         @Column(name = "internal_observation")
-        LocalDate internalObservation,
+        private LocalDate internalObservation;
 
         @Column(name = "external_observation")
-        LocalDate externalObservation
-) {
+        LocalDate externalObservation;
+
+        public Patient() {
+        }
+
+        @OneToMany(fetch = FetchType.LAZY)
+        @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id")
+        private Clinic clinic;
 }
-
-

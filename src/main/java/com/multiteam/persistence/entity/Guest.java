@@ -9,36 +9,35 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "guests")
-public record Guest(
+public class Guest {
 
         @Id
         @GeneratedValue
         @Column(name = "guest_id")
-        UUID id,
+        private UUID id;
 
         @Column(name = "name")
-        String name,
+        private String name;
 
         @Column(name = "middle_name")
-        String middleName,
+        private String middleName;
 
         @Column(name = "relationship")
         @Enumerated(EnumType.STRING)
-        RelationshipType relationship,
+        private RelationshipType relationship;
 
         @Column(name = "cell_phone")
-        String cellPhone,
+        private String cellPhone;
 
         @Column(name = "email")
-        String email,
+        private String email;
 
         @Column(name = "active")
-        boolean active,
+        private boolean active;
 
         @OneToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "credential_id")
-        Credential credential
-) {
+        Credential credential;
 }
 
 

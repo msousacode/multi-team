@@ -7,26 +7,27 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "treatment_professional")
-public record TreatmentProfessional(
+public class TreatmentProfessional {
 
         @Id
         @GeneratedValue
         @Column(name = "treatment_professional_id")
-        UUID id,
+        private UUID id;
 
         @ManyToOne
         @JoinColumn(name = "treatment_id")
-        Treatment treatment,
+        private Treatment treatment;
 
         @ManyToOne
         @JoinColumn(name = "professional_id")
-        Professional professional,
+        private Professional professional;
 
         @Column(name = "annotation")
-        String annotation,
+        private String annotation;
 
         @Column(name = "situation_type")
         @Enumerated(EnumType.STRING)
-        SituationType situationType
-) {
+        private SituationType situationType;
+
+        public TreatmentProfessional() {}
 }

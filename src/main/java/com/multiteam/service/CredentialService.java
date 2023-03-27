@@ -17,7 +17,6 @@ public class CredentialService {
 
     @Transactional
     public Credential createCredential(Credential credential) {
-        var result = credentialRepository.save(credential);
-        return new Credential(result.getId(), result.getUsername());
+        return credentialRepository.save(credential);
     }
 }

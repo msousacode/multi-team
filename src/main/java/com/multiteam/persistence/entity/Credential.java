@@ -2,7 +2,6 @@ package com.multiteam.persistence.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -23,6 +22,8 @@ public class Credential implements UserDetails {
 
     @Column(name = "password")
     private String password;
+
+    public Credential() {}
 
     public Credential(String username, String password) {
         if(username.isEmpty())
