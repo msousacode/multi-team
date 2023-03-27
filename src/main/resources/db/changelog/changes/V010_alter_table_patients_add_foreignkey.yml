@@ -10,7 +10,7 @@ databaseChangeLog:
                   name: clinic_id
                   type: uuid
                   constraints:
-                    nullable: false
+                    nullable: true
         - addForeignKeyConstraint:
             baseColumnNames: clinic_id
             baseTableName: patients
