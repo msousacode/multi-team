@@ -47,7 +47,7 @@ class ProfessionalServiceTest {
     @DisplayName("deve buscar a lista dos profissionais cadastrados com sucesso")
     void shouldRetrieveProfessionalList_thenSuccess() {
         var clinicDefault = UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2");
-        var professionals = professionalService.getProfessionals(clinicDefault);
+        var professionals = professionalService.getAllProfessionals(clinicDefault);
         Assertions.assertFalse(professionals.isEmpty());
     }
 

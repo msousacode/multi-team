@@ -41,7 +41,7 @@ class ClinicServiceTest {
     @Test
     @DisplayName("deve retornar todas as clinicas")
     void shouldRetrieveAllClinics_thenSuccess() {
-        var result = clinicService.getAll();
+        var result = clinicService.getAllClinic();
         Assertions.assertFalse(result.isEmpty());
     }
 

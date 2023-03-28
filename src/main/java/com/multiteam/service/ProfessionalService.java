@@ -48,7 +48,7 @@ public class ProfessionalService {
         return professionalRepository.save(builder);
     }
 
-    public List<Professional> getProfessionals(final UUID clinicId) {
+    public List<Professional> getAllProfessionals(final UUID clinicId) {
         return professionalRepository.findAllByClinic_Id(clinicId);
     }
 

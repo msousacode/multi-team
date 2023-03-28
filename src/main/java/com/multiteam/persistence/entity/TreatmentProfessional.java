@@ -1,12 +1,13 @@
 package com.multiteam.persistence.entity;
 
 import com.multiteam.persistence.types.SituationType;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "treatment_professional")
+@Table(name = "treatments_professionals")
 public class TreatmentProfessional {
 
         @Id
@@ -30,4 +31,22 @@ public class TreatmentProfessional {
         private SituationType situationType;
 
         public TreatmentProfessional() {}
+
+        public TreatmentProfessional(
+                UUID id,
+                Treatment treatment,
+                Professional professional,
+                String annotation,
+                SituationType situationType) {
+
+                Assert.notNull(treatment, "treatment should not be null");
+                Assert.notNull(professional, "professional should not be null");
+                Assert.notNull(situationType, "situationType should not be null");
+
+                this.id = id;
+                this.treatment = treatment;
+                this.professional = professional;
+                this.annotation = annotation;
+                this.situationType = situationType;
+        }
 }

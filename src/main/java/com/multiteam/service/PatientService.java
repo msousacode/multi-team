@@ -41,11 +41,11 @@ public class PatientService {
         return patientRepository.save(builder);
     }
 
-    public List<Patient> findAll(final UUID clinicId) {
+    public List<Patient> getAllPatients(final UUID clinicId) {
         return patientRepository.findAllByClinic_Id(clinicId);
     }
 
-    public Optional<Patient> findById(final UUID patientId, final UUID clinicId) {
+    public Optional<Patient> getPatientById(final UUID patientId, final UUID clinicId) {
         return patientRepository.findByIdAndClinic_Id(patientId, clinicId);
     }
 }

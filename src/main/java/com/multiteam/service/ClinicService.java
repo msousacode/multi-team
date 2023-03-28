@@ -34,7 +34,7 @@ public class ClinicService {
         return clinicRespository.save(builder);
     }
 
-    public List<Clinic> getAll() {
+    public List<Clinic> getAllClinic() {
         return clinicRespository.findAll();
     }
 
