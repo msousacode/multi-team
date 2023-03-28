@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -44,7 +45,7 @@ public class PatientService {
         return patientRepository.findAllByClinic_Id(clinicId);
     }
 
-    public Patient findById(final UUID pacientId, final UUID clinicId) {
-        return patientRepository.findByIdAndClinic_Id(pacientId, clinicId).orElseThrow(() -> null);//TODO fazer exception customizada
+    public Optional<Patient> findById(final UUID patientId, final UUID clinicId) {
+        return patientRepository.findByIdAndClinic_Id(patientId, clinicId);
     }
 }

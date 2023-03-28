@@ -56,12 +56,19 @@ public class PatientServiceTest {
     @Test
     @DisplayName("deve retornar o paciente filtrando pelo uuid do paciente e da clinica com sucesso")
     void shouldReturnListPacientFilteringByIdPacientAndIdClinic_thenSuccess() {
-        var pacientId = UUID.fromString("bc91b5cc-3bb8-48f4-abdf-8f16e33d6787");
+        var patientId = UUID.fromString("bc91b5cc-3bb8-48f4-abdf-8f16e33d6787");
         var clinicId = UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2");
 
-        var result = patientService.findById(pacientId, clinicId);
+        var result = patientService.findById(patientId, clinicId);
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(result.getId(), pacientId);
-        Assertions.assertEquals(result.getClinic().getId(), clinicId);
+        Assertions.assertEquals(result.get().getId(), patientId);
+        Assertions.assertEquals(result.get().getClinic().getId(), clinicId);
+    }
+
+    @Test
+    @DisplayName("dado um patientId que não existe deve retornar vazio")
+    void givenPatientIdThatNotExists_thenReturnEmpty() {
+        var result = patientService.findById(UUID.fromString("7bdb248d-5f38-4060-8bb7-4a4f98a0ab51"), UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2"));
+        Assertions.assertTrue(result.isEmpty());
     }
 }

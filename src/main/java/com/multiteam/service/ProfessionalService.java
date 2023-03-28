@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,7 +31,7 @@ public class ProfessionalService {
 
         var clinic = clinicService.findById(clinicId);
 
-        var credential = credentialService.createCredential(new Credential(professional.getEmail(), "12345678"));//TODO ajustar para não gerar essa senha.
+        var credential = credentialService.createCredential(new Credential(professional.getEmail(), getProvisionalPassword()));
 
         var builder = new Professional.Builder(
                 null,
@@ -47,7 +48,15 @@ public class ProfessionalService {
         return professionalRepository.save(builder);
     }
 
-    public List<Professional> getProfessionals() {
-        return professionalRepository.findAll();
+    public List<Professional> getProfessionals(final UUID clinicId) {
+        return professionalRepository.findAllByClinic_Id(clinicId);
+    }
+
+    public Optional<Professional> getProfessionalById(final UUID professionalId) {
+        return professionalRepository.findById(professionalId);
+    }
+
+    private String getProvisionalPassword() {
+        return UUID.randomUUID().toString().substring(0, 10);
     }
 }

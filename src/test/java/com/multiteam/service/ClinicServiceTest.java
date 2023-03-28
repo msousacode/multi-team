@@ -18,7 +18,7 @@ class ClinicServiceTest {
 
     @Test
     @DisplayName("deve criar uma nova com sucesso")
-    void shouldCreateClinic_thenSucess() {
+    void shouldCreateClinic_thenSuccess() {
 
         var email = UUID.randomUUID().toString().substring(0, 5) + "@email.com";
         var cpfCnpj = UUID.randomUUID().toString().substring(0, 14);
@@ -43,6 +43,14 @@ class ClinicServiceTest {
     void shouldRetrieveAllClinics_thenSuccess() {
         var result = clinicService.getAll();
         Assertions.assertFalse(result.isEmpty());
+    }
+
+    @Test
+    @DisplayName("dado um clinicId que existe deve retornar a clinica consultada")
+    void givenClinicIdThatExists_thenReturnClinicWithSuccess() {
+        var clinicId = UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2");
+        var result = clinicService.findById(clinicId);
+        Assertions.assertEquals(result.get().getId(), clinicId);
     }
 
     @Test
