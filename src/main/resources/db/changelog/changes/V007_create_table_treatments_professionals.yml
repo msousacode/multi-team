@@ -35,6 +35,6 @@ databaseChangeLog:
         - addForeignKeyConstraint:
             baseColumnNames: professional_id
             baseTableName: treatments_professionals
-            constraintName: fk_treatments_professionals
+            constraintName: fk_treatments_professionals_professionals
             referencedColumnNames: professional_id
             referencedTableName: professionals

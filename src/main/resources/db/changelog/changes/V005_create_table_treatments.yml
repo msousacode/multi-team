@@ -47,7 +47,7 @@ databaseChangeLog:
                     nullable: false
         - addForeignKeyConstraint:
             baseColumnNames: patient_id
-            baseTableName: patients
-            constraintName: fk_patients_treatments
-            referencedColumnNames: treatment_id
-            referencedTableName: treatments
+            baseTableName: treatments
+            constraintName: fk_treatments_patients
+            referencedColumnNames: patient_id
+            referencedTableName: patients

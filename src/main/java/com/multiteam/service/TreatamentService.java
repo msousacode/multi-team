@@ -44,6 +44,8 @@ public class TreatamentService {
                 treatmentDto.situation(),
                 treatmentDto.initialDate(),
                 patient.get())
+                .description(treatmentDto.description())
+                .active(true)
                 .build();
 
         var treatment = treatementRepository.save(builder);

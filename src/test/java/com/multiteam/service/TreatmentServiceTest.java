@@ -14,14 +14,14 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-class TreatamentServiceTest {
+class TreatmentServiceTest {
 
     @Autowired
     private TreatamentService treatamentService;
 
     @Test
     @DisplayName("deve criar o tratamento associado ao profissional")
-    void shouldCreateTreatmentAssocietedWithProfessional_thenSuccess() {
+    void shouldCreateTreatmentAssociatedWithProfessional_thenSuccess() {
 
         var clinicId = UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2");
         var professionalId = UUID.fromString("5adcab58-cbe3-42bf-b299-8c3d7682a3f9");
@@ -38,7 +38,7 @@ class TreatamentServiceTest {
                 LocalDate.now());
 
         var result = treatamentService.includeTreatment(treatmentDto);
-        
+
         assertTrue(result);
     }
 }
