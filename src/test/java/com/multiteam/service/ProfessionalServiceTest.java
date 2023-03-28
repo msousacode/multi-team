@@ -32,7 +32,7 @@ class ProfessionalServiceTest {
         var email = UUID.randomUUID().toString().substring(0, 5) + "@email.com";
         var clinic = clinicService.findById(clinicDefault);
 
-        var professional = new Professional.Builder(null, name, middleName, specialty, cellPhone, email, true, clinic).build();
+        var professional = new Professional.Builder(null, name, middleName, specialty, cellPhone, email, true, clinic.get()).build();
 
         var result = professionalService.createProfessional(professional, clinicDefault);
 

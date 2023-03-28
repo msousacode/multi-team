@@ -31,7 +31,7 @@ public class PatientService {
                 patient.getMiddleName(),
                 patient.getSex(),
                 patient.getAge(),
-                clinic)
+                clinic.get())
                 .months(patient.getMonths())
                 .internalObservation(patient.getInternalObservation())
                 .externalObservation(patient.getExternalObservation())

@@ -44,4 +44,11 @@ class ClinicServiceTest {
         var result = clinicService.getAll();
         Assertions.assertFalse(result.isEmpty());
     }
+
+    @Test
+    @DisplayName("dado um clinicId que não existe deve retornar vazio")
+    void givenClinicIdThatNotExists_thenReturnEmpty() {
+        var result = clinicService.findById(UUID.fromString("7bdb248d-5f38-4060-8bb7-4a4f98a0ab52"));
+        Assertions.assertTrue(result.isEmpty());
+    }
 }

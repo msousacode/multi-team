@@ -40,7 +40,7 @@ public class ProfessionalService {
                 professional.getCellPhone(),
                 professional.getEmail(),
                 professional.isActive(),
-                clinic)
+                clinic.get())
                 .credential(credential)
                 .build();
 
