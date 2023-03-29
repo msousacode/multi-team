@@ -3,6 +3,7 @@ package com.multiteam.service;
 import com.multiteam.persistence.entity.Credential;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.repository.ProfessionalRepository;
+import com.multiteam.service.util.ProvisinalPasswordUtil;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -31,7 +32,7 @@ public class ProfessionalService {
 
         var clinic = clinicService.findById(clinicId);
 
-        var credential = credentialService.createCredential(new Credential(professional.getEmail(), getProvisionalPassword()));
+        var credential = credentialService.createCredential(new Credential(professional.getEmail(), ProvisinalPasswordUtil.generate()));
 
         var builder = new Professional.Builder(
                 null,
@@ -54,9 +55,5 @@ public class ProfessionalService {
 
     public Optional<Professional> getProfessionalById(final UUID professionalId) {
         return professionalRepository.findById(professionalId);
-    }
-
-    private String getProvisionalPassword() {
-        return UUID.randomUUID().toString().substring(0, 10);
     }
 }

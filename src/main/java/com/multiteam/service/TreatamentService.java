@@ -1,25 +1,29 @@
 package com.multiteam.service;
 
 import com.multiteam.controller.dto.TreatmentDto;
+import com.multiteam.persistence.entity.Guest;
 import com.multiteam.persistence.entity.Treatment;
 import com.multiteam.persistence.entity.TreatmentProfessional;
 import com.multiteam.persistence.repository.TreatementProfessionalRepository;
-import com.multiteam.persistence.repository.TreatementRepository;
+import com.multiteam.persistence.repository.TreatmentRepository;
 import com.multiteam.persistence.types.SituationType;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class TreatamentService {
 
-    private final TreatementRepository treatementRepository;
+    private final TreatmentRepository treatementRepository;
     private final TreatementProfessionalRepository treatementProfessionalRepository;
     private final PatientService patientService;
     private final ProfessionalService professionalService;
 
     public TreatamentService(
-            TreatementRepository treatementRepository,
+            TreatmentRepository treatementRepository,
             TreatementProfessionalRepository treatementProfessionalRepository,
             PatientService patientService,
             ProfessionalService professionalService) {
@@ -54,5 +58,17 @@ public class TreatamentService {
         treatementProfessionalRepository.save(treatmentProfessional);
 
         return Boolean.TRUE;
+    }
+
+    public Set<Treatment> getAllTreatmentsByPatientId(UUID patientId) {
+        return treatementRepository.findAllByPatient_Id(patientId);
+    }
+
+    @Transactional
+    public void includeGuestInTreatment(Guest guest, Set<Treatment> treatments) {
+        treatments.forEach(treatment -> {
+            treatment.addGuestsInTreatment(guest);
+            treatementRepository.save(treatment);
+        });
     }
 }

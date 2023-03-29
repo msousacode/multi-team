@@ -91,7 +91,12 @@ public class Treatment {
         return treatmentProfessionals;
     }
 
-    public Treatment() {}
+    public void addGuestsInTreatment(Guest guest) {
+        this.guests.add(guest);
+    }
+
+    public Treatment() {
+    }
 
     private Treatment(Builder builder) {
         this.id = builder.id;
@@ -132,7 +137,6 @@ public class Treatment {
             Assert.notNull(initialDate, "initialDate should not be null");
             Assert.isTrue(validateDateInitial(initialDate), "initial date must not be less than the current date");
             Assert.notNull(patient, "patient needs to be associated with treatment");
-            //Assert.notEmpty(professionals, "relationship between professional and patient should not be empty");
 
             this.id = id;
             this.treatmentType = treatmentType;

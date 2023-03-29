@@ -2,10 +2,10 @@ package com.multiteam.persistence.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -23,14 +23,16 @@ public class Credential implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    public Credential() {}
+    public Credential() {
+    }
 
     public Credential(String username, String password) {
-        if(username.isEmpty())
+        if (username.isEmpty())
             throw new IllegalArgumentException("username not be empty");
 
-        Objects.requireNonNull(username, "username not be null");
-        Objects.requireNonNull(password, "username not be null");
+        Assert.notNull(username, "username not be null");
+        Assert.notNull(password, "username not be null");
+
         this.username = username;
         this.password = password;
     }
