@@ -98,6 +98,13 @@ public class Treatment {
     public Treatment() {
     }
 
+    public Treatment(UUID id, TreatmentType treatmentType, SituationType situation, Patient patient) {
+        this.id = id;
+        this.treatmentType = treatmentType;
+        this.situation = situation;
+        this.patient = patient;
+    }
+
     private Treatment(Builder builder) {
         this.id = builder.id;
         this.treatmentType = builder.treatmentType;

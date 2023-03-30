@@ -1,6 +1,7 @@
 package com.multiteam.service;
 
 import com.multiteam.controller.dto.TreatmentDto;
+import com.multiteam.persistence.projection.TreatmentView;
 import com.multiteam.vo.DataResponse;
 import com.multiteam.persistence.entity.Guest;
 import com.multiteam.persistence.entity.Treatment;
@@ -8,7 +9,6 @@ import com.multiteam.persistence.entity.TreatmentProfessional;
 import com.multiteam.persistence.repository.TreatementProfessionalRepository;
 import com.multiteam.persistence.repository.TreatmentRepository;
 import com.multiteam.persistence.types.SituationType;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -90,7 +90,7 @@ public class TreatmentService {
         });
     }
 
-    public List<Treatment> getAllTreatmentsByGuestId(UUID guestId) {
+    public List<TreatmentView> getAllTreatmentsByGuestId(UUID guestId) {
         return treatmentRepository.getAllTreatmentsByGuestId(guestId);
     }
 }
