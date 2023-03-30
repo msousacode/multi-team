@@ -3,52 +3,72 @@ package com.multiteam.service;
 import com.multiteam.controller.dto.GuestDto;
 import com.multiteam.persistence.entity.Credential;
 import com.multiteam.persistence.entity.Guest;
-import com.multiteam.persistence.entity.Treatment;
 import com.multiteam.persistence.repository.GuestRespository;
 import com.multiteam.service.util.ProvisinalPasswordUtil;
+import com.multiteam.vo.DataResponse;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class GuestService {
 
     private final GuestRespository guestRespository;
-    private final TreatamentService treatamentService;
+    private final TreatmentService treatmentService;
+    private final CredentialService credentialService;
 
     public GuestService(
             GuestRespository guestRespository,
-            TreatamentService treatamentService) {
+            TreatmentService treatamentService,
+            CredentialService credentialService) {
         this.guestRespository = guestRespository;
-        this.treatamentService = treatamentService;
+        this.treatmentService = treatamentService;
+        this.credentialService = credentialService;
     }
 
     @Transactional
-    public boolean createGuest(GuestDto guestDto) {
+    public DataResponse createGuest(GuestDto guestDto) {
 
-        var treatment = treatamentService.getAllTreatmentsByPatientId(guestDto.patientId());
+        var treatment = treatmentService.getAllTreatmentsByPatientId(guestDto.patientId());
 
         if (treatment.isEmpty())
-            throw new RuntimeException();//Criar execption custom.
+            return new DataResponse(null, "treatment not found, try again", false);
 
-        var credential = new Credential(guestDto.email(), ProvisinalPasswordUtil.generate());
+        if (credentialService.isThereCredential(guestDto.email())) {
+            return new DataResponse(null, "guest registration already exists", false);
+        } else {
+            var credential = new Credential(guestDto.email(), ProvisinalPasswordUtil.generate());
 
-        var builder = new Guest.Builder(
-                null,
-                guestDto.name(),
-                guestDto.middleName(),
-                guestDto.relationship(),
-                guestDto.cellPhone(),
-                guestDto.email(),
-                true,
-                credential)
-                .build();
+            var builder = new Guest.Builder(
+                    null,
+                    guestDto.name(),
+                    guestDto.middleName(),
+                    guestDto.relationship(),
+                    guestDto.cellPhone(),
+                    guestDto.email(),
+                    true,
+                    credential)
+                    .build();
 
-        var guest = guestRespository.save(builder);
+            var guest = guestRespository.save(builder);
 
-        treatamentService.includeGuestInTreatment(guest, treatment);
+            treatmentService.includeGuestInTreatment(guest, treatment);
+        }
+        return new DataResponse(guestDto.email(), "guest registration with success", true);
+    }
 
+    @Transactional
+    public Boolean addGuestInTreatment(UUID patientId, UUID guestId) {
+
+        var treatments = treatmentService.getAllTreatmentsByPatientId(patientId);
+        var guest = guestRespository.findById(guestId);
+
+        if (guest.isPresent() && !treatments.isEmpty())
+            treatmentService.includeGuestInTreatment(guest.get(), treatments);
+        else {
+            throw new RuntimeException("");//custom
+        }
         return Boolean.TRUE;
     }
 }

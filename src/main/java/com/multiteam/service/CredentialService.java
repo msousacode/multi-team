@@ -19,4 +19,8 @@ public class CredentialService {
     public Credential createCredential(Credential credential) {
         return credentialRepository.save(credential);
     }
+
+    public boolean isThereCredential(String email) {
+        return credentialRepository.findByUsername(email).isPresent();//TODO criar exception personalizada
+    }
 }

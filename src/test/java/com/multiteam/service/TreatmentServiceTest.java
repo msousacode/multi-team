@@ -3,6 +3,7 @@ package com.multiteam.service;
 import com.multiteam.controller.dto.TreatmentDto;
 import com.multiteam.persistence.types.SituationType;
 import com.multiteam.persistence.types.TreatmentType;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TreatmentServiceTest {
 
     @Autowired
-    private TreatamentService treatamentService;
+    private TreatmentService treatamentService;
 
     @Test
     @DisplayName("deve criar o tratamento associado ao profissional")
@@ -39,6 +40,29 @@ class TreatmentServiceTest {
 
         var result = treatamentService.includeTreatment(treatmentDto);
 
-        assertTrue(result);
+        assertTrue(result.success());
+    }
+
+    @Test
+    @DisplayName("deve excluir tratamento com sucesso")
+    void shouldExcludeTreatmentById_thenSuccess() {
+
+        var treatmentId = UUID.fromString("f3fdb224-c63d-4e11-ab38-0e533f923f37");
+
+        var result = treatamentService.excludeTreatment(treatmentId);
+
+        Assertions.assertNull(result.content());
+        Assertions.assertEquals(result.message(), "treatment deleted with success");
+        Assertions.assertTrue(result.success());
+    }
+
+    @Test
+    @DisplayName("deve obter todos os tratamentos que o convidado esta acompanhando")
+    void shouldGetAllTreatments_thenSuccess() {
+
+        var guestId = UUID.fromString("29ce2c3f-4408-4123-9468-8a7811108bcf");
+        var result = treatamentService.getAllTreatmentsByGuestId(guestId);
+
+        Assertions.assertFalse(result.isEmpty());
     }
 }
