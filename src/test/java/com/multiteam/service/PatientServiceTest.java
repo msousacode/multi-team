@@ -2,6 +2,7 @@ package com.multiteam.service;
 
 import com.multiteam.persistence.entity.Patient;
 import com.multiteam.persistence.types.SexType;
+import com.multiteam.persistence.types.SituationType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,5 +71,12 @@ public class PatientServiceTest {
     void givenPatientIdThatNotExists_thenReturnEmpty() {
         var result = patientService.getPatientById(UUID.fromString("7bdb248d-5f38-4060-8bb7-4a4f98a0ab51"), UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2"));
         Assertions.assertTrue(result.isEmpty());
+    }
+
+    @Test
+    @DisplayName("deve retornar todos os pacientes filtrados por professionalId então sucesso")
+    void shouldReturnAllPatientsFilteringByProfessionalId_thenSuccess() {
+        var result = patientService.getAllPatientsByProfessionalId(UUID.fromString("5adcab58-cbe3-42bf-b299-8c3d7682a3f9"), SituationType.ANDAMENTO);
+        Assertions.assertFalse(result.isEmpty());
     }
 }

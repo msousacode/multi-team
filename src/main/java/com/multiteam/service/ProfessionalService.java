@@ -56,4 +56,12 @@ public class ProfessionalService {
     public Optional<Professional> getProfessionalById(final UUID professionalId) {
         return professionalRepository.findById(professionalId);
     }
+
+    //get professional by professionalId. Roles: professional, admin, controller
+
+    //edit professional. Roles: professional, admin, controller
+
+    //inactive professional. Roles: admin, controller
+
+    //get professional by patientId. Roles: professional, admin, controller, guest
 }

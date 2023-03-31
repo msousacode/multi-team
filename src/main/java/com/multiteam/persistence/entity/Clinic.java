@@ -4,6 +4,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -41,6 +42,9 @@ public class Clinic {
 
     @Column(name = "removed_date")
     private LocalDateTime removedDate;
+
+    @OneToMany(mappedBy = "clinic")
+    private List<Professional> professionals;
 
     public Clinic() {}
 
@@ -90,6 +94,14 @@ public class Clinic {
 
     public LocalDateTime getRemovedDate() {
         return removedDate;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public List<Professional> getProfessionals() {
+        return professionals;
     }
 
     public static class Builder {

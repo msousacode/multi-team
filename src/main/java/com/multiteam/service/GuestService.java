@@ -71,4 +71,10 @@ public class GuestService {
         }
         return Boolean.TRUE;
     }
+
+    //exclude guest. Roles: admin, controller
+
+    //edit patient. Roles: admin, controller
+
+    //get all guests filtering by patientId. Roles: professional, admin, controller
 }

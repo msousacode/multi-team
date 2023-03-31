@@ -1,7 +1,9 @@
 package com.multiteam.service;
 
 import com.multiteam.persistence.entity.Patient;
+import com.multiteam.persistence.projection.PatientsProfessionalsView;
 import com.multiteam.persistence.repository.PatientRepository;
+import com.multiteam.persistence.types.SituationType;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,12 +16,15 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
     private final ClinicService clinicService;
+    private final ProfessionalService professionalService;
 
     public PatientService(
             PatientRepository patientRepository,
-            ClinicService clinicService) {
+            ClinicService clinicService,
+            ProfessionalService professionalService) {
         this.patientRepository = patientRepository;
         this.clinicService = clinicService;
+        this.professionalService = professionalService;
     }
 
     @Transactional
@@ -48,4 +53,25 @@ public class PatientService {
     public Optional<Patient> getPatientById(final UUID patientId, final UUID clinicId) {
         return patientRepository.findByIdAndClinic_Id(patientId, clinicId);
     }
+
+
+    /*
+    get all patients filtering by professionalId. Roles: professional, admin, controller
+    “Aqui é o profissional consultando os pacientes que ele trata, deve existir uma restrição
+    para o profissional não consultar dados de outros pacientes que não são dele”
+     */
+    public List<PatientsProfessionalsView> getAllPatientsByProfessionalId(UUID professionalId, SituationType situation) {
+        return patientRepository.findAllPatientsByProfessionalId(professionalId, situation);
+    }
+
+
+    /*
+     get patient by clinicId to visualize details. Roles: professional, admin, controller
+     “Abrir os detalhes do paciente, deve existir uma restrição para o profissional não
+     consultar dados de outros pacientes que não são dele”.
+     */
+
+    //inactive patient. Role: admin, controller
+
+    //edit patient. Roles: admin, controller
 }

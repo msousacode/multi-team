@@ -41,4 +41,18 @@ public class ClinicService {
     public Optional<Clinic> findById(UUID clinicId) {
         return clinicRespository.findById(clinicId);
     }
+
+    /*
+    get by clinicId: professional, admin, controller, guest
+    “deve ter uma restrição para que os dados básicos da clinicas sejam visualizadas somente
+    por aqueles que fazem parte da clinica”
+     */
+
+    //inactive clinic: developer
+
+    //edit clinic: developer
+
+
+
+
 }

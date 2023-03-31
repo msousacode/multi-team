@@ -63,8 +63,6 @@ class TreatmentServiceTest {
         var guestId = UUID.fromString("29ce2c3f-4408-4123-9468-8a7811108bcf");
         var result = treatamentService.getAllTreatmentsByGuestId(guestId);
 
-        result.forEach(i -> System.out.println(i.getProfessionalName() + " --- " + i.getProfessionalMiddleName() + " --- " + i.getTreatmentType() + " ---" +i.getId() + " --- " + i.getSituation() + " --- " + i.getPatientName() + " " + i.getPatientMiddleName()));
-
         Assertions.assertFalse(result.isEmpty());
     }
 }
