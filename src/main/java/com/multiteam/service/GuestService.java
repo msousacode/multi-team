@@ -9,6 +9,7 @@ import com.multiteam.vo.DataResponse;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -20,17 +21,17 @@ public class GuestService {
 
     public GuestService(
             GuestRespository guestRespository,
-            TreatmentService treatamentService,
+            TreatmentService treatmentService,
             CredentialService credentialService) {
         this.guestRespository = guestRespository;
-        this.treatmentService = treatamentService;
+        this.treatmentService = treatmentService;
         this.credentialService = credentialService;
     }
 
     @Transactional
     public DataResponse createGuest(GuestDto guestDto) {
 
-        var treatment = treatmentService.getAllTreatmentsByPatientId(guestDto.patientId());
+        var treatment = treatmentService.findAllTreatmentsByPatientId(guestDto.patientId());
 
         if (treatment.isEmpty())
             return new DataResponse(null, "treatment not found, try again", false);
@@ -61,7 +62,7 @@ public class GuestService {
     @Transactional
     public Boolean addGuestInTreatment(UUID patientId, UUID guestId) {
 
-        var treatments = treatmentService.getAllTreatmentsByPatientId(patientId);
+        var treatments = treatmentService.findAllTreatmentsByPatientId(patientId);
         var guest = guestRespository.findById(guestId);
 
         if (guest.isPresent() && !treatments.isEmpty())

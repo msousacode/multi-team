@@ -47,7 +47,7 @@ class TreatmentServiceTest {
     @DisplayName("deve excluir tratamento com sucesso")
     void shouldExcludeTreatmentById_thenSuccess() {
 
-        var treatmentId = UUID.fromString("f3fdb224-c63d-4e11-ab38-0e533f923f37");
+        var treatmentId = UUID.fromString("df577d4e-235a-4d1d-b060-094fcd18e73c");
 
         var result = treatamentService.excludeTreatment(treatmentId);
 

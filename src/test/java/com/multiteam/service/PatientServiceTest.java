@@ -76,7 +76,21 @@ public class PatientServiceTest {
     @Test
     @DisplayName("deve retornar todos os pacientes filtrados por professionalId então sucesso")
     void shouldReturnAllPatientsFilteringByProfessionalId_thenSuccess() {
-        var result = patientService.getAllPatientsByProfessionalId(UUID.fromString("5adcab58-cbe3-42bf-b299-8c3d7682a3f9"), SituationType.ANDAMENTO);
+        var result = patientService.findAllPatientsByProfessionalId(UUID.fromString("5adcab58-cbe3-42bf-b299-8c3d7682a3f9"), SituationType.ANDAMENTO);
         Assertions.assertFalse(result.isEmpty());
+    }
+
+    @Test
+    @DisplayName("deve retornar todos os pacientes filtrados por clinicId então sucesso")
+    void shouldReturnAllPatientsFilteringByClinicId_thenSuccess() {
+        var result = patientService.findAllPatientsByClinicId(UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2"), SituationType.ANDAMENTO);
+        Assertions.assertFalse(result.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Deve inativar o paciente marcando o mesmo com o flag false e de modo cascata inativar o tratamento associados ao mesmo.")
+    void shouldInactivePatientByPatientId_thenSuccess() {
+        var result = patientService.inactivePatient(UUID.fromString("bc91b5cc-3bb8-48f4-abdf-8f16e33d6787"), UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2"));
+        Assertions.assertTrue(result.success());
     }
 }

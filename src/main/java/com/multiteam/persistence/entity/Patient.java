@@ -37,6 +37,9 @@ public class Patient {
     @Column(name = "external_observation")
     private String externalObservation;
 
+    @Column(name = "active")
+    private boolean active;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clinic_id")
     private Clinic clinic;
@@ -54,6 +57,7 @@ public class Patient {
         this.months = builder.months;
         this.internalObservation = builder.internalObservation;
         this.externalObservation = builder.externalObservation;
+        this.active = builder.active;
     }
 
     public UUID getId() {
@@ -92,6 +96,10 @@ public class Patient {
         return clinic;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
     public static class Builder {
 
         //mandatory
@@ -106,6 +114,7 @@ public class Patient {
         private Integer months;
         private String internalObservation;
         private String externalObservation;
+        private boolean active;
 
         public Builder(
                 final String name,
@@ -139,6 +148,11 @@ public class Patient {
 
         public Builder externalObservation(String externalObservation) {
             this.externalObservation = externalObservation;
+            return this;
+        }
+
+        public Builder active(boolean active) {
+            this.active = active;
             return this;
         }
 

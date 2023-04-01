@@ -9,6 +9,7 @@ import com.multiteam.persistence.entity.TreatmentProfessional;
 import com.multiteam.persistence.repository.TreatementProfessionalRepository;
 import com.multiteam.persistence.repository.TreatmentRepository;
 import com.multiteam.persistence.types.SituationType;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,7 +28,7 @@ public class TreatmentService {
     public TreatmentService(
             TreatmentRepository treatmentRepository,
             TreatementProfessionalRepository treatementProfessionalRepository,
-            PatientService patientService,
+            @Lazy PatientService patientService,
             ProfessionalService professionalService) {
         this.treatmentRepository = treatmentRepository;
         this.treatementProfessionalRepository = treatementProfessionalRepository;
@@ -43,7 +44,7 @@ public class TreatmentService {
 
         if (patient.isEmpty())
             return new DataResponse(null, "patient not found, try again", false);
-        if(professional.isEmpty())
+        if (professional.isEmpty())
             return new DataResponse(null, "professionals not found, try again", false);
 
         var builder = new Treatment.Builder(
@@ -64,7 +65,7 @@ public class TreatmentService {
         return new DataResponse(null, "treatment added with success", true);
     }
 
-    public Set<Treatment> getAllTreatmentsByPatientId(UUID patientId) {
+    public Set<Treatment> findAllTreatmentsByPatientId(UUID patientId) {
         return treatmentRepository.findAllByPatient_Id(patientId);
     }
 
@@ -73,11 +74,18 @@ public class TreatmentService {
 
         var treatment = treatmentRepository.findById(treatmentId);
 
-        if(treatment.isEmpty())
-            return new DataResponse(null, "treatment not found try again", false);
+        if (treatment.isEmpty())
+            return new DataResponse(null, "treatment not found", false);
 
-        treatementProfessionalRepository.deleteByTreatment_Id(treatmentId);
-        treatmentRepository.delete(treatment.get());
+        //inactive professionals of treatment
+        treatementProfessionalRepository.inactiveProfessionalsByTreatmentId(treatmentId, SituationType.INATIVO);
+
+        //exclude all guests
+        treatment.get().getGuests().removeAll(treatment.get().getGuests());
+        treatmentRepository.save(treatment.get());
+
+        //inactive treatment
+        treatmentRepository.inactiveTreatment(treatmentId);
 
         return new DataResponse(null, "treatment deleted with success", true);
     }
@@ -92,5 +100,11 @@ public class TreatmentService {
 
     public List<TreatmentView> getAllTreatmentsByGuestId(UUID guestId) {
         return treatmentRepository.getAllTreatmentsByGuestId(guestId);
+    }
+
+    @Transactional
+    public void excludeTreatmentByPatientId(UUID patientId) {
+        var treatments = findAllTreatmentsByPatientId(patientId);
+        treatments.forEach(t -> excludeTreatment(t.getId()));
     }
 }

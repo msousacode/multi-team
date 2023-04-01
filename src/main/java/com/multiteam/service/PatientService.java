@@ -4,6 +4,7 @@ import com.multiteam.persistence.entity.Patient;
 import com.multiteam.persistence.projection.PatientsProfessionalsView;
 import com.multiteam.persistence.repository.PatientRepository;
 import com.multiteam.persistence.types.SituationType;
+import com.multiteam.vo.DataResponse;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,15 +17,16 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
     private final ClinicService clinicService;
-    private final ProfessionalService professionalService;
+    private final TreatmentService treatmentService;
 
     public PatientService(
             PatientRepository patientRepository,
             ClinicService clinicService,
-            ProfessionalService professionalService) {
+            TreatmentService treatmentService
+    ) {
         this.patientRepository = patientRepository;
         this.clinicService = clinicService;
-        this.professionalService = professionalService;
+        this.treatmentService = treatmentService;
     }
 
     @Transactional
@@ -54,24 +56,28 @@ public class PatientService {
         return patientRepository.findByIdAndClinic_Id(patientId, clinicId);
     }
 
-
-    /*
-    get all patients filtering by professionalId. Roles: professional, admin, controller
-    “Aqui é o profissional consultando os pacientes que ele trata, deve existir uma restrição
-    para o profissional não consultar dados de outros pacientes que não são dele”
-     */
-    public List<PatientsProfessionalsView> getAllPatientsByProfessionalId(UUID professionalId, SituationType situation) {
+    public List<PatientsProfessionalsView> findAllPatientsByProfessionalId(UUID professionalId, SituationType situation) {
         return patientRepository.findAllPatientsByProfessionalId(professionalId, situation);
     }
 
+    public List<PatientsProfessionalsView> findAllPatientsByClinicId(UUID professionalId, SituationType situation) {
+        return patientRepository.findAllPatientsByClinicId(professionalId, situation);
+    }
 
-    /*
-     get patient by clinicId to visualize details. Roles: professional, admin, controller
-     “Abrir os detalhes do paciente, deve existir uma restrição para o profissional não
-     consultar dados de outros pacientes que não são dele”.
-     */
+    @Transactional
+    public DataResponse inactivePatient(UUID patientId, UUID clinicId) {
 
-    //inactive patient. Role: admin, controller
+        var patient = patientRepository.findById(patientId);
+
+        if (patient.isEmpty())
+            return new DataResponse(null, "patient not found", false);
+
+        patientRepository.inactivePatient(patientId, clinicId);
+
+        treatmentService.excludeTreatmentByPatientId(patientId);
+
+        return new DataResponse(null, "patient excluded successfully", true);
+    }
 
     //edit patient. Roles: admin, controller
 }
