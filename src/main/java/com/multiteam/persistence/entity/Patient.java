@@ -136,6 +136,11 @@ public class Patient {
             this.clinic = clinic;
         }
 
+        public Builder id(final UUID id) {
+            this.id = id;
+            return this;
+        }
+
         public Builder months(Integer months) {
             this.months = months;
             return this;

@@ -49,6 +49,7 @@ public class Clinic {
     public Clinic() {}
 
     public Clinic(Builder builder) {
+        this.id = builder.id;
         this.clinicName = builder.clinicName;
         this.cpfCnpj = builder.cpfCnpj;
         this.email = builder.email;
@@ -107,7 +108,7 @@ public class Clinic {
     public static class Builder {
 
         //mandatory
-        UUID id;
+        private UUID id;
         private final String clinicName;
         private final String cpfCnpj;
         private final String email;
@@ -135,6 +136,11 @@ public class Clinic {
             this.cpfCnpj = cpfCnpj;
             this.email = email;
             this.cellPhone = cellPhone;
+        }
+
+        public Builder id(final UUID id) {
+            this.id = id;
+            return this;
         }
 
         public Builder telephone(final String telephone) {

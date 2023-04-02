@@ -1,5 +1,6 @@
 package com.multiteam.service;
 
+import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.persistence.entity.Patient;
 import com.multiteam.persistence.types.SexType;
 import com.multiteam.persistence.types.SituationType;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @SpringBootTest
@@ -92,5 +94,38 @@ public class PatientServiceTest {
     void shouldInactivePatientByPatientId_thenSuccess() {
         var result = patientService.inactivePatient(UUID.fromString("bc91b5cc-3bb8-48f4-abdf-8f16e33d6787"), UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2"));
         Assertions.assertTrue(result.success());
+    }
+
+    @Test
+    @DisplayName("Deve atualizar o paciente então sucesso")
+    void shouldUpdatePatient_thenSuccess() {
+
+        var clinicId = UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2");
+        var patientId = UUID.fromString("d2383308-c9c5-4f6f-a9bc-09cb6a1f2e91");
+
+        var clinicBuilder = new Clinic.Builder(
+                "Geraldo Bryan Gomes",
+                "35997818268",
+                "email@email.com",
+                "(71) 3871-3197")
+                .id(clinicId)
+                .build();
+
+        var patientBuilder = new Patient.Builder(
+                "Isabela",
+                "Freitas",
+                SexType.MASCULINO,
+                15,
+                clinicBuilder)
+                .id(patientId)
+                .active(true)
+                .months(2)
+                .externalObservation("Observation test unit")
+                .internalObservation("Observation test unit")
+                .build();
+
+        var response = patientService.updatePatient(patientBuilder);
+
+        Assertions.assertTrue(response.success());
     }
 }

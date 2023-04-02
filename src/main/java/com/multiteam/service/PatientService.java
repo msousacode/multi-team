@@ -79,5 +79,31 @@ public class PatientService {
         return new DataResponse(null, "patient excluded successfully", true);
     }
 
-    //edit patient. Roles: admin, controller
+    @Transactional
+    public DataResponse updatePatient(Patient patient) {
+
+        var patientResult = patientRepository.findById(patient.getId());
+        var clinicResult = clinicService.findById(patient.getClinic().getId());
+
+        if (patientResult.isPresent() && clinicResult.isPresent()) {
+
+            var builder = new Patient.Builder(
+                    patient.getName(),
+                    patient.getMiddleName(),
+                    patient.getSex(),
+                    patient.getAge(),
+                    clinicResult.get())
+                    .id(patientResult.get().getId())
+                    .active(patient.isActive())
+                    .months(patient.getMonths())
+                    .externalObservation(patient.getExternalObservation())
+                    .internalObservation(patient.getInternalObservation())
+                    .build();
+
+            patientRepository.save(builder);
+            return new DataResponse(null, "updated with success", true);
+        }
+
+        return new DataResponse(null, "resource not found", false);
+    }
 }
