@@ -94,7 +94,6 @@ public class PatientService {
                     patient.getAge(),
                     clinicResult.get())
                     .id(patientResult.get().getId())
-                    .active(patient.isActive())
                     .months(patient.getMonths())
                     .externalObservation(patient.getExternalObservation())
                     .internalObservation(patient.getInternalObservation())
