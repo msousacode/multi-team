@@ -6,10 +6,13 @@ import com.multiteam.persistence.entity.Guest;
 import com.multiteam.persistence.repository.GuestRespository;
 import com.multiteam.service.util.ProvisinalPasswordUtil;
 import com.multiteam.vo.DataResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
-import java.util.Set;
+import java.awt.print.Pageable;
 import java.util.UUID;
 
 @Service
@@ -73,9 +76,34 @@ public class GuestService {
         return Boolean.TRUE;
     }
 
-    //exclude guest. Roles: admin, controller
+    @Transactional
+    public DataResponse removeGuest(UUID guestId) {
+        guestRespository.deleteById(guestId);
+        return new DataResponse(null, "guest removed successfully", true);
+    }
 
-    //edit patient. Roles: admin, controller
+    @Modifying
+    public DataResponse editGuest(Guest guest) {
 
-    //get all guests filtering by patientId. Roles: professional, admin, controller
+        var result = guestRespository.findById(guest.getId());
+
+        if (result.isEmpty()) {
+            return new DataResponse(null, "resource not found", false);
+        }
+
+        var builder = new Guest.Builder(
+                result.get().getId(),
+                guest.getName(),
+                guest.getMiddleName(),
+                guest.getRelationship(),
+                guest.getCellPhone(),
+                guest.getEmail(),
+                guest.isActive(),
+                result.get().getCredential())
+                .build();
+
+        guestRespository.save(builder);
+
+        return new DataResponse(null, "guest updated successfully", true);
+    }
 }
