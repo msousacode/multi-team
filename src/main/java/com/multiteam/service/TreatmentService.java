@@ -64,6 +64,29 @@ public class TreatmentService {
         return Boolean.TRUE;
     }
 
+    @Transactional
+    public Boolean updateTreatment(Treatment treatment) {
+
+        var result = treatmentRepository.findById(treatment.getId());
+
+        if (result.isEmpty()) {
+            return Boolean.FALSE;
+        }
+
+        var builder = new Treatment.Builder(
+                result.get().getId(),
+                treatment.getTreatmentType(),
+                treatment.getSituation(),
+                treatment.getInitialDate(),
+                result.get().getPatient())
+                .finalDate(treatment.getFinalDate())
+                .build();
+
+        treatmentRepository.save(builder);
+
+        return Boolean.TRUE;
+    }
+
     public Set<Treatment> getAllTreatmentsByPatientId(UUID patientId) {
         return treatmentRepository.findAllByPatient_Id(patientId);
     }
@@ -105,5 +128,9 @@ public class TreatmentService {
     public void excludeTreatmentByPatientId(UUID patientId) {
         var treatments = getAllTreatmentsByPatientId(patientId);
         treatments.forEach(t -> inactiveTreatment(t.getId()));
+    }
+
+    public TreatmentView getTreatmentById(UUID treatmentId) {
+        return treatmentRepository.findByIdProjection(treatmentId);
     }
 }

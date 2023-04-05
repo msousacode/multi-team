@@ -12,7 +12,7 @@ public class GlobalHandlerExeception {
 
     @ExceptionHandler({IllegalArgumentException.class})
     public ResponseEntity<ErrorDetails> handlerAsBadRequest(RuntimeException ex) {
-        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), LocalDateTime.now());
+        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), LocalDateTime.now(), Boolean.FALSE);
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 }

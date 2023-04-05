@@ -37,4 +37,18 @@ public interface TreatmentRepository extends JpaRepository<Treatment, UUID> {
     @Modifying
     @Query("UPDATE Treatment tr SET tr.active = false WHERE tr.id = :treatmentId")
     void inactiveTreatment(@Param("treatmentId") UUID treatmentId);
+
+    @Query("""
+           SELECT
+           t.id AS id,
+           t.description AS description,
+           t.treatmentType AS treatmentType,
+           t.situation AS situation,
+           t.initialDate AS initialDate,
+           t.finalDate AS finalDate,
+           t.active AS active
+           FROM Treatment t
+           t.id = :treatmentId
+           """)
+    TreatmentView findByIdProjection(@Param("treatmentId") UUID treatmentId);
 }
