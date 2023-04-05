@@ -4,7 +4,7 @@ import com.multiteam.persistence.entity.Patient;
 import com.multiteam.persistence.projection.PatientsProfessionalsView;
 import com.multiteam.persistence.repository.PatientRepository;
 import com.multiteam.persistence.types.SituationType;
-import com.multiteam.vo.DataResponse;
+import com.multiteam.controller.dto.ResponseDto;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -60,27 +60,27 @@ public class PatientService {
         return patientRepository.findAllPatientsByProfessionalId(professionalId, situation);
     }
 
-    public List<PatientsProfessionalsView> findAllPatientsByClinicId(UUID professionalId, SituationType situation) {
-        return patientRepository.findAllPatientsByClinicId(professionalId, situation);
+    public List<PatientsProfessionalsView> findAllPatientsByClinicId(UUID clinicId, SituationType situation) {
+        return patientRepository.findAllPatientsByClinicId(clinicId, situation);
     }
 
     @Transactional
-    public DataResponse inactivePatient(UUID patientId, UUID clinicId) {
+    public ResponseDto inactivePatient(UUID patientId, UUID clinicId) {
 
         var patient = patientRepository.findById(patientId);
 
         if (patient.isEmpty())
-            return new DataResponse(null, "patient not found", false);
+            return new ResponseDto(null, "patient not found", false);
 
         patientRepository.inactivePatient(patientId, clinicId);
 
         treatmentService.excludeTreatmentByPatientId(patientId);
 
-        return new DataResponse(null, "patient excluded successfully", true);
+        return new ResponseDto(null, "patient excluded successfully", true);
     }
 
     @Transactional
-    public DataResponse updatePatient(Patient patient) {
+    public ResponseDto updatePatient(Patient patient) {
 
         var patientResult = patientRepository.findById(patient.getId());
         var clinicResult = clinicService.findById(patient.getClinic().getId());
@@ -100,9 +100,9 @@ public class PatientService {
                     .build();
 
             patientRepository.save(builder);
-            return new DataResponse(null, "updated with success", true);
+            return new ResponseDto(null, "updated with success", true);
         }
 
-        return new DataResponse(null, "resource not found", false);
+        return new ResponseDto(null, "resource not found", false);
     }
 }

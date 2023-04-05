@@ -49,7 +49,7 @@ class TreatmentServiceTest {
 
         var treatmentId = UUID.fromString("df577d4e-235a-4d1d-b060-094fcd18e73c");
 
-        var result = treatamentService.excludeTreatment(treatmentId);
+        var result = treatamentService.inactiveTreatment(treatmentId);
 
         Assertions.assertNull(result.content());
         Assertions.assertEquals(result.message(), "treatment deleted with success");

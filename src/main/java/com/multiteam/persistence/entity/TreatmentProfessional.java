@@ -49,4 +49,24 @@ public class TreatmentProfessional {
                 this.annotation = annotation;
                 this.situationType = situationType;
         }
+
+        public UUID getId() {
+                return id;
+        }
+
+        public Treatment getTreatment() {
+                return treatment;
+        }
+
+        public Professional getProfessional() {
+                return professional;
+        }
+
+        public String getAnnotation() {
+                return annotation;
+        }
+
+        public SituationType getSituationType() {
+                return situationType;
+        }
 }

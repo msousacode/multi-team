@@ -5,14 +5,11 @@ import com.multiteam.persistence.entity.Credential;
 import com.multiteam.persistence.entity.Guest;
 import com.multiteam.persistence.repository.GuestRespository;
 import com.multiteam.service.util.ProvisinalPasswordUtil;
-import com.multiteam.vo.DataResponse;
-import org.springframework.data.domain.Page;
+import com.multiteam.controller.dto.ResponseDto;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
-import java.awt.print.Pageable;
 import java.util.UUID;
 
 @Service
@@ -32,15 +29,15 @@ public class GuestService {
     }
 
     @Transactional
-    public DataResponse createGuest(GuestDto guestDto) {
+    public ResponseDto createGuest(GuestDto guestDto) {
 
         var treatment = treatmentService.findAllTreatmentsByPatientId(guestDto.patientId());
 
         if (treatment.isEmpty())
-            return new DataResponse(null, "treatment not found, try again", false);
+            return new ResponseDto(null, "treatment not found, try again", false);
 
         if (credentialService.isThereCredential(guestDto.email())) {
-            return new DataResponse(null, "guest registration already exists", false);
+            return new ResponseDto(null, "guest registration already exists", false);
         } else {
             var credential = new Credential(guestDto.email(), ProvisinalPasswordUtil.generate());
 
@@ -59,7 +56,7 @@ public class GuestService {
 
             treatmentService.includeGuestInTreatment(guest, treatment);
         }
-        return new DataResponse(guestDto.email(), "guest registration with success", true);
+        return new ResponseDto(guestDto.email(), "guest registration with success", true);
     }
 
     @Transactional
@@ -77,18 +74,18 @@ public class GuestService {
     }
 
     @Transactional
-    public DataResponse removeGuest(UUID guestId) {
+    public ResponseDto removeGuest(UUID guestId) {
         guestRespository.deleteById(guestId);
-        return new DataResponse(null, "guest removed successfully", true);
+        return new ResponseDto(null, "guest removed successfully", true);
     }
 
     @Modifying
-    public DataResponse editGuest(Guest guest) {
+    public ResponseDto editGuest(Guest guest) {
 
         var result = guestRespository.findById(guest.getId());
 
         if (result.isEmpty()) {
-            return new DataResponse(null, "resource not found", false);
+            return new ResponseDto(null, "resource not found", false);
         }
 
         var builder = new Guest.Builder(
@@ -104,6 +101,6 @@ public class GuestService {
 
         guestRespository.save(builder);
 
-        return new DataResponse(null, "guest updated successfully", true);
+        return new ResponseDto(null, "guest updated successfully", true);
     }
 }

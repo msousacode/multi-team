@@ -2,7 +2,7 @@ package com.multiteam.service;
 
 import com.multiteam.controller.dto.TreatmentDto;
 import com.multiteam.persistence.projection.TreatmentView;
-import com.multiteam.vo.DataResponse;
+import com.multiteam.controller.dto.ResponseDto;
 import com.multiteam.persistence.entity.Guest;
 import com.multiteam.persistence.entity.Treatment;
 import com.multiteam.persistence.entity.TreatmentProfessional;
@@ -29,7 +29,7 @@ public class TreatmentService {
             TreatmentRepository treatmentRepository,
             TreatementProfessionalRepository treatementProfessionalRepository,
             @Lazy PatientService patientService,
-            ProfessionalService professionalService) {
+            @Lazy ProfessionalService professionalService) {
         this.treatmentRepository = treatmentRepository;
         this.treatementProfessionalRepository = treatementProfessionalRepository;
         this.patientService = patientService;
@@ -37,15 +37,15 @@ public class TreatmentService {
     }
 
     @Transactional
-    public DataResponse includeTreatment(TreatmentDto treatmentDto) {
+    public ResponseDto includeTreatment(TreatmentDto treatmentDto) {
 
         var patient = patientService.getPatientById(treatmentDto.patientId(), treatmentDto.clinicId());
         var professional = professionalService.getProfessionalById(treatmentDto.professionalId());
 
         if (patient.isEmpty())
-            return new DataResponse(null, "patient not found, try again", false);
+            return new ResponseDto(null, "patient not found, try again", false);
         if (professional.isEmpty())
-            return new DataResponse(null, "professionals not found, try again", false);
+            return new ResponseDto(null, "professionals not found, try again", false);
 
         var builder = new Treatment.Builder(
                 null,
@@ -62,7 +62,7 @@ public class TreatmentService {
         var treatmentProfessional = new TreatmentProfessional(null, treatment, professional.get(), "", SituationType.ANDAMENTO);
         treatementProfessionalRepository.save(treatmentProfessional);
 
-        return new DataResponse(null, "treatment added with success", true);
+        return new ResponseDto(null, "treatment added with success", true);
     }
 
     public Set<Treatment> findAllTreatmentsByPatientId(UUID patientId) {
@@ -70,12 +70,12 @@ public class TreatmentService {
     }
 
     @Transactional
-    public DataResponse excludeTreatment(UUID treatmentId) {
+    public ResponseDto inactiveTreatment(UUID treatmentId) {
 
         var treatment = treatmentRepository.findById(treatmentId);
 
         if (treatment.isEmpty())
-            return new DataResponse(null, "treatment not found", false);
+            return new ResponseDto(null, "treatment not found", false);
 
         //inactive professionals of treatment
         treatementProfessionalRepository.inactiveProfessionalsByTreatmentId(treatmentId, SituationType.INATIVO);
@@ -87,7 +87,7 @@ public class TreatmentService {
         //inactive treatment
         treatmentRepository.inactiveTreatment(treatmentId);
 
-        return new DataResponse(null, "treatment deleted with success", true);
+        return new ResponseDto(null, "treatment deleted with success", true);
     }
 
     @Transactional
@@ -105,6 +105,6 @@ public class TreatmentService {
     @Transactional
     public void excludeTreatmentByPatientId(UUID patientId) {
         var treatments = findAllTreatmentsByPatientId(patientId);
-        treatments.forEach(t -> excludeTreatment(t.getId()));
+        treatments.forEach(t -> inactiveTreatment(t.getId()));
     }
 }

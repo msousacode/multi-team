@@ -65,4 +65,11 @@ class ProfessionalServiceTest {
         var result = professionalService.getProfessionalById(UUID.fromString("7bdb248d-5f38-4060-8bb7-4a4f98a0ab52"));
         Assertions.assertTrue(result.isEmpty());
     }
+
+    @Test
+    @DisplayName("deverá inativar o profissional então sucesso")
+    void shouldInactivateTheProfessional_thenSuccess() {
+        var result = professionalService.professionalInactive(UUID.fromString("5adcab58-cbe3-42bf-b299-8c3d7682a3f9"));
+        Assertions.assertTrue(result.success());
+    }
 }

@@ -59,7 +59,7 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
             AND prs.situationType = :situation
             """)
     List<PatientsProfessionalsView> findAllPatientsByClinicId(
-            @Param("clinicId") UUID professionalId,
+            @Param("clinicId") UUID clinicId,
             @Param("situation") SituationType situation);
 
     @Modifying
