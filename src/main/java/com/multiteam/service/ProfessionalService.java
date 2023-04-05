@@ -5,7 +5,6 @@ import com.multiteam.persistence.entity.Credential;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.repository.ProfessionalRepository;
 import com.multiteam.service.util.ProvisinalPasswordUtil;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -68,7 +67,7 @@ public class ProfessionalService {
     }
 
     @Transactional
-    public ResponseDto professionalInactive(UUID professionalId) {
+    public ResponseDto inactiveProfessional(UUID professionalId) {
 
         var professional = professionalRepository.findById(professionalId);
 
@@ -80,5 +79,30 @@ public class ProfessionalService {
         professionalRepository.professionalInactive(professional.get().getId());
 
         return new ResponseDto(null, "professional deleted successfully", true);
+    }
+
+    @Transactional
+    public ResponseDto updateProfessional(Professional professional) {
+
+        var result = professionalRepository.findById(professional.getId());
+
+        if(result.isEmpty()){
+            return new ResponseDto(null, "resource not found", false);
+        }
+
+        var builder = new Professional.Builder(
+                result.get().getId(),
+                professional.getName(),
+                professional.getMiddleName(),
+                professional.getSpecialty(),
+                professional.getCellPhone(),
+                professional.getEmail(),
+                professional.isActive(),
+                result.get().getClinic())
+                .build();
+
+        professionalRepository.save(builder);
+
+        return new ResponseDto(null, "successfully updated professional", true);
     }
 }

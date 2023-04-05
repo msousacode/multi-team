@@ -92,6 +92,10 @@ public class Professional {
         return credential;
     }
 
+    public Clinic getClinic() {
+        return clinic;
+    }
+
     public Set<TreatmentProfessional> getProfessionals() {
         return professionals;
     }
