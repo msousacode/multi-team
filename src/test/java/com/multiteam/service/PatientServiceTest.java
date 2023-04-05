@@ -26,7 +26,7 @@ class PatientServiceTest {
 
         var clinicDefault = TestsConstants.CLINIC_ID;
 
-        var clinic = clinicService.findById(clinicDefault);
+        var clinic = clinicService.getClinicById(clinicDefault);
 
         var builder = new Patient.Builder(
                 "Márcio",
@@ -69,14 +69,14 @@ class PatientServiceTest {
     @Test
     @DisplayName("deve retornar todos os pacientes filtrados por professionalId então sucesso")
     void shouldReturnAllPatientsFilteringByProfessionalId_thenSuccess() {
-        var result = patientService.findAllPatientsByProfessionalId(TestsConstants.PROFESSIONAL_ID, SituationType.ANDAMENTO);
+        var result = patientService.getAllPatientsByProfessionalId(TestsConstants.PROFESSIONAL_ID, SituationType.ANDAMENTO);
         Assertions.assertFalse(result.isEmpty());
     }
 
     @Test
     @DisplayName("deve retornar todos os pacientes filtrados por clinicId então sucesso")
     void shouldReturnAllPatientsFilteringByClinicId_thenSuccess() {
-        var result = patientService.findAllPatientsByClinicId(TestsConstants.CLINIC_ID, SituationType.ANDAMENTO);
+        var result = patientService.getAllPatientsByClinicId(TestsConstants.CLINIC_ID, SituationType.ANDAMENTO);
         Assertions.assertFalse(result.isEmpty());
     }
 /*

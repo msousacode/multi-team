@@ -4,7 +4,6 @@ import com.multiteam.persistence.entity.Patient;
 import com.multiteam.persistence.projection.PatientsProfessionalsView;
 import com.multiteam.persistence.repository.PatientRepository;
 import com.multiteam.persistence.types.SituationType;
-import com.multiteam.controller.dto.ResponseDto;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -30,9 +29,13 @@ public class PatientService {
     }
 
     @Transactional
-    public Patient createPatient(Patient patient, UUID clinicId) {
+    public Boolean createPatient(Patient patient, UUID clinicId) {
 
-        var clinic = clinicService.findById(clinicId);
+        var clinic = clinicService.getClinicById(clinicId);
+
+        if (clinic.isEmpty()) {
+            return Boolean.FALSE;
+        }
 
         var builder = new Patient.Builder(
                 patient.getName(),
@@ -45,7 +48,9 @@ public class PatientService {
                 .externalObservation(patient.getExternalObservation())
                 .build();
 
-        return patientRepository.save(builder);
+        patientRepository.save(builder);
+
+        return Boolean.TRUE;
     }
 
     public List<Patient> getAllPatientsByClinicId(final UUID clinicId) {
@@ -56,34 +61,35 @@ public class PatientService {
         return patientRepository.findByIdAndClinic_Id(patientId, clinicId);
     }
 
-    public List<PatientsProfessionalsView> findAllPatientsByProfessionalId(UUID professionalId, SituationType situation) {
+    public List<PatientsProfessionalsView> getAllPatientsByProfessionalId(UUID professionalId, SituationType situation) {
         return patientRepository.findAllPatientsByProfessionalId(professionalId, situation);
     }
 
-    public List<PatientsProfessionalsView> findAllPatientsByClinicId(UUID clinicId, SituationType situation) {
+    public List<PatientsProfessionalsView> getAllPatientsByClinicId(UUID clinicId, SituationType situation) {
         return patientRepository.findAllPatientsByClinicId(clinicId, situation);
     }
 
     @Transactional
-    public ResponseDto inactivePatient(UUID patientId, UUID clinicId) {
+    public Boolean inactivePatient(UUID patientId, UUID clinicId) {
 
         var patient = patientRepository.findById(patientId);
 
-        if (patient.isEmpty())
-            return new ResponseDto(null, "patient not found", false);
+        if (patient.isEmpty()) {
+            return Boolean.FALSE;
+        }
 
         patientRepository.inactivePatient(patientId, clinicId);
 
         treatmentService.excludeTreatmentByPatientId(patientId);
 
-        return new ResponseDto(null, "patient excluded successfully", true);
+        return Boolean.TRUE;
     }
 
     @Transactional
-    public ResponseDto updatePatient(Patient patient) {
+    public Boolean updatePatient(Patient patient) {
 
         var patientResult = patientRepository.findById(patient.getId());
-        var clinicResult = clinicService.findById(patient.getClinic().getId());
+        var clinicResult = clinicService.getClinicById(patient.getClinic().getId());
 
         if (patientResult.isPresent() && clinicResult.isPresent()) {
 
@@ -100,9 +106,9 @@ public class PatientService {
                     .build();
 
             patientRepository.save(builder);
-            return new ResponseDto(null, "updated with success", true);
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
         }
-
-        return new ResponseDto(null, "resource not found", false);
     }
 }

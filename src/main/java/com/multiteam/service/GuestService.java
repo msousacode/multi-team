@@ -5,7 +5,6 @@ import com.multiteam.persistence.entity.Credential;
 import com.multiteam.persistence.entity.Guest;
 import com.multiteam.persistence.repository.GuestRespository;
 import com.multiteam.service.util.ProvisinalPasswordUtil;
-import com.multiteam.controller.dto.ResponseDto;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
@@ -29,15 +28,16 @@ public class GuestService {
     }
 
     @Transactional
-    public ResponseDto createGuest(GuestDto guestDto) {
+    public Boolean createGuest(GuestDto guestDto) {
 
-        var treatment = treatmentService.findAllTreatmentsByPatientId(guestDto.patientId());
+        var treatment = treatmentService.getAllTreatmentsByPatientId(guestDto.patientId());
 
-        if (treatment.isEmpty())
-            return new ResponseDto(null, "treatment not found, try again", false);
+        if (treatment.isEmpty()) {
+            return Boolean.FALSE;
+        }
 
-        if (credentialService.isThereCredential(guestDto.email())) {
-            return new ResponseDto(null, "guest registration already exists", false);
+        if (credentialService.checkIfCredentialExists(guestDto.email())) {
+            return Boolean.FALSE;
         } else {
             var credential = new Credential(guestDto.email(), ProvisinalPasswordUtil.generate());
 
@@ -56,13 +56,13 @@ public class GuestService {
 
             treatmentService.includeGuestInTreatment(guest, treatment);
         }
-        return new ResponseDto(guestDto.email(), "guest registration with success", true);
+        return Boolean.TRUE;
     }
 
     @Transactional
     public Boolean addGuestInTreatment(UUID patientId, UUID guestId) {
 
-        var treatments = treatmentService.findAllTreatmentsByPatientId(patientId);
+        var treatments = treatmentService.getAllTreatmentsByPatientId(patientId);
         var guest = guestRespository.findById(guestId);
 
         if (guest.isPresent() && !treatments.isEmpty())
@@ -74,18 +74,18 @@ public class GuestService {
     }
 
     @Transactional
-    public ResponseDto removeGuest(UUID guestId) {
+    public Boolean deleteGuest(UUID guestId) {
         guestRespository.deleteById(guestId);
-        return new ResponseDto(null, "guest removed successfully", true);
+        return Boolean.TRUE;
     }
 
     @Modifying
-    public ResponseDto editGuest(Guest guest) {
+    public Boolean updateGuest(Guest guest) {
 
         var result = guestRespository.findById(guest.getId());
 
         if (result.isEmpty()) {
-            return new ResponseDto(null, "resource not found", false);
+            return Boolean.FALSE;
         }
 
         var builder = new Guest.Builder(
@@ -101,6 +101,6 @@ public class GuestService {
 
         guestRespository.save(builder);
 
-        return new ResponseDto(null, "guest updated successfully", true);
+        return Boolean.TRUE;
     }
 }

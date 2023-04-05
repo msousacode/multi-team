@@ -20,7 +20,7 @@ public class CredentialService {
         return credentialRepository.save(credential);
     }
 
-    public boolean isThereCredential(String email) {
-        return credentialRepository.findByUsername(email).isPresent();//TODO criar exception personalizada
+    public boolean checkIfCredentialExists(String email) {
+        return credentialRepository.findByUsername(email).isPresent();
     }
 }

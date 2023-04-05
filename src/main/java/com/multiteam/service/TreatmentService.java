@@ -1,11 +1,10 @@
 package com.multiteam.service;
 
 import com.multiteam.controller.dto.TreatmentDto;
-import com.multiteam.persistence.projection.TreatmentView;
-import com.multiteam.controller.dto.ResponseDto;
 import com.multiteam.persistence.entity.Guest;
 import com.multiteam.persistence.entity.Treatment;
 import com.multiteam.persistence.entity.TreatmentProfessional;
+import com.multiteam.persistence.projection.TreatmentView;
 import com.multiteam.persistence.repository.TreatementProfessionalRepository;
 import com.multiteam.persistence.repository.TreatmentRepository;
 import com.multiteam.persistence.types.SituationType;
@@ -37,15 +36,15 @@ public class TreatmentService {
     }
 
     @Transactional
-    public ResponseDto includeTreatment(TreatmentDto treatmentDto) {
+    public Boolean includeTreatment(TreatmentDto treatmentDto) {
 
         var patient = patientService.getPatientById(treatmentDto.patientId(), treatmentDto.clinicId());
         var professional = professionalService.getProfessionalById(treatmentDto.professionalId());
 
         if (patient.isEmpty())
-            return new ResponseDto(null, "patient not found, try again", false);
+            return Boolean.FALSE;
         if (professional.isEmpty())
-            return new ResponseDto(null, "professionals not found, try again", false);
+            return Boolean.FALSE;
 
         var builder = new Treatment.Builder(
                 null,
@@ -62,20 +61,20 @@ public class TreatmentService {
         var treatmentProfessional = new TreatmentProfessional(null, treatment, professional.get(), "", SituationType.ANDAMENTO);
         treatementProfessionalRepository.save(treatmentProfessional);
 
-        return new ResponseDto(null, "treatment added with success", true);
+        return Boolean.TRUE;
     }
 
-    public Set<Treatment> findAllTreatmentsByPatientId(UUID patientId) {
+    public Set<Treatment> getAllTreatmentsByPatientId(UUID patientId) {
         return treatmentRepository.findAllByPatient_Id(patientId);
     }
 
     @Transactional
-    public ResponseDto inactiveTreatment(UUID treatmentId) {
+    public Boolean inactiveTreatment(UUID treatmentId) {
 
         var treatment = treatmentRepository.findById(treatmentId);
 
         if (treatment.isEmpty())
-            return new ResponseDto(null, "treatment not found", false);
+            return Boolean.FALSE;
 
         //inactive professionals of treatment
         treatementProfessionalRepository.inactiveProfessionalsByTreatmentId(treatmentId, SituationType.INATIVO);
@@ -87,7 +86,7 @@ public class TreatmentService {
         //inactive treatment
         treatmentRepository.inactiveTreatment(treatmentId);
 
-        return new ResponseDto(null, "treatment deleted with success", true);
+        return Boolean.TRUE;
     }
 
     @Transactional
@@ -104,7 +103,7 @@ public class TreatmentService {
 
     @Transactional
     public void excludeTreatmentByPatientId(UUID patientId) {
-        var treatments = findAllTreatmentsByPatientId(patientId);
+        var treatments = getAllTreatmentsByPatientId(patientId);
         treatments.forEach(t -> inactiveTreatment(t.getId()));
     }
 }

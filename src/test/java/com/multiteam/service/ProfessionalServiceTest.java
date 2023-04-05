@@ -31,7 +31,7 @@ class ProfessionalServiceTest {
         var specialty = SpecialtyType.FONOAUDIOLOGIA;
         var cellPhone = UUID.randomUUID().toString().substring(0, 5);
         var email = UUID.randomUUID().toString().substring(0, 5) + "@email.com";
-        var clinic = clinicService.findById(clinicDefault);
+        var clinic = clinicService.getClinicById(clinicDefault);
 
         var professional = new Professional.Builder(null, name, middleName, specialty, cellPhone, email, true, clinic.get()).build();
 

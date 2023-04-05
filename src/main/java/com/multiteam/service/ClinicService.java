@@ -38,7 +38,7 @@ public class ClinicService {
         return clinicRespository.findAll();
     }
 
-    public Optional<Clinic> findById(UUID clinicId) {
+    public Optional<Clinic> getClinicById(UUID clinicId) {
         return clinicRespository.findById(clinicId);
     }
 }

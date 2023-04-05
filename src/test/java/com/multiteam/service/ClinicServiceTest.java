@@ -49,7 +49,7 @@ class ClinicServiceTest {
     @Test
     @DisplayName("dado um clinicId que existe deve retornar a clinica consultada")
     void givenClinicIdThatExists_thenReturnClinicWithSuccess() {
-        var result = clinicService.findById(TestsConstants.CLINIC_ID);
+        var result = clinicService.getClinicById(TestsConstants.CLINIC_ID);
         Assertions.assertEquals(result.get().getId(), TestsConstants.CLINIC_ID);
     }
 }

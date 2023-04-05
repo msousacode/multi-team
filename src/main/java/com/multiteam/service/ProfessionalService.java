@@ -1,6 +1,5 @@
 package com.multiteam.service;
 
-import com.multiteam.controller.dto.ResponseDto;
 import com.multiteam.persistence.entity.Credential;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.repository.ProfessionalRepository;
@@ -32,9 +31,13 @@ public class ProfessionalService {
     }
 
     @Transactional
-    public Professional createProfessional(Professional professional, UUID clinicId) {
+    public Boolean createProfessional(Professional professional, UUID clinicId) {
 
-        var clinic = clinicService.findById(clinicId);
+        var clinic = clinicService.getClinicById(clinicId);
+
+        if(clinic.isEmpty()){
+            return Boolean.FALSE;
+        }
 
         var credential = credentialService.createCredential(new Credential(professional.getEmail(), ProvisinalPasswordUtil.generate()));
 
@@ -50,7 +53,9 @@ public class ProfessionalService {
                 .credential(credential)
                 .build();
 
-        return professionalRepository.save(builder);
+        professionalRepository.save(builder);
+
+        return Boolean.TRUE;
     }
 
     public List<Professional> getAllProfessionals(final UUID clinicId) {
@@ -61,33 +66,32 @@ public class ProfessionalService {
         return professionalRepository.findById(professionalId);
     }
 
-    public ResponseDto getProfessional(UUID professionalId) {
-        var professional = professionalRepository.findById(professionalId);
-        return professional.isPresent() ? new ResponseDto(professional, "", true) : new ResponseDto(null, "resource not found", false);
+    public Optional<Professional> getProfessional(UUID professionalId) {
+        return professionalRepository.findById(professionalId);
     }
 
     @Transactional
-    public ResponseDto inactiveProfessional(UUID professionalId) {
+    public Boolean inactiveProfessional(UUID professionalId) {
 
         var professional = professionalRepository.findById(professionalId);
 
         if (professional.isEmpty()) {
-            return new ResponseDto(null, "resource not found", false);
+            return Boolean.FALSE;
         }
 
         professional.get().getProfessionals().forEach(t -> treatmentService.inactiveTreatment(t.getTreatment().getId()));
         professionalRepository.professionalInactive(professional.get().getId());
 
-        return new ResponseDto(null, "professional deleted successfully", true);
+        return Boolean.TRUE;
     }
 
     @Transactional
-    public ResponseDto updateProfessional(Professional professional) {
+    public Boolean updateProfessional(Professional professional) {
 
         var result = professionalRepository.findById(professional.getId());
 
         if(result.isEmpty()){
-            return new ResponseDto(null, "resource not found", false);
+            return Boolean.FALSE;
         }
 
         var builder = new Professional.Builder(
@@ -103,6 +107,6 @@ public class ProfessionalService {
 
         professionalRepository.save(builder);
 
-        return new ResponseDto(null, "successfully updated professional", true);
+        return Boolean.TRUE;
     }
 }
