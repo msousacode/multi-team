@@ -37,11 +37,7 @@ class ProfessionalServiceTest {
 
         var result = professionalService.createProfessional(professional, clinicDefault);
 
-        Assertions.assertNotNull(result.getId());
-        Assertions.assertEquals(result.getName(), name);
-        Assertions.assertEquals(result.getMiddleName(), middleName);
-        Assertions.assertEquals(result.getCellPhone(), cellPhone);
-        Assertions.assertEquals(result.getEmail(), email);
+        Assertions.assertTrue(result);
     }
 
     @Test

@@ -41,10 +41,7 @@ class PatientServiceTest {
 
         var result = patientService.createPatient(builder, clinicDefault);
 
-        Assertions.assertNotNull(result.getId());
-        Assertions.assertEquals(result.getName(), "Márcio");
-        Assertions.assertEquals(result.getMiddleName(), "Farias");
-        Assertions.assertNotNull(result.getClinic().getId());
+        Assertions.assertTrue(result);
     }
 
     @Test
@@ -114,6 +111,6 @@ class PatientServiceTest {
 
         var response = patientService.updatePatient(patientBuilder);
 
-        Assertions.assertTrue(response.success());
+        Assertions.assertTrue(response);
     }
 }

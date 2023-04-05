@@ -36,7 +36,7 @@ class TreatmentServiceTest {
 
         var result = treatamentService.includeTreatment(treatmentDto);
 
-        assertTrue(result.success());
+        assertTrue(result);
     }
 /*
     @Test

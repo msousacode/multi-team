@@ -36,7 +36,7 @@ class GuestServiceTest {
 
         var result = guestService.createGuest(guestDto);
 
-        Assertions.assertTrue(result.success());
+        Assertions.assertTrue(result);
     }
 
     @Test
