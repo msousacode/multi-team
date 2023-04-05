@@ -1,5 +1,6 @@
 package com.multiteam.service;
 
+import com.multiteam.constants.TestsConstants;
 import com.multiteam.controller.dto.GuestDto;
 import com.multiteam.persistence.types.RelationshipType;
 import org.junit.jupiter.api.Assertions;
@@ -20,7 +21,6 @@ class GuestServiceTest {
     @DisplayName("deve criar um novo convidade então sucesso")
     void shouldCreateGuest_thenSuccess() {
 
-        var patientId = UUID.fromString("bc91b5cc-3bb8-48f4-abdf-8f16e33d6787");
         var email = UUID.randomUUID().toString().substring(0, 5) + "@email.com";
 
         var guestDto = new GuestDto(
@@ -31,7 +31,7 @@ class GuestServiceTest {
                 "(82) 99424-8064",
                 email,
                 true,
-                patientId
+                TestsConstants.PATIENT_ID
         );
 
         var result = guestService.createGuest(guestDto);
@@ -42,10 +42,7 @@ class GuestServiceTest {
     @Test
     @DisplayName("deve adicionar convidados ao tratamento com sucesso")
     void shouldAddGuestInTreatment_thenSuccess() {
-        var guestId = UUID.fromString("29ce2c3f-4408-4123-9468-8a7811108bcf");
-        var patientId = UUID.fromString("bc91b5cc-3bb8-48f4-abdf-8f16e33d6787");
-
-        var result = guestService.addGuestInTreatment(patientId, guestId);
+        var result = guestService.addGuestInTreatment(TestsConstants.PATIENT_ID, TestsConstants.GUEST_ID);
         Assertions.assertTrue(result);
     }
 }

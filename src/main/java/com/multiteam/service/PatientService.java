@@ -48,7 +48,7 @@ public class PatientService {
         return patientRepository.save(builder);
     }
 
-    public List<Patient> getAllPatients(final UUID clinicId) {
+    public List<Patient> getAllPatientsByClinicId(final UUID clinicId) {
         return patientRepository.findAllByClinic_Id(clinicId);
     }
 

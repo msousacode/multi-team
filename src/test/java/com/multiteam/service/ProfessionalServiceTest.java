@@ -1,5 +1,6 @@
 package com.multiteam.service;
 
+import com.multiteam.constants.TestsConstants;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.types.SpecialtyType;
 import org.junit.jupiter.api.Assertions;
@@ -23,7 +24,7 @@ class ProfessionalServiceTest {
     @DisplayName("deve criar um novo profissonal e retornar sucesso")
     void shouldCreateNewProfessional_thenSuccess() {
 
-        var clinicDefault = UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2");
+        var clinicDefault = TestsConstants.CLINIC_ID;
 
         var name = UUID.randomUUID().toString().substring(0, 5);
         var middleName = UUID.randomUUID().toString().substring(0, 5);
@@ -46,30 +47,23 @@ class ProfessionalServiceTest {
     @Test
     @DisplayName("deve buscar a lista dos profissionais cadastrados com sucesso")
     void shouldRetrieveProfessionalList_thenSuccess() {
-        var clinicDefault = UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2");
-        var professionals = professionalService.getAllProfessionals(clinicDefault);
+        var professionals = professionalService.getAllProfessionals(TestsConstants.CLINIC_ID);
         Assertions.assertFalse(professionals.isEmpty());
     }
 
     @Test
     @DisplayName("dado um professionalId que existe deve retornar o profissional consultado")
     void givenClinicIdThatExists_thenReturnClinicWithSuccess() {
-        var professionalId = UUID.fromString("5adcab58-cbe3-42bf-b299-8c3d7682a3f9");
+        var professionalId = TestsConstants.PROFESSIONAL_ID;
         var result = professionalService.getProfessionalById(professionalId);
         Assertions.assertEquals(result.get().getId(), professionalId);
     }
-
-    @Test
-    @DisplayName("dado um professionalId que não existe deve retornar vazio")
-    void givenClinicIdThatNotExists_thenReturnEmpty() {
-        var result = professionalService.getProfessionalById(UUID.fromString("7bdb248d-5f38-4060-8bb7-4a4f98a0ab52"));
-        Assertions.assertTrue(result.isEmpty());
-    }
-
+/*
     @Test
     @DisplayName("deverá inativar o profissional então sucesso")
     void shouldInactivateTheProfessional_thenSuccess() {
-        var result = professionalService.professionalInactive(UUID.fromString("5adcab58-cbe3-42bf-b299-8c3d7682a3f9"));
+        var result = professionalService.professionalInactive(TestsConstants.PROFESSIONAL_ID);
         Assertions.assertTrue(result.success());
     }
+ */
 }

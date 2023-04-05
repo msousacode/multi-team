@@ -18,7 +18,7 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
 
     List<Patient> findAllByClinic_Id(UUID clinicId);
 
-    Optional<Patient> findByIdAndClinic_Id(UUID pacientId, UUID clinicId);
+    Optional<Patient> findByIdAndClinic_Id(UUID patientId, UUID clinicId);
 
     //TODO futuramente avaliar se essas querys podem ser um projection para unir as duas consultas em uma com propriedaes WHERE dinamicas.
     @Query("""

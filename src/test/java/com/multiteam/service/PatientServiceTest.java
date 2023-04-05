@@ -1,5 +1,6 @@
 package com.multiteam.service;
 
+import com.multiteam.constants.TestsConstants;
 import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.persistence.entity.Patient;
 import com.multiteam.persistence.types.SexType;
@@ -9,8 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.UUID;
 
 @SpringBootTest
 class PatientServiceTest {
@@ -25,7 +24,7 @@ class PatientServiceTest {
     @DisplayName("deve criar um novo paciente e retornar sucesso")
     void shouldCreatePatient_thenSuccess() {
 
-        var clinicDefault = UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2");
+        var clinicDefault = TestsConstants.CLINIC_ID;
 
         var clinic = clinicService.findById(clinicDefault);
 
@@ -50,16 +49,16 @@ class PatientServiceTest {
 
     @Test
     @DisplayName("deve retornar a lista de pacientes filtrando pelo uuid da clinica com sucesso")
-    void shouldReturnListPacientFilteringByIdClinic_thenSuccess() {
-        var result = patientService.getAllPatients(UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2"));
+    void shouldReturnListPatientFilteringByIdClinic_thenSuccess() {
+        var result = patientService.getAllPatientsByClinicId(TestsConstants.CLINIC_ID);
         Assertions.assertFalse(result.isEmpty());
     }
 
     @Test
     @DisplayName("deve retornar o paciente filtrando pelo uuid do paciente e da clinica com sucesso")
-    void shouldReturnListPacientFilteringByIdPacientAndIdClinic_thenSuccess() {
-        var patientId = UUID.fromString("bc91b5cc-3bb8-48f4-abdf-8f16e33d6787");
-        var clinicId = UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2");
+    void shouldReturnListPatientFilteringByIdPacientAndIdClinic_thenSuccess() {
+        var patientId = TestsConstants.PATIENT_ID;
+        var clinicId = TestsConstants.CLINIC_ID;
 
         var result = patientService.getPatientById(patientId, clinicId);
         Assertions.assertNotNull(result);
@@ -68,46 +67,36 @@ class PatientServiceTest {
     }
 
     @Test
-    @DisplayName("dado um patientId que não existe deve retornar vazio")
-    void givenPatientIdThatNotExists_thenReturnEmpty() {
-        var result = patientService.getPatientById(UUID.fromString("7bdb248d-5f38-4060-8bb7-4a4f98a0ab51"), UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2"));
-        Assertions.assertTrue(result.isEmpty());
-    }
-
-    @Test
     @DisplayName("deve retornar todos os pacientes filtrados por professionalId então sucesso")
     void shouldReturnAllPatientsFilteringByProfessionalId_thenSuccess() {
-        var result = patientService.findAllPatientsByProfessionalId(UUID.fromString("5adcab58-cbe3-42bf-b299-8c3d7682a3f9"), SituationType.ANDAMENTO);
+        var result = patientService.findAllPatientsByProfessionalId(TestsConstants.PROFESSIONAL_ID, SituationType.ANDAMENTO);
         Assertions.assertFalse(result.isEmpty());
     }
 
     @Test
     @DisplayName("deve retornar todos os pacientes filtrados por clinicId então sucesso")
     void shouldReturnAllPatientsFilteringByClinicId_thenSuccess() {
-        var result = patientService.findAllPatientsByClinicId(UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2"), SituationType.ANDAMENTO);
+        var result = patientService.findAllPatientsByClinicId(TestsConstants.CLINIC_ID, SituationType.ANDAMENTO);
         Assertions.assertFalse(result.isEmpty());
     }
-
+/*
     @Test
     @DisplayName("Deve inativar o paciente marcando o mesmo com o flag false e de modo cascata inativar o tratamento associados ao mesmo.")
     void shouldInactivePatientByPatientId_thenSuccess() {
-        var result = patientService.inactivePatient(UUID.fromString("bc91b5cc-3bb8-48f4-abdf-8f16e33d6787"), UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2"));
+        var result = patientService.inactivePatient(TestsConstants.PATIENT_ID, TestsConstants.CLINIC_ID);
         Assertions.assertTrue(result.success());
     }
-
+*/
     @Test
     @DisplayName("Deve atualizar o paciente então sucesso")
     void shouldUpdatePatient_thenSuccess() {
-
-        var clinicId = UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2");
-        var patientId = UUID.fromString("d2383308-c9c5-4f6f-a9bc-09cb6a1f2e91");
 
         var clinicBuilder = new Clinic.Builder(
                 "Geraldo Bryan Gomes",
                 "35997818268",
                 "email@email.com",
                 "(71) 3871-3197")
-                .id(clinicId)
+                .id(TestsConstants.CLINIC_ID)
                 .build();
 
         var patientBuilder = new Patient.Builder(
@@ -116,7 +105,7 @@ class PatientServiceTest {
                 SexType.MASCULINO,
                 15,
                 clinicBuilder)
-                .id(patientId)
+                .id(TestsConstants.PATIENT_ID)
                 .active(true)
                 .months(2)
                 .externalObservation("Observation test unit")

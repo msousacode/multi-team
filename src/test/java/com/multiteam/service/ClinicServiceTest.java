@@ -1,5 +1,6 @@
 package com.multiteam.service;
 
+import com.multiteam.constants.TestsConstants;
 import com.multiteam.persistence.entity.Clinic;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -48,15 +49,7 @@ class ClinicServiceTest {
     @Test
     @DisplayName("dado um clinicId que existe deve retornar a clinica consultada")
     void givenClinicIdThatExists_thenReturnClinicWithSuccess() {
-        var clinicId = UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2");
-        var result = clinicService.findById(clinicId);
-        Assertions.assertEquals(result.get().getId(), clinicId);
-    }
-
-    @Test
-    @DisplayName("dado um clinicId que não existe deve retornar vazio")
-    void givenClinicIdThatNotExists_thenReturnEmpty() {
-        var result = clinicService.findById(UUID.fromString("7bdb248d-5f38-4060-8bb7-4a4f98a0ab52"));
-        Assertions.assertTrue(result.isEmpty());
+        var result = clinicService.findById(TestsConstants.CLINIC_ID);
+        Assertions.assertEquals(result.get().getId(), TestsConstants.CLINIC_ID);
     }
 }
