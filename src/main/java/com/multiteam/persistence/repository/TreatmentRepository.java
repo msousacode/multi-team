@@ -48,7 +48,7 @@ public interface TreatmentRepository extends JpaRepository<Treatment, UUID> {
            t.finalDate AS finalDate,
            t.active AS active
            FROM Treatment t
-           t.id = :treatmentId
+           WHERE t.id = :treatmentId
            """)
     TreatmentView findByIdProjection(@Param("treatmentId") UUID treatmentId);
 }
