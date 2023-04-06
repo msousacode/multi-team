@@ -1,4 +1,4 @@
-package com.multiteam.service.util;
+package com.multiteam.util;
 
 import java.util.UUID;
 

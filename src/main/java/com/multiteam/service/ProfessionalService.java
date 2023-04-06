@@ -3,7 +3,7 @@ package com.multiteam.service;
 import com.multiteam.persistence.entity.Credential;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.repository.ProfessionalRepository;
-import com.multiteam.service.util.ProvisinalPasswordUtil;
+import com.multiteam.util.ProvisinalPasswordUtil;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

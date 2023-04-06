@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class GlobalHandlerExeception {
 
-    @ExceptionHandler({IllegalArgumentException.class})
+    @ExceptionHandler({IllegalArgumentException.class, TreatmentNotExistsException.class})
     public ResponseEntity<ErrorDetails> handlerAsBadRequest(RuntimeException ex) {
         ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), LocalDateTime.now(), Boolean.FALSE);
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
