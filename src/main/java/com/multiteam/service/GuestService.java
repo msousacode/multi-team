@@ -17,15 +17,12 @@ public class GuestService {
 
     private final GuestRespository guestRespository;
     private final TreatmentService treatmentService;
-    private final CredentialService credentialService;
 
     public GuestService(
             GuestRespository guestRespository,
-            TreatmentService treatmentService,
-            CredentialService credentialService) {
+            TreatmentService treatmentService) {
         this.guestRespository = guestRespository;
         this.treatmentService = treatmentService;
-        this.credentialService = credentialService;
     }
 
     @Transactional
@@ -34,10 +31,6 @@ public class GuestService {
         var treatment = treatmentService.getAllTreatmentsByPatientId(guestDto.patientId());
 
         if (treatment.isEmpty()) {
-            return Boolean.FALSE;
-        }
-
-        if (credentialService.checkIfCredentialExists(guestDto.email())) {
             return Boolean.FALSE;
         } else {
             //var credential = new Credential(guestDto.email(), ProvisinalPasswordUtils.generate());

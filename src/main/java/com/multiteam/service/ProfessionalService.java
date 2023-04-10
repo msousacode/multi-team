@@ -13,17 +13,14 @@ import java.util.UUID;
 public class ProfessionalService {
 
     private final ProfessionalRepository professionalRepository;
-    private final CredentialService credentialService;
     private final ClinicService clinicService;
     private final TreatmentService treatmentService;
 
     public ProfessionalService(
             ProfessionalRepository professionalRepository,
-            CredentialService credentialService,
             ClinicService clinicService,
             TreatmentService treatmentService) {
         this.professionalRepository = professionalRepository;
-        this.credentialService = credentialService;
         this.clinicService = clinicService;
         this.treatmentService = treatmentService;
     }
