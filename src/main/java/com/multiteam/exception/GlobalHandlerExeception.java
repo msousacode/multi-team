@@ -15,4 +15,10 @@ public class GlobalHandlerExeception {
         ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), LocalDateTime.now(), Boolean.FALSE);
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler({OAuth2AuthenticationProcessingException.class})
+    public ResponseEntity<ErrorDetails> handlerAsForbiddenRequest(RuntimeException ex) {
+        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), LocalDateTime.now(), Boolean.FALSE);
+        return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
+    }
 }
