@@ -18,6 +18,13 @@ public class Role {
     @Column(name = "role")
     private RoleType role;
 
+    public Role() {}
+
+    public Role(UUID id, RoleType role){
+        this.id = id;
+        this.role = role;
+    }
+
     public UUID getId() {
         return id;
     }

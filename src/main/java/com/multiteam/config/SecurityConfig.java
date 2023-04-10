@@ -66,7 +66,6 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
                 .exceptionHandling()
                 //.authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
-                .headers(headers -> headers.frameOptions().disable())//mandatory when using h2 database, otherwise you can remove.
                 .authorizeRequests()
                 .antMatchers("/",
                         "/error",
@@ -83,6 +82,7 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
                 .antMatchers(POST, "/v1/auth/login").permitAll()
                 .antMatchers(POST, "/v1/auth/token").permitAll()
+                .antMatchers(POST, "/v1/auth/signup").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()

@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: V016
+      author: michael
+      changes:
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'ADMIN');"
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'OWNER');"
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PATIENT');"
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'GUEST');"
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PROFESSIONAL');"
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'SCHEDULE');"
