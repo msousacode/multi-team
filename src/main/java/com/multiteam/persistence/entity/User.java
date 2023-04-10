@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.multiteam.persistence.types.AuthProviderType;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -35,6 +37,15 @@ public class User {
     @Column(name = "provider")
     private AuthProviderType provider;
 
+    @Column(name = "active")
+    private Boolean active;
+
+    @ManyToMany
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
     public User() {
     }
 
@@ -45,6 +56,8 @@ public class User {
         this.emailVerified = builder.emailVerified;
         this.imageUrl = builder.imageUrl;
         this.provider = builder.provider;
+        this.active = builder.active;
+        this.roles = builder.roles;
     }
 
     public UUID getId() {
@@ -75,6 +88,10 @@ public class User {
         return provider;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -88,17 +105,25 @@ public class User {
         private UUID id;
         private final String name;
         private final String email;
+        private final Boolean active;
 
         //optional
         private String password;
         private String imageUrl;
         private Boolean emailVerified;
         private AuthProviderType provider;
+        private Set<Role> roles;
 
-        public Builder(final UUID id, final String name, final String email) {
+        public Builder(
+                final UUID id,
+                final String name,
+                final String email,
+                final Boolean active) {
+
             this.id = id;
             this.name = name;
             this.email = email;
+            this.active = active;
         }
 
         public Builder imageUrl(String imageUrl) {
@@ -118,6 +143,11 @@ public class User {
 
         public Builder password(String password) {
             this.password = password;
+            return this;
+        }
+
+        public Builder roles(Set<Role> roles) {
+            this.roles = roles;
             return this;
         }
 

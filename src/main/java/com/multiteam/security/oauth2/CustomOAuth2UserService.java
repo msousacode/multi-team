@@ -65,7 +65,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user = new User.Builder(
                 null,
                 oAuth2UserInfo.getName(),
-                oAuth2UserInfo.getEmail())
+                oAuth2UserInfo.getEmail(),
+                true)
                 .imageUrl(oAuth2UserInfo.getImageUrl())
                 .password(null)
                 .provider(AuthProviderType.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))
