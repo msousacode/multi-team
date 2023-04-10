@@ -1,9 +1,7 @@
 package com.multiteam.service;
 
-import com.multiteam.persistence.entity.Credential;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.repository.ProfessionalRepository;
-import com.multiteam.util.ProvisinalPasswordUtils;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -39,7 +37,7 @@ public class ProfessionalService {
             return Boolean.FALSE;
         }
 
-        var credential = credentialService.createCredential(new Credential(professional.getEmail(), ProvisinalPasswordUtils.generate()));
+        //var credential = credentialService.createCredential(new Credential(professional.getEmail(), ProvisinalPasswordUtils.generate()));
 
         var builder = new Professional.Builder(
                 null,
@@ -50,7 +48,6 @@ public class ProfessionalService {
                 professional.getEmail(),
                 professional.isActive(),
                 clinic.get())
-                .credential(credential)
                 .build();
 
         professionalRepository.save(builder);

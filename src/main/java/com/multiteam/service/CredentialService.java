@@ -1,7 +1,5 @@
 package com.multiteam.service;
 
-import com.multiteam.persistence.entity.Credential;
-import com.multiteam.persistence.repository.CredentialRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

@@ -34,10 +34,6 @@ public class Guest {
     @Column(name = "active")
     private boolean active;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "credential_id")
-    private Credential credential;
-
     public Guest() {}
 
     public Guest(Builder builder) {
@@ -48,7 +44,6 @@ public class Guest {
         this.cellPhone = builder.cellPhone;
         this.email = builder.email;
         this.active = builder.active;
-        this.credential = builder.credential;
     }
 
     public UUID getId() {
@@ -79,10 +74,6 @@ public class Guest {
         return active;
     }
 
-    public Credential getCredential() {
-        return credential;
-    }
-
     public static class Builder {
         //mandatory
         private UUID id;
@@ -92,7 +83,6 @@ public class Guest {
         private final String cellPhone;
         private final String email;
         private final boolean active;
-        private final Credential credential;
 
         public Builder(UUID id,
                        final String name,
@@ -100,8 +90,7 @@ public class Guest {
                        final RelationshipType relationship,
                        final String cellPhone,
                        final String email,
-                       final boolean active,
-                       final Credential credential) {
+                       final boolean active) {
 
             Assert.isTrue(!name.isEmpty(), "guest name should not be empty");
             Assert.isTrue(!middleName.isEmpty(), "guest middle name should not be empty");
@@ -111,7 +100,6 @@ public class Guest {
             Assert.notNull(name, "guest name should not be null");
             Assert.notNull(middleName,"guest middle name should not be null");
             Assert.notNull(cellPhone, "guest cell phone should not be null");
-            Assert.notNull(credential, "guest needs be associate with credential");
 
             this.id = id;
             this.name = name;
@@ -120,7 +108,6 @@ public class Guest {
             this.cellPhone = cellPhone;
             this.email = email;
             this.active = active;
-            this.credential = credential;
         }
 
         public Guest build() {
@@ -128,5 +115,3 @@ public class Guest {
         }
     }
 }
-
-

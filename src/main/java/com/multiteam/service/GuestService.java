@@ -2,10 +2,8 @@ package com.multiteam.service;
 
 import com.multiteam.controller.dto.GuestDto;
 import com.multiteam.exception.TreatmentNotExistsException;
-import com.multiteam.persistence.entity.Credential;
 import com.multiteam.persistence.entity.Guest;
 import com.multiteam.persistence.repository.GuestRespository;
-import com.multiteam.util.ProvisinalPasswordUtils;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +40,7 @@ public class GuestService {
         if (credentialService.checkIfCredentialExists(guestDto.email())) {
             return Boolean.FALSE;
         } else {
-            var credential = new Credential(guestDto.email(), ProvisinalPasswordUtils.generate());
+            //var credential = new Credential(guestDto.email(), ProvisinalPasswordUtils.generate());
 
             var builder = new Guest.Builder(
                     null,
@@ -51,8 +49,7 @@ public class GuestService {
                     guestDto.relationship(),
                     guestDto.cellPhone(),
                     guestDto.email(),
-                    true,
-                    credential)
+                    true)
                     .build();
 
             var guest = guestRespository.save(builder);
@@ -98,8 +95,7 @@ public class GuestService {
                 guest.getRelationship(),
                 guest.getCellPhone(),
                 guest.getEmail(),
-                guest.isActive(),
-                result.get().getCredential())
+                guest.isActive())
                 .build();
 
         guestRespository.save(builder);

@@ -35,10 +35,6 @@ public class Professional {
     @Column(name = "active")
     private boolean active;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "credential_id")
-    private Credential credential;
-
     @OneToMany(mappedBy = "professional")
     private Set<TreatmentProfessional> professionals;
 
@@ -55,7 +51,6 @@ public class Professional {
         this.specialty = builder.specialty;
         this.cellPhone = builder.cellPhone;
         this.email = builder.email;
-        this.credential = builder.credential;
         this.active = builder.active;
         this.clinic = builder.clinic;
     }
@@ -88,10 +83,6 @@ public class Professional {
         return active;
     }
 
-    public Credential getCredential() {
-        return credential;
-    }
-
     public Clinic getClinic() {
         return clinic;
     }
@@ -110,7 +101,6 @@ public class Professional {
         private final String cellPhone;
         private final String email;
         private final boolean active;
-        private Credential credential;
         private final Clinic clinic;
 
         //optional
@@ -145,12 +135,6 @@ public class Professional {
             this.email = email;
             this.active = active;
             this.clinic = clinic;
-        }
-
-        public Builder credential(Credential credential) {
-            Assert.notNull(credential, "credential not be null");
-            this.credential = credential;
-            return this;
         }
 
         public Builder professionals(Set<TreatmentProfessional> professionals) {
