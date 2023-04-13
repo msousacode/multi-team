@@ -8,6 +8,7 @@ import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.repository.RoleRepository;
 import com.multiteam.persistence.repository.UserRepository;
 import com.multiteam.persistence.types.AuthProviderType;
+import com.multiteam.persistence.types.RoleType;
 import com.multiteam.security.CustomAuthenticationManager;
 import com.multiteam.security.TokenProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Set;
 
 @Service
 public class AuthService {
@@ -61,12 +61,15 @@ public class AuthService {
             throw new BadRequestException("Email address already in use.");
         }
 
-        Role role = roleRepository.findByRole("GUEST");
+        if(signUpRequest.roles().isEmpty()) {
+            Role role = roleRepository.findByRole(RoleType.GUEST);
+            signUpRequest.roles().add(role);
+        }
 
         var builder = new User.Builder(
                 null, signUpRequest.name(), signUpRequest.email(), true)
                 .provider(AuthProviderType.local)
-                //.roles(Set.of(role))
+                .roles(signUpRequest.roles())
                 .build();
 
         return userRepository.save(builder);
