@@ -1,6 +1,6 @@
 package com.multiteam.service;
 
-import com.multiteam.controller.dto.TreatmentDto;
+import com.multiteam.controller.dto.TreatmentRequest;
 import com.multiteam.persistence.entity.Guest;
 import com.multiteam.persistence.entity.Treatment;
 import com.multiteam.persistence.entity.TreatmentProfessional;
@@ -36,7 +36,7 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean includeTreatment(TreatmentDto treatmentDto) {
+    public Boolean includeTreatment(TreatmentRequest treatmentDto) {
 
         var patient = patientService.getPatientById(treatmentDto.patientId(), treatmentDto.clinicId());
         var professional = professionalService.getProfessionalById(treatmentDto.professionalId());

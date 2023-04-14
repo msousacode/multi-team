@@ -1,7 +1,7 @@
 package com.multiteam.service;
 
 import com.multiteam.constants.TestsConstants;
-import com.multiteam.controller.dto.GuestDto;
+import com.multiteam.controller.dto.GuestRequest;
 import com.multiteam.persistence.types.RelationshipType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -18,12 +18,12 @@ class GuestServiceTest {
     private GuestService guestService;
 
     @Test
-    @DisplayName("deve criar um novo convidade então sucesso")
+    @DisplayName("deve criar um novo convidado então sucesso")
     void shouldCreateGuest_thenSuccess() {
 
         var email = UUID.randomUUID().toString().substring(0, 5) + "@email.com";
 
-        var guestDto = new GuestDto(
+        var guestDto = new GuestRequest(
                 null,
                 "Danilo",
                 "Joaquim",

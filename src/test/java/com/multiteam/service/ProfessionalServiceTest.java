@@ -1,6 +1,7 @@
 package com.multiteam.service;
 
 import com.multiteam.constants.TestsConstants;
+import com.multiteam.controller.dto.ProfessionalRequest;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.types.SpecialtyType;
 import org.junit.jupiter.api.Assertions;
@@ -24,18 +25,15 @@ class ProfessionalServiceTest {
     @DisplayName("deve criar um novo profissonal e retornar sucesso")
     void shouldCreateNewProfessional_thenSuccess() {
 
-        var clinicDefault = TestsConstants.CLINIC_ID;
-
         var name = UUID.randomUUID().toString().substring(0, 5);
         var middleName = UUID.randomUUID().toString().substring(0, 5);
         var specialty = SpecialtyType.FONOAUDIOLOGIA;
         var cellPhone = UUID.randomUUID().toString().substring(0, 5);
-        var email = UUID.randomUUID().toString().substring(0, 5) + "@email.com";
-        var clinic = clinicService.getClinicById(clinicDefault);
+        var email = "Ow Test+" + UUID.randomUUID().toString().substring(0, 5) + "@email.com";
 
-        var professional = new Professional.Builder(null, name, middleName, specialty, cellPhone, email, true, clinic.get()).build();
+        var professional = new ProfessionalRequest(null, name, middleName, specialty, cellPhone, email, TestsConstants.CLINIC_ID);
 
-        var result = professionalService.createProfessional(professional, clinicDefault);
+        var result = professionalService.createProfessional(professional);
 
         Assertions.assertTrue(result);
     }

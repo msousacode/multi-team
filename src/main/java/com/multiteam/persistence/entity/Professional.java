@@ -35,16 +35,16 @@ public class Professional {
     @Column(name = "active")
     private boolean active;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "credential_id")
-    private Credential credential;
-
     @OneToMany(mappedBy = "professional")
     private Set<TreatmentProfessional> professionals;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id")
     private Clinic clinic;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Professional() {}
 
@@ -55,9 +55,9 @@ public class Professional {
         this.specialty = builder.specialty;
         this.cellPhone = builder.cellPhone;
         this.email = builder.email;
-        this.credential = builder.credential;
         this.active = builder.active;
         this.clinic = builder.clinic;
+        this.user = builder.user;
     }
 
     public UUID getId() {
@@ -88,16 +88,16 @@ public class Professional {
         return active;
     }
 
-    public Credential getCredential() {
-        return credential;
-    }
-
     public Clinic getClinic() {
         return clinic;
     }
 
     public Set<TreatmentProfessional> getProfessionals() {
         return professionals;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public static class Builder {
@@ -110,8 +110,8 @@ public class Professional {
         private final String cellPhone;
         private final String email;
         private final boolean active;
-        private Credential credential;
         private final Clinic clinic;
+        private final User user;
 
         //optional
         private Set<TreatmentProfessional> professionals;
@@ -124,7 +124,8 @@ public class Professional {
                 final String cellPhone,
                 final String email,
                 final boolean active,
-                final Clinic clinic) {
+                final Clinic clinic,
+                final User user) {
 
             Assert.notNull(name, "professional name not be null");
             Assert.notNull(middleName, "professional middle name not be null");
@@ -132,6 +133,8 @@ public class Professional {
             Assert.notNull(cellPhone, "professional cellphone not be null");
             Assert.notNull(email, "professional email not be null");
             Assert.notNull(clinic, "professional needs to be associated with the clinic");
+            Assert.notNull(user, "professional needs to be associated with the user");
+
             Assert.isTrue(!name.isEmpty(), "professional name not be empty");
             Assert.isTrue(!middleName.isEmpty(), "professional middle name not be empty");
             Assert.isTrue(!cellPhone.isEmpty(), "professional cellphone not be empty");
@@ -145,12 +148,7 @@ public class Professional {
             this.email = email;
             this.active = active;
             this.clinic = clinic;
-        }
-
-        public Builder credential(Credential credential) {
-            Assert.notNull(credential, "credential not be null");
-            this.credential = credential;
-            return this;
+            this.user = user;
         }
 
         public Builder professionals(Set<TreatmentProfessional> professionals) {

@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: V013
+      author: michael
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: user_id
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: varchar(100)
+              - column:
+                  name: image_url
+                  type: varchar(250)
+              - column:
+                  name: email_verified
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: provider
+                  type: varchar(20)
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false

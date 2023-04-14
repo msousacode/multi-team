@@ -6,7 +6,7 @@ import com.multiteam.persistence.types.TreatmentType;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record TreatmentDto(
+public record TreatmentRequest(
         UUID id,
         String description,
         TreatmentType treatmentType,

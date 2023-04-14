@@ -1,7 +1,7 @@
 package com.multiteam.service;
 
 import com.multiteam.constants.TestsConstants;
-import com.multiteam.controller.dto.TreatmentDto;
+import com.multiteam.controller.dto.TreatmentRequest;
 import com.multiteam.persistence.types.SituationType;
 import com.multiteam.persistence.types.TreatmentType;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +24,7 @@ class TreatmentServiceTest {
     @DisplayName("deve criar o tratamento associado ao profissional")
     void shouldCreateTreatmentAssociatedWithProfessional_thenSuccess() {
 
-        var treatmentDto = new TreatmentDto(
+        var treatmentDto = new TreatmentRequest(
                 null,
                 "Lorem ipsum donec consectetur sagittis ullamcorper hac platea ultrices tristique, turpis curabitur commodo condimentum risus porttitor sit erat metus tempor, cras proin in odio eros ut dolor egestas. cras cursus elit sit urna mauris enim quisque eu class quam",
                 TreatmentType.FONOAUDIOLOGIA,
