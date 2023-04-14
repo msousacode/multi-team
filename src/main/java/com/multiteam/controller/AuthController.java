@@ -6,6 +6,7 @@ import com.multiteam.controller.dto.payload.LoginRequest;
 import com.multiteam.controller.dto.payload.SignUpRequest;
 import com.multiteam.service.AuthService;
 import org.hibernate.mapping.Any;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,14 +34,8 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
-        var result = authService.registerUser(signUpRequest);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/user/me")
-                .buildAndExpand(result.getId()).toUri();
-
-        return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "User registered successfully@"));
+    public ResponseEntity<Void> registerUser(@RequestBody SignUpRequest signUpRequest) {
+        authService.registerUser(signUpRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
