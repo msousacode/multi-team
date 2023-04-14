@@ -13,19 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthControllerTest extends MockMvcController {
 
     @Test
-    @DisplayName("deve realizar a autenticação do usuário então sucesso")
-    public void shouldPerformAuthenticationUser_thenGeneratedTokenWithHttpStatus200() throws Exception {
-
-        mockMvc.perform(
-                        post("/v1/auth/login")
-                                .content(getUserJson())
-                                .contentType(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").isNotEmpty());
-    }
-
-    @Test
     @DisplayName("deve criar um novo usuário sem roles então sucesso")
     public void shouldRegisterNewUserWithOutRoles_thenSuccess() throws Exception {
 
@@ -49,10 +36,23 @@ class AuthControllerTest extends MockMvcController {
                 .andExpect(status().isCreated());
     }
 
+    @Test
+    @DisplayName("deve realizar a autenticação do usuário então sucesso")
+    public void shouldPerformAuthenticationUser_thenGeneratedTokenWithHttpStatus200() throws Exception {
+
+        mockMvc.perform(
+                        post("/v1/auth/login")
+                                .content(getUserJson())
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").isNotEmpty());
+    }
+
     private String getNewUserWithRoleJson() {
         return """
                 {
-                    "name":"RedTest",
+                    "name":"%s",
                     "email":"%s",
                     "password":"12345678",
                     "roles": [
@@ -66,13 +66,15 @@ class AuthControllerTest extends MockMvcController {
                         }
                     ]
                 }
-                """.formatted(UUID.randomUUID().toString().substring(0,5) + "@email.com");
+                """.formatted(
+                        "Ow Test+" + UUID.randomUUID().toString().substring(0,5),
+                        UUID.randomUUID().toString().substring(0,5) + "@email.com");
     }
 
     private String getUserJson() {
         return """
                 {
-                    "email":"redtest@email.com",
+                    "email":"ab6ee@email.com",
                     "password":"12345678"
                 }
                 """;
@@ -81,10 +83,12 @@ class AuthControllerTest extends MockMvcController {
     private String getNewUserWithoutRoleJson() {
         return """
                 {
-                    "name":"RedTest",
+                    "name":"%s",
                     "email":"%s",
                     "password":"12345678"
                 }
-                """.formatted(UUID.randomUUID().toString().substring(0,5) + "@email.com");
+                """.formatted(
+                        "Ow Test+" + UUID.randomUUID().toString().substring(0,5),
+                        UUID.randomUUID().toString().substring(0,5) + "@email.com");
     }
 }

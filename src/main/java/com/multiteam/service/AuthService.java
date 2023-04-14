@@ -11,8 +11,10 @@ import com.multiteam.persistence.types.AuthProviderType;
 import com.multiteam.persistence.types.RoleType;
 import com.multiteam.security.CustomAuthenticationManager;
 import com.multiteam.security.TokenProvider;
+import com.multiteam.util.ProvisinalPasswordUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
