@@ -42,6 +42,10 @@ public class Professional {
     @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id")
     private Clinic clinic;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Professional() {}
 
     private Professional(Builder builder) {
@@ -53,6 +57,7 @@ public class Professional {
         this.email = builder.email;
         this.active = builder.active;
         this.clinic = builder.clinic;
+        this.user = builder.user;
     }
 
     public UUID getId() {
@@ -91,6 +96,10 @@ public class Professional {
         return professionals;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public static class Builder {
 
         //mandatory
@@ -102,6 +111,7 @@ public class Professional {
         private final String email;
         private final boolean active;
         private final Clinic clinic;
+        private final User user;
 
         //optional
         private Set<TreatmentProfessional> professionals;
@@ -114,7 +124,8 @@ public class Professional {
                 final String cellPhone,
                 final String email,
                 final boolean active,
-                final Clinic clinic) {
+                final Clinic clinic,
+                final User user) {
 
             Assert.notNull(name, "professional name not be null");
             Assert.notNull(middleName, "professional middle name not be null");
@@ -122,6 +133,8 @@ public class Professional {
             Assert.notNull(cellPhone, "professional cellphone not be null");
             Assert.notNull(email, "professional email not be null");
             Assert.notNull(clinic, "professional needs to be associated with the clinic");
+            Assert.notNull(user, "professional needs to be associated with the user");
+
             Assert.isTrue(!name.isEmpty(), "professional name not be empty");
             Assert.isTrue(!middleName.isEmpty(), "professional middle name not be empty");
             Assert.isTrue(!cellPhone.isEmpty(), "professional cellphone not be empty");
@@ -135,6 +148,7 @@ public class Professional {
             this.email = email;
             this.active = active;
             this.clinic = clinic;
+            this.user = user;
         }
 
         public Builder professionals(Set<TreatmentProfessional> professionals) {

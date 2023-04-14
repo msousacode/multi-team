@@ -1,17 +1,16 @@
 package com.multiteam.controller.dto;
 
-import com.multiteam.persistence.types.RelationshipType;
+import com.multiteam.persistence.types.SpecialtyType;
 
 import java.util.UUID;
 
-public record GuestDto(
+public record ProfessionalRequest(
         UUID id,
         String name,
         String middleName,
-        RelationshipType relationship,
+        SpecialtyType specialty,
         String cellPhone,
         String email,
-        boolean active,
-        UUID patientId
+        UUID clinicId
 ) {
 }

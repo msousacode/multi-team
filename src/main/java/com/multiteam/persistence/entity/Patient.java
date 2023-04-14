@@ -44,6 +44,10 @@ public class Patient {
     @JoinColumn(name = "clinic_id")
     private Clinic clinic;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Patient() {
     }
 

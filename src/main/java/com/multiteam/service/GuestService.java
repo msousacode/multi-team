@@ -1,9 +1,13 @@
 package com.multiteam.service;
 
-import com.multiteam.controller.dto.GuestDto;
+
+import com.multiteam.controller.dto.GuestRequest;
 import com.multiteam.exception.TreatmentNotExistsException;
 import com.multiteam.persistence.entity.Guest;
+import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.repository.GuestRespository;
+import com.multiteam.persistence.repository.UserRepository;
+import com.multiteam.persistence.types.AuthProviderType;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
@@ -17,23 +21,28 @@ public class GuestService {
 
     private final GuestRespository guestRespository;
     private final TreatmentService treatmentService;
+    private final UserRepository userRepository;
 
     public GuestService(
             GuestRespository guestRespository,
-            TreatmentService treatmentService) {
+            TreatmentService treatmentService,
+            UserRepository userRepository) {
         this.guestRespository = guestRespository;
         this.treatmentService = treatmentService;
+        this.userRepository = userRepository;
     }
 
     @Transactional
-    public Boolean createGuest(GuestDto guestDto) {
+    public Boolean createGuest(GuestRequest guestDto) {
 
         var treatment = treatmentService.getAllTreatmentsByPatientId(guestDto.patientId());
 
         if (treatment.isEmpty()) {
             return Boolean.FALSE;
         } else {
-            //var credential = new Credential(guestDto.email(), ProvisinalPasswordUtils.generate());
+            var user = new User.Builder(null, guestDto.name(), guestDto.email(), true).provider(AuthProviderType.local).build();
+
+            var userResult = userRepository.save(user);
 
             var builder = new Guest.Builder(
                     null,
@@ -42,7 +51,8 @@ public class GuestService {
                     guestDto.relationship(),
                     guestDto.cellPhone(),
                     guestDto.email(),
-                    true)
+                    true,
+                    userResult)
                     .build();
 
             var guest = guestRespository.save(builder);
@@ -88,7 +98,8 @@ public class GuestService {
                 guest.getRelationship(),
                 guest.getCellPhone(),
                 guest.getEmail(),
-                guest.isActive())
+                guest.isActive(),
+                result.get().getUser())
                 .build();
 
         guestRespository.save(builder);

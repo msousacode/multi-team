@@ -1,7 +1,10 @@
 package com.multiteam.service;
 
+import com.multiteam.controller.dto.ProfessionalRequest;
 import com.multiteam.persistence.entity.Professional;
+import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.repository.ProfessionalRepository;
+import com.multiteam.persistence.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -9,42 +12,49 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.multiteam.persistence.types.AuthProviderType.local;
+
 @Service
 public class ProfessionalService {
 
     private final ProfessionalRepository professionalRepository;
     private final ClinicService clinicService;
     private final TreatmentService treatmentService;
+    private final UserRepository userRepository;
 
     public ProfessionalService(
             ProfessionalRepository professionalRepository,
             ClinicService clinicService,
-            TreatmentService treatmentService) {
+            TreatmentService treatmentService,
+            UserRepository userRepository) {
         this.professionalRepository = professionalRepository;
         this.clinicService = clinicService;
         this.treatmentService = treatmentService;
+        this.userRepository = userRepository;
     }
 
     @Transactional
-    public Boolean createProfessional(Professional professional, UUID clinicId) {
+    public Boolean createProfessional(ProfessionalRequest professionalRequest) {
 
-        var clinic = clinicService.getClinicById(clinicId);
+        var clinic = clinicService.getClinicById(professionalRequest.clinicId());
 
         if(clinic.isEmpty()){
             return Boolean.FALSE;
         }
 
-        //var credential = credentialService.createCredential(new Credential(professional.getEmail(), ProvisinalPasswordUtils.generate()));
+        var user = new User.Builder(null, professionalRequest.name(), professionalRequest.email(), true).provider(local).build();
+        var userResult = userRepository.save(user);
 
         var builder = new Professional.Builder(
                 null,
-                professional.getName(),
-                professional.getMiddleName(),
-                professional.getSpecialty(),
-                professional.getCellPhone(),
-                professional.getEmail(),
-                professional.isActive(),
-                clinic.get())
+                professionalRequest.name(),
+                professionalRequest.middleName(),
+                professionalRequest.specialty(),
+                professionalRequest.cellPhone(),
+                professionalRequest.email(),
+                true,
+                clinic.get(),
+                userResult)
                 .build();
 
         professionalRepository.save(builder);
@@ -96,7 +106,8 @@ public class ProfessionalService {
                 professional.getCellPhone(),
                 professional.getEmail(),
                 professional.isActive(),
-                result.get().getClinic())
+                result.get().getClinic(),
+                professional.getUser())
                 .build();
 
         professionalRepository.save(builder);
