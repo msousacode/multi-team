@@ -58,6 +58,7 @@ public class User {
         this.provider = builder.provider;
         this.active = builder.active;
         this.roles = builder.roles;
+        this.password = builder.password;
     }
 
     public UUID getId() {
@@ -98,6 +99,10 @@ public class User {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public static User createUserActive(String email, String password) {
+        return new User.Builder(UUID.randomUUID(), "Basic User", email, true).password(password).build();
     }
 
     public static class Builder {

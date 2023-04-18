@@ -16,7 +16,7 @@
 		<liquibase-core.version>4.20.0</liquibase-core.version>
 		<snakeyaml.version>2.0</snakeyaml.version>
 		<jjwt.version>0.11.5</jjwt.version>
-		<google.api.version>1.30.9</google.api.version>
+		<google.api.version>2.2.0</google.api.version>
 		<jacoco.version>0.8.8</jacoco.version>
 	</properties>
 	<dependencies>
@@ -79,6 +79,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

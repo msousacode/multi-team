@@ -1,6 +1,6 @@
 package com.multiteam.persistence.entity;
 
-import com.multiteam.persistence.types.RoleType;
+import com.multiteam.persistence.types.RoleEnum;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -16,11 +16,11 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private RoleType role;
+    private RoleEnum role;
 
     public Role() {}
 
-    public Role(UUID id, RoleType role){
+    public Role(UUID id, RoleEnum role){
         this.id = id;
         this.role = role;
     }
@@ -29,7 +29,7 @@ public class Role {
         return id;
     }
 
-    public RoleType getRole() {
+    public RoleEnum getRole() {
         return role;
     }
 }

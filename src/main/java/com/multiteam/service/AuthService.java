@@ -8,13 +8,11 @@ import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.repository.RoleRepository;
 import com.multiteam.persistence.repository.UserRepository;
 import com.multiteam.persistence.types.AuthProviderType;
-import com.multiteam.persistence.types.RoleType;
+import com.multiteam.persistence.types.RoleEnum;
 import com.multiteam.security.CustomAuthenticationManager;
 import com.multiteam.security.TokenProvider;
-import com.multiteam.util.ProvisinalPasswordUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -64,7 +62,7 @@ public class AuthService {
         }
 
         if(signUpRequest.roles().isEmpty()) {
-            Role role = roleRepository.findByRole(RoleType.GUEST);
+            Role role = roleRepository.findByRole(RoleEnum.ROLE_GUEST);
             signUpRequest.roles().add(role);
         }
 
