@@ -37,11 +37,13 @@ public class ProfessionalController {
         }
     }
 
-    @GetMapping("/{clinicId}")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @GetMapping("/clinic/{clinicId}")
     public List<Professional> getAllProfessionals(@PathVariable("clinicId") UUID clinicId) {
         return professionalService.getAllProfessionals(clinicId);
     }
 
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @GetMapping("/{professionalId}")
     public ResponseEntity<Professional> getProfessional(@PathVariable("professionalId") UUID professionalId) {
         var professionalOptional = professionalService.getProfessional(professionalId);
@@ -50,13 +52,13 @@ public class ProfessionalController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    //@PreAuthorize("hasAnyRole('ROLE_OWNER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @PutMapping
     public void updateProfessional() {
 
     }
 
-    //@PreAuthorize("hasAnyRole('ROLE_OWNER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @DeleteMapping
     public void inactiveProfessional() {
 

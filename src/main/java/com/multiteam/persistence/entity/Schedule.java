@@ -1,6 +1,6 @@
 package com.multiteam.persistence.entity;
 
-import com.multiteam.persistence.types.ScheduleType;
+import com.multiteam.persistence.enums.ScheduleType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

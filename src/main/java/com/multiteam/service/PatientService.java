@@ -3,7 +3,7 @@ package com.multiteam.service;
 import com.multiteam.persistence.entity.Patient;
 import com.multiteam.persistence.projection.PatientsProfessionalsView;
 import com.multiteam.persistence.repository.PatientRepository;
-import com.multiteam.persistence.types.SituationType;
+import com.multiteam.persistence.enums.SituationType;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

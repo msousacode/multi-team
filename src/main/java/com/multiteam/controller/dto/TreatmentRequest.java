@@ -1,7 +1,7 @@
 package com.multiteam.controller.dto;
 
-import com.multiteam.persistence.types.SituationType;
-import com.multiteam.persistence.types.TreatmentType;
+import com.multiteam.persistence.enums.SituationType;
+import com.multiteam.persistence.enums.TreatmentType;
 
 import java.time.LocalDate;
 import java.util.UUID;

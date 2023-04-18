@@ -7,7 +7,7 @@ import com.multiteam.persistence.entity.Guest;
 import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.repository.GuestRespository;
 import com.multiteam.persistence.repository.UserRepository;
-import com.multiteam.persistence.types.AuthProviderType;
+import com.multiteam.persistence.enums.AuthProviderType;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.multiteam.persistence.entity;
 
-import com.multiteam.persistence.types.RelationshipType;
+import com.multiteam.persistence.enums.RelationshipType;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;

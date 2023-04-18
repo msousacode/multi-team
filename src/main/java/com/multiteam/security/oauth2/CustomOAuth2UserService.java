@@ -3,7 +3,7 @@ package com.multiteam.security.oauth2;
 import com.multiteam.exception.OAuth2AuthenticationProcessingException;
 import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.repository.UserRepository;
-import com.multiteam.persistence.types.AuthProviderType;
+import com.multiteam.persistence.enums.AuthProviderType;
 import com.multiteam.security.UserPrincipal;
 import com.multiteam.security.oauth2.user.OAuth2UserInfo;
 import com.multiteam.security.oauth2.user.OAuth2UserInfoFactory;

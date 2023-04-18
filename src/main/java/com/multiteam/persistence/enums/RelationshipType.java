@@ -1,4 +1,4 @@
-package com.multiteam.persistence.types;
+package com.multiteam.persistence.enums;
 
 public enum RelationshipType {
     MAE("Mãe"),

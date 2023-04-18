@@ -1,6 +1,6 @@
 package com.multiteam.controller.dto;
 
-import com.multiteam.persistence.types.RelationshipType;
+import com.multiteam.persistence.enums.RelationshipType;
 
 import java.util.UUID;
 

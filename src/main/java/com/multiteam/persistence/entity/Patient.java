@@ -1,6 +1,6 @@
 package com.multiteam.persistence.entity;
 
-import com.multiteam.persistence.types.SexType;
+import com.multiteam.persistence.enums.SexType;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
