@@ -54,13 +54,21 @@ public class ProfessionalController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @PutMapping
-    public void updateProfessional() {
-
+    public ResponseEntity<?> updateProfessional(@RequestBody Professional professional) {
+       if(professionalService.updateProfessional(professional)){
+           return ResponseEntity.status(HttpStatus.OK).build();
+       } else {
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+       }
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
-    @DeleteMapping
-    public void inactiveProfessional() {
-
+    @DeleteMapping("/{professionalId}")
+    public ResponseEntity<?> inactiveProfessional(@PathVariable("professionalId") UUID professionalId) {
+        if(professionalService.inactiveProfessional(professionalId)) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }

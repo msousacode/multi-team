@@ -4,10 +4,11 @@ import com.multiteam.constants.TestsConstants;
 import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.entity.User;
+import com.multiteam.persistence.enums.SpecialtyType;
 import com.multiteam.persistence.repository.ProfessionalRepository;
 import com.multiteam.persistence.repository.UserRepository;
-import com.multiteam.persistence.enums.SpecialtyType;
 import com.multiteam.service.ClinicService;
+import com.multiteam.service.ProfessionalService;
 import com.multiteam.util.TokenUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,11 +19,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,14 +34,11 @@ public class ProfessionalControllerTest extends TokenUtil {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    protected WebApplicationContext wac;
-
-    @Autowired
-    private FilterChainProxy springSecurityFilterChain;
-
     @MockBean
     private ProfessionalRepository professionalRepository;
+
+    @MockBean
+    private ProfessionalService professionalService;
 
     @MockBean
     private UserRepository userRepository;
@@ -80,6 +76,38 @@ public class ProfessionalControllerTest extends TokenUtil {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8")
                                 .header("Authorization", "Bearer " + defaultAccessToken))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @DisplayName("deve atualizar o profissionais usando roles OWNER e ADMIN")
+    void shouldUpdateProfessional_thenSuccess() throws Exception {
+
+        BDDMockito.given(professionalService.updateProfessional(Mockito.any())).willReturn(Boolean.TRUE);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/v1/professionals")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .header("Authorization", "Bearer " + defaultAccessToken)
+                                .content(newProfessionalJson()))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @DisplayName("deve inativar o profissional usando roles OWNER e ADMIN")
+    void shouldInactiveProfessional_thenSuccess() throws Exception {
+
+        BDDMockito.given(professionalService.inactiveProfessional(Mockito.any())).willReturn(Boolean.TRUE);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .delete("/v1/professionals/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .header("Authorization", "Bearer " + defaultAccessToken)
+                                .content(newProfessionalJson()))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
