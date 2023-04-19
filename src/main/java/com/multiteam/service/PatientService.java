@@ -1,5 +1,6 @@
 package com.multiteam.service;
 
+import com.multiteam.controller.dto.PatientRequest;
 import com.multiteam.persistence.entity.Patient;
 import com.multiteam.persistence.projection.PatientsProfessionalsView;
 import com.multiteam.persistence.repository.PatientRepository;
@@ -29,23 +30,23 @@ public class PatientService {
     }
 
     @Transactional
-    public Boolean createPatient(Patient patient, UUID clinicId) {
+    public Boolean createPatient(PatientRequest patientRequest) {
 
-        var clinic = clinicService.getClinicById(clinicId);
+        var clinic = clinicService.getClinicById(patientRequest.clinicId());
 
         if (clinic.isEmpty()) {
             return Boolean.FALSE;
         }
 
         var builder = new Patient.Builder(
-                patient.getName(),
-                patient.getMiddleName(),
-                patient.getSex(),
-                patient.getAge(),
+                patientRequest.name(),
+                patientRequest.middleName(),
+                patientRequest.sex(),
+                patientRequest.age(),
                 clinic.get())
-                .months(patient.getMonths())
-                .internalObservation(patient.getInternalObservation())
-                .externalObservation(patient.getExternalObservation())
+                .months(patientRequest.months())
+                .internalObservation(patientRequest.internalObservation())
+                .externalObservation(patientRequest.externalObservation())
                 .build();
 
         patientRepository.save(builder);
@@ -86,23 +87,23 @@ public class PatientService {
     }
 
     @Transactional
-    public Boolean updatePatient(Patient patient) {
+    public Boolean updatePatient(PatientRequest patientRequest) {
 
-        var patientResult = patientRepository.findById(patient.getId());
-        var clinicResult = clinicService.getClinicById(patient.getClinic().getId());
+        var patientResult = patientRepository.findById(patientRequest.id());
+        var clinicResult = clinicService.getClinicById(patientRequest.clinicId());
 
         if (patientResult.isPresent() && clinicResult.isPresent()) {
 
             var builder = new Patient.Builder(
-                    patient.getName(),
-                    patient.getMiddleName(),
-                    patient.getSex(),
-                    patient.getAge(),
+                    patientRequest.name(),
+                    patientRequest.middleName(),
+                    patientRequest.sex(),
+                    patientRequest.age(),
                     clinicResult.get())
                     .id(patientResult.get().getId())
-                    .months(patient.getMonths())
-                    .externalObservation(patient.getExternalObservation())
-                    .internalObservation(patient.getInternalObservation())
+                    .months(patientRequest.months())
+                    .externalObservation(patientRequest.externalObservation())
+                    .internalObservation(patientRequest.internalObservation())
                     .build();
 
             patientRepository.save(builder);

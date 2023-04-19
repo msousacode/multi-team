@@ -1,6 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.constants.Constants;
+import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.entity.User;
@@ -191,7 +191,7 @@ public class ProfessionalControllerTest extends TokenUtil {
                 SpecialtyType.FONOAUDIOLOGIA,
                 "11 5656 - 0606",
                 UUID.randomUUID().toString().substring(0, 10) + "@email.com",
-                Constants.CLINIC_ID
+                ConstantsToTests.CLINIC_ID
         );
     }
 

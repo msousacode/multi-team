@@ -1,6 +1,6 @@
 package com.multiteam.util;
 
-import com.multiteam.constants.Constants;
+import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.persistence.enums.RoleEnum;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -40,7 +40,7 @@ public class TokenUtil {
         }
 
         return Jwts.builder()
-                .setSubject(Constants.USER_OWNER_ADMIN)
+                .setSubject(ConstantsToTests.USER_OWNER_ADMIN)
                 .claim("roles", authoritiesList)
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(Instant.now().plus(Duration.ofSeconds(864000000))))

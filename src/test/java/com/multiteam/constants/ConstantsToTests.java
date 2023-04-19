@@ -2,7 +2,7 @@ package com.multiteam.constants;
 
 import java.util.UUID;
 
-public class Constants {
+public class ConstantsToTests {
 
     public final static String USER_OWNER_ADMIN = "ab6ee@email.com";
     public final static UUID CLINIC_ID = UUID.fromString("9667823d-d5db-4387-bb5a-06e0278795f2");

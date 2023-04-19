@@ -1,6 +1,7 @@
 package com.multiteam.service;
 
-import com.multiteam.constants.Constants;
+import com.multiteam.constants.ConstantsToTests;
+import com.multiteam.controller.dto.PatientRequest;
 import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.persistence.entity.Patient;
 import com.multiteam.persistence.enums.SexType;
@@ -24,22 +25,19 @@ class PatientServiceTest {
     @DisplayName("deve criar um novo paciente e retornar sucesso")
     void shouldCreatePatient_thenSuccess() {
 
-        var clinicDefault = Constants.CLINIC_ID;
-
-        var clinic = clinicService.getClinicById(clinicDefault);
-
-        var builder = new Patient.Builder(
+        var patientRequest = new PatientRequest(
+                null,
                 "Márcio",
                 "Farias",
                 SexType.MASCULINO,
                 13,
-                clinic.get())
-                .months(null)
-                .internalObservation("Lorem ipsum nulla sollicitudin massa lectus enim justo ligula, nulla inceptos nisi curabitur libero bibendum class mollis, cras metus maecenas dictum sollicitudin class senectus. arcu molestie conubia dui conubia quis condimentum ipsum tellus ornare habitant inceptos aliquet elit, tempor porttitor etiam magna neque tincidunt nulla torquent euismod rhoncus facilisis. nisi dui maecenas enim risus in lectus porta, lacinia")
-                .externalObservation("Lorem ipsum nulla sollicitudin massa lectus enim justo ligula, nulla inceptos nisi curabitur libero bibendum class mollis, cras metus maecenas dictum sollicitudin class senectus. arcu molestie conubia dui conubia quis condimentum ipsum tellus ornare habitant inceptos aliquet elit, tempor porttitor etiam magna neque tincidunt nulla torquent euismod rhoncus facilisis. nisi dui maecenas enim risus in lectus porta, lacinia")
-                .build();
+                10,
+                "Lorem ipsum nulla sollicitudin massa lectus enim justo ligula, nulla inceptos nisi curabitur libero bibendum class mollis, cras metus maecenas dictum sollicitudin class senectus. arcu molestie conubia dui conubia quis condimentum ipsum tellus ornare habitant inceptos aliquet elit, tempor porttitor etiam magna neque tincidunt nulla torquent euismod rhoncus facilisis. nisi dui maecenas enim risus in lectus porta, lacinia",
+                "Lorem ipsum nulla sollicitudin massa lectus enim justo ligula, nulla inceptos nisi curabitur libero bibendum class mollis, cras metus maecenas dictum sollicitudin class senectus. arcu molestie conubia dui conubia quis condimentum ipsum tellus ornare habitant inceptos aliquet elit, tempor porttitor etiam magna neque tincidunt nulla torquent euismod rhoncus facilisis. nisi dui maecenas enim risus in lectus porta, lacinia",
+                true,
+                ConstantsToTests.CLINIC_ID);
 
-        var result = patientService.createPatient(builder, clinicDefault);
+        var result = patientService.createPatient(patientRequest);
 
         Assertions.assertTrue(result);
     }
@@ -47,15 +45,15 @@ class PatientServiceTest {
     @Test
     @DisplayName("deve retornar a lista de pacientes filtrando pelo uuid da clinica com sucesso")
     void shouldReturnListPatientFilteringByIdClinic_thenSuccess() {
-        var result = patientService.getAllPatientsByClinicId(Constants.CLINIC_ID);
+        var result = patientService.getAllPatientsByClinicId(ConstantsToTests.CLINIC_ID);
         Assertions.assertFalse(result.isEmpty());
     }
 
     @Test
     @DisplayName("deve retornar o paciente filtrando pelo uuid do paciente e da clinica com sucesso")
     void shouldReturnListPatientFilteringByIdPacientAndIdClinic_thenSuccess() {
-        var patientId = Constants.PATIENT_ID;
-        var clinicId = Constants.CLINIC_ID;
+        var patientId = ConstantsToTests.PATIENT_ID;
+        var clinicId = ConstantsToTests.CLINIC_ID;
 
         var result = patientService.getPatientById(patientId, clinicId);
         Assertions.assertNotNull(result);
@@ -66,14 +64,14 @@ class PatientServiceTest {
     @Test
     @DisplayName("deve retornar todos os pacientes filtrados por professionalId então sucesso")
     void shouldReturnAllPatientsFilteringByProfessionalId_thenSuccess() {
-        var result = patientService.getAllPatientsByProfessionalId(Constants.PROFESSIONAL_ID, SituationType.ANDAMENTO);
+        var result = patientService.getAllPatientsByProfessionalId(ConstantsToTests.PROFESSIONAL_ID, SituationType.ANDAMENTO);
         Assertions.assertFalse(result.isEmpty());
     }
 
     @Test
     @DisplayName("deve retornar todos os pacientes filtrados por clinicId então sucesso")
     void shouldReturnAllPatientsFilteringByClinicId_thenSuccess() {
-        var result = patientService.getAllPatientsByClinicId(Constants.CLINIC_ID, SituationType.ANDAMENTO);
+        var result = patientService.getAllPatientsByClinicId(ConstantsToTests.CLINIC_ID, SituationType.ANDAMENTO);
         Assertions.assertFalse(result.isEmpty());
     }
 /*
@@ -88,28 +86,19 @@ class PatientServiceTest {
     @DisplayName("Deve atualizar o paciente então sucesso")
     void shouldUpdatePatient_thenSuccess() {
 
-        var clinicBuilder = new Clinic.Builder(
-                "Geraldo Bryan Gomes",
-                "35997818268",
-                "email@email.com",
-                "(71) 3871-3197")
-                .id(Constants.CLINIC_ID)
-                .build();
-
-        var patientBuilder = new Patient.Builder(
+        var patientRequest = new PatientRequest(
+                ConstantsToTests.PATIENT_ID,
                 "Isabela",
                 "Freitas",
                 SexType.MASCULINO,
                 15,
-                clinicBuilder)
-                .id(Constants.PATIENT_ID)
-                .active(true)
-                .months(2)
-                .externalObservation("Observation test unit")
-                .internalObservation("Observation test unit")
-                .build();
+                2,
+                "Observation test unit",
+                "Observation test unit",
+                true,
+                ConstantsToTests.CLINIC_ID);
 
-        var response = patientService.updatePatient(patientBuilder);
+        var response = patientService.updatePatient(patientRequest);
 
         Assertions.assertTrue(response);
     }
