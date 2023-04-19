@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.multiteam.persistence.enums.AuthProviderType.local;
+import static com.multiteam.enums.AuthProviderType.local;
 
 @Service
 public class ProfessionalService {

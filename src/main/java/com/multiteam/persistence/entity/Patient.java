@@ -1,7 +1,7 @@
 package com.multiteam.persistence.entity;
 
 import com.multiteam.constants.ApplicationErrorsEnum;
-import com.multiteam.persistence.enums.SexType;
+import com.multiteam.enums.SexType;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;

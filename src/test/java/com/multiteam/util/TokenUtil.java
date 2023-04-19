@@ -1,7 +1,7 @@
 package com.multiteam.util;
 
 import com.multiteam.constants.ConstantsToTests;
-import com.multiteam.persistence.enums.RoleEnum;
+import com.multiteam.enums.RoleEnum;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

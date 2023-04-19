@@ -1,7 +1,7 @@
 package com.multiteam.persistence.projection;
 
-import com.multiteam.persistence.enums.SituationType;
-import com.multiteam.persistence.enums.TreatmentType;
+import com.multiteam.enums.SituationType;
+import com.multiteam.enums.TreatmentType;
 
 import java.util.UUID;
 

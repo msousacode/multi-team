@@ -1,4 +1,4 @@
-package com.multiteam.persistence.enums;
+package com.multiteam.enums;
 
 public enum AuthProviderType {
     local,

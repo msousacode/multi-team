@@ -1,7 +1,7 @@
 package com.multiteam.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.multiteam.persistence.enums.AuthProviderType;
+import com.multiteam.enums.AuthProviderType;
 
 import javax.persistence.*;
 import java.util.HashSet;

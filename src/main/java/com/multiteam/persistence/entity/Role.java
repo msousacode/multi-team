@@ -1,6 +1,6 @@
 package com.multiteam.persistence.entity;
 
-import com.multiteam.persistence.enums.RoleEnum;
+import com.multiteam.enums.RoleEnum;
 
 import javax.persistence.*;
 import java.util.UUID;

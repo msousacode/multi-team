@@ -2,8 +2,8 @@ package com.multiteam.service;
 
 import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.controller.dto.request.TreatmentRequest;
-import com.multiteam.persistence.enums.SituationType;
-import com.multiteam.persistence.enums.TreatmentType;
+import com.multiteam.enums.SituationType;
+import com.multiteam.enums.TreatmentType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

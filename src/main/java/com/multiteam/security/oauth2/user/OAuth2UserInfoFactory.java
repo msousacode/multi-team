@@ -1,7 +1,7 @@
 package com.multiteam.security.oauth2.user;
 
 import com.multiteam.exception.OAuth2AuthenticationProcessingException;
-import com.multiteam.persistence.enums.AuthProviderType;
+import com.multiteam.enums.AuthProviderType;
 
 import java.util.Map;
 

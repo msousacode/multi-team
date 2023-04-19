@@ -1,6 +1,6 @@
 package com.multiteam.controller.dto.request;
 
-import com.multiteam.persistence.enums.SpecialtyType;
+import com.multiteam.enums.SpecialtyType;
 
 import java.util.UUID;
 

@@ -1,6 +1,6 @@
 package com.multiteam.controller.dto.request;
 
-import com.multiteam.persistence.enums.SexType;
+import com.multiteam.enums.SexType;
 
 import java.util.UUID;
 
