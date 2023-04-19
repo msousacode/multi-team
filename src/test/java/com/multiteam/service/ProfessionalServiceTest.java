@@ -1,7 +1,7 @@
 package com.multiteam.service;
 
 import com.multiteam.constants.ConstantsToTests;
-import com.multiteam.controller.dto.ProfessionalRequest;
+import com.multiteam.controller.dto.request.ProfessionalRequest;
 import com.multiteam.persistence.enums.SpecialtyType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

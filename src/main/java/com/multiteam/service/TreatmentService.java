@@ -1,6 +1,6 @@
 package com.multiteam.service;
 
-import com.multiteam.controller.dto.TreatmentRequest;
+import com.multiteam.controller.dto.request.TreatmentRequest;
 import com.multiteam.persistence.entity.Guest;
 import com.multiteam.persistence.entity.Treatment;
 import com.multiteam.persistence.entity.TreatmentProfessional;

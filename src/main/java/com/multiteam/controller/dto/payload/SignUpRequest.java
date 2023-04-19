@@ -11,8 +11,8 @@ public record SignUpRequest(String name, String email, String password, Set<Role
 
     public SignUpRequest{
         roles = new HashSet<>();
-        Assert.isTrue(!name.isEmpty(), ApplicationErrorsEnum.VALUE_DOES_NOT_EMPTY.name());
-        Assert.isTrue(!email.isEmpty(), ApplicationErrorsEnum.VALUE_DOES_NOT_EMPTY.name());
-        Assert.isTrue(!password.isEmpty(), ApplicationErrorsEnum.VALUE_DOES_NOT_EMPTY.name());
+        Assert.isTrue(!name.isEmpty(), "value name can`t be empty or null");
+        Assert.isTrue(!email.isEmpty(), "value email can`t be empty or null");
+        Assert.isTrue(!password.isEmpty(), "value password can`t be empty or null");
     }
 }

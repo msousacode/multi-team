@@ -1,7 +1,7 @@
 package com.multiteam.service;
 
 import com.multiteam.constants.ConstantsToTests;
-import com.multiteam.controller.dto.GuestRequest;
+import com.multiteam.controller.dto.request.GuestRequest;
 import com.multiteam.persistence.enums.RelationshipType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

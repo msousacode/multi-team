@@ -1,7 +1,7 @@
 package com.multiteam.service;
 
 import com.multiteam.constants.ConstantsToTests;
-import com.multiteam.controller.dto.TreatmentRequest;
+import com.multiteam.controller.dto.request.TreatmentRequest;
 import com.multiteam.persistence.enums.SituationType;
 import com.multiteam.persistence.enums.TreatmentType;
 import org.junit.jupiter.api.Assertions;

@@ -1,7 +1,7 @@
 package com.multiteam.service;
 
 
-import com.multiteam.controller.dto.GuestRequest;
+import com.multiteam.controller.dto.request.GuestRequest;
 import com.multiteam.exception.TreatmentNotExistsException;
 import com.multiteam.persistence.entity.Guest;
 import com.multiteam.persistence.entity.User;

@@ -1,6 +1,6 @@
 package com.multiteam.service;
 
-import com.multiteam.controller.dto.ProfessionalRequest;
+import com.multiteam.controller.dto.request.ProfessionalRequest;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.repository.ProfessionalRepository;

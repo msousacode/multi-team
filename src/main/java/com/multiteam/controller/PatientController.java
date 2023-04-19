@@ -1,6 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.controller.dto.PatientRequest;
+import com.multiteam.controller.dto.request.PatientRequest;
 import com.multiteam.persistence.entity.Patient;
 import com.multiteam.service.PatientService;
 import org.springframework.http.HttpStatus;
@@ -70,7 +70,7 @@ public class PatientController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @DeleteMapping("/{patientId}/clinic/{clinicId}")
-    public ResponseEntity<?> inactiveProfessional(
+    public ResponseEntity<?> inactivePatient(
             @PathVariable("patientId") UUID patientId,
             @PathVariable("clinicId") UUID clinicId) {
 

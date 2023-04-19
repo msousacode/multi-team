@@ -1,4 +1,4 @@
-package com.multiteam.controller.dto;
+package com.multiteam.controller.dto.request;
 
 import com.multiteam.persistence.enums.RelationshipType;
 
