@@ -1,6 +1,6 @@
 package com.multiteam.persistence.entity;
 
-import com.multiteam.enums.RelationshipType;
+import com.multiteam.enums.RelationshipEnum;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -23,7 +23,7 @@ public class Guest {
 
     @Column(name = "relationship")
     @Enumerated(EnumType.STRING)
-    private RelationshipType relationship;
+    private RelationshipEnum relationship;
 
     @Column(name = "cell_phone")
     private String cellPhone;
@@ -63,7 +63,7 @@ public class Guest {
         return middleName;
     }
 
-    public RelationshipType getRelationship() {
+    public RelationshipEnum getRelationship() {
         return relationship;
     }
 
@@ -88,7 +88,7 @@ public class Guest {
         private UUID id;
         private final String name;
         private final String middleName;
-        private final RelationshipType relationship;
+        private final RelationshipEnum relationship;
         private final String cellPhone;
         private final String email;
         private final boolean active;
@@ -97,7 +97,7 @@ public class Guest {
         public Builder(UUID id,
                        final String name,
                        final String middleName,
-                       final RelationshipType relationship,
+                       final RelationshipEnum relationship,
                        final String cellPhone,
                        final String email,
                        final boolean active,

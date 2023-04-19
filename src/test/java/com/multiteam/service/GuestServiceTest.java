@@ -2,7 +2,7 @@ package com.multiteam.service;
 
 import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.controller.dto.request.GuestRequest;
-import com.multiteam.enums.RelationshipType;
+import com.multiteam.enums.RelationshipEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class GuestServiceTest {
                 null,
                 "Danilo",
                 "Joaquim",
-                RelationshipType.PAI,
+                RelationshipEnum.PAI,
                 "(82) 99424-8064",
                 email,
                 true,

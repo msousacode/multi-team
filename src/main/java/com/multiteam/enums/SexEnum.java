@@ -1,6 +1,6 @@
 package com.multiteam.enums;
 
-public enum SexType {
+public enum SexEnum {
 
     FEMININO("F", "Feminino"),
     MASCULINO("M", "Masculino"),
@@ -9,7 +9,7 @@ public enum SexType {
     private final String description;
     private final String acronym;
 
-    SexType(String description, String acronym) {
+    SexEnum(String description, String acronym) {
         this.description = description;
         this.acronym = acronym;
     }

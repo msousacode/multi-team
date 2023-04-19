@@ -1,7 +1,7 @@
 package com.multiteam.persistence.entity;
 
-import com.multiteam.enums.SituationType;
-import com.multiteam.enums.TreatmentType;
+import com.multiteam.enums.SituationEnum;
+import com.multiteam.enums.TreatmentEnum;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -23,11 +23,11 @@ public class Treatment {
 
     @Column(name = "treatment_type")
     @Enumerated(EnumType.STRING)
-    private TreatmentType treatmentType;
+    private TreatmentEnum treatmentType;
 
     @Column(name = "situation")
     @Enumerated(EnumType.STRING)
-    private SituationType situation;
+    private SituationEnum situation;
 
     @Column(name = "initial_date")
     private LocalDate initialDate;
@@ -59,11 +59,11 @@ public class Treatment {
         return description;
     }
 
-    public TreatmentType getTreatmentType() {
+    public TreatmentEnum getTreatmentType() {
         return treatmentType;
     }
 
-    public SituationType getSituation() {
+    public SituationEnum getSituation() {
         return situation;
     }
 
@@ -98,7 +98,7 @@ public class Treatment {
     public Treatment() {
     }
 
-    public Treatment(UUID id, TreatmentType treatmentType, SituationType situation, Patient patient) {
+    public Treatment(UUID id, TreatmentEnum treatmentType, SituationEnum situation, Patient patient) {
         this.id = id;
         this.treatmentType = treatmentType;
         this.situation = situation;
@@ -121,8 +121,8 @@ public class Treatment {
 
         //mandatory
         private UUID id;
-        private final TreatmentType treatmentType;
-        private final SituationType situation;
+        private final TreatmentEnum treatmentType;
+        private final SituationEnum situation;
         private final LocalDate initialDate;
         private final Patient patient;
 
@@ -134,8 +134,8 @@ public class Treatment {
 
         public Builder(
                 UUID id,
-                final TreatmentType treatmentType,
-                final SituationType situation,
+                final TreatmentEnum treatmentType,
+                final SituationEnum situation,
                 final LocalDate initialDate,
                 final Patient patient) {
 

@@ -1,6 +1,6 @@
 package com.multiteam.enums;
 
-public enum RelationshipType {
+public enum RelationshipEnum {
     MAE("Mãe"),
     PAI("Pai"),
     TIA("Tia(o)"),
@@ -9,7 +9,7 @@ public enum RelationshipType {
 
     public final String name;
 
-    RelationshipType(String name) {
+    RelationshipEnum(String name) {
         this.name = name;
     }
 }

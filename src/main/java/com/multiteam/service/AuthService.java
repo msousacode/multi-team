@@ -7,7 +7,7 @@ import com.multiteam.persistence.entity.Role;
 import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.repository.RoleRepository;
 import com.multiteam.persistence.repository.UserRepository;
-import com.multiteam.enums.AuthProviderType;
+import com.multiteam.enums.AuthProviderEnum;
 import com.multiteam.enums.RoleEnum;
 import com.multiteam.security.CustomAuthenticationManager;
 import com.multiteam.security.TokenProvider;
@@ -68,7 +68,7 @@ public class AuthService {
 
         var builder = new User.Builder(
                 null, signUpRequest.name(), signUpRequest.email(), true)
-                .provider(AuthProviderType.local)
+                .provider(AuthProviderEnum.local)
                 .roles(signUpRequest.roles())
                 .build();
 

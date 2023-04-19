@@ -1,6 +1,6 @@
 package com.multiteam.persistence.entity;
 
-import com.multiteam.enums.SituationType;
+import com.multiteam.enums.SituationEnum;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -28,7 +28,7 @@ public class TreatmentProfessional {
 
         @Column(name = "situation_type")
         @Enumerated(EnumType.STRING)
-        private SituationType situationType;
+        private SituationEnum situationType;
 
         public TreatmentProfessional() {}
 
@@ -37,7 +37,7 @@ public class TreatmentProfessional {
                 Treatment treatment,
                 Professional professional,
                 String annotation,
-                SituationType situationType) {
+                SituationEnum situationType) {
 
                 Assert.notNull(treatment, "treatment should not be null");
                 Assert.notNull(professional, "professional should not be null");
@@ -66,7 +66,7 @@ public class TreatmentProfessional {
                 return annotation;
         }
 
-        public SituationType getSituationType() {
+        public SituationEnum getSituationType() {
                 return situationType;
         }
 }

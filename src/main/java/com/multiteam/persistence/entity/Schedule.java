@@ -1,6 +1,6 @@
 package com.multiteam.persistence.entity;
 
-import com.multiteam.enums.ScheduleType;
+import com.multiteam.enums.ScheduleEnum;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ public record Schedule(
 
         @Column(name = "situation")
         @Enumerated(EnumType.STRING)
-        ScheduleType situation,
+        ScheduleEnum situation,
 
         @Column(name = "observation")
         String observation,

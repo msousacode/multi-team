@@ -5,7 +5,7 @@ import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.entity.User;
 import com.multiteam.enums.RoleEnum;
-import com.multiteam.enums.SpecialtyType;
+import com.multiteam.enums.SpecialtyEnum;
 import com.multiteam.persistence.repository.ProfessionalRepository;
 import com.multiteam.persistence.repository.UserRepository;
 import com.multiteam.service.ClinicService;
@@ -188,7 +188,7 @@ public class ProfessionalControllerTest extends TokenUtil {
                 """.formatted(
                 UUID.randomUUID().toString().substring(0, 10),
                 UUID.randomUUID().toString().substring(0, 10),
-                SpecialtyType.FONOAUDIOLOGIA,
+                SpecialtyEnum.FONOAUDIOLOGIA,
                 "11 5656 - 0606",
                 UUID.randomUUID().toString().substring(0, 10) + "@email.com",
                 ConstantsToTests.CLINIC_ID
@@ -205,7 +205,7 @@ public class ProfessionalControllerTest extends TokenUtil {
                 UUID.randomUUID(),
                 "Ana",
                 "Analu",
-                SpecialtyType.FONOAUDIOLOGIA,
+                SpecialtyEnum.FONOAUDIOLOGIA,
                 "(11) 98637-7492",
                 "anaanaludasilva@fosjc.unesp.br",
                 true, new Clinic(), new User())

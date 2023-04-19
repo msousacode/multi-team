@@ -7,7 +7,7 @@ import com.multiteam.persistence.entity.TreatmentProfessional;
 import com.multiteam.persistence.projection.TreatmentView;
 import com.multiteam.persistence.repository.TreatementProfessionalRepository;
 import com.multiteam.persistence.repository.TreatmentRepository;
-import com.multiteam.enums.SituationType;
+import com.multiteam.enums.SituationEnum;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +58,7 @@ public class TreatmentService {
 
         var treatment = treatmentRepository.save(builder);
 
-        var treatmentProfessional = new TreatmentProfessional(null, treatment, professional.get(), "", SituationType.ANDAMENTO);
+        var treatmentProfessional = new TreatmentProfessional(null, treatment, professional.get(), "", SituationEnum.ANDAMENTO);
         treatementProfessionalRepository.save(treatmentProfessional);
 
         return Boolean.TRUE;
@@ -100,7 +100,7 @@ public class TreatmentService {
             return Boolean.FALSE;
 
         //inactive professionals of treatment
-        treatementProfessionalRepository.inactiveProfessionalsByTreatmentId(treatmentId, SituationType.INATIVO);
+        treatementProfessionalRepository.inactiveProfessionalsByTreatmentId(treatmentId, SituationEnum.INATIVO);
 
         //exclude all guests
         treatment.get().getGuests().removeAll(treatment.get().getGuests());

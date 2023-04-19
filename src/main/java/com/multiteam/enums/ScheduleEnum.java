@@ -1,6 +1,6 @@
 package com.multiteam.enums;
 
-public enum ScheduleType {
+public enum ScheduleEnum {
     CONFIRMADO,
     CANCELADO,
     BLOQUEADO_TEMPORARIAMENTE,

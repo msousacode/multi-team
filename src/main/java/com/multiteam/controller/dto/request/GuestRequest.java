@@ -1,6 +1,6 @@
 package com.multiteam.controller.dto.request;
 
-import com.multiteam.enums.RelationshipType;
+import com.multiteam.enums.RelationshipEnum;
 
 import java.util.UUID;
 
@@ -8,7 +8,7 @@ public record GuestRequest(
         UUID id,
         String name,
         String middleName,
-        RelationshipType relationship,
+        RelationshipEnum relationship,
         String cellPhone,
         String email,
         boolean active,

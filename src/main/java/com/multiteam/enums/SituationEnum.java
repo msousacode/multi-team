@@ -1,6 +1,6 @@
 package com.multiteam.enums;
 
-public enum SituationType {
+public enum SituationEnum {
     ANDAMENTO,
     PAUSADO,
     CONCLUIDO,

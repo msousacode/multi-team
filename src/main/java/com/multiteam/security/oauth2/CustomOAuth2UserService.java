@@ -3,7 +3,7 @@ package com.multiteam.security.oauth2;
 import com.multiteam.exception.OAuth2AuthenticationProcessingException;
 import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.repository.UserRepository;
-import com.multiteam.enums.AuthProviderType;
+import com.multiteam.enums.AuthProviderEnum;
 import com.multiteam.security.UserPrincipal;
 import com.multiteam.security.oauth2.user.OAuth2UserInfo;
 import com.multiteam.security.oauth2.user.OAuth2UserInfoFactory;
@@ -48,7 +48,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user;
         if (userOptional.isPresent()) {
             user = userOptional.get();
-            if (!user.getProvider().equals(AuthProviderType.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
+            if (!user.getProvider().equals(AuthProviderEnum.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
                 throw new OAuth2AuthenticationProcessingException("Looks like you're signed up with " +
                                                                   user.getProvider() + " account. Please use your " + user.getProvider() +
                                                                   " account to login.");
@@ -69,7 +69,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 true)
                 .imageUrl(oAuth2UserInfo.getImageUrl())
                 .password(null)
-                .provider(AuthProviderType.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))
+                .provider(AuthProviderEnum.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))
                 .build();
 
         return userRepository.save(user);

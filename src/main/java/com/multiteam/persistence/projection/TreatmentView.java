@@ -1,16 +1,16 @@
 package com.multiteam.persistence.projection;
 
-import com.multiteam.enums.SituationType;
-import com.multiteam.enums.TreatmentType;
+import com.multiteam.enums.SituationEnum;
+import com.multiteam.enums.TreatmentEnum;
 
 import java.util.UUID;
 
 public interface TreatmentView {
     UUID getId();
 
-    TreatmentType getTreatmentType();
+    TreatmentEnum getTreatmentType();
 
-    SituationType getSituation();
+    SituationEnum getSituation();
 
     String getPatientName();
 

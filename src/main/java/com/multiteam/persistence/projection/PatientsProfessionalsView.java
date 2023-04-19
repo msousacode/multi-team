@@ -1,6 +1,6 @@
 package com.multiteam.persistence.projection;
 
-import com.multiteam.enums.SituationType;
+import com.multiteam.enums.SituationEnum;
 
 import java.util.UUID;
 
@@ -18,6 +18,6 @@ public interface PatientsProfessionalsView {
 
     String getProfessionalMiddleName();
 
-    SituationType getSituation();
+    SituationEnum getSituation();
 }
 

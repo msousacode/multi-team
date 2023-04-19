@@ -1,7 +1,7 @@
 package com.multiteam.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.multiteam.enums.AuthProviderType;
+import com.multiteam.enums.AuthProviderEnum;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -35,7 +35,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "provider")
-    private AuthProviderType provider;
+    private AuthProviderEnum provider;
 
     @Column(name = "active")
     private Boolean active;
@@ -85,7 +85,7 @@ public class User {
         return password;
     }
 
-    public AuthProviderType getProvider() {
+    public AuthProviderEnum getProvider() {
         return provider;
     }
 
@@ -116,7 +116,7 @@ public class User {
         private String password;
         private String imageUrl;
         private Boolean emailVerified;
-        private AuthProviderType provider;
+        private AuthProviderEnum provider;
         private Set<Role> roles;
 
         public Builder(
@@ -141,7 +141,7 @@ public class User {
             return this;
         }
 
-        public Builder provider(AuthProviderType provider) {
+        public Builder provider(AuthProviderEnum provider) {
             this.provider = provider;
             return this;
         }

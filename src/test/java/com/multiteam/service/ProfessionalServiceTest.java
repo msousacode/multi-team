@@ -2,7 +2,7 @@ package com.multiteam.service;
 
 import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.controller.dto.request.ProfessionalRequest;
-import com.multiteam.enums.SpecialtyType;
+import com.multiteam.enums.SpecialtyEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class ProfessionalServiceTest {
 
         var name = UUID.randomUUID().toString().substring(0, 5);
         var middleName = UUID.randomUUID().toString().substring(0, 5);
-        var specialty = SpecialtyType.FONOAUDIOLOGIA;
+        var specialty = SpecialtyEnum.FONOAUDIOLOGIA;
         var cellPhone = UUID.randomUUID().toString().substring(0, 5);
         var email = "Ow Test+" + UUID.randomUUID().toString().substring(0, 5) + "@email.com";
 

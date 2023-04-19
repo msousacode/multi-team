@@ -1,7 +1,7 @@
 package com.multiteam.persistence.entity;
 
 import com.multiteam.constants.ApplicationErrorsEnum;
-import com.multiteam.enums.SexType;
+import com.multiteam.enums.SexEnum;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -24,7 +24,7 @@ public class Patient {
 
     @Column(name = "sex")
     @Enumerated(EnumType.STRING)
-    private SexType sex;
+    private SexEnum sex;
 
     @Column(name = "age")
     private Integer age;
@@ -77,7 +77,7 @@ public class Patient {
         return middleName;
     }
 
-    public SexType getSex() {
+    public SexEnum getSex() {
         return sex;
     }
 
@@ -111,7 +111,7 @@ public class Patient {
         private UUID id;
         private final String name;
         private final String middleName;
-        private final SexType sex;
+        private final SexEnum sex;
         private final Integer age;
         private final Clinic clinic;
 
@@ -124,7 +124,7 @@ public class Patient {
         public Builder(
                 final String name,
                 final String middleName,
-                final SexType sex,
+                final SexEnum sex,
                 final Integer age,
                 final Clinic clinic) {
 

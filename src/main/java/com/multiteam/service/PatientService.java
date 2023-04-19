@@ -4,7 +4,7 @@ import com.multiteam.controller.dto.request.PatientRequest;
 import com.multiteam.persistence.entity.Patient;
 import com.multiteam.persistence.projection.PatientsProfessionalsView;
 import com.multiteam.persistence.repository.PatientRepository;
-import com.multiteam.enums.SituationType;
+import com.multiteam.enums.SituationEnum;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -62,11 +62,11 @@ public class PatientService {
         return patientRepository.findByIdAndClinic_Id(patientId, clinicId);
     }
 
-    public List<PatientsProfessionalsView> getAllPatientsByProfessionalId(UUID professionalId, SituationType situation) {
+    public List<PatientsProfessionalsView> getAllPatientsByProfessionalId(UUID professionalId, SituationEnum situation) {
         return patientRepository.findAllPatientsByProfessionalId(professionalId, situation);
     }
 
-    public List<PatientsProfessionalsView> getAllPatientsByClinicId(UUID clinicId, SituationType situation) {
+    public List<PatientsProfessionalsView> getAllPatientsByClinicId(UUID clinicId, SituationEnum situation) {
         return patientRepository.findAllPatientsByClinicId(clinicId, situation);
     }
 

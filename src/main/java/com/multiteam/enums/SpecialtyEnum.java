@@ -1,6 +1,6 @@
 package com.multiteam.enums;
 
-public enum SpecialtyType {
+public enum SpecialtyEnum {
 
     TERAPIA_OCUPACIONAL("fonoaudióloga"),
     FONOAUDIOLOGIA("Fonoaudiologia"),
@@ -8,7 +8,7 @@ public enum SpecialtyType {
 
     private final String name;
 
-    SpecialtyType(String name) {
+    SpecialtyEnum(String name) {
         this.name = name;
     }
 }

@@ -1,6 +1,6 @@
 package com.multiteam.enums;
 
-public enum AuthProviderType {
+public enum AuthProviderEnum {
     local,
     google,
     facebook

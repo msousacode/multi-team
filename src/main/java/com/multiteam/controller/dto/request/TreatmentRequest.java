@@ -1,7 +1,7 @@
 package com.multiteam.controller.dto.request;
 
-import com.multiteam.enums.SituationType;
-import com.multiteam.enums.TreatmentType;
+import com.multiteam.enums.SituationEnum;
+import com.multiteam.enums.TreatmentEnum;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -9,8 +9,8 @@ import java.util.UUID;
 public record TreatmentRequest(
         UUID id,
         String description,
-        TreatmentType treatmentType,
-        SituationType situation,
+        TreatmentEnum treatmentType,
+        SituationEnum situation,
         UUID patientId,
         UUID professionalId,
         UUID clinicId,

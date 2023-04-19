@@ -2,8 +2,8 @@ package com.multiteam.service;
 
 import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.controller.dto.request.PatientRequest;
-import com.multiteam.enums.SexType;
-import com.multiteam.enums.SituationType;
+import com.multiteam.enums.SexEnum;
+import com.multiteam.enums.SituationEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class PatientServiceTest {
                 null,
                 "Márcio",
                 "Farias",
-                SexType.MASCULINO,
+                SexEnum.MASCULINO,
                 13,
                 10,
                 "Lorem ipsum nulla sollicitudin massa lectus enim justo ligula, nulla inceptos nisi curabitur libero bibendum class mollis, cras metus maecenas dictum sollicitudin class senectus. arcu molestie conubia dui conubia quis condimentum ipsum tellus ornare habitant inceptos aliquet elit, tempor porttitor etiam magna neque tincidunt nulla torquent euismod rhoncus facilisis. nisi dui maecenas enim risus in lectus porta, lacinia",
@@ -62,14 +62,14 @@ class PatientServiceTest {
     @Test
     @DisplayName("deve retornar todos os pacientes filtrados por professionalId então sucesso")
     void shouldReturnAllPatientsFilteringByProfessionalId_thenSuccess() {
-        var result = patientService.getAllPatientsByProfessionalId(ConstantsToTests.PROFESSIONAL_ID, SituationType.ANDAMENTO);
+        var result = patientService.getAllPatientsByProfessionalId(ConstantsToTests.PROFESSIONAL_ID, SituationEnum.ANDAMENTO);
         Assertions.assertFalse(result.isEmpty());
     }
 
     @Test
     @DisplayName("deve retornar todos os pacientes filtrados por clinicId então sucesso")
     void shouldReturnAllPatientsFilteringByClinicId_thenSuccess() {
-        var result = patientService.getAllPatientsByClinicId(ConstantsToTests.CLINIC_ID, SituationType.ANDAMENTO);
+        var result = patientService.getAllPatientsByClinicId(ConstantsToTests.CLINIC_ID, SituationEnum.ANDAMENTO);
         Assertions.assertFalse(result.isEmpty());
     }
 /*
@@ -88,7 +88,7 @@ class PatientServiceTest {
                 ConstantsToTests.PATIENT_ID,
                 "Isabela",
                 "Freitas",
-                SexType.MASCULINO,
+                SexEnum.MASCULINO,
                 15,
                 2,
                 "Observation test unit",

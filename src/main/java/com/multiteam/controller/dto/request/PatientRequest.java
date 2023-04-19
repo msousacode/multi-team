@@ -1,6 +1,6 @@
 package com.multiteam.controller.dto.request;
 
-import com.multiteam.enums.SexType;
+import com.multiteam.enums.SexEnum;
 
 import java.util.UUID;
 
@@ -8,7 +8,7 @@ public record PatientRequest(
         UUID id,
         String name,
         String middleName,
-        SexType sex,
+        SexEnum sex,
         Integer age,
         Integer months,
         String internalObservation,

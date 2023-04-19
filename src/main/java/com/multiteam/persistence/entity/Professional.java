@@ -1,6 +1,6 @@
 package com.multiteam.persistence.entity;
 
-import com.multiteam.enums.SpecialtyType;
+import com.multiteam.enums.SpecialtyEnum;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -24,7 +24,7 @@ public class Professional {
 
     @Column(name = "specialty")
     @Enumerated(EnumType.STRING)
-    private SpecialtyType specialty;
+    private SpecialtyEnum specialty;
 
     @Column(name = "cell_phone")
     private String cellPhone;
@@ -72,7 +72,7 @@ public class Professional {
         return middleName;
     }
 
-    public SpecialtyType getSpecialty() {
+    public SpecialtyEnum getSpecialty() {
         return specialty;
     }
 
@@ -106,7 +106,7 @@ public class Professional {
         private UUID id;
         private final String name;
         private final String middleName;
-        private final SpecialtyType specialty;
+        private final SpecialtyEnum specialty;
         private final String cellPhone;
         private final String email;
         private final boolean active;
@@ -120,7 +120,7 @@ public class Professional {
                 UUID id,
                 final String name,
                 final String middleName,
-                final SpecialtyType specialty,
+                final SpecialtyEnum specialty,
                 final String cellPhone,
                 final String email,
                 final boolean active,
