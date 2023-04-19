@@ -1,9 +1,7 @@
 package com.multiteam.controller;
 
 import com.multiteam.controller.dto.PatientRequest;
-import com.multiteam.controller.dto.ProfessionalRequest;
 import com.multiteam.persistence.entity.Patient;
-import com.multiteam.persistence.entity.Professional;
 import com.multiteam.service.PatientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +30,7 @@ public class PatientController {
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @PostMapping
     public ResponseEntity<?> createPatient(
-            @RequestBody PatientRequest patientRequest,
-            @PathVariable("clinicId") UUID clinicId) {
+            @RequestBody PatientRequest patientRequest) {
 
         if (patientService.createPatient(patientRequest)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();

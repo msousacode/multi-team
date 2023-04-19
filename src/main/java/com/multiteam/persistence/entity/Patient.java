@@ -1,5 +1,6 @@
 package com.multiteam.persistence.entity;
 
+import com.multiteam.constants.ApplicationErrorsEnum;
 import com.multiteam.persistence.enums.SexType;
 import org.springframework.util.Assert;
 
@@ -131,7 +132,7 @@ public class Patient {
             Assert.isTrue(!middleName.isEmpty(), "patient middle name cannot be empty");
             Assert.notNull(sex, "patient sex cannot be null");
             Assert.notNull(age, "patient age cannot be null");
-            Assert.notNull(clinic, "patient needs to be associated with the clinic");
+            Assert.notNull(clinic, ApplicationErrorsEnum.CLINIC_IS_MANDATORY.name());
 
             this.name = name;
             this.middleName = middleName;
