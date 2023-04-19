@@ -1,6 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.constants.TestsConstants;
+import com.multiteam.constants.Constants;
 import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.entity.User;
@@ -111,6 +111,71 @@ public class ProfessionalControllerTest extends TokenUtil {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    @Test
+    @DisplayName("deve tentar criar um novo profissional usando roles erradas então falha")
+    void shouldCreateNewProfessionalWithRolesWrong_thenForbidden() throws Exception {
+
+        BDDMockito.given(clinicService.getClinicById(Mockito.any())).willReturn(getClinic());
+        BDDMockito.given(professionalRepository.save(new Professional())).willReturn(getProfessional());
+        BDDMockito.given(userRepository.save(Mockito.any())).willReturn(new User());
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .post("/v1/professionals")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .header("Authorization", "Bearer " + defaultAccessToken)
+                                .content(newProfessionalJson()))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("deve tentar buscar todos os profissionais usando roles erradas então falha")
+    void shouldGetAllProfessionalsWithRolesWrong_thenFail() throws Exception {
+
+        BDDMockito.given(professionalRepository.findAllByClinic_Id(Mockito.any())).willReturn(List.of());
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .get("/v1/professionals/clinic/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .header("Authorization", "Bearer " + defaultAccessToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("deve tentar atualizar o profissional usando roles erradas então falha")
+    void shouldUpdateProfessionalWithRolesWrong_thenFail() throws Exception {
+
+        BDDMockito.given(professionalService.updateProfessional(Mockito.any())).willReturn(Boolean.TRUE);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/v1/professionals")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .header("Authorization", "Bearer " + defaultAccessToken)
+                                .content(newProfessionalJson()))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("deve tentar inativar o profissional usando roles erradas então falha")
+    void shouldInactiveProfessionalWithRolesWrong_thenFail() throws Exception {
+
+        BDDMockito.given(professionalService.inactiveProfessional(Mockito.any())).willReturn(Boolean.TRUE);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .delete("/v1/professionals/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .header("Authorization", "Bearer " + defaultAccessToken)
+                                .content(newProfessionalJson()))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
     private String newProfessionalJson() {
         return """
                 {
@@ -127,7 +192,7 @@ public class ProfessionalControllerTest extends TokenUtil {
                 SpecialtyType.FONOAUDIOLOGIA,
                 "11 5656 - 0606",
                 UUID.randomUUID().toString().substring(0, 10) + "@email.com",
-                TestsConstants.CLINIC_ID
+                Constants.CLINIC_ID
         );
     }
 

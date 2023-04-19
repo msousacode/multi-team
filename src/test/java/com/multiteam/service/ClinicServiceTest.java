@@ -1,6 +1,6 @@
 package com.multiteam.service;
 
-import com.multiteam.constants.TestsConstants;
+import com.multiteam.constants.Constants;
 import com.multiteam.persistence.entity.Clinic;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -49,7 +49,7 @@ class ClinicServiceTest {
     @Test
     @DisplayName("dado um clinicId que existe deve retornar a clinica consultada")
     void givenClinicIdThatExists_thenReturnClinicWithSuccess() {
-        var result = clinicService.getClinicById(TestsConstants.CLINIC_ID);
-        Assertions.assertEquals(result.get().getId(), TestsConstants.CLINIC_ID);
+        var result = clinicService.getClinicById(Constants.CLINIC_ID);
+        Assertions.assertEquals(result.get().getId(), Constants.CLINIC_ID);
     }
 }

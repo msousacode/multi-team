@@ -1,6 +1,6 @@
 package com.multiteam.service;
 
-import com.multiteam.constants.TestsConstants;
+import com.multiteam.constants.Constants;
 import com.multiteam.controller.dto.ProfessionalRequest;
 import com.multiteam.persistence.enums.SpecialtyType;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +30,7 @@ class ProfessionalServiceTest {
         var cellPhone = UUID.randomUUID().toString().substring(0, 5);
         var email = "Ow Test+" + UUID.randomUUID().toString().substring(0, 5) + "@email.com";
 
-        var professional = new ProfessionalRequest(null, name, middleName, specialty, cellPhone, email, TestsConstants.CLINIC_ID);
+        var professional = new ProfessionalRequest(null, name, middleName, specialty, cellPhone, email, Constants.CLINIC_ID);
 
         var result = professionalService.createProfessional(professional);
 
@@ -40,14 +40,14 @@ class ProfessionalServiceTest {
     @Test
     @DisplayName("deve buscar a lista dos profissionais cadastrados com sucesso")
     void shouldRetrieveProfessionalList_thenSuccess() {
-        var professionals = professionalService.getAllProfessionals(TestsConstants.CLINIC_ID);
+        var professionals = professionalService.getAllProfessionals(Constants.CLINIC_ID);
         Assertions.assertFalse(professionals.isEmpty());
     }
 
     @Test
     @DisplayName("dado um professionalId que existe deve retornar o profissional consultado")
     void givenClinicIdThatExists_thenReturnClinicWithSuccess() {
-        var professionalId = TestsConstants.PROFESSIONAL_ID;
+        var professionalId = Constants.PROFESSIONAL_ID;
         var result = professionalService.getProfessionalById(professionalId);
         Assertions.assertEquals(result.get().getId(), professionalId);
     }

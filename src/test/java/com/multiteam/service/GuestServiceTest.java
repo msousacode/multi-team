@@ -1,6 +1,6 @@
 package com.multiteam.service;
 
-import com.multiteam.constants.TestsConstants;
+import com.multiteam.constants.Constants;
 import com.multiteam.controller.dto.GuestRequest;
 import com.multiteam.persistence.enums.RelationshipType;
 import org.junit.jupiter.api.Assertions;
@@ -31,7 +31,7 @@ class GuestServiceTest {
                 "(82) 99424-8064",
                 email,
                 true,
-                TestsConstants.PATIENT_ID
+                Constants.PATIENT_ID
         );
 
         var result = guestService.createGuest(guestDto);
@@ -42,7 +42,7 @@ class GuestServiceTest {
     @Test
     @DisplayName("deve adicionar convidados ao tratamento com sucesso")
     void shouldAddGuestInTreatment_thenSuccess() {
-        var result = guestService.addGuestInTreatment(TestsConstants.PATIENT_ID, TestsConstants.GUEST_ID);
+        var result = guestService.addGuestInTreatment(Constants.PATIENT_ID, Constants.GUEST_ID);
         Assertions.assertTrue(result);
     }
 }

@@ -1,6 +1,6 @@
 package com.multiteam.util;
 
-import com.multiteam.constants.TestsConstants;
+import com.multiteam.constants.Constants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -28,7 +28,7 @@ public class TokenUtil {
     public void init() {
         var secret = Base64.getEncoder().encodeToString(tokenSecret.getBytes());
         secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        defaultAccessToken = generateToken(TestsConstants.USER_OWNER_ADMIN);
+        defaultAccessToken = generateToken(Constants.USER_OWNER_ADMIN);
     }
 
     public String generateToken(String email) {
@@ -45,7 +45,7 @@ public class TokenUtil {
         }
 
         return Jwts.builder()
-                .setSubject(TestsConstants.USER_OWNER_ADMIN)
+                .setSubject(Constants.USER_OWNER_ADMIN)
                 .claim("roles", authoritiesList)
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(Instant.now().plus(Duration.ofSeconds(864000000))))

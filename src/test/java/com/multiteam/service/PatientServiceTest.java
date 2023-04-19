@@ -1,6 +1,6 @@
 package com.multiteam.service;
 
-import com.multiteam.constants.TestsConstants;
+import com.multiteam.constants.Constants;
 import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.persistence.entity.Patient;
 import com.multiteam.persistence.enums.SexType;
@@ -24,7 +24,7 @@ class PatientServiceTest {
     @DisplayName("deve criar um novo paciente e retornar sucesso")
     void shouldCreatePatient_thenSuccess() {
 
-        var clinicDefault = TestsConstants.CLINIC_ID;
+        var clinicDefault = Constants.CLINIC_ID;
 
         var clinic = clinicService.getClinicById(clinicDefault);
 
@@ -47,15 +47,15 @@ class PatientServiceTest {
     @Test
     @DisplayName("deve retornar a lista de pacientes filtrando pelo uuid da clinica com sucesso")
     void shouldReturnListPatientFilteringByIdClinic_thenSuccess() {
-        var result = patientService.getAllPatientsByClinicId(TestsConstants.CLINIC_ID);
+        var result = patientService.getAllPatientsByClinicId(Constants.CLINIC_ID);
         Assertions.assertFalse(result.isEmpty());
     }
 
     @Test
     @DisplayName("deve retornar o paciente filtrando pelo uuid do paciente e da clinica com sucesso")
     void shouldReturnListPatientFilteringByIdPacientAndIdClinic_thenSuccess() {
-        var patientId = TestsConstants.PATIENT_ID;
-        var clinicId = TestsConstants.CLINIC_ID;
+        var patientId = Constants.PATIENT_ID;
+        var clinicId = Constants.CLINIC_ID;
 
         var result = patientService.getPatientById(patientId, clinicId);
         Assertions.assertNotNull(result);
@@ -66,14 +66,14 @@ class PatientServiceTest {
     @Test
     @DisplayName("deve retornar todos os pacientes filtrados por professionalId então sucesso")
     void shouldReturnAllPatientsFilteringByProfessionalId_thenSuccess() {
-        var result = patientService.getAllPatientsByProfessionalId(TestsConstants.PROFESSIONAL_ID, SituationType.ANDAMENTO);
+        var result = patientService.getAllPatientsByProfessionalId(Constants.PROFESSIONAL_ID, SituationType.ANDAMENTO);
         Assertions.assertFalse(result.isEmpty());
     }
 
     @Test
     @DisplayName("deve retornar todos os pacientes filtrados por clinicId então sucesso")
     void shouldReturnAllPatientsFilteringByClinicId_thenSuccess() {
-        var result = patientService.getAllPatientsByClinicId(TestsConstants.CLINIC_ID, SituationType.ANDAMENTO);
+        var result = patientService.getAllPatientsByClinicId(Constants.CLINIC_ID, SituationType.ANDAMENTO);
         Assertions.assertFalse(result.isEmpty());
     }
 /*
@@ -93,7 +93,7 @@ class PatientServiceTest {
                 "35997818268",
                 "email@email.com",
                 "(71) 3871-3197")
-                .id(TestsConstants.CLINIC_ID)
+                .id(Constants.CLINIC_ID)
                 .build();
 
         var patientBuilder = new Patient.Builder(
@@ -102,7 +102,7 @@ class PatientServiceTest {
                 SexType.MASCULINO,
                 15,
                 clinicBuilder)
-                .id(TestsConstants.PATIENT_ID)
+                .id(Constants.PATIENT_ID)
                 .active(true)
                 .months(2)
                 .externalObservation("Observation test unit")

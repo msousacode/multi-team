@@ -1,6 +1,6 @@
 package com.multiteam.service;
 
-import com.multiteam.constants.TestsConstants;
+import com.multiteam.constants.Constants;
 import com.multiteam.controller.dto.TreatmentRequest;
 import com.multiteam.persistence.enums.SituationType;
 import com.multiteam.persistence.enums.TreatmentType;
@@ -29,9 +29,9 @@ class TreatmentServiceTest {
                 "Lorem ipsum donec consectetur sagittis ullamcorper hac platea ultrices tristique, turpis curabitur commodo condimentum risus porttitor sit erat metus tempor, cras proin in odio eros ut dolor egestas. cras cursus elit sit urna mauris enim quisque eu class quam",
                 TreatmentType.FONOAUDIOLOGIA,
                 SituationType.ANDAMENTO,
-                TestsConstants.PATIENT_ID,
-                TestsConstants.PROFESSIONAL_ID,
-                TestsConstants.CLINIC_ID,
+                Constants.PATIENT_ID,
+                Constants.PROFESSIONAL_ID,
+                Constants.CLINIC_ID,
                 LocalDate.now());
 
         var result = treatamentService.includeTreatment(treatmentDto);
@@ -53,7 +53,7 @@ class TreatmentServiceTest {
     @Test
     @DisplayName("deve obter todos os tratamentos que o convidado esta acompanhando")
     void shouldGetAllTreatments_thenSuccess() {
-        var result = treatamentService.getAllTreatmentsByGuestId(TestsConstants.GUEST_ID);
+        var result = treatamentService.getAllTreatmentsByGuestId(Constants.GUEST_ID);
         Assertions.assertFalse(result.isEmpty());
     }
 }
