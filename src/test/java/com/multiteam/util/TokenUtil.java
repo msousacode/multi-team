@@ -1,6 +1,7 @@
 package com.multiteam.util;
 
 import com.multiteam.constants.Constants;
+import com.multiteam.persistence.enums.RoleEnum;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -28,15 +29,9 @@ public class TokenUtil {
     public void init() {
         var secret = Base64.getEncoder().encodeToString(tokenSecret.getBytes());
         secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        defaultAccessToken = generateToken(Constants.USER_OWNER_ADMIN);
     }
 
-    public String generateToken(String email) {
-
-        Collection<? extends GrantedAuthority> authorities = Arrays.asList(
-                new SimpleGrantedAuthority("ROLE_OWNER"),
-                new SimpleGrantedAuthority("ROLE_ADMIN")
-        );
+    public String generateToken(Collection<? extends GrantedAuthority> authorities) {
 
         ArrayList<String> authoritiesList = new ArrayList<>(authorities.size());
 
@@ -51,5 +46,31 @@ public class TokenUtil {
                 .setExpiration(Date.from(Instant.now().plus(Duration.ofSeconds(864000000))))
                 .signWith(this.secretKey, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    protected String getToken(RoleEnum role) {
+
+        Collection<? extends GrantedAuthority> authorities = new ArrayList<>();
+
+        if(role.equals(RoleEnum.ROLE_OWNER)) {
+            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_OWNER"));
+
+        } else if (role.equals(RoleEnum.ROLE_ADMIN)) {
+            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+        } else if (role.equals(RoleEnum.ROLE_SCHEDULE)) {
+            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_SCHEDULE"));
+
+        } else if (role.equals(RoleEnum.ROLE_PROFESSIONAL)) {
+            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_PROFESSIONAL"));
+
+        } else if (role.equals(RoleEnum.ROLE_PATIENT)) {
+            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_PATIENT"));
+
+        } else if (role.equals(RoleEnum.ROLE_GUEST)) {
+            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_GUEST"));
+        }
+
+        return generateToken(authorities);
     }
 }

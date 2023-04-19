@@ -58,11 +58,11 @@ class AuthControllerTest extends MockMvcController {
                     "roles": [
                         {
                             "id": "03dc776a-3bb2-45f6-b186-a0d0a7c16894",
-                            "role": "ADMIN"
+                            "role": "ROLE_ADMIN"
                         },
                         {
                             "id": "6252fbab-2c24-48e3-bd3b-bd36cf9faebf",
-                            "role": "PROFESSIONAL"
+                            "role": "ROLE_PROFESSIONAL"
                         }
                     ]
                 }

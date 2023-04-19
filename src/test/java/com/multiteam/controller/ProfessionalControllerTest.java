@@ -4,6 +4,7 @@ import com.multiteam.constants.Constants;
 import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.entity.User;
+import com.multiteam.persistence.enums.RoleEnum;
 import com.multiteam.persistence.enums.SpecialtyType;
 import com.multiteam.persistence.repository.ProfessionalRepository;
 import com.multiteam.persistence.repository.UserRepository;
@@ -50,16 +51,14 @@ public class ProfessionalControllerTest extends TokenUtil {
     @DisplayName("deve criar um novo profissional então sucesso usando roles OWNER e ADMIN")
     void shouldCreateNewProfessional_thenSuccess() throws Exception {
 
-        BDDMockito.given(clinicService.getClinicById(Mockito.any())).willReturn(getClinic());
-        BDDMockito.given(professionalRepository.save(new Professional())).willReturn(getProfessional());
-        BDDMockito.given(userRepository.save(Mockito.any())).willReturn(new User());
+        BDDMockito.given(professionalService.createProfessional(Mockito.any())).willReturn(Boolean.TRUE);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
                                 .post("/v1/professionals")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + defaultAccessToken)
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER))
                                 .content(newProfessionalJson()))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
@@ -75,7 +74,7 @@ public class ProfessionalControllerTest extends TokenUtil {
                                 .get("/v1/professionals/clinic/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + defaultAccessToken))
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -90,7 +89,7 @@ public class ProfessionalControllerTest extends TokenUtil {
                                 .put("/v1/professionals")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + defaultAccessToken)
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER))
                                 .content(newProfessionalJson()))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -106,7 +105,7 @@ public class ProfessionalControllerTest extends TokenUtil {
                                 .delete("/v1/professionals/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + defaultAccessToken)
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER))
                                 .content(newProfessionalJson()))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -124,7 +123,7 @@ public class ProfessionalControllerTest extends TokenUtil {
                                 .post("/v1/professionals")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + defaultAccessToken)
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_PROFESSIONAL))
                                 .content(newProfessionalJson()))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
@@ -140,7 +139,7 @@ public class ProfessionalControllerTest extends TokenUtil {
                                 .get("/v1/professionals/clinic/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + defaultAccessToken))
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_PROFESSIONAL)))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
@@ -155,7 +154,7 @@ public class ProfessionalControllerTest extends TokenUtil {
                                 .put("/v1/professionals")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + defaultAccessToken)
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_PROFESSIONAL))
                                 .content(newProfessionalJson()))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
@@ -171,7 +170,7 @@ public class ProfessionalControllerTest extends TokenUtil {
                                 .delete("/v1/professionals/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + defaultAccessToken)
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_PROFESSIONAL))
                                 .content(newProfessionalJson()))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
