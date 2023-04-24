@@ -32,7 +32,8 @@ class TreatmentServiceTest {
                 ConstantsToTests.PATIENT_ID,
                 ConstantsToTests.PROFESSIONAL_ID,
                 ConstantsToTests.CLINIC_ID,
-                LocalDate.now());
+                LocalDate.now(),
+                null);
 
         var result = treatamentService.includeTreatment(treatmentDto);
 

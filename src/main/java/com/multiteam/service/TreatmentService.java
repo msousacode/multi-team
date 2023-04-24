@@ -36,10 +36,10 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean includeTreatment(TreatmentRequest treatmentDto) {
+    public Boolean includeTreatment(TreatmentRequest treatmentRequest) {
 
-        var patient = patientService.getPatientById(treatmentDto.patientId(), treatmentDto.clinicId());
-        var professional = professionalService.getProfessionalById(treatmentDto.professionalId());
+        var patient = patientService.getPatientById(treatmentRequest.patientId(), treatmentRequest.clinicId());
+        var professional = professionalService.getProfessionalById(treatmentRequest.professionalId());
 
         if (patient.isEmpty())
             return Boolean.FALSE;
@@ -48,11 +48,12 @@ public class TreatmentService {
 
         var builder = new Treatment.Builder(
                 null,
-                treatmentDto.treatmentType(),
-                treatmentDto.situation(),
-                treatmentDto.initialDate(),
+                treatmentRequest.treatmentType(),
+                treatmentRequest.situation(),
+                treatmentRequest.initialDate(),
                 patient.get())
-                .description(treatmentDto.description())
+                .finalDate(treatmentRequest.finalDate())
+                .description(treatmentRequest.description())
                 .active(true)
                 .build();
 
@@ -65,9 +66,9 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean updateTreatment(Treatment treatment) {
+    public Boolean updateTreatment(TreatmentRequest treatmentRequest) {
 
-        var result = treatmentRepository.findById(treatment.getId());
+        var result = treatmentRepository.findById(treatmentRequest.id());
 
         if (result.isEmpty()) {
             return Boolean.FALSE;
@@ -75,11 +76,11 @@ public class TreatmentService {
 
         var builder = new Treatment.Builder(
                 result.get().getId(),
-                treatment.getTreatmentType(),
-                treatment.getSituation(),
-                treatment.getInitialDate(),
+                treatmentRequest.treatmentType(),
+                treatmentRequest.situation(),
+                treatmentRequest.initialDate(),
                 result.get().getPatient())
-                .finalDate(treatment.getFinalDate())
+                .finalDate(treatmentRequest.finalDate())
                 .build();
 
         treatmentRepository.save(builder);

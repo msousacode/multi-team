@@ -14,6 +14,7 @@ public record TreatmentRequest(
         UUID patientId,
         UUID professionalId,
         UUID clinicId,
-        LocalDate initialDate
+        LocalDate initialDate,
+        LocalDate finalDate
 ) {
 }
