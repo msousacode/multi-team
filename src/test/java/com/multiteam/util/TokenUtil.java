@@ -73,6 +73,9 @@ public class TokenUtil {
 
         } else if (role.equals(RoleEnum.PERM_TREATMENT_WRITE)) {
             authorities = Arrays.asList(new SimpleGrantedAuthority("PERM_TREATMENT_WRITE"));
+
+        } else if (role.equals(RoleEnum.PERM_TREATMENT_READ)) {
+            authorities = Arrays.asList(new SimpleGrantedAuthority("PERM_TREATMENT_READ"));
         } else {
             throw new BadRequestException("role mandatory");
         }

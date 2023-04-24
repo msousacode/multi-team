@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -131,7 +132,7 @@ public class TreatmentService {
         treatments.forEach(t -> inactiveTreatment(t.getId()));
     }
 
-    public TreatmentView getTreatmentById(UUID treatmentId) {
+    public Optional<TreatmentView> getTreatmentById(UUID treatmentId) {
         return treatmentRepository.findByIdProjection(treatmentId);
     }
 }

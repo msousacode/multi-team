@@ -171,7 +171,7 @@ public class ProfessionalControllerTest extends TokenUtil {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8")
                                 .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_PROFESSIONAL))
-                                .content(newProfessionalJson()))
+                                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 

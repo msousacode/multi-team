@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -50,5 +51,5 @@ public interface TreatmentRepository extends JpaRepository<Treatment, UUID> {
            FROM Treatment t
            WHERE t.id = :treatmentId
            """)
-    TreatmentView findByIdProjection(@Param("treatmentId") UUID treatmentId);
+    Optional<TreatmentView> findByIdProjection(@Param("treatmentId") UUID treatmentId);
 }

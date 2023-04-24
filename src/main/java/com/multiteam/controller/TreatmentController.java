@@ -1,9 +1,12 @@
 package com.multiteam.controller;
 
 import com.multiteam.controller.dto.request.TreatmentRequest;
+import com.multiteam.enums.RoleEnum;
 import com.multiteam.persistence.entity.Treatment;
+import com.multiteam.persistence.projection.TreatmentView;
 import com.multiteam.service.TreatmentService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -43,16 +46,13 @@ public class TreatmentController {
     public Set<Treatment> getAllTreatments(@PathVariable("patientId") UUID patientId) {
         return treatmentService.getAllTreatmentsByPatientId(patientId);
     }
-    /*
+
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_READ')")
     @GetMapping("/{treatmentId}")
-    public ResponseEntity<Treatment> getTreatment(@PathVariable("treatmentId") UUID treatmentId) {
-
+    public ResponseEntity<TreatmentView> getTreatment(@PathVariable("treatmentId") UUID treatmentId) {
         var treatmentOptional = treatmentService.getTreatmentById(treatmentId);
-        return treatmentOptional
-                .map(treatment -> ResponseEntity.status(HttpStatus.OK).body(treatment))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    }*/
+        return treatmentOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @PutMapping

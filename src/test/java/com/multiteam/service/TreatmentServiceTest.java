@@ -57,4 +57,11 @@ class TreatmentServiceTest {
         var result = treatamentService.getAllTreatmentsByGuestId(ConstantsToTests.GUEST_ID);
         Assertions.assertFalse(result.isEmpty());
     }
+
+    @Test
+    @DisplayName("deve obter o tratamento por treatmentId")
+    void shouldGetTreatmentById_thenSuccess() {
+        var result = treatamentService.getTreatmentById(ConstantsToTests.TREATMENT_ID);
+        Assertions.assertNotNull(result.get());
+    }
 }
