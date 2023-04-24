@@ -2,6 +2,7 @@ package com.multiteam.util;
 
 import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.enums.RoleEnum;
+import com.multiteam.exception.BadRequestException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -69,6 +70,11 @@ public class TokenUtil {
 
         } else if (role.equals(RoleEnum.ROLE_GUEST)) {
             authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_GUEST"));
+
+        } else if (role.equals(RoleEnum.PERM_TREATMENT_WRITE)) {
+            authorities = Arrays.asList(new SimpleGrantedAuthority("PERM_TREATMENT_WRITE"));
+        } else {
+            throw new BadRequestException("role mandatory");
         }
 
         return generateToken(authorities);

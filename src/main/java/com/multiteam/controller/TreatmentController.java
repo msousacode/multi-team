@@ -27,7 +27,7 @@ public class TreatmentController {
         this.treatmentService = treatmentService;
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')" )
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @PostMapping
     public ResponseEntity<?> createTreatment(@RequestBody TreatmentRequest treatmentRequest) {
 

@@ -44,6 +44,35 @@ public class TreatmentControllerTest extends TokenUtil {
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
+    @Test
+    @DisplayName("deve criar um novo tratamento utilizando a permissão de escrita então sucesso")
+    void shouldCreateNewTreatmentUsingWritePermissions_thenSuccess() throws Exception {
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .post("/v1/treatments")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.PERM_TREATMENT_WRITE))
+                                .content(getNewTreatment()))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+
+    @Test
+    @DisplayName("deve tentar criar um novo tratamento utilizando uma role inválida então falha")
+    void shouldTryCreateNewTreatmentUsingInvalidPermissions_thenFail() throws Exception {
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .post("/v1/treatments")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_PROFESSIONAL))
+                                .content(getNewTreatment()))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+
     String getNewTreatment() {
         return """
                 {
