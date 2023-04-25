@@ -79,6 +79,21 @@ public class ProfessionalControllerTest extends TokenUtil {
     }
 
     @Test
+    @DisplayName("deve buscar o profissional usando roles OWNER e ADMIN então sucesso")
+    void shouldGetProfessionalById_thenSuccess() throws Exception {
+
+        BDDMockito.given(professionalService.getProfessional(Mockito.any())).willReturn(Optional.ofNullable(getProfessional()));
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .get("/v1/professionals/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
     @DisplayName("deve atualizar o profissionais usando roles OWNER e ADMIN")
     void shouldUpdateProfessional_thenSuccess() throws Exception {
 

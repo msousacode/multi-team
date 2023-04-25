@@ -27,7 +27,7 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_WRITE')")
     @PostMapping
     public ResponseEntity<?> createPatient(
             @RequestBody PatientRequest patientRequest) {
@@ -39,13 +39,13 @@ public class PatientController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'SCHEDULE', 'PROFESSIONAL')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_READ')")
     @GetMapping("/clinic/{clinicId}")
     public List<Patient> getAllPatient(@PathVariable("clinicId") UUID clinicId) {
         return patientService.getAllPatientsByClinicId(clinicId);
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'SCHEDULE', 'PROFESSIONAL', 'PATIENT', 'GUEST')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_READ')")
     @GetMapping("clinic/{clinicId}/patient/{patientId}")
     public ResponseEntity<Patient> getPatient(
             @PathVariable("patientId") UUID patientId,
@@ -57,7 +57,7 @@ public class PatientController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_WRITE')")
     @PutMapping
     public ResponseEntity<?> updatePatient(@RequestBody PatientRequest patientRequest) {
 
@@ -68,7 +68,7 @@ public class PatientController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_WRITE')")
     @DeleteMapping("/{patientId}/clinic/{clinicId}")
     public ResponseEntity<?> inactivePatient(
             @PathVariable("patientId") UUID patientId,
