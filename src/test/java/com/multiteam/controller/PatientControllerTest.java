@@ -3,6 +3,7 @@ package com.multiteam.controller;
 import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.enums.RoleEnum;
 import com.multiteam.enums.SexEnum;
+import com.multiteam.persistence.entity.Patient;
 import com.multiteam.service.PatientService;
 import com.multiteam.util.TokenUtil;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @AutoConfigureMockMvc
@@ -45,8 +48,17 @@ public class PatientControllerTest extends TokenUtil {
     }
 
     @Test
-    void shouldGetPatientById_thenSuccess() {
+    void shouldGetPatientById_thenSuccess() throws Exception {
 
+        BDDMockito.given(patientService.getPatientById(Mockito.any(), Mockito.any())).willReturn(Optional.of(new Patient()));
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .get("/v1/patients/clinic/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04/patient/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.PERM_PATIENT_READ)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
