@@ -6,6 +6,7 @@ import com.multiteam.enums.SexEnum;
 import com.multiteam.persistence.entity.Patient;
 import com.multiteam.service.PatientService;
 import com.multiteam.util.TokenUtil;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -18,8 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @AutoConfigureMockMvc
@@ -33,6 +34,7 @@ public class PatientControllerTest extends TokenUtil {
     private PatientService patientService;
 
     @Test
+    @DisplayName("deve criar um novo paciente então sucesso")
     void shouldCreateNewPatient_thenSuccess() throws Exception {
 
         BDDMockito.given(patientService.createPatient(Mockito.any())).willReturn(Boolean.TRUE);
@@ -48,6 +50,7 @@ public class PatientControllerTest extends TokenUtil {
     }
 
     @Test
+    @DisplayName("deve buscar o paciente por patientId e clinicId então sucesso")
     void shouldGetPatientById_thenSuccess() throws Exception {
 
         BDDMockito.given(patientService.getPatientById(Mockito.any(), Mockito.any())).willReturn(Optional.of(new Patient()));
@@ -62,13 +65,48 @@ public class PatientControllerTest extends TokenUtil {
     }
 
     @Test
-    void shouldGetAllPatients_thenSuccess() {
+    @DisplayName("Deve buscar todos os pacientes então sucesso")
+    void shouldGetAllPatients_thenSuccess() throws Exception {
 
+        BDDMockito.given(patientService.getAllPatientsByClinicId(Mockito.any(), Mockito.any())).willReturn(List.of());
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .get("/v1/patients/clinic/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.PERM_PATIENT_READ)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    void shouldInactivePatient_thenSuccess() {
+    @DisplayName("deve inativar um paciente então sucesso")
+    void shouldInactivePatient_thenSuccess() throws Exception {
+        BDDMockito.given(patientService.inactivePatient(Mockito.any(), Mockito.any())).willReturn(Boolean.TRUE);
 
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .delete("/v1/patients/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04/clinic/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.PERM_PATIENT_WRITE))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @DisplayName("deve atualizar o paciente usando permissão correta então sucesso")
+    void shouldUpdatePatient_thenSuccess() throws Exception {
+
+        BDDMockito.given(patientService.updatePatient(Mockito.any())).willReturn(Boolean.TRUE);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .put("/v1/patients")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .header("Authorization", "Bearer " + getToken(RoleEnum.PERM_PATIENT_WRITE))
+                                .content(getNewPatient()))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     private String getNewPatient() {
