@@ -83,9 +83,9 @@ public class GuestService {
     }
 
     @Modifying
-    public Boolean updateGuest(Guest guest) {
+    public Boolean updateGuest(GuestRequest guestRequest) {
 
-        var result = guestRespository.findById(guest.getId());
+        var result = guestRespository.findById(guestRequest.id());
 
         if (result.isEmpty()) {
             return Boolean.FALSE;
@@ -93,12 +93,12 @@ public class GuestService {
 
         var builder = new Guest.Builder(
                 result.get().getId(),
-                guest.getName(),
-                guest.getMiddleName(),
-                guest.getRelationship(),
-                guest.getCellPhone(),
-                guest.getEmail(),
-                guest.isActive(),
+                guestRequest.name(),
+                guestRequest.middleName(),
+                guestRequest.relationship(),
+                guestRequest.cellPhone(),
+                guestRequest.email(),
+                guestRequest.active(),
                 result.get().getUser())
                 .build();
 

@@ -5,7 +5,8 @@ public enum RelationshipEnum {
     PAI("Pai"),
     TIA("Tia(o)"),
     AVO("Avó(ô)"),
-    PROFESSOR("Professora(o)");
+    BABA("Babá"),
+    PROFESSOR("Professor");
 
     public final String name;
 
