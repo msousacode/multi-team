@@ -1,6 +1,5 @@
 package com.multiteam.controller;
 
-import com.multiteam.constants.ConstantsToTests;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -8,7 +7,6 @@ import org.springframework.http.MediaType;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,7 +32,6 @@ class AuthControllerTest extends MockMvcController {
                         post("/v1/auth/signup")
                                 .content(getNewUserWithRoleJson())
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("utf-8")
                 )
                 .andExpect(status().isCreated());
     }
@@ -47,9 +44,7 @@ class AuthControllerTest extends MockMvcController {
                         post("/v1/auth/login")
                                 .content(getUserJson())
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("utf-8")
                 )
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").isNotEmpty());
     }
@@ -79,10 +74,10 @@ class AuthControllerTest extends MockMvcController {
     private String getUserJson() {
         return """
                 {
-                    "email":"%s",
+                    "email":"ab6ee@email.com",
                     "password":"12345678"
                 }
-                """.formatted(ConstantsToTests.USER_OWNER_ADMIN);
+                """;
     }
 
     private String getNewUserWithoutRoleJson() {

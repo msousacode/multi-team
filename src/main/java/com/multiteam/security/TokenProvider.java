@@ -43,20 +43,11 @@ public class TokenProvider {
 
         Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(jwtExpiration)));
 
-        Collection<? extends GrantedAuthority> authorities = userPrincipal.getAuthorities();
-
-        ArrayList<String> authoritiesList = new ArrayList<>(authorities.size());
-
-        for (GrantedAuthority authority : authorities) {
-            authoritiesList.add(authority.getAuthority());
-        }
-
         return Jwts.builder()
                 .setSubject(userPrincipal.getId().toString())
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(this.secretKey, SignatureAlgorithm.HS256)
-                .claim("roles", authoritiesList)
                 .compact();
     }
 
