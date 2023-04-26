@@ -50,4 +50,4 @@ databaseChangeLog:
               - column:
                   name: active
                   type: boolean
-                  defaultValueBoolean: false
+                  defaultValueBoolean: true

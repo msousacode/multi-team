@@ -57,16 +57,14 @@ public class AuthService {
     }
 
     @Transactional
-    public User registerUser(SignUpRequest signUpRequest) {
+    public void registerUser(SignUpRequest signUpRequest) {
 
         if(userRepository.existsByEmail(signUpRequest.email())) {
             throw new BadRequestException("Email address already in use.");
         }
 
-        if(signUpRequest.roles().isEmpty()) {
-            Role role = roleRepository.findByRole(RoleEnum.ROLE_GUEST);
-            signUpRequest.roles().add(role);
-        }
+        Role role = roleRepository.findByRole(RoleEnum.ROLE_OWNER);
+        signUpRequest.roles().add(role);
 
         var builder = new User.Builder(
                 null, signUpRequest.name(), signUpRequest.email(), true)
@@ -75,6 +73,6 @@ public class AuthService {
                 .roles(signUpRequest.roles())
                 .build();
 
-        return userRepository.save(builder);
+        userRepository.save(builder);
     }
 }

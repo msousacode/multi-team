@@ -4,14 +4,26 @@ databaseChangeLog:
       author: michael
       changes:
         - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'ADMIN');"
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'ROLE_ADMIN');"
         - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'OWNER');"
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'ROLE_OWNER');"
         - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PATIENT');"
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'ROLE_PATIENT');"
         - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'GUEST');"
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'ROLE_GUEST');"
         - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PROFESSIONAL');"
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'ROLE_PROFESSIONAL');"
         - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'SCHEDULE');"
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'ROLE_SCHEDULE');"
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_TREATMENT_READ');"
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_TREATMENT_WRITE');"
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_PATIENT_READ');"
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_PATIENT_WRITE');"
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_SCHEDULE_READ');"
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_SCHEDULE_WRITE');"
