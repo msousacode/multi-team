@@ -13,6 +13,8 @@ import com.multiteam.security.CustomAuthenticationManager;
 import com.multiteam.security.TokenProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -69,6 +71,7 @@ public class AuthService {
         var builder = new User.Builder(
                 null, signUpRequest.name(), signUpRequest.email(), true)
                 .provider(AuthProviderEnum.local)
+                .password(new BCryptPasswordEncoder().encode(signUpRequest.password()))
                 .roles(signUpRequest.roles())
                 .build();
 
