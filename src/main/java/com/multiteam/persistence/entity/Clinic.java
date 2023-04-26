@@ -114,6 +114,16 @@ public class Clinic {
         return user;
     }
 
+    @Override
+    public String toString() {
+        return "Clinic{" +
+               "id=" + id +
+               ", clinicName='" + clinicName + '\'' +
+               ", cpfCnpj='" + cpfCnpj + '\'' +
+               ", email='" + email + '\'' +
+               '}';
+    }
+
     public static class Builder {
 
         //mandatory

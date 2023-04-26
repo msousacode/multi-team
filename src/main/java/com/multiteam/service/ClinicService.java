@@ -4,6 +4,8 @@ import com.multiteam.controller.dto.request.ClinicRequest;
 import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.persistence.repository.ClinicRespository;
 import com.multiteam.persistence.repository.UserRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,6 +16,8 @@ import java.util.UUID;
 
 @Service
 public class ClinicService {
+
+    private final Logger logger = LogManager.getLogger(ClinicService.class);
 
     private final ClinicRespository clinicRespository;
     private final UserRepository userRepository;
@@ -29,6 +33,8 @@ public class ClinicService {
         var user = userRepository.findById(clinicRequest.userId());
 
         if (user.isEmpty()){
+            logger.debug("check if user exists. userId: {}", clinicRequest.userId());
+            logger.error("empty user cannot create clinic userId: {}", clinicRequest.userId());
             return Boolean.FALSE;
         }
 
@@ -43,6 +49,8 @@ public class ClinicService {
                 .build();
 
         clinicRespository.save(builder);
+
+        logger.info("clinic {} created by userId {}", builder.toString(), clinicRequest.userId());
 
         return Boolean.TRUE;
     }
