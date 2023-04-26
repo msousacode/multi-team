@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
@@ -82,5 +83,22 @@ public class TokenProvider {
         } catch (RuntimeException ex) {
         }
         return false;
+    }
+
+    public Map<String, String> openToken(String token) {
+
+        Claims body = Jwts.parser()
+                .setSigningKey(this.secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+
+        String userId = body.getSubject();
+
+        Assert.notNull(userId, "userId can not be null");
+
+        Map<String, String> userInfo = new HashMap<>();
+        userInfo.put("userId", userId);
+
+        return userInfo;
     }
 }

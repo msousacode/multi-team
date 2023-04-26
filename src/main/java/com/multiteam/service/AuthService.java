@@ -2,6 +2,7 @@ package com.multiteam.service;
 
 import com.multiteam.controller.dto.payload.LoginRequest;
 import com.multiteam.controller.dto.payload.SignUpRequest;
+import com.multiteam.controller.dto.response.CheckTokenResponse;
 import com.multiteam.exception.BadRequestException;
 import com.multiteam.persistence.entity.Role;
 import com.multiteam.persistence.entity.User;
@@ -11,14 +12,19 @@ import com.multiteam.enums.AuthProviderEnum;
 import com.multiteam.enums.RoleEnum;
 import com.multiteam.security.CustomAuthenticationManager;
 import com.multiteam.security.TokenProvider;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.UUID;
 
 @Service
 public class AuthService {
+
+    private static final Logger logger = LogManager.getLogger(AuthService.class);
 
     private final CustomAuthenticationManager customAuthenticationManager;
     private final TokenProvider jwtTokenProvider;
@@ -73,5 +79,20 @@ public class AuthService {
                 .build();
 
         return userRepository.save(builder);
+    }
+
+    public CheckTokenResponse checkToken(final String token) {
+        logger.info("check token {}", token);
+        var userInfo = jwtTokenProvider.openToken(token);
+
+        if(jwtTokenProvider.validateToken(token)) {
+            logger.info("valid token {}", token);
+            return new CheckTokenResponse(UUID.fromString(userInfo.get("userId")), true);
+
+        } else {
+            logger.error("invalid token {}", token);
+            logger.debug("could not validate user token id {}", userInfo.get("userId"));
+            return new CheckTokenResponse(null, false);
+        }
     }
 }
