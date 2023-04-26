@@ -1,5 +1,6 @@
 package com.multiteam.controller;
 
+import com.multiteam.controller.dto.payload.ApiResponse;
 import com.multiteam.controller.dto.payload.AuthResponse;
 import com.multiteam.controller.dto.payload.LoginRequest;
 import com.multiteam.controller.dto.payload.SignUpRequest;
@@ -13,14 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(path = "/v1/auth",
-        produces = APPLICATION_JSON_VALUE,
-        consumes = APPLICATION_JSON_VALUE
-)
+@RequestMapping(path = "/v1/auth", produces = APPLICATION_JSON_VALUE)
 public class AuthController {
 
     private final AuthService authService;

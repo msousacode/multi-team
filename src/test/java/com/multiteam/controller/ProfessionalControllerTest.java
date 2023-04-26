@@ -212,7 +212,7 @@ public class ProfessionalControllerTest extends TokenUtil {
 
     Optional<Clinic> getClinic() {
         return Optional.ofNullable(
-                new Clinic.Builder("Teste", "000000000000000", "teste@teste", "1199999-9999", new User()).build());
+                new Clinic.Builder("Teste", "000000000000000", "teste@teste", "1199999-9999").build());
     }
 
     private Professional getProfessional() {

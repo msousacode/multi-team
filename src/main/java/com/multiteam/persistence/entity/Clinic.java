@@ -46,10 +46,6 @@ public class Clinic {
     @OneToMany(mappedBy = "clinic")
     private List<Professional> professionals;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private User user;
-
     public Clinic() {}
 
     public Clinic(Builder builder) {
@@ -63,7 +59,6 @@ public class Clinic {
         this.active = builder.active;
         this.createdDate = builder.createdDate;
         this.removedDate = builder.removedDate;
-        this.user = builder.user;
     }
 
     public UUID getId() {
@@ -110,10 +105,6 @@ public class Clinic {
         return professionals;
     }
 
-    public User getUser() {
-        return user;
-    }
-
     public static class Builder {
 
         //mandatory
@@ -122,7 +113,6 @@ public class Clinic {
         private final String cpfCnpj;
         private final String email;
         private final String cellPhone;
-        private final User user;
 
         //optional
         private String telephone;
@@ -131,9 +121,8 @@ public class Clinic {
         private LocalDateTime createdDate;
         private LocalDateTime removedDate;
 
-        public Builder(final String clinicName, final String cpfCnpj, final String email, final String cellPhone, final User user) {
+        public Builder(final String clinicName, final String cpfCnpj, final String email, final String cellPhone) {
 
-            Assert.notNull(user, "clinic needs to be associated with the user owner");
             Assert.notNull(clinicName, "clinic name not be null");
             Assert.notNull(cpfCnpj, "clinic cpf_cnpj not be null");
             Assert.notNull(email, "clinic email not be null");
@@ -147,7 +136,6 @@ public class Clinic {
             this.cpfCnpj = cpfCnpj;
             this.email = email;
             this.cellPhone = cellPhone;
-            this.user = user;
         }
 
         public Builder id(final UUID id) {

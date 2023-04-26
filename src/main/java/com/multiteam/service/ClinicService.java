@@ -1,9 +1,7 @@
 package com.multiteam.service;
 
-import com.multiteam.controller.dto.request.ClinicRequest;
 import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.persistence.repository.ClinicRespository;
-import com.multiteam.persistence.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,39 +14,28 @@ import java.util.UUID;
 public class ClinicService {
 
     private final ClinicRespository clinicRespository;
-    private final UserRepository userRepository;
 
-    public ClinicService(ClinicRespository clinicRespository, UserRepository userRepository) {
+    public ClinicService(ClinicRespository clinicRespository) {
         this.clinicRespository = clinicRespository;
-        this.userRepository = userRepository;
     }
 
     @Transactional
-    public Boolean createClinic(ClinicRequest clinicRequest) {
-
-        var user = userRepository.findById(clinicRequest.userId());
-
-        if (user.isEmpty()){
-            return Boolean.FALSE;
-        }
+    public Clinic createClinic(Clinic clinic) {
 
         var builder = new Clinic.Builder(
-                clinicRequest.clinicName(),
-                clinicRequest.cpfCnpj(),
-                clinicRequest.email(),
-                clinicRequest.cellPhone(),
-                user.get())
+                clinic.getClinicName(),
+                clinic.getCpfCnpj(),
+                clinic.getEmail(),
+                clinic.getCellPhone())
                 .createdDate(LocalDateTime.now())
                 .active(true)
                 .build();
 
-        clinicRespository.save(builder);
-
-        return Boolean.TRUE;
+        return clinicRespository.save(builder);
     }
 
-    public List<Clinic> getAllClinic(UUID ownerId) {
-        return clinicRespository.findAllByUserId(ownerId);
+    public List<Clinic> getAllClinic() {
+        return clinicRespository.findAll();
     }
 
     public Optional<Clinic> getClinicById(UUID clinicId) {
