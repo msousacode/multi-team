@@ -3,7 +3,10 @@ package com.multiteam.controller;
 import com.multiteam.controller.dto.payload.AuthResponse;
 import com.multiteam.controller.dto.payload.LoginRequest;
 import com.multiteam.controller.dto.payload.SignUpRequest;
+import com.multiteam.controller.dto.request.CheckTokenRequest;
+import com.multiteam.controller.dto.response.CheckTokenResponse;
 import com.multiteam.service.AuthService;
+import com.nimbusds.oauth2.sdk.TokenRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,5 +38,16 @@ public class AuthController {
     public ResponseEntity<Void> registerUser(@RequestBody SignUpRequest signUpRequest) {
         authService.registerUser(signUpRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/check-token")
+    public ResponseEntity<CheckTokenResponse> checkToken(@RequestBody CheckTokenRequest checkTokenRequest) {
+        var result = authService.checkToken(checkTokenRequest.token());
+
+        if (result.isValid()) {
+            return ResponseEntity.ok(new CheckTokenResponse(result.userId(), true));
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new CheckTokenResponse(result.userId(), true));
+        }
     }
 }
