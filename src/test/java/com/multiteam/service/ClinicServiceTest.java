@@ -1,6 +1,7 @@
 package com.multiteam.service;
 
 import com.multiteam.constants.ConstantsToTests;
+import com.multiteam.controller.dto.request.ClinicRequest;
 import com.multiteam.persistence.entity.Clinic;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -24,25 +25,26 @@ class ClinicServiceTest {
         var email = UUID.randomUUID().toString().substring(0, 5) + "@email.com";
         var cpfCnpj = UUID.randomUUID().toString().substring(0, 14);
 
-        var builder = new Clinic.Builder(
+        var builder = new ClinicRequest(
+                null,
                 "Geraldo Bryan Gomes",
                 cpfCnpj,
                 email,
-                "(71) 3871-3197")
-                .createdDate(LocalDateTime.now())
-                .build();
+                "(71) 3871-3197",
+                "",
+                "",
+                ConstantsToTests.OWNER_ID);
+
 
         var result = clinicService.createClinic(builder);
 
-        Assertions.assertNotNull(result.getId());
-        Assertions.assertEquals(result.getEmail(), email);
-        Assertions.assertEquals(result.getCpfCnpj(), cpfCnpj);
+        Assertions.assertTrue(result);
     }
 
     @Test
     @DisplayName("deve retornar todas as clinicas")
     void shouldRetrieveAllClinics_thenSuccess() {
-        var result = clinicService.getAllClinic();
+        var result = clinicService.getAllClinic(ConstantsToTests.OWNER_ID);
         Assertions.assertFalse(result.isEmpty());
     }
 
