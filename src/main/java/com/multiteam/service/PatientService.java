@@ -63,11 +63,13 @@ public class PatientService {
     }
 
     public List<PatientsProfessionalsView> getAllPatientsByProfessionalId(UUID professionalId, SituationEnum situation) {
-        return patientRepository.findAllPatientsByProfessionalId(professionalId, situation);
+        //return patientRepository.findAllPatientsByProfessionalId(professionalId, situation);
+        return List.of();
     }
 
     public List<PatientsProfessionalsView> getAllPatientsByClinicId(UUID clinicId, SituationEnum situation) {
-        return patientRepository.findAllPatientsByClinicId(clinicId, situation);
+        //return patientRepository.findAllPatientsByClinicId(clinicId, situation);
+        return List.of();
     }
 
     @Transactional

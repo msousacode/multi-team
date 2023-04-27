@@ -4,6 +4,8 @@ import com.multiteam.enums.SpecialtyEnum;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -38,13 +40,17 @@ public class Professional {
     @OneToMany(mappedBy = "professional")
     private Set<TreatmentProfessional> professionals;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id")
-    private Clinic clinic;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "professionals_clinics",
+            joinColumns = @JoinColumn(name = "professional_id"),
+            inverseJoinColumns = @JoinColumn(name = "clinic_id"))
+    private List<Clinic> clinics = new ArrayList<>();
 
     public Professional() {}
 
@@ -56,7 +62,7 @@ public class Professional {
         this.cellPhone = builder.cellPhone;
         this.email = builder.email;
         this.active = builder.active;
-        this.clinic = builder.clinic;
+        this.clinics = builder.clinics;
         this.user = builder.user;
     }
 
@@ -88,8 +94,8 @@ public class Professional {
         return active;
     }
 
-    public Clinic getClinic() {
-        return clinic;
+    public List<Clinic> getClinics() {
+        return clinics;
     }
 
     public Set<TreatmentProfessional> getProfessionals() {
@@ -110,7 +116,7 @@ public class Professional {
         private final String cellPhone;
         private final String email;
         private final boolean active;
-        private final Clinic clinic;
+        private final List<Clinic> clinics;
         private final User user;
 
         //optional
@@ -124,19 +130,17 @@ public class Professional {
                 final String cellPhone,
                 final String email,
                 final boolean active,
-                final Clinic clinic,
+                final List<Clinic> clinics,
                 final User user) {
 
             Assert.notNull(name, "professional name not be null");
-            Assert.notNull(middleName, "professional middle name not be null");
             Assert.notNull(specialty, "professional specialty not be null");
             Assert.notNull(cellPhone, "professional cellphone not be null");
             Assert.notNull(email, "professional email not be null");
-            Assert.notNull(clinic, "professional needs to be associated with the clinic");
             Assert.notNull(user, "professional needs to be associated with the user");
 
+            Assert.isTrue(!clinics.isEmpty(), "clinic list cannot be empty");
             Assert.isTrue(!name.isEmpty(), "professional name not be empty");
-            Assert.isTrue(!middleName.isEmpty(), "professional middle name not be empty");
             Assert.isTrue(!cellPhone.isEmpty(), "professional cellphone not be empty");
             Assert.isTrue(!email.isEmpty(), "professional email not be empty");
 
@@ -147,7 +151,7 @@ public class Professional {
             this.cellPhone = cellPhone;
             this.email = email;
             this.active = active;
-            this.clinic = clinic;
+            this.clinics = clinics;
             this.user = user;
         }
 

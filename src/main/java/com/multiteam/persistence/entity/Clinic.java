@@ -43,9 +43,6 @@ public class Clinic {
     @Column(name = "removed_date")
     private LocalDateTime removedDate;
 
-    @OneToMany(mappedBy = "clinic")
-    private List<Professional> professionals;
-
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
@@ -104,10 +101,6 @@ public class Clinic {
 
     public Boolean getActive() {
         return active;
-    }
-
-    public List<Professional> getProfessionals() {
-        return professionals;
     }
 
     public User getUser() {

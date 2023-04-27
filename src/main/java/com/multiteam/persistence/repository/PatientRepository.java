@@ -19,7 +19,7 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
     List<Patient> findAllByClinic_Id(UUID clinicId);
 
     Optional<Patient> findByIdAndClinic_Id(UUID patientId, UUID clinicId);
-
+/*
     //TODO futuramente avaliar se essas querys podem ser um projection para unir as duas consultas em uma com propriedaes WHERE dinamicas.
     @Query("""
             SELECT DISTINCT
@@ -40,7 +40,8 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
     List<PatientsProfessionalsView> findAllPatientsByProfessionalId(
             @Param("professionalId") UUID professionalId,
             @Param("situation") SituationEnum situation);
-
+    */
+/*
     //TODO futuramente avaliar se essas querys podem ser um projection para unir as duas consultas em uma com propriedaes WHERE dinamicas.
     @Query("""
             SELECT DISTINCT
@@ -61,6 +62,7 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
     List<PatientsProfessionalsView> findAllPatientsByClinicId(
             @Param("clinicId") UUID clinicId,
             @Param("situation") SituationEnum situation);
+ */
 
     @Modifying
     @Query("UPDATE Patient pa SET pa.active = false WHERE pa.id = :patientId AND pa.clinic.id = :clinicId")

@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -61,5 +62,9 @@ public class ClinicService {
 
     public Optional<Clinic> getClinicById(UUID clinicId) {
         return clinicRespository.findById(clinicId);
+    }
+
+    public List<Clinic> getClinics(Set<UUID> clinics) {
+        return clinicRespository.findAllById(clinics);
     }
 }

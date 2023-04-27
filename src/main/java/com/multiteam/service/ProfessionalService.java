@@ -1,21 +1,25 @@
 package com.multiteam.service;
 
 import com.multiteam.controller.dto.request.ProfessionalRequest;
+import com.multiteam.enums.SpecialtyEnum;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.repository.ProfessionalRepository;
 import com.multiteam.persistence.repository.UserRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static com.multiteam.enums.AuthProviderEnum.local;
 
 @Service
 public class ProfessionalService {
+
+    private final Logger logger = LogManager.getLogger(ProfessionalService.class);
 
     private final ProfessionalRepository professionalRepository;
     private final ClinicService clinicService;
@@ -36,9 +40,16 @@ public class ProfessionalService {
     @Transactional
     public Boolean createProfessional(ProfessionalRequest professionalRequest) {
 
-        var clinic = clinicService.getClinicById(professionalRequest.clinicId());
+        Set<UUID> clinicsIds = new HashSet<>();
+        professionalRequest.clinicId().forEach(elem -> clinicsIds.add(UUID.fromString(elem)));
 
-        if(clinic.isEmpty()){
+        Assert.isTrue(!clinicsIds.isEmpty(), "clinic list cannot be empty");
+
+        var clinics = clinicService.getClinics(clinicsIds);
+
+        if(clinics.isEmpty()){
+            logger.debug("check if clinic exists. clinicId: {}", professionalRequest.clinicId());
+            logger.error("clinic cannot be null. clinicId: {}", professionalRequest.clinicId());
             return Boolean.FALSE;
         }
 
@@ -49,11 +60,11 @@ public class ProfessionalService {
                 null,
                 professionalRequest.name(),
                 professionalRequest.middleName(),
-                professionalRequest.specialty(),
+                SpecialtyEnum.get(professionalRequest.specialty()),
                 professionalRequest.cellPhone(),
                 professionalRequest.email(),
                 true,
-                clinic.get(),
+                clinics,
                 userResult)
                 .build();
 
@@ -63,7 +74,7 @@ public class ProfessionalService {
     }
 
     public List<Professional> getAllProfessionals(final UUID clinicId) {
-        return professionalRepository.findAllByClinic_Id(clinicId);
+        return professionalRepository.findAllByClinics_Id(clinicId);
     }
 
     public Optional<Professional> getProfessionalById(final UUID professionalId) {
@@ -106,7 +117,7 @@ public class ProfessionalService {
                 professional.getCellPhone(),
                 professional.getEmail(),
                 professional.isActive(),
-                result.get().getClinic(),
+                List.of(),
                 professional.getUser())
                 .build();
 
