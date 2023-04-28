@@ -13,7 +13,13 @@ import java.util.UUID;
 @Repository
 public interface ProfessionalRepository extends JpaRepository<Professional, UUID> {
 
-    List<Professional> findAllByClinics_Id(UUID clinicId);
+    @Query("""
+            SELECT p FROM Professional p
+            JOIN p.clinics c
+            WHERE c.id = :clinicId
+            AND p.active = true
+            """)
+    List<Professional> findAllProfessionalsByClinicId(@Param("clinicId") UUID clinicId);
 
     @Modifying
     @Query("UPDATE Professional pr SET pr.active = false WHERE pr.id = :professionalId")

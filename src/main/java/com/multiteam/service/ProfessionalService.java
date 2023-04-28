@@ -71,7 +71,7 @@ public class ProfessionalService {
     }
 
     public List<Professional> getAllProfessionals(final UUID clinicId) {
-        return professionalRepository.findAllByClinics_Id(clinicId);
+        return professionalRepository.findAllProfessionalsByClinicId(clinicId);
     }
 
     public Optional<Professional> getProfessionalById(final UUID professionalId) {
@@ -98,11 +98,15 @@ public class ProfessionalService {
         var professional = professionalRepository.findById(professionalId);
 
         if (professional.isEmpty()) {
+            logger.error("verify if exists professional with id: {}", professionalId);
             return Boolean.FALSE;
         }
 
         professional.get().getProfessionals().forEach(t -> treatmentService.inactiveTreatment(t.getTreatment().getId()));
+        logger.info("treatments associated with professional {} has been inactivated", professionalId);
+
         professionalRepository.professionalInactive(professional.get().getId());
+        logger.info("professional has been inactivated, professionalId {}", professionalId);
 
         return Boolean.TRUE;
     }
