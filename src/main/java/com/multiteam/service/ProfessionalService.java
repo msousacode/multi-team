@@ -1,6 +1,6 @@
 package com.multiteam.service;
 
-import com.multiteam.controller.dto.request.ProfessionalRequest;
+import com.multiteam.controller.dto.request.ProfessionalDTO;
 import com.multiteam.enums.SpecialtyEnum;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.entity.User;
@@ -38,16 +38,13 @@ public class ProfessionalService {
     }
 
     @Transactional
-    public Boolean createProfessional(ProfessionalRequest professionalRequest) {
+    public Boolean createProfessional(ProfessionalDTO professionalRequest) {
 
-        Set<UUID> clinicsIds = new HashSet<>();
-        professionalRequest.clinicId().forEach(elem -> clinicsIds.add(UUID.fromString(elem)));
-
+        Set<UUID> clinicsIds = getUuids(professionalRequest);
         Assert.isTrue(!clinicsIds.isEmpty(), "clinic list cannot be empty");
-
         var clinics = clinicService.getClinics(clinicsIds);
 
-        if(clinics.isEmpty()){
+        if (clinics.isEmpty()) {
             logger.debug("check if clinic exists. clinicId: {}", professionalRequest.clinicId());
             logger.error("clinic cannot be null. clinicId: {}", professionalRequest.clinicId());
             return Boolean.FALSE;
@@ -81,8 +78,18 @@ public class ProfessionalService {
         return professionalRepository.findById(professionalId);
     }
 
-    public Optional<Professional> getProfessional(UUID professionalId) {
-        return professionalRepository.findById(professionalId);
+    public Optional<ProfessionalDTO> getProfessional(UUID professionalId) {
+        var professional = professionalRepository.findById(professionalId);
+
+        if (professional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Set<String> clinicsIds = new HashSet<>();
+        professional.get().getClinics().forEach(i -> clinicsIds.add(i.getId().toString()));
+
+        return professional.map(i -> new ProfessionalDTO(
+                i.getId(), i.getName(), i.getMiddleName(), i.getSpecialty().getName(), i.getCellPhone(), i.getEmail(), clinicsIds));
     }
 
     @Transactional
@@ -101,28 +108,42 @@ public class ProfessionalService {
     }
 
     @Transactional
-    public Boolean updateProfessional(Professional professional) {
+    public Boolean updateProfessional(ProfessionalDTO professionalRequest) {
 
-        var result = professionalRepository.findById(professional.getId());
+        var professionalResult = professionalRepository.findById(professionalRequest.id());
 
-        if(result.isEmpty()){
+        Set<UUID> clinicsIds = getUuids(professionalRequest);
+        Assert.isTrue(!clinicsIds.isEmpty(), "clinic list cannot be empty");
+        var clinics = clinicService.getClinics(clinicsIds);
+
+        if (professionalResult.isEmpty()) {
+            logger.debug("check if professional exists. professionalId: {}", professionalRequest.id());
+            logger.error("professional cannot be null. professionalId: {}", professionalRequest.id());
             return Boolean.FALSE;
         }
 
         var builder = new Professional.Builder(
-                result.get().getId(),
-                professional.getName(),
-                professional.getMiddleName(),
-                professional.getSpecialty(),
-                professional.getCellPhone(),
-                professional.getEmail(),
-                professional.isActive(),
-                List.of(),
-                professional.getUser())
+                professionalResult.get().getId(),
+                professionalRequest.name(),
+                professionalRequest.middleName(),
+                SpecialtyEnum.get(professionalRequest.specialty()),
+                professionalRequest.cellPhone(),
+                professionalRequest.email(),
+                true,
+                clinics,
+                professionalResult.get().getUser())
                 .build();
 
         professionalRepository.save(builder);
 
+        logger.info("updated professional: {}", new Professional().toString());
+
         return Boolean.TRUE;
+    }
+
+    private static Set<UUID> getUuids(ProfessionalDTO professionalRequest) {
+        Set<UUID> clinicsIds = new HashSet<>();
+        professionalRequest.clinicId().forEach(elem -> clinicsIds.add(UUID.fromString(elem)));
+        return clinicsIds;
     }
 }

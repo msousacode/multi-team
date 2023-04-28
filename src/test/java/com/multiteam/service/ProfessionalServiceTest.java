@@ -1,7 +1,7 @@
 package com.multiteam.service;
 
 import com.multiteam.constants.ConstantsToTests;
-import com.multiteam.controller.dto.request.ProfessionalRequest;
+import com.multiteam.controller.dto.request.ProfessionalDTO;
 import com.multiteam.enums.SpecialtyEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ class ProfessionalServiceTest {
         var cellPhone = UUID.randomUUID().toString().substring(0, 5);
         var email = "Ow Test+" + UUID.randomUUID().toString().substring(0, 5) + "@email.com";
 
-        var professional = new ProfessionalRequest(null, name, middleName, specialty, cellPhone, email, ConstantsToTests.CLINIC_ID);
+        var professional = new ProfessionalDTO(null, name, middleName, specialty, cellPhone, email, ConstantsToTests.CLINIC_ID);
 
         var result = professionalService.createProfessional(professional);
 

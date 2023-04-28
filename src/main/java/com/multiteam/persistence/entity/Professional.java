@@ -40,10 +40,18 @@ public class Professional {
     @OneToMany(mappedBy = "professional")
     private Set<TreatmentProfessional> professionals;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Override
+    public String toString() {
+        return "Professional{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", specialty=" + specialty +
+               '}';
+    }
 
     @ManyToMany
     @JoinTable(

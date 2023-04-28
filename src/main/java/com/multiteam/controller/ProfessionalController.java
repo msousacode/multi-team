@@ -1,6 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.controller.dto.request.ProfessionalRequest;
+import com.multiteam.controller.dto.request.ProfessionalDTO;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.service.ProfessionalService;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class ProfessionalController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @PostMapping
-    public ResponseEntity<?> createProfessional(@RequestBody ProfessionalRequest professionalRequest) {
+    public ResponseEntity<?> createProfessional(@RequestBody ProfessionalDTO professionalRequest) {
 
         if (professionalService.createProfessional(professionalRequest)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -46,8 +46,7 @@ public class ProfessionalController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @GetMapping("/{professionalId}")
-    public ResponseEntity<Professional> getProfessional(@PathVariable("professionalId") UUID professionalId) {
-
+    public ResponseEntity<ProfessionalDTO> getProfessional(@PathVariable("professionalId") UUID professionalId) {
         var professionalOptional = professionalService.getProfessional(professionalId);
         return professionalOptional
                 .map(professional -> ResponseEntity.status(HttpStatus.OK).body(professional))
@@ -56,9 +55,9 @@ public class ProfessionalController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @PutMapping
-    public ResponseEntity<?> updateProfessional(@RequestBody Professional professional) {
+    public ResponseEntity<?> updateProfessional(@RequestBody ProfessionalDTO professionalRequest) {
 
-       if(professionalService.updateProfessional(professional)){
+       if(professionalService.updateProfessional(professionalRequest)){
            return ResponseEntity.status(HttpStatus.OK).build();
        } else {
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

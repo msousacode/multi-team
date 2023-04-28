@@ -3,7 +3,7 @@ package com.multiteam.controller.dto.request;
 import java.util.Set;
 import java.util.UUID;
 
-public record ProfessionalRequest(
+public record ProfessionalDTO(
         UUID id,
         String name,
         String middleName,
