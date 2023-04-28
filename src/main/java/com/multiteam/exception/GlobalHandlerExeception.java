@@ -12,14 +12,15 @@ import java.time.LocalDateTime;
 public class GlobalHandlerExeception extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({IllegalArgumentException.class, TreatmentNotExistsException.class})
-    public ResponseEntity<ErrorDetails> handlerBadRequest(RuntimeException ex) {
-        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), LocalDateTime.now(), Boolean.FALSE);
+    public ResponseEntity<ApiErrorResponse> handlerBadRequest(RuntimeException ex) {
+        ApiErrorResponse errorDetails = new ApiErrorResponse.Builder(
+                ex.getMessage(), ex.getCause(), ex.getStackTrace(), ex.getLocalizedMessage()).action("400 Bad Request indica que o servidor não pode ou não irá processar a requisição devido a alguma coisa que foi entendida como um erro do cliente.").build();
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({OAuth2AuthenticationProcessingException.class})
-    public ResponseEntity<ErrorDetails> handlerForbiddenRequest(RuntimeException ex) {
-        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), LocalDateTime.now(), Boolean.FALSE);
+    public ResponseEntity<ApiErrorResponse> handlerForbiddenRequest(RuntimeException ex) {
+        ApiErrorResponse errorDetails = new ApiErrorResponse.Builder(ex.getMessage(), ex.getCause(), ex.getStackTrace(), ex.getLocalizedMessage()).build();
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     }
 }
