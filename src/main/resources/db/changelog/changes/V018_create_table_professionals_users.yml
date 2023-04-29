@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: V019
+      id: V018
       author: michael
       changes:
         - createTable:
