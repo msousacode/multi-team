@@ -19,6 +19,7 @@ public class ApiErrorResponse {
     private String detailMessage;
     private String action;
     private String classError;
+    private int httpCode;
 
     private ApiErrorResponse(Builder builder) {
         this.errorId = builder.errorId;
@@ -28,6 +29,7 @@ public class ApiErrorResponse {
         this.detailMessage = builder.detailMessage;
         this.action = builder.action;
         this.classError = builder.classError;
+        this.httpCode = builder.httpCode;
     }
 
     public static class Builder {
@@ -40,17 +42,19 @@ public class ApiErrorResponse {
         private final Throwable cause;
         private final StackTraceElement[] stackTrace;
         private final String classError;
+        private final int httpCode;
 
         //optional
         private String action;
 
-        public Builder(String detailMessage, Throwable cause, StackTraceElement[] stackTrace, String classError) {
+        public Builder(String detailMessage, Throwable cause, StackTraceElement[] stackTrace, String classError, int httpCode) {
             this.errorId = UUID.randomUUID();
             this.timestamp = LocalDateTime.now();
             this.detailMessage = detailMessage;
             this.cause = cause;
             this.stackTrace = stackTrace;
             this.classError = classError;
+            this.httpCode = httpCode;
 
             logger.error("error_id {} --- cause: {}", this.errorId, cause);
             logger.error("error_id {} --- trace: {}", this.errorId, stackTrace);

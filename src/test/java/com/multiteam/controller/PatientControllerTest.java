@@ -113,15 +113,12 @@ public class PatientControllerTest extends TokenUtil {
         return """
                 {
                     "id":"%s",
-                    "name":"%s",
-                    "middleName":"%s",
+                    "name":"%s",                    
                     "sex":"%s",
                     "age":"%s",
-                    "months":"%s",
-                    "internalObservation":"%s",
-                    "externalObservation":"%s",
+                    "months":"%s",                    
                     "active":"%s",
-                    "clinicId":"%s"
+                    "ownerId":"%s"
                 }
                 """.formatted(
                 UUID.randomUUID(),

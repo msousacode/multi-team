@@ -6,7 +6,6 @@ import java.util.UUID;
 public record ProfessionalDTO(
         UUID id,
         String name,
-        String middleName,
         String specialty,
         String cellPhone,
         String email,

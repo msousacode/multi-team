@@ -19,25 +19,21 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: middle_name
-                  type: varchar(100)
-                  constraints:
-                    nullable: false
-              - column:
                   name: sex
                   type: varchar(15)
               - column:
+                  name: date_birth
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: owner_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
                   name: age
                   type: smallint
-              - column:
-                  name: months
-                  type: smallint
-              - column:
-                  name: internal_observation
-                  type: text
-              - column:
-                  name: external_observation
-                  type: text
               - column:
                   name: active
                   type: boolean

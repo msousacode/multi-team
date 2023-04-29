@@ -14,13 +14,13 @@ public class GlobalHandlerExeception extends ResponseEntityExceptionHandler {
     @ExceptionHandler({IllegalArgumentException.class, TreatmentNotExistsException.class})
     public ResponseEntity<ApiErrorResponse> handlerBadRequest(RuntimeException ex) {
         ApiErrorResponse errorDetails = new ApiErrorResponse.Builder(
-                ex.getMessage(), ex.getCause(), ex.getStackTrace(), ex.getLocalizedMessage()).action("400 Bad Request indica que o servidor não pode ou não irá processar a requisição devido a alguma coisa que foi entendida como um erro do cliente.").build();
+                ex.getMessage(), ex.getCause(), ex.getStackTrace(), ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value()).action("400 Bad Request indica que o servidor não pode ou não irá processar a requisição devido a alguma coisa que foi entendida como um erro do cliente.").build();
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({OAuth2AuthenticationProcessingException.class})
     public ResponseEntity<ApiErrorResponse> handlerForbiddenRequest(RuntimeException ex) {
-        ApiErrorResponse errorDetails = new ApiErrorResponse.Builder(ex.getMessage(), ex.getCause(), ex.getStackTrace(), ex.getLocalizedMessage()).build();
+        ApiErrorResponse errorDetails = new ApiErrorResponse.Builder(ex.getMessage(), ex.getCause(), ex.getStackTrace(), ex.getLocalizedMessage(), HttpStatus.FORBIDDEN.value()).build();
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     }
 }

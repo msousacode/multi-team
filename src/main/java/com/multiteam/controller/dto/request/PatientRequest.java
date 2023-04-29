@@ -2,18 +2,18 @@ package com.multiteam.controller.dto.request;
 
 import com.multiteam.enums.SexEnum;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public record PatientRequest(
         UUID id,
         String name,
-        String middleName,
         SexEnum sex,
         Integer age,
-        Integer months,
-        String internalObservation,
-        String externalObservation,
+        String privateObservation,
+        String publicObservation,
         boolean active,
-        UUID clinicId
+        UUID ownerId,
+        LocalDate dateBirth
 ) {
 }

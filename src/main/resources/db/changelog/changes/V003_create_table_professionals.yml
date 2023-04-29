@@ -19,11 +19,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: middle_name
-                  type: varchar(100)
-                  constraints:
-                    nullable: false
-              - column:
                   name: specialty
                   type: varchar(100)
                   constraints:

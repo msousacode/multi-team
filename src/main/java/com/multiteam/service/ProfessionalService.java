@@ -56,7 +56,6 @@ public class ProfessionalService {
         var builder = new Professional.Builder(
                 null,
                 professionalRequest.name(),
-                professionalRequest.middleName(),
                 SpecialtyEnum.get(professionalRequest.specialty()),
                 professionalRequest.cellPhone(),
                 professionalRequest.email(),
@@ -89,7 +88,7 @@ public class ProfessionalService {
         professional.get().getClinics().forEach(i -> clinicsIds.add(i.getId().toString()));
 
         return professional.map(i -> new ProfessionalDTO(
-                i.getId(), i.getName(), i.getMiddleName(), i.getSpecialty().getName(), i.getCellPhone(), i.getEmail(), clinicsIds));
+                i.getId(), i.getName(), i.getSpecialty().getName(), i.getCellPhone(), i.getEmail(), clinicsIds));
     }
 
     @Transactional
@@ -129,7 +128,6 @@ public class ProfessionalService {
         var builder = new Professional.Builder(
                 professionalResult.get().getId(),
                 professionalRequest.name(),
-                professionalRequest.middleName(),
                 SpecialtyEnum.get(professionalRequest.specialty()),
                 professionalRequest.cellPhone(),
                 professionalRequest.email(),

@@ -21,9 +21,6 @@ public class Professional {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "middle_name")
-    private String middleName;
-
     @Column(name = "specialty")
     @Enumerated(EnumType.STRING)
     private SpecialtyEnum specialty;
@@ -58,14 +55,13 @@ public class Professional {
             name = "professionals_clinics",
             joinColumns = @JoinColumn(name = "professional_id"),
             inverseJoinColumns = @JoinColumn(name = "clinic_id"))
-    private List<Clinic> clinics = new ArrayList<>();
+    private List<Clinic> clinics;
 
     public Professional() {}
 
     private Professional(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
-        this.middleName = builder.middleName;
         this.specialty = builder.specialty;
         this.cellPhone = builder.cellPhone;
         this.email = builder.email;
@@ -80,10 +76,6 @@ public class Professional {
 
     public String getName() {
         return name;
-    }
-
-    public String getMiddleName() {
-        return middleName;
     }
 
     public SpecialtyEnum getSpecialty() {
@@ -119,7 +111,6 @@ public class Professional {
         //mandatory
         private UUID id;
         private final String name;
-        private final String middleName;
         private final SpecialtyEnum specialty;
         private final String cellPhone;
         private final String email;
@@ -133,7 +124,6 @@ public class Professional {
         public Builder(
                 UUID id,
                 final String name,
-                final String middleName,
                 final SpecialtyEnum specialty,
                 final String cellPhone,
                 final String email,
@@ -154,7 +144,6 @@ public class Professional {
 
             this.id = id;
             this.name = name;
-            this.middleName = middleName;
             this.specialty = specialty;
             this.cellPhone = cellPhone;
             this.email = email;

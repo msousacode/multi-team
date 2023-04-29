@@ -12,11 +12,7 @@ public interface PatientsProfessionalsView {
 
     String getPatientName();
 
-    String getPatientMiddleName();
-
     String getProfessionalName();
-
-    String getProfessionalMiddleName();
 
     SituationEnum getSituation();
 }
