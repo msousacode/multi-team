@@ -43,6 +43,11 @@ databaseChangeLog:
                   type: uuid
                   constraints:
                     nullable: false
+              - column:
+                  name: owner_id
+                  type: uuid
+                  constraints:
+                    nullable: false
         - addForeignKeyConstraint:
             baseColumnNames: credential_id
             baseTableName: professionals

@@ -23,7 +23,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserRepository loginRepository;
+    private UserRepository userRepository;
 
     @Override
     public Authentication authenticate(final Authentication authentication) throws AuthenticationException {
@@ -46,7 +46,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 
     public UserDetails loadUserByUsername(String username) {
 
-        Optional<User> loginOptional = loginRepository.findByEmail(username);
+        Optional<User> loginOptional = userRepository.findByEmail(username);
 
         if (loginOptional.isEmpty()) {
             throw new UsernameNotFoundException(username);

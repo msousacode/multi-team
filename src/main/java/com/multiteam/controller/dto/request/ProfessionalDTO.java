@@ -9,6 +9,7 @@ public record ProfessionalDTO(
         String specialty,
         String cellPhone,
         String email,
-        Set<String> clinicId
+        Set<String> clinicId,
+        UUID ownerId
 ) {
 }

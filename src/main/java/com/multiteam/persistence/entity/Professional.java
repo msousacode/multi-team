@@ -4,7 +4,6 @@ import com.multiteam.enums.SpecialtyEnum;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -41,6 +40,9 @@ public class Professional {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "owner_id")
+    private UUID ownerId;
+
     @Override
     public String toString() {
         return "Professional{" +
@@ -68,6 +70,7 @@ public class Professional {
         this.active = builder.active;
         this.clinics = builder.clinics;
         this.user = builder.user;
+        this.ownerId = builder.ownerId;
     }
 
     public UUID getId() {
@@ -106,6 +109,10 @@ public class Professional {
         return user;
     }
 
+    public UUID getOwnerId() {
+        return ownerId;
+    }
+
     public static class Builder {
 
         //mandatory
@@ -117,6 +124,7 @@ public class Professional {
         private final boolean active;
         private final List<Clinic> clinics;
         private final User user;
+        private final UUID ownerId;
 
         //optional
         private Set<TreatmentProfessional> professionals;
@@ -129,13 +137,15 @@ public class Professional {
                 final String email,
                 final boolean active,
                 final List<Clinic> clinics,
-                final User user) {
+                final User user,
+                final UUID ownerId) {
 
             Assert.notNull(name, "professional name not be null");
             Assert.notNull(specialty, "professional specialty not be null");
             Assert.notNull(cellPhone, "professional cellphone not be null");
             Assert.notNull(email, "professional email not be null");
             Assert.notNull(user, "professional needs to be associated with the user");
+            Assert.notNull(ownerId, "professional needs to be associated with the owner");
 
             Assert.isTrue(!clinics.isEmpty(), "clinic list cannot be empty");
             Assert.isTrue(!name.isEmpty(), "professional name not be empty");
@@ -150,6 +160,7 @@ public class Professional {
             this.active = active;
             this.clinics = clinics;
             this.user = user;
+            this.ownerId = ownerId;
         }
 
         public Builder professionals(Set<TreatmentProfessional> professionals) {

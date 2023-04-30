@@ -61,7 +61,8 @@ public class ProfessionalService {
                 professionalRequest.email(),
                 true,
                 clinics,
-                userResult)
+                userResult,
+                professionalRequest.ownerId())
                 .build();
 
         professionalRepository.save(builder);
@@ -88,7 +89,7 @@ public class ProfessionalService {
         professional.get().getClinics().forEach(i -> clinicsIds.add(i.getId().toString()));
 
         return professional.map(i -> new ProfessionalDTO(
-                i.getId(), i.getName(), i.getSpecialty().getName(), i.getCellPhone(), i.getEmail(), clinicsIds));
+                i.getId(), i.getName(), i.getSpecialty().getName(), i.getCellPhone(), i.getEmail(), clinicsIds, i.getOwnerId()));
     }
 
     @Transactional
@@ -133,7 +134,8 @@ public class ProfessionalService {
                 professionalRequest.email(),
                 true,
                 clinics,
-                professionalResult.get().getUser())
+                professionalResult.get().getUser(),
+                professionalResult.get().getOwnerId())
                 .build();
 
         professionalRepository.save(builder);

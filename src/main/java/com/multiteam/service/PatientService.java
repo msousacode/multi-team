@@ -59,7 +59,7 @@ public class PatientService {
 
         patientRepository.save(builder);
 
-        logger.info("successfully created patient {} ", new Patient().toString());
+        logger.info("successfully created patient {} ", builder.toString());
 
         return Boolean.TRUE;
     }

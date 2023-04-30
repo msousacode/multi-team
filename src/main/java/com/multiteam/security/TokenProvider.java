@@ -54,6 +54,7 @@ public class TokenProvider {
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getId().toString())
+                //.claim("_ow", )
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(this.secretKey, SignatureAlgorithm.HS256)
