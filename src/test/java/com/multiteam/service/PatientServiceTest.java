@@ -52,7 +52,7 @@ class PatientServiceTest {
         var patientId = ConstantsToTests.PATIENT_ID;
         var clinicId = ConstantsToTests.CLINIC_ID;
 
-        var result = patientService.getPatientById(patientId, clinicId);
+        var result = patientService.getPatient(patientId, clinicId);
         Assertions.assertNotNull(result);
         Assertions.assertEquals(result.get().getId(), patientId);
         Assertions.assertEquals(result.get().getClinic().getId(), clinicId);

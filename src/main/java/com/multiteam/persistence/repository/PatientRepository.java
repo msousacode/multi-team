@@ -9,16 +9,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, UUID> {
 
-    Page<Patient> findAllByOwnerId(UUID ownerId, Pageable pageable);
+    Page<Patient> findAllByOwnerIdAndActiveIsTrue(UUID ownerId, Pageable pageable);
 
-    Optional<Patient> findById(UUID patientId);//TODO adicionar a chave ownerId na pesquisa
 /*
     //TODO futuramente avaliar se essas querys podem ser um projection para unir as duas consultas em uma com propriedaes WHERE dinamicas.
     @Query("""
@@ -67,4 +65,6 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
     @Modifying
     @Query("UPDATE Patient pa SET pa.active = false WHERE pa.id = :patientId AND pa.ownerId = :ownerId")
     void inactivePatient(@Param("patientId") UUID patientId, @Param("ownerId") UUID ownerId);
+
+    Optional<Patient> findByIdAndOwnerId(UUID patientId, UUID ownerId);
 }

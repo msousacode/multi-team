@@ -39,7 +39,7 @@ public class TreatmentService {
     @Transactional
     public Boolean includeTreatment(TreatmentRequest treatmentRequest) {
 
-        var patient = patientService.getPatientById(treatmentRequest.patientId(), treatmentRequest.clinicId());
+        var patient = patientService.getPatient(treatmentRequest.patientId(), treatmentRequest.clinicId());
         var professional = professionalService.getProfessionalById(treatmentRequest.professionalId());
 
         if (patient.isEmpty())

@@ -22,7 +22,7 @@ public record PatientDTO(
                 patient.getName(),
                 patient.getUser().getEmail(),
                 patient.getCellPhone(),
-                patient.getSex().name(),
+                patient.getSex().getDescription(),
                 patient.getAge(),
                 patient.isActive(),
                 patient.getOwnerId(),

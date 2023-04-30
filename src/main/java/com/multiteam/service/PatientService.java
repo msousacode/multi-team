@@ -77,8 +77,8 @@ public class PatientService {
         return Boolean.TRUE;
     }
 
-    public Optional<Patient> getPatientById(final UUID patientId, final UUID clinicId) {
-        return patientRepository.findById(patientId);
+    public Optional<Patient> getPatient(final UUID patientId, final UUID ownerId) {
+        return patientRepository.findByIdAndOwnerId(patientId, ownerId);
     }
 
     public List<PatientsProfessionalsView> getAllPatientsByProfessionalId(UUID professionalId, SituationEnum situation) {
@@ -87,11 +87,11 @@ public class PatientService {
     }
 
     public Page<PatientDTO> getAllPatientsByOwnerId(UUID ownerId, Pageable pageable) {
-        return patientRepository.findAllByOwnerId(ownerId, pageable).map(PatientDTO::fromPatientDTO);
+        return patientRepository.findAllByOwnerIdAndActiveIsTrue(ownerId, pageable).map(PatientDTO::fromPatientDTO);
     }
 
     @Transactional
-    public Boolean inactivePatient(UUID patientId, UUID clinicId) {
+    public Boolean inactivePatient(UUID patientId, UUID ownerId) {
 
         var patient = patientRepository.findById(patientId);
 
@@ -99,7 +99,7 @@ public class PatientService {
             return Boolean.FALSE;
         }
 
-        patientRepository.inactivePatient(patientId, clinicId);
+        patientRepository.inactivePatient(patientId, ownerId);
 
         treatmentService.excludeTreatmentByPatientId(patientId);
 
