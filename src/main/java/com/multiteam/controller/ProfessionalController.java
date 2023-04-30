@@ -47,8 +47,7 @@ public class ProfessionalController {
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @GetMapping("/{professionalId}")
     public ResponseEntity<ProfessionalDTO> getProfessional(@PathVariable("professionalId") UUID professionalId) {
-        var professionalOptional = professionalService.getProfessional(professionalId);
-        return professionalOptional
+        return professionalService.getProfessional(professionalId)
                 .map(professional -> ResponseEntity.status(HttpStatus.OK).body(professional))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }

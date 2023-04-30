@@ -39,8 +39,6 @@ databaseChangeLog:
               - column:
                   name: created_date
                   type: timestamp
-                  constraints:
-                    nullable: false
               - column:
                   name: removed_date
                   type: timestamp

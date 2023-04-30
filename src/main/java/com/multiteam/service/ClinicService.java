@@ -33,7 +33,7 @@ public class ClinicService {
 
         var user = userRepository.findById(clinicRequest.userId());
 
-        if (user.isEmpty()){
+        if (user.isEmpty()) {
             logger.debug("check if user exists. userId: {}", clinicRequest.userId());
             logger.error("empty user cannot create clinic userId: {}", clinicRequest.userId());
             return Boolean.FALSE;
@@ -66,5 +66,32 @@ public class ClinicService {
 
     public List<Clinic> getClinics(Set<UUID> clinics) {
         return clinicRespository.findAllById(clinics);
+    }
+
+    @Transactional
+    public Boolean updateClinic(ClinicRequest clinicRequest) {
+
+        var clinicResult = clinicRespository.findById(clinicRequest.id());
+
+        if (clinicResult.isEmpty()) {
+            logger.debug("check if professional exists. professionalId: {}", clinicRequest.id());
+            logger.error("professional cannot be null. professionalId: {}", clinicRequest.id());
+            return Boolean.FALSE;
+        }
+
+        var builder = new Clinic.Builder(
+                clinicRequest.clinicName(),
+                clinicRequest.cpfCnpj(),
+                clinicRequest.email(),
+                clinicRequest.cellPhone(),
+                clinicResult.get().getUser())
+                .id(clinicRequest.id())
+                .build();
+
+        clinicRespository.save(builder);
+
+        logger.info("updated clinic: {}", builder.toString());
+
+        return Boolean.TRUE;
     }
 }

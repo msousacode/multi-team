@@ -1,8 +1,10 @@
 package com.multiteam.controller;
 
 import com.multiteam.controller.dto.request.ClinicRequest;
+import com.multiteam.controller.dto.request.ProfessionalDTO;
 import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.service.ClinicService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +35,27 @@ public class ClinicController {
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
-    @GetMapping("/user/{userId}")
-    public List<Clinic> getAllClinics(@PathVariable("userId") UUID userId) {
-        return clinicService.getAllClinic(userId);
+    @PutMapping
+    public ResponseEntity<?> updateClinic(@RequestBody ClinicRequest clinicRequest) {
+
+        if(clinicService.updateClinic(clinicRequest)){
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @GetMapping("/owner/{ownerId}")
+    public List<Clinic> getAllClinics(@PathVariable("ownerId") UUID ownerId) {
+        return clinicService.getAllClinic(ownerId);
+    }
+
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @GetMapping("/{clinicId}")
+    public ResponseEntity<Clinic> getClinic(@PathVariable("clinicId") UUID clinicId) {
+        return clinicService.getClinicById(clinicId)
+                .map(clinic -> ResponseEntity.status(HttpStatus.OK).body(clinic))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
