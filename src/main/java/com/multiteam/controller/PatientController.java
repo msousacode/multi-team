@@ -1,14 +1,15 @@
 package com.multiteam.controller;
 
-import com.multiteam.controller.dto.request.PatientRequest;
+import com.multiteam.controller.dto.request.PatientDTO;
 import com.multiteam.persistence.entity.Patient;
 import com.multiteam.service.PatientService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -30,7 +31,7 @@ public class PatientController {
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_WRITE')")
     @PostMapping
     public ResponseEntity<?> createPatient(
-            @RequestBody PatientRequest patientRequest) {
+            @RequestBody PatientDTO patientRequest) {
 
         if (patientService.createPatient(patientRequest)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -41,8 +42,12 @@ public class PatientController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_READ')")
     @GetMapping("/owner/{ownerId}")
-    public List<Patient> getAllPatientByOwnerId(@PathVariable("ownerId") UUID ownerId) {
-        return patientService.getAllPatientsByOwnerId(ownerId);
+    public ResponseEntity<Page<PatientDTO>> getAllPatientByOwnerId(
+            @PathVariable("ownerId") UUID ownerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size) {
+        var result = patientService.getAllPatientsByOwnerId(ownerId, PageRequest.of(page, size));
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_READ')")
@@ -59,7 +64,7 @@ public class PatientController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_WRITE')")
     @PutMapping
-    public ResponseEntity<?> updatePatient(@RequestBody PatientRequest patientRequest) {
+    public ResponseEntity<?> updatePatient(@RequestBody PatientDTO patientRequest) {
 
         if(patientService.updatePatient(patientRequest)){
             return ResponseEntity.status(HttpStatus.OK).build();

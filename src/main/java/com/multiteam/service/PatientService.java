@@ -1,15 +1,15 @@
 package com.multiteam.service;
 
-import com.multiteam.controller.dto.request.PatientRequest;
-import com.multiteam.enums.AuthProviderEnum;
+import com.multiteam.controller.dto.request.PatientDTO;
 import com.multiteam.enums.SexEnum;
 import com.multiteam.enums.SituationEnum;
 import com.multiteam.persistence.entity.Patient;
-import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.projection.PatientsProfessionalsView;
 import com.multiteam.persistence.repository.PatientRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -42,7 +42,7 @@ public class PatientService {
     }
 
     @Transactional
-    public Boolean createPatient(PatientRequest patientRequest) {
+    public Boolean createPatient(PatientDTO patientRequest) {
 
         var owner = userService.getOwnerById(patientRequest.ownerId());
 
@@ -77,10 +77,6 @@ public class PatientService {
         return Boolean.TRUE;
     }
 
-    public List<Patient> getAllPatientsByOwnerId(final UUID ownerId) {
-        return patientRepository.findAllByOwnerId(ownerId);
-    }
-
     public Optional<Patient> getPatientById(final UUID patientId, final UUID clinicId) {
         return patientRepository.findById(patientId);
     }
@@ -90,9 +86,8 @@ public class PatientService {
         return List.of();
     }
 
-    public List<PatientsProfessionalsView> getAllPatientsByOwnerId(UUID clinicId, SituationEnum situation) {
-        //return patientRepository.findAllPatientsByClinicId(clinicId, situation);
-        return List.of();
+    public Page<PatientDTO> getAllPatientsByOwnerId(UUID ownerId, Pageable pageable) {
+        return patientRepository.findAllByOwnerId(ownerId, pageable).map(PatientDTO::fromPatientDTO);
     }
 
     @Transactional
@@ -112,7 +107,7 @@ public class PatientService {
     }
 
     @Transactional
-    public Boolean updatePatient(PatientRequest patientRequest) {
+    public Boolean updatePatient(PatientDTO patientRequest) {
 
         var patientResult = patientRepository.findById(patientRequest.id());
 

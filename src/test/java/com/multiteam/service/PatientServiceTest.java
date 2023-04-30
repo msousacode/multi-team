@@ -1,7 +1,7 @@
 package com.multiteam.service;
 
 import com.multiteam.constants.ConstantsToTests;
-import com.multiteam.controller.dto.request.PatientRequest;
+import com.multiteam.controller.dto.request.PatientDTO;
 import com.multiteam.enums.SexEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +22,7 @@ class PatientServiceTest {
     @DisplayName("deve criar um novo paciente e retornar sucesso")
     void shouldCreatePatient_thenSuccess() {
 
-        var patientRequest = new PatientRequest(
+        var patientRequest = new PatientDTO(
                 null,
                 "Márcio",
                 "Farias",
@@ -84,7 +84,7 @@ class PatientServiceTest {
     @DisplayName("Deve atualizar o paciente então sucesso")
     void shouldUpdatePatient_thenSuccess() {
 
-        var patientRequest = new PatientRequest(
+        var patientRequest = new PatientDTO(
                 ConstantsToTests.PATIENT_ID,
                 "Isabela",
                 "Freitas",
