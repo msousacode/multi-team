@@ -12,6 +12,7 @@ public record GuestRequest(
         String cellPhone,
         String email,
         boolean active,
-        UUID patientId
+        UUID patientId,
+        UUID ownerId
 ) {
 }

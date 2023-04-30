@@ -2,6 +2,7 @@ package com.multiteam.service;
 
 import com.multiteam.controller.dto.request.ProfessionalDTO;
 import com.multiteam.enums.SpecialtyEnum;
+import com.multiteam.exception.OwnerException;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.repository.ProfessionalRepository;
@@ -44,13 +45,17 @@ public class ProfessionalService {
         Assert.isTrue(!clinicsIds.isEmpty(), "clinic list cannot be empty");
         var clinics = clinicService.getClinics(clinicsIds);
 
+        if(professionalRequest.ownerId() == null) {
+            throw new OwnerException("value ownerId cannot be null");
+        }
+
         if (clinics.isEmpty()) {
             logger.debug("check if clinic exists. clinicId: {}", professionalRequest.clinicId());
             logger.error("clinic cannot be null. clinicId: {}", professionalRequest.clinicId());
             return Boolean.FALSE;
         }
 
-        var user = new User.Builder(null, professionalRequest.name(), professionalRequest.email(), true).provider(local).build();
+        var user = new User.Builder(null, professionalRequest.name(), professionalRequest.email(), true, professionalRequest.ownerId()).provider(local).build();
         var userResult = userRepository.save(user);
 
         var builder = new Professional.Builder(

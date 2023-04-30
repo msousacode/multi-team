@@ -3,7 +3,6 @@ package com.multiteam.service;
 import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.controller.dto.request.PatientRequest;
 import com.multiteam.enums.SexEnum;
-import com.multiteam.enums.SituationEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +42,7 @@ class PatientServiceTest {
     @Test
     @DisplayName("deve retornar a lista de pacientes filtrando pelo uuid da clinica com sucesso")
     void shouldReturnListPatientFilteringByIdClinic_thenSuccess() {
-        var result = patientService.getAllPatientsByClinicId(ConstantsToTests.CLINIC_ID);
+        var result = patientService.getAllPatientsByOwnerId(ConstantsToTests.CLINIC_ID);
         Assertions.assertFalse(result.isEmpty());
     }
 
@@ -70,7 +69,7 @@ class PatientServiceTest {
     @Test
     @DisplayName("deve retornar todos os pacientes filtrados por clinicId então sucesso")
     void shouldReturnAllPatientsFilteringByClinicId_thenSuccess() {
-        var result = patientService.getAllPatientsByClinicId(ConstantsToTests.CLINIC_ID);
+        var result = patientService.getAllPatientsByOwnerId(ConstantsToTests.CLINIC_ID);
         Assertions.assertFalse(result.isEmpty());
     }
 /*

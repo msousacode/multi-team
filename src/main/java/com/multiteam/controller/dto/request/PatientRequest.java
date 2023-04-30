@@ -6,10 +6,10 @@ import java.util.UUID;
 public record PatientRequest(
         UUID id,
         String name,
+        String email,
+        String cellPhone,
         String sex,
         Integer age,
-        String privateObservation,
-        String publicObservation,
         boolean active,
         UUID ownerId,
         LocalDate dateBirth

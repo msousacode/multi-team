@@ -23,4 +23,11 @@ public class GlobalHandlerExeception extends ResponseEntityExceptionHandler {
         ApiErrorResponse errorDetails = new ApiErrorResponse.Builder(ex.getMessage(), ex.getCause(), ex.getStackTrace(), ex.getLocalizedMessage(), HttpStatus.FORBIDDEN.value()).build();
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(OwnerException.class)
+    public ResponseEntity<ApiErrorResponse> handlerOwnerExceptionBadRequest(OwnerException ex) {
+        ApiErrorResponse errorDetails = new ApiErrorResponse.Builder(
+                ex.getMessage(), ex.getCause(), ex.getStackTrace(), ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value()).action("Esse erro significa que o client (frontend) não enviou o ownerId obrigatório para realizar a operação.").build();
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
 }

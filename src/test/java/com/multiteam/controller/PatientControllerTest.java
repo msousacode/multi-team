@@ -68,7 +68,7 @@ public class PatientControllerTest extends TokenUtil {
     @DisplayName("Deve buscar todos os pacientes então sucesso")
     void shouldGetAllPatients_thenSuccess() throws Exception {
 
-        BDDMockito.given(patientService.getAllPatientsByClinicId(Mockito.any(), Mockito.any())).willReturn(List.of());
+        BDDMockito.given(patientService.getAllPatientsByOwnerId(Mockito.any(), Mockito.any())).willReturn(List.of());
 
         mockMvc.perform(
                         MockMvcRequestBuilders

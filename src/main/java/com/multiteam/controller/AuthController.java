@@ -45,9 +45,9 @@ public class AuthController {
         var result = authService.checkToken(checkTokenRequest.token());
 
         if (result.isValid()) {
-            return ResponseEntity.ok(new CheckTokenResponse(result.userId(), true));
+            return ResponseEntity.ok(new CheckTokenResponse(result.userId(), result.ownerId(), true));
         } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new CheckTokenResponse(result.userId(), true));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new CheckTokenResponse(null, null, false));
         }
     }
 }

@@ -28,6 +28,11 @@ databaseChangeLog:
                   name: password
                   type: varchar(100)
               - column:
+                  name: owner_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+              - column:
                   name: image_url
                   type: varchar(250)
               - column:

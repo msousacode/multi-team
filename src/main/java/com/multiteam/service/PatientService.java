@@ -1,9 +1,11 @@
 package com.multiteam.service;
 
 import com.multiteam.controller.dto.request.PatientRequest;
+import com.multiteam.enums.AuthProviderEnum;
 import com.multiteam.enums.SexEnum;
 import com.multiteam.enums.SituationEnum;
 import com.multiteam.persistence.entity.Patient;
+import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.projection.PatientsProfessionalsView;
 import com.multiteam.persistence.repository.PatientRepository;
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +16,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.multiteam.enums.AuthProviderEnum.local;
 
 @Service
 public class PatientService {
@@ -48,13 +52,22 @@ public class PatientService {
             return Boolean.FALSE;
         }
 
+        var user = userService.createUser(patientRequest.name(), patientRequest.email(), patientRequest.ownerId(), local);
+
+        if (user == null) {
+            logger.error("An error occurred while creating the user, email: {}, ownerId: {}", patientRequest.email(), patientRequest.ownerId());
+            return Boolean.FALSE;
+        }
+
         var builder = new Patient.Builder(
                 owner.get().getId(),
                 patientRequest.name(),
                 SexEnum.get(patientRequest.sex()),
                 patientRequest.age(),
-                patientRequest.dateBirth()
-                )
+                patientRequest.dateBirth(),
+                user)
+                .active(true)
+                .cellPhone(patientRequest.cellPhone())
                 .build();
 
         patientRepository.save(builder);
@@ -64,8 +77,8 @@ public class PatientService {
         return Boolean.TRUE;
     }
 
-    public List<Patient> getAllPatientsByClinicId(final UUID clinicId) {
-        return patientRepository.findAllByOwnerId(clinicId);
+    public List<Patient> getAllPatientsByOwnerId(final UUID ownerId) {
+        return patientRepository.findAllByOwnerId(ownerId);
     }
 
     public Optional<Patient> getPatientById(final UUID patientId, final UUID clinicId) {
@@ -77,7 +90,7 @@ public class PatientService {
         return List.of();
     }
 
-    public List<PatientsProfessionalsView> getAllPatientsByClinicId(UUID clinicId, SituationEnum situation) {
+    public List<PatientsProfessionalsView> getAllPatientsByOwnerId(UUID clinicId, SituationEnum situation) {
         //return patientRepository.findAllPatientsByClinicId(clinicId, situation);
         return List.of();
     }
@@ -110,8 +123,11 @@ public class PatientService {
                     patientRequest.name(),
                     SexEnum.get(patientRequest.sex()),
                     patientRequest.age(),
-                    patientRequest.dateBirth())
+                    patientRequest.dateBirth(),
+                    patientResult.get().getUser())
                     .id(patientResult.get().getId())
+                    .cellPhone(patientRequest.cellPhone())
+                    .active(true)
                     .build();
 
             patientRepository.save(builder);

@@ -40,9 +40,9 @@ public class PatientController {
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_READ')")
-    @GetMapping("/clinic/{clinicId}")
-    public List<Patient> getAllPatient(@PathVariable("ownerId") UUID clinicId) {
-        return patientService.getAllPatientsByClinicId(clinicId);
+    @GetMapping("/owner/{ownerId}")
+    public List<Patient> getAllPatientByOwnerId(@PathVariable("ownerId") UUID ownerId) {
+        return patientService.getAllPatientsByOwnerId(ownerId);
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_READ')")

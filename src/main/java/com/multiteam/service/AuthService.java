@@ -73,13 +73,14 @@ public class AuthService {
         signUpRequest.roles().add(role);
 
         var builder = new User.Builder(
-                null, signUpRequest.name(), signUpRequest.email(), true)
+                null, signUpRequest.name(), signUpRequest.email(), true, null)
                 .provider(AuthProviderEnum.local)
                 .password(new BCryptPasswordEncoder().encode(signUpRequest.password()))
                 .roles(signUpRequest.roles())
                 .build();
 
-        userRepository.save(builder);
+        var userResult = userRepository.save(builder);
+        userRepository.updateOwnerId(userResult.getId());
     }
 
     public CheckTokenResponse checkToken(final String token) {
@@ -88,12 +89,12 @@ public class AuthService {
 
         if(jwtTokenProvider.validateToken(token)) {
             logger.info("valid token {}", token);
-            return new CheckTokenResponse(UUID.fromString(userInfo.get("userId")), true);
+            return new CheckTokenResponse(userInfo.get("userId"), userInfo.get("ownerId"), true);
 
         } else {
             logger.error("invalid token {}", token);
             logger.debug("could not validate user token id {}", userInfo.get("userId"));
-            return new CheckTokenResponse(null, false);
+            return new CheckTokenResponse(null, null, false);
         }
     }
 }

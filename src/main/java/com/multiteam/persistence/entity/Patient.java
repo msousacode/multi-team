@@ -39,6 +39,9 @@ public class Patient {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "cell_phone")
+    private String cellPhone;
+
     public Patient() {
     }
 
@@ -50,6 +53,8 @@ public class Patient {
         this.age = builder.age;
         this.active = builder.active;
         this.dateBirth = builder.dateBirth;
+        this.user = builder.user;
+        this.cellPhone = builder.cellPhone;
     }
 
     public UUID getId() {
@@ -80,6 +85,14 @@ public class Patient {
         return ownerId;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public String getCellPhone() {
+        return cellPhone;
+    }
+
     public static class Builder {
 
         //mandatory
@@ -90,16 +103,22 @@ public class Patient {
         private final Integer age;
         private boolean active;
         private final LocalDate dateBirth;
+        private final User user;
+
+        //optional
+        private String cellPhone;
 
         public Builder(
                 final UUID ownerId,
                 final String name,
                 final SexEnum sex,
                 final Integer age,
-                final LocalDate dateBirth) {
+                final LocalDate dateBirth,
+                final User user) {
 
             Assert.notNull(dateBirth, "value dateBirth cannot be null");
             Assert.notNull(ownerId, "value ownerId cannot be null");
+            Assert.notNull(user, "user cannot be null");
             Assert.isTrue(!name.isEmpty(), "patient name cannot be empty");
             Assert.notNull(sex, "patient sex cannot be null");
             Assert.notNull(age, "patient age cannot be null");
@@ -109,6 +128,7 @@ public class Patient {
             this.sex = sex;
             this.age = age;
             this.dateBirth = dateBirth;
+            this.user = user;
         }
 
         public Builder id(final UUID id) {
@@ -118,6 +138,11 @@ public class Patient {
 
         public Builder active(boolean active) {
             this.active = active;
+            return this;
+        }
+
+        public Builder cellPhone(String cellPhone) {
+            this.cellPhone = cellPhone;
             return this;
         }
 
