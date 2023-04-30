@@ -1,24 +1,36 @@
 package com.multiteam.enums;
 
+import org.springframework.util.Assert;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public enum SexEnum {
 
-    FEMININO("F", "Feminino"),
-    MASCULINO("M", "Masculino"),
-    NAO_DECLARADO("M", "Não declarado");
+    FEMININO("Feminino"),
+    MASCULINO("Masculino"),
+    NAO_DECLARADO("Não declarado");
 
     private final String description;
-    private final String acronym;
+    private static final Map<String, SexEnum> lookup = new HashMap<>();
 
-    SexEnum(String description, String acronym) {
+    SexEnum(String description) {
         this.description = description;
-        this.acronym = acronym;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public String getAcronym() {
-        return acronym;
+    static {
+        for (SexEnum s : SexEnum.values()) {
+            lookup.put(s.getDescription(), s);
+        }
+    }
+
+    public static SexEnum get(String name) {
+        var value = lookup.get(name);
+        Assert.notNull(value, "specialty not can be null");
+        return value;
     }
 }

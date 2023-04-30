@@ -1,6 +1,7 @@
 package com.multiteam.service;
 
 import com.multiteam.controller.dto.request.PatientRequest;
+import com.multiteam.enums.SexEnum;
 import com.multiteam.enums.SituationEnum;
 import com.multiteam.persistence.entity.Patient;
 import com.multiteam.persistence.projection.PatientsProfessionalsView;
@@ -50,7 +51,7 @@ public class PatientService {
         var builder = new Patient.Builder(
                 owner.get().getId(),
                 patientRequest.name(),
-                patientRequest.sex(),
+                SexEnum.get(patientRequest.sex()),
                 patientRequest.age(),
                 patientRequest.dateBirth()
                 )
@@ -107,7 +108,7 @@ public class PatientService {
             var builder = new Patient.Builder(
                     patientResult.get().getOwnerId(),
                     patientRequest.name(),
-                    patientRequest.sex(),
+                    SexEnum.get(patientRequest.sex()),
                     patientRequest.age(),
                     patientRequest.dateBirth())
                     .id(patientResult.get().getId())
