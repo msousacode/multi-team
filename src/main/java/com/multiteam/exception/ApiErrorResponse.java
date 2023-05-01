@@ -56,7 +56,7 @@ public class ApiErrorResponse {
             this.classError = classError;
             this.httpCode = httpCode;
 
-            logger.error("error_id {} --- cause: {}", this.errorId, cause);
+            logger.error("error_id {} --- cause: {}", this.errorId, detailMessage);
             logger.error("error_id {} --- trace: {}", this.errorId, stackTrace);
         }
 

@@ -43,6 +43,9 @@ public class User {
     @Column(name = "owner_id")
     private UUID ownerId;
 
+    @Transient
+    private String provisionalPassword;
+
     @ManyToMany
     @JoinTable(
             name = "users_roles",
@@ -108,6 +111,14 @@ public class User {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public void setProvisionalPassword(String provisionalPassword) {
+        this.provisionalPassword = provisionalPassword;
+    }
+
+    public String getProvisionalPassword() {
+        return provisionalPassword;
     }
 
     public static class Builder {

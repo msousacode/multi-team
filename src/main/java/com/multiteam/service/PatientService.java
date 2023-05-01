@@ -25,20 +25,20 @@ public class PatientService {
     private final Logger logger = LogManager.getLogger(PatientService.class);
 
     private final PatientRepository patientRepository;
-    private final ClinicService clinicService;
     private final TreatmentService treatmentService;
     private final UserService userService;
+    private final EmailService emailService;
 
     public PatientService(
             PatientRepository patientRepository,
-            ClinicService clinicService,
             TreatmentService treatmentService,
-            UserService userService
+            UserService userService,
+            EmailService emailService
     ) {
         this.patientRepository = patientRepository;
-        this.clinicService = clinicService;
         this.treatmentService = treatmentService;
         this.userService = userService;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -74,6 +74,9 @@ public class PatientService {
 
         logger.info("successfully created patient {} ", builder.toString());
 
+        if(emailService.sendEmailNewUser(user.getEmail(), user.getProvisionalPassword())){
+            logger.warn("user was created , but an error occurred when sending the first login email: {}", user.getEmail());
+        }
         return Boolean.TRUE;
     }
 

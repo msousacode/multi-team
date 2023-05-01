@@ -9,6 +9,7 @@ import com.multiteam.persistence.repository.ProfessionalRepository;
 import com.multiteam.persistence.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -26,16 +27,22 @@ public class ProfessionalService {
     private final ClinicService clinicService;
     private final TreatmentService treatmentService;
     private final UserRepository userRepository;
+    private final EmailService emailService;
+    private final UserService userService;
 
     public ProfessionalService(
             ProfessionalRepository professionalRepository,
             ClinicService clinicService,
             TreatmentService treatmentService,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            EmailService emailService,
+            UserService userService) {
         this.professionalRepository = professionalRepository;
         this.clinicService = clinicService;
         this.treatmentService = treatmentService;
         this.userRepository = userRepository;
+        this.emailService = emailService;
+        this.userService = userService;
     }
 
     @Transactional
@@ -55,7 +62,8 @@ public class ProfessionalService {
             return Boolean.FALSE;
         }
 
-        var user = new User.Builder(null, professionalRequest.name(), professionalRequest.email(), true, professionalRequest.ownerId()).provider(local).build();
+        var user = userService.createUser(professionalRequest.name(), professionalRequest.email(), professionalRequest.ownerId(), local);
+
         var userResult = userRepository.save(user);
 
         var builder = new Professional.Builder(
@@ -71,6 +79,10 @@ public class ProfessionalService {
                 .build();
 
         professionalRepository.save(builder);
+
+        if(emailService.sendEmailNewUser(user.getEmail(), user.getProvisionalPassword())){
+            logger.warn("user was created , but an error occurred when sending the first login email: {}", professionalRequest.email());
+        }
 
         return Boolean.TRUE;
     }
