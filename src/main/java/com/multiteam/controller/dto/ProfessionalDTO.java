@@ -1,4 +1,4 @@
-package com.multiteam.controller.dto.request;
+package com.multiteam.controller.dto;
 
 import java.util.Set;
 import java.util.UUID;

@@ -121,6 +121,19 @@ public class User {
         return provisionalPassword;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", email='" + email + '\'' +
+               '}';
+    }
+
     public static class Builder {
         //mandatory
         private UUID id;

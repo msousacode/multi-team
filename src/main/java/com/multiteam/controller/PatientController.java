@@ -1,7 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.controller.dto.request.PatientDTO;
-import com.multiteam.persistence.entity.Patient;
+import com.multiteam.controller.dto.PatientDTO;
 import com.multiteam.service.PatientService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

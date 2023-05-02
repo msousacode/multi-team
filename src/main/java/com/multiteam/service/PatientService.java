@@ -1,6 +1,6 @@
 package com.multiteam.service;
 
-import com.multiteam.controller.dto.request.PatientDTO;
+import com.multiteam.controller.dto.PatientDTO;
 import com.multiteam.enums.SexEnum;
 import com.multiteam.enums.SituationEnum;
 import com.multiteam.persistence.entity.Patient;

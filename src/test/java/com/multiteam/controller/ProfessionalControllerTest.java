@@ -1,6 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.controller.dto.request.ProfessionalDTO;
+import com.multiteam.controller.dto.ProfessionalDTO;
 import com.multiteam.enums.RoleEnum;
 import com.multiteam.enums.SpecialtyEnum;
 import com.multiteam.persistence.entity.Clinic;

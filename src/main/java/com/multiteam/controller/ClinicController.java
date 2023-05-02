@@ -1,7 +1,6 @@
 package com.multiteam.controller;
 
 import com.multiteam.controller.dto.request.ClinicRequest;
-import com.multiteam.controller.dto.request.ProfessionalDTO;
 import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.service.ClinicService;
 import org.springframework.http.HttpStatus;

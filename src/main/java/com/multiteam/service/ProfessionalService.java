@@ -1,15 +1,13 @@
 package com.multiteam.service;
 
-import com.multiteam.controller.dto.request.ProfessionalDTO;
+import com.multiteam.controller.dto.ProfessionalDTO;
 import com.multiteam.enums.SpecialtyEnum;
 import com.multiteam.exception.OwnerException;
 import com.multiteam.persistence.entity.Professional;
-import com.multiteam.persistence.entity.User;
 import com.multiteam.persistence.repository.ProfessionalRepository;
 import com.multiteam.persistence.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 

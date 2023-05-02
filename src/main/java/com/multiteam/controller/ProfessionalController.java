@@ -1,6 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.controller.dto.request.ProfessionalDTO;
+import com.multiteam.controller.dto.ProfessionalDTO;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.service.ProfessionalService;
 import org.springframework.http.HttpStatus;
