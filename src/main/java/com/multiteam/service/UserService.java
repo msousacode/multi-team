@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -105,6 +106,13 @@ public class UserService {
 
         logger.info("updated user: {} ", builder.toString());
 
+        return Boolean.TRUE;
+    }
+
+    @Transactional
+    public Boolean inactiveUser(UUID userId, UUID ownerId) {
+        userRepository.inactiveUser(userId, ownerId);
+        logger.info("inactive userId: {}, ownerId: {}", userId, ownerId);
         return Boolean.TRUE;
     }
 }

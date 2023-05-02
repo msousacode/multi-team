@@ -26,4 +26,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Page<User> findByOwnerIdAndActiveIsTrue(UUID ownerId, Pageable pageable);
 
     Optional<User> findByIdAndOwnerId(UUID userId, UUID ownerId);
+
+    @Modifying
+    @Query("UPDATE User u SET u.active = false WHERE u.id = :userId AND u.ownerId = :ownerId")
+    void inactiveUser(@Param("userId") UUID userId, @Param("ownerId") UUID ownerId);
 }

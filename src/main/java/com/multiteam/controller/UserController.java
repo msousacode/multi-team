@@ -58,4 +58,17 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @DeleteMapping("/{userId}/owner/{ownerId}")
+    public ResponseEntity<?> inactiveUser(
+            @PathVariable("userId") UUID userId,
+            @PathVariable("ownerId") UUID ownerId) {
+
+        if(userService.inactiveUser(userId, ownerId)) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 }
