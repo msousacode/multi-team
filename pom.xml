@@ -18,6 +18,7 @@
 		<jjwt.version>0.11.5</jjwt.version>
 		<google.api.version>2.2.0</google.api.version>
 		<jacoco.version>0.8.8</jacoco.version>
+		<sendgrid.version>4.9.3</sendgrid.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -59,6 +60,12 @@
 			<groupId>com.google.api-client</groupId>
 			<artifactId>google-api-client</artifactId>
 			<version>${google.api.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sendgrid</groupId>
+			<artifactId>sendgrid-java</artifactId>
+			<version>${sendgrid.version}</version>
 		</dependency>
 
 		<dependency>

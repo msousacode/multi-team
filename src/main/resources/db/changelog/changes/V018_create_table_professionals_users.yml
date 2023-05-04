@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: V018
+      author: michael
+      changes:
+        - createTable:
+            tableName: professionals_clinics
+            columns:
+              - column:
+                  name: professional_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: clinic_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: professional_id
+            baseTableName: professionals_clinics
+            constraintName: fk_professionals_professionals_clinics
+            referencedColumnNames: professional_id
+            referencedTableName: professionals
+        - addForeignKeyConstraint:
+            baseColumnNames: clinic_id
+            baseTableName: professionals_clinics
+            constraintName: fk_users_professionals_clinics
+            referencedColumnNames: clinic_id
+            referencedTableName: clinics

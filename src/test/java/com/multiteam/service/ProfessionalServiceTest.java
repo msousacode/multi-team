@@ -1,7 +1,7 @@
 package com.multiteam.service;
 
 import com.multiteam.constants.ConstantsToTests;
-import com.multiteam.controller.dto.request.ProfessionalRequest;
+import com.multiteam.controller.dto.ProfessionalDTO;
 import com.multiteam.enums.SpecialtyEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @SpringBootTest
@@ -26,11 +28,13 @@ class ProfessionalServiceTest {
 
         var name = UUID.randomUUID().toString().substring(0, 5);
         var middleName = UUID.randomUUID().toString().substring(0, 5);
-        var specialty = SpecialtyEnum.FONOAUDIOLOGIA;
         var cellPhone = UUID.randomUUID().toString().substring(0, 5);
         var email = "Ow Test+" + UUID.randomUUID().toString().substring(0, 5) + "@email.com";
 
-        var professional = new ProfessionalRequest(null, name, middleName, specialty, cellPhone, email, ConstantsToTests.CLINIC_ID);
+        Set<String> clinics = new HashSet<>();
+        clinics.add(ConstantsToTests.CLINIC_ID.toString());
+
+        var professional = new ProfessionalDTO(null, name, middleName, SpecialtyEnum.FONOAUDIOLOGIA.getName(), cellPhone, email, clinics);
 
         var result = professionalService.createProfessional(professional);
 

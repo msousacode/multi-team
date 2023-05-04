@@ -2,6 +2,7 @@ package com.multiteam.service;
 
 
 import com.multiteam.controller.dto.request.GuestRequest;
+import com.multiteam.exception.OwnerException;
 import com.multiteam.exception.TreatmentNotExistsException;
 import com.multiteam.persistence.entity.Guest;
 import com.multiteam.persistence.entity.User;
@@ -33,24 +34,28 @@ public class GuestService {
     }
 
     @Transactional
-    public Boolean createGuest(GuestRequest guestDto) {
+    public Boolean createGuest(GuestRequest guestRequest) {
 
-        var treatment = treatmentService.getAllTreatmentsByPatientId(guestDto.patientId());
+        var treatment = treatmentService.getAllTreatmentsByPatientId(guestRequest.patientId());
+
+        if(guestRequest.ownerId() == null) {
+            throw new OwnerException("value ownerId cannot be null");
+        }
 
         if (treatment.isEmpty()) {
             return Boolean.FALSE;
         } else {
-            var user = new User.Builder(null, guestDto.name(), guestDto.email(), true).provider(AuthProviderEnum.local).build();
+            var user = new User.Builder(null, guestRequest.name(), guestRequest.email(), true, guestRequest.ownerId()).provider(AuthProviderEnum.local).build();
 
             var userResult = userRepository.save(user);
 
             var builder = new Guest.Builder(
                     null,
-                    guestDto.name(),
-                    guestDto.middleName(),
-                    guestDto.relationship(),
-                    guestDto.cellPhone(),
-                    guestDto.email(),
+                    guestRequest.name(),
+                    guestRequest.middleName(),
+                    guestRequest.relationship(),
+                    guestRequest.cellPhone(),
+                    guestRequest.email(),
                     true,
                     userResult)
                     .build();

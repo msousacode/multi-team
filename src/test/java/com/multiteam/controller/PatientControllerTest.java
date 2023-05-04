@@ -53,7 +53,7 @@ public class PatientControllerTest extends TokenUtil {
     @DisplayName("deve buscar o paciente por patientId e clinicId então sucesso")
     void shouldGetPatientById_thenSuccess() throws Exception {
 
-        BDDMockito.given(patientService.getPatientById(Mockito.any(), Mockito.any())).willReturn(Optional.of(new Patient()));
+        BDDMockito.given(patientService.getPatient(Mockito.any(), Mockito.any())).willReturn(Optional.of(new Patient()));
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -68,7 +68,7 @@ public class PatientControllerTest extends TokenUtil {
     @DisplayName("Deve buscar todos os pacientes então sucesso")
     void shouldGetAllPatients_thenSuccess() throws Exception {
 
-        BDDMockito.given(patientService.getAllPatientsByClinicId(Mockito.any(), Mockito.any())).willReturn(List.of());
+        BDDMockito.given(patientService.getAllPatientsByOwnerId(Mockito.any(), Mockito.any())).willReturn(List.of());
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -113,15 +113,12 @@ public class PatientControllerTest extends TokenUtil {
         return """
                 {
                     "id":"%s",
-                    "name":"%s",
-                    "middleName":"%s",
+                    "name":"%s",                    
                     "sex":"%s",
                     "age":"%s",
-                    "months":"%s",
-                    "internalObservation":"%s",
-                    "externalObservation":"%s",
+                    "months":"%s",                    
                     "active":"%s",
-                    "clinicId":"%s"
+                    "ownerId":"%s"
                 }
                 """.formatted(
                 UUID.randomUUID(),

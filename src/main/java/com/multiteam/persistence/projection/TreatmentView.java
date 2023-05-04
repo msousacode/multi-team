@@ -15,8 +15,6 @@ public interface TreatmentView {
 
     String getPatientName();
 
-    String getPatientMiddleName();
-
     String getProfessionalName();
 
     String getProfessionalMiddleName();

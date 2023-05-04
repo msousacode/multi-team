@@ -22,10 +22,7 @@ public interface TreatmentRepository extends JpaRepository<Treatment, UUID> {
             t.id AS id,
             t.situation AS situation,
             t.treatmentType AS treatmentType,
-            p.name AS patientName,
-            p.middleName AS patientMiddleName,
-            pf.name AS professionalName,
-            pf.middleName AS professionalMiddleName
+            p.name AS patientName
             FROM Treatment t
             JOIN t.guests tg
             JOIN t.patient p

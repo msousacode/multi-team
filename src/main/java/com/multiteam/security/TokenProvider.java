@@ -1,5 +1,6 @@
 package com.multiteam.security;
 
+import com.multiteam.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -32,6 +33,12 @@ public class TokenProvider {
 
     private SecretKey secretKey;
 
+    private final UserService userService;
+
+    public TokenProvider(UserService userService) {
+        this.userService = userService;
+    }
+
     @PostConstruct
     public void setUpSecretKey() {
         var secret = Base64.getEncoder().encodeToString(this.tokenSecret.getBytes());
@@ -42,10 +49,13 @@ public class TokenProvider {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
+        var ownerId = userService.getOwnerId(userPrincipal.getId());
+
         Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(jwtExpiration)));
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getId().toString())
+                .claim("_ow", ownerId)
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(this.secretKey, SignatureAlgorithm.HS256)
@@ -87,17 +97,19 @@ public class TokenProvider {
 
     public Map<String, String> openToken(String token) {
 
-        Claims body = Jwts.parser()
+        Claims claims = Jwts.parser()
                 .setSigningKey(this.secretKey)
                 .parseClaimsJws(token)
                 .getBody();
 
-        String userId = body.getSubject();
+        String userId = claims.getSubject();
+        String ownerId = claims.get("_ow", String.class);
 
         Assert.notNull(userId, "userId can not be null");
 
         Map<String, String> userInfo = new HashMap<>();
         userInfo.put("userId", userId);
+        userInfo.put("ownerId", ownerId);
 
         return userInfo;
     }

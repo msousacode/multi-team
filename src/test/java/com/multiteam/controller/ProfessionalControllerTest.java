@@ -1,11 +1,11 @@
 package com.multiteam.controller;
 
-import com.multiteam.constants.ConstantsToTests;
+import com.multiteam.controller.dto.ProfessionalDTO;
+import com.multiteam.enums.RoleEnum;
+import com.multiteam.enums.SpecialtyEnum;
 import com.multiteam.persistence.entity.Clinic;
 import com.multiteam.persistence.entity.Professional;
 import com.multiteam.persistence.entity.User;
-import com.multiteam.enums.RoleEnum;
-import com.multiteam.enums.SpecialtyEnum;
 import com.multiteam.persistence.repository.ProfessionalRepository;
 import com.multiteam.persistence.repository.UserRepository;
 import com.multiteam.service.ClinicService;
@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @AutoConfigureMockMvc
@@ -67,7 +68,7 @@ public class ProfessionalControllerTest extends TokenUtil {
     @DisplayName("deve buscar todos os profissionais usando roles OWNER e ADMIN")
     void shouldGetAllProfessionals_thenSuccess() throws Exception {
 
-        BDDMockito.given(professionalRepository.findAllByClinic_Id(Mockito.any())).willReturn(List.of());
+        BDDMockito.given(professionalRepository.findAllProfessionalsByClinicId(Mockito.any())).willReturn(List.of());
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -82,7 +83,7 @@ public class ProfessionalControllerTest extends TokenUtil {
     @DisplayName("deve buscar o profissional usando roles OWNER e ADMIN então sucesso")
     void shouldGetProfessionalById_thenSuccess() throws Exception {
 
-        BDDMockito.given(professionalService.getProfessional(Mockito.any())).willReturn(Optional.ofNullable(getProfessional()));
+        BDDMockito.given(professionalService.getProfessional(Mockito.any())).willReturn(Optional.of(getProfessionalDTO()));
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -129,9 +130,7 @@ public class ProfessionalControllerTest extends TokenUtil {
     @DisplayName("deve tentar criar um novo profissional usando roles erradas então falha")
     void shouldCreateNewProfessionalWithRolesWrong_thenForbidden() throws Exception {
 
-        BDDMockito.given(clinicService.getClinicById(Mockito.any())).willReturn(getClinic());
-        BDDMockito.given(professionalRepository.save(new Professional())).willReturn(getProfessional());
-        BDDMockito.given(userRepository.save(Mockito.any())).willReturn(new User());
+        BDDMockito.given(professionalService.createProfessional(Mockito.any())).willReturn(Boolean.TRUE);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -147,7 +146,7 @@ public class ProfessionalControllerTest extends TokenUtil {
     @DisplayName("deve tentar buscar todos os profissionais usando roles erradas então falha")
     void shouldGetAllProfessionalsWithRolesWrong_thenFail() throws Exception {
 
-        BDDMockito.given(professionalRepository.findAllByClinic_Id(Mockito.any())).willReturn(List.of());
+        BDDMockito.given(professionalRepository.findAllProfessionalsByClinicId(Mockito.any())).willReturn(List.of());
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -197,22 +196,31 @@ public class ProfessionalControllerTest extends TokenUtil {
                     "middleName":"%s",
                     "specialty":"%s",
                     "cellPhone":"%s",
-                    "email":"%s",
-                    "clinicId":"%s"
+                    "email":"%s"
                 }
                 """.formatted(
                 UUID.randomUUID().toString().substring(0, 10),
                 UUID.randomUUID().toString().substring(0, 10),
-                SpecialtyEnum.FONOAUDIOLOGIA,
+                SpecialtyEnum.FONOAUDIOLOGIA.getName(),
                 "11 5656 - 0606",
-                UUID.randomUUID().toString().substring(0, 10) + "@email.com",
-                ConstantsToTests.CLINIC_ID
+                UUID.randomUUID().toString().substring(0, 10) + "@email.com"
         );
     }
 
     Optional<Clinic> getClinic() {
         return Optional.ofNullable(
                 new Clinic.Builder("Teste", "000000000000000", "teste@teste", "1199999-9999").build());
+    }
+
+    private ProfessionalDTO getProfessionalDTO() {
+        return new ProfessionalDTO(
+                UUID.randomUUID(),
+                "Ana",
+                "Analu",
+                SpecialtyEnum.FONOAUDIOLOGIA.name(),
+                "(11) 98637-7492",
+                "anaanaludasilva@fosjc.unesp.br",
+                Set.of());
     }
 
     private Professional getProfessional() {
@@ -223,7 +231,7 @@ public class ProfessionalControllerTest extends TokenUtil {
                 SpecialtyEnum.FONOAUDIOLOGIA,
                 "(11) 98637-7492",
                 "anaanaludasilva@fosjc.unesp.br",
-                true, new Clinic(), new User())
+                true, List.of(), new User())
                 .build();
     }
 }

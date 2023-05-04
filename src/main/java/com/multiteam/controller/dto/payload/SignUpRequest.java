@@ -1,6 +1,5 @@
 package com.multiteam.controller.dto.payload;
 
-import com.multiteam.constants.ApplicationErrorsEnum;
 import com.multiteam.persistence.entity.Role;
 import org.springframework.util.Assert;
 

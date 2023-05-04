@@ -16,6 +16,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -61,24 +63,24 @@ public class AuthService {
     }
 
     @Transactional
-    public User registerUser(SignUpRequest signUpRequest) {
+    public void registerUser(SignUpRequest signUpRequest) {
 
         if(userRepository.existsByEmail(signUpRequest.email())) {
             throw new BadRequestException("Email address already in use.");
         }
 
-        if(signUpRequest.roles().isEmpty()) {
-            Role role = roleRepository.findByRole(RoleEnum.ROLE_GUEST);
-            signUpRequest.roles().add(role);
-        }
+        Role role = roleRepository.findByRole(RoleEnum.ROLE_OWNER);
+        signUpRequest.roles().add(role);
 
         var builder = new User.Builder(
-                null, signUpRequest.name(), signUpRequest.email(), true)
+                null, signUpRequest.name(), signUpRequest.email(), true, null)
                 .provider(AuthProviderEnum.local)
+                .password(new BCryptPasswordEncoder().encode(signUpRequest.password()))
                 .roles(signUpRequest.roles())
                 .build();
 
-        return userRepository.save(builder);
+        var userResult = userRepository.save(builder);
+        userRepository.updateOwnerId(userResult.getId());
     }
 
     public CheckTokenResponse checkToken(final String token) {
@@ -87,12 +89,12 @@ public class AuthService {
 
         if(jwtTokenProvider.validateToken(token)) {
             logger.info("valid token {}", token);
-            return new CheckTokenResponse(UUID.fromString(userInfo.get("userId")), true);
+            return new CheckTokenResponse(userInfo.get("userId"), userInfo.get("ownerId"), true);
 
         } else {
             logger.error("invalid token {}", token);
             logger.debug("could not validate user token id {}", userInfo.get("userId"));
-            return new CheckTokenResponse(null, false);
+            return new CheckTokenResponse(null, null, false);
         }
     }
 }

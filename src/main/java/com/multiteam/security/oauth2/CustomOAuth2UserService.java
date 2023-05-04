@@ -66,7 +66,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 null,
                 oAuth2UserInfo.getName(),
                 oAuth2UserInfo.getEmail(),
-                true)
+                true, null)//TODO ajustar a passagem desse ownerId
                 .imageUrl(oAuth2UserInfo.getImageUrl())
                 .password(null)
                 .provider(AuthProviderEnum.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))

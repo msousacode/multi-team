@@ -1,6 +1,4 @@
 package com.multiteam.controller.dto.response;
 
-import java.util.UUID;
-
-public record CheckTokenResponse(UUID userId, boolean isValid) {
+public record CheckTokenResponse(String userId, String ownerId, boolean isValid) {
 }

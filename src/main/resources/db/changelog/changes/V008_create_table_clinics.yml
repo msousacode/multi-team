@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: v008
+      id: V008
       author: michael
       changes:
         - createTable:
@@ -39,8 +39,6 @@ databaseChangeLog:
               - column:
                   name: created_date
                   type: timestamp
-                  constraints:
-                    nullable: false
               - column:
                   name: removed_date
                   type: timestamp

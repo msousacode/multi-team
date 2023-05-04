@@ -27,7 +27,7 @@ public class User {
     private String imageUrl;
 
     @Column(name = "email_verified")
-    private Boolean emailVerified = false;
+    private Boolean emailVerified;
 
     @JsonIgnore
     @Column(name = "password")
@@ -40,8 +40,15 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
+    @Column(name = "owner_id")
+    private UUID ownerId;
+
+    @Transient
+    private String provisionalPassword;
+
     @ManyToMany
-    @JoinTable(name = "users_roles",
+    @JoinTable(
+            name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
@@ -59,6 +66,7 @@ public class User {
         this.active = builder.active;
         this.roles = builder.roles;
         this.password = builder.password;
+        this.ownerId = builder.ownerId;
     }
 
     public UUID getId() {
@@ -93,6 +101,10 @@ public class User {
         return active;
     }
 
+    public UUID getOwnerId() {
+        return ownerId;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -101,8 +113,25 @@ public class User {
         this.imageUrl = imageUrl;
     }
 
-    public static User createUserActive(String email, String password) {
-        return new User.Builder(UUID.randomUUID(), "Basic User", email, true).password(password).build();
+    public void setProvisionalPassword(String provisionalPassword) {
+        this.provisionalPassword = provisionalPassword;
+    }
+
+    public String getProvisionalPassword() {
+        return provisionalPassword;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", email='" + email + '\'' +
+               '}';
     }
 
     public static class Builder {
@@ -111,6 +140,7 @@ public class User {
         private final String name;
         private final String email;
         private final Boolean active;
+        private final UUID ownerId;
 
         //optional
         private String password;
@@ -123,12 +153,14 @@ public class User {
                 final UUID id,
                 final String name,
                 final String email,
-                final Boolean active) {
+                final Boolean active,
+                final UUID ownerId) {
 
             this.id = id;
             this.name = name;
             this.email = email;
             this.active = active;
+            this.ownerId = ownerId;
         }
 
         public Builder imageUrl(String imageUrl) {

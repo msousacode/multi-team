@@ -4,6 +4,7 @@ import com.multiteam.enums.SpecialtyEnum;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,9 +19,6 @@ public class Professional {
 
     @Column(name = "name")
     private String name;
-
-    @Column(name = "middle_name")
-    private String middleName;
 
     @Column(name = "specialty")
     @Enumerated(EnumType.STRING)
@@ -38,26 +36,41 @@ public class Professional {
     @OneToMany(mappedBy = "professional")
     private Set<TreatmentProfessional> professionals;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id")
-    private Clinic clinic;
-
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(name = "owner_id")
+    private UUID ownerId;
+
+    @Override
+    public String toString() {
+        return "Professional{" +
+               "id=" + id +
+               ", name='" + name + '\'' +
+               ", specialty=" + specialty +
+               '}';
+    }
+
+    @ManyToMany
+    @JoinTable(
+            name = "professionals_clinics",
+            joinColumns = @JoinColumn(name = "professional_id"),
+            inverseJoinColumns = @JoinColumn(name = "clinic_id"))
+    private List<Clinic> clinics;
 
     public Professional() {}
 
     private Professional(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
-        this.middleName = builder.middleName;
         this.specialty = builder.specialty;
         this.cellPhone = builder.cellPhone;
         this.email = builder.email;
         this.active = builder.active;
-        this.clinic = builder.clinic;
+        this.clinics = builder.clinics;
         this.user = builder.user;
+        this.ownerId = builder.ownerId;
     }
 
     public UUID getId() {
@@ -66,10 +79,6 @@ public class Professional {
 
     public String getName() {
         return name;
-    }
-
-    public String getMiddleName() {
-        return middleName;
     }
 
     public SpecialtyEnum getSpecialty() {
@@ -88,8 +97,8 @@ public class Professional {
         return active;
     }
 
-    public Clinic getClinic() {
-        return clinic;
+    public List<Clinic> getClinics() {
+        return clinics;
     }
 
     public Set<TreatmentProfessional> getProfessionals() {
@@ -100,18 +109,22 @@ public class Professional {
         return user;
     }
 
+    public UUID getOwnerId() {
+        return ownerId;
+    }
+
     public static class Builder {
 
         //mandatory
         private UUID id;
         private final String name;
-        private final String middleName;
         private final SpecialtyEnum specialty;
         private final String cellPhone;
         private final String email;
         private final boolean active;
-        private final Clinic clinic;
+        private final List<Clinic> clinics;
         private final User user;
+        private final UUID ownerId;
 
         //optional
         private Set<TreatmentProfessional> professionals;
@@ -119,36 +132,35 @@ public class Professional {
         public Builder(
                 UUID id,
                 final String name,
-                final String middleName,
                 final SpecialtyEnum specialty,
                 final String cellPhone,
                 final String email,
                 final boolean active,
-                final Clinic clinic,
-                final User user) {
+                final List<Clinic> clinics,
+                final User user,
+                final UUID ownerId) {
 
             Assert.notNull(name, "professional name not be null");
-            Assert.notNull(middleName, "professional middle name not be null");
             Assert.notNull(specialty, "professional specialty not be null");
             Assert.notNull(cellPhone, "professional cellphone not be null");
             Assert.notNull(email, "professional email not be null");
-            Assert.notNull(clinic, "professional needs to be associated with the clinic");
             Assert.notNull(user, "professional needs to be associated with the user");
+            Assert.notNull(ownerId, "professional needs to be associated with the owner");
 
+            Assert.isTrue(!clinics.isEmpty(), "clinic list cannot be empty");
             Assert.isTrue(!name.isEmpty(), "professional name not be empty");
-            Assert.isTrue(!middleName.isEmpty(), "professional middle name not be empty");
             Assert.isTrue(!cellPhone.isEmpty(), "professional cellphone not be empty");
             Assert.isTrue(!email.isEmpty(), "professional email not be empty");
 
             this.id = id;
             this.name = name;
-            this.middleName = middleName;
             this.specialty = specialty;
             this.cellPhone = cellPhone;
             this.email = email;
             this.active = active;
-            this.clinic = clinic;
+            this.clinics = clinics;
             this.user = user;
+            this.ownerId = ownerId;
         }
 
         public Builder professionals(Set<TreatmentProfessional> professionals) {

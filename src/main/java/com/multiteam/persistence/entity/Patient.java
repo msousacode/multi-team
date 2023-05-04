@@ -1,10 +1,10 @@
 package com.multiteam.persistence.entity;
 
-import com.multiteam.constants.ApplicationErrorsEnum;
 import com.multiteam.enums.SexEnum;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -16,53 +16,45 @@ public class Patient {
     @Column(name = "patient_id")
     private UUID id;
 
+    @Column(name = "owner_id")
+    private UUID ownerId;
+
     @Column(name = "name")
     private String name;
-
-    @Column(name = "middle_name")
-    private String middleName;
 
     @Column(name = "sex")
     @Enumerated(EnumType.STRING)
     private SexEnum sex;
 
+    @Column(name = "date_birth")
+    private LocalDate dateBirth;
+
     @Column(name = "age")
     private Integer age;
-
-    @Column(name = "months")
-    private Integer months;
-
-    @Column(name = "internal_observation")
-    private String internalObservation;
-
-    @Column(name = "external_observation")
-    private String externalObservation;
 
     @Column(name = "active")
     private boolean active;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "clinic_id")
-    private Clinic clinic;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(name = "cell_phone")
+    private String cellPhone;
 
     public Patient() {
     }
 
     private Patient(Builder builder) {
         this.id = builder.id;
+        this.ownerId = builder.ownerId;
         this.name = builder.name;
-        this.middleName = builder.middleName;
         this.sex = builder.sex;
         this.age = builder.age;
-        this.clinic = builder.clinic;
-        this.months = builder.months;
-        this.internalObservation = builder.internalObservation;
-        this.externalObservation = builder.externalObservation;
         this.active = builder.active;
+        this.dateBirth = builder.dateBirth;
+        this.user = builder.user;
+        this.cellPhone = builder.cellPhone;
     }
 
     public UUID getId() {
@@ -73,10 +65,6 @@ public class Patient {
         return name;
     }
 
-    public String getMiddleName() {
-        return middleName;
-    }
-
     public SexEnum getSex() {
         return sex;
     }
@@ -85,79 +73,66 @@ public class Patient {
         return age;
     }
 
-    public Integer getMonths() {
-        return months;
-    }
-
-    public String getInternalObservation() {
-        return internalObservation;
-    }
-
-    public String getExternalObservation() {
-        return externalObservation;
-    }
-
-    public Clinic getClinic() {
-        return clinic;
-    }
-
     public boolean isActive() {
         return active;
+    }
+
+    public LocalDate getDateBirth() {
+        return dateBirth;
+    }
+
+    public UUID getOwnerId() {
+        return ownerId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public String getCellPhone() {
+        return cellPhone;
     }
 
     public static class Builder {
 
         //mandatory
         private UUID id;
+        private final UUID ownerId;
         private final String name;
-        private final String middleName;
         private final SexEnum sex;
         private final Integer age;
-        private final Clinic clinic;
+        private boolean active;
+        private final LocalDate dateBirth;
+        private final User user;
 
         //optional
-        private Integer months;
-        private String internalObservation;
-        private String externalObservation;
-        private boolean active;
+        private String cellPhone;
 
         public Builder(
+                final UUID ownerId,
                 final String name,
-                final String middleName,
                 final SexEnum sex,
                 final Integer age,
-                final Clinic clinic) {
+                final LocalDate dateBirth,
+                final User user) {
 
+            Assert.notNull(dateBirth, "value dateBirth cannot be null");
+            Assert.notNull(ownerId, "value ownerId cannot be null");
+            Assert.notNull(user, "user cannot be null");
             Assert.isTrue(!name.isEmpty(), "patient name cannot be empty");
-            Assert.isTrue(!middleName.isEmpty(), "patient middle name cannot be empty");
             Assert.notNull(sex, "patient sex cannot be null");
             Assert.notNull(age, "patient age cannot be null");
-            Assert.notNull(clinic, ApplicationErrorsEnum.CLINIC_IS_MANDATORY.name());
 
+            this.ownerId = ownerId;
             this.name = name;
-            this.middleName = middleName;
             this.sex = sex;
             this.age = age;
-            this.clinic = clinic;
+            this.dateBirth = dateBirth;
+            this.user = user;
         }
 
         public Builder id(final UUID id) {
             this.id = id;
-            return this;
-        }
-
-        public Builder months(Integer months) {
-            this.months = months;
-            return this;
-        }
-
-        public Builder internalObservation(String internalObservation) {
-            this.internalObservation = internalObservation;
-            return this;
-        }
-
-        public Builder externalObservation(String externalObservation) {
-            this.externalObservation = externalObservation;
             return this;
         }
 
@@ -166,8 +141,22 @@ public class Patient {
             return this;
         }
 
+        public Builder cellPhone(String cellPhone) {
+            this.cellPhone = cellPhone;
+            return this;
+        }
+
         public Patient build() {
             return new Patient(this);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+               "id=" + id +
+               ", ownerId=" + ownerId +
+               ", name='" + name + '\'' +
+               '}';
     }
 }
