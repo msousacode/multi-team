@@ -62,8 +62,6 @@ public class ProfessionalService {
 
         var user = userService.createUser(professionalRequest.name(), professionalRequest.email(), professionalRequest.ownerId(), local);
 
-        var userResult = userRepository.save(user);
-
         var builder = new Professional.Builder(
                 null,
                 professionalRequest.name(),
@@ -72,7 +70,7 @@ public class ProfessionalService {
                 professionalRequest.email(),
                 true,
                 clinics,
-                userResult,
+                user,
                 professionalRequest.ownerId())
                 .build();
 
