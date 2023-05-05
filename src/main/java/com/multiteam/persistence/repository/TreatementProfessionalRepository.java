@@ -1,7 +1,7 @@
 package com.multiteam.persistence.repository;
 
 import com.multiteam.persistence.entity.TreatmentProfessional;
-import com.multiteam.enums.SituationEnum;
+import com.multiteam.core.enums.SituationEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -3,25 +3,23 @@ package com.multiteam.service;
 import com.multiteam.controller.dto.payload.LoginRequest;
 import com.multiteam.controller.dto.payload.SignUpRequest;
 import com.multiteam.controller.dto.response.CheckTokenResponse;
-import com.multiteam.exception.BadRequestException;
+import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.persistence.entity.Role;
-import com.multiteam.persistence.entity.User;
+import com.multiteam.user.User;
 import com.multiteam.persistence.repository.RoleRepository;
-import com.multiteam.persistence.repository.UserRepository;
-import com.multiteam.enums.AuthProviderEnum;
-import com.multiteam.enums.RoleEnum;
-import com.multiteam.security.CustomAuthenticationManager;
-import com.multiteam.security.TokenProvider;
+import com.multiteam.user.UserRepository;
+import com.multiteam.core.enums.AuthProviderEnum;
+import com.multiteam.core.enums.RoleEnum;
+import com.multiteam.core.security.CustomAuthenticationManager;
+import com.multiteam.core.security.TokenProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.UUID;
 
 @Service
 public class AuthService {
@@ -73,14 +71,13 @@ public class AuthService {
         signUpRequest.roles().add(role);
 
         var builder = new User.Builder(
-                null, signUpRequest.name(), signUpRequest.email(), true, null)
+                null, signUpRequest.name(), signUpRequest.email(), true)
                 .provider(AuthProviderEnum.local)
                 .password(new BCryptPasswordEncoder().encode(signUpRequest.password()))
                 .roles(signUpRequest.roles())
                 .build();
 
         var userResult = userRepository.save(builder);
-        userRepository.updateOwnerId(userResult.getId());
     }
 
     public CheckTokenResponse checkToken(final String token) {

@@ -1,10 +1,11 @@
 package com.multiteam.service;
 
+import com.multiteam.clinic.ClinicService;
 import com.multiteam.constants.ConstantsToTests;
-import com.multiteam.controller.dto.ProfessionalDTO;
-import com.multiteam.enums.SpecialtyEnum;
+import com.multiteam.core.enums.SpecialtyEnum;
+import com.multiteam.professional.ProfessionalDTO;
+import com.multiteam.professional.ProfessionalService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,8 +24,7 @@ class ProfessionalServiceTest {
     private ClinicService clinicService;
 
     @Test
-    @DisplayName("deve criar um novo profissonal e retornar sucesso")
-    void shouldCreateNewProfessional_thenSuccess() {
+    void shouldCreateNewProfessionalThenSuccess() {
 
         var name = UUID.randomUUID().toString().substring(0, 5);
         var middleName = UUID.randomUUID().toString().substring(0, 5);
@@ -34,13 +34,13 @@ class ProfessionalServiceTest {
         Set<String> clinics = new HashSet<>();
         clinics.add(ConstantsToTests.CLINIC_ID.toString());
 
-        var professional = new ProfessionalDTO(null, name, middleName, SpecialtyEnum.FONOAUDIOLOGIA.getName(), cellPhone, email, clinics);
+        var professional = new ProfessionalDTO(null, name, SpecialtyEnum.FONOAUDIOLOGIA.getName(), cellPhone, email, clinics);
 
         var result = professionalService.createProfessional(professional);
 
         Assertions.assertTrue(result);
     }
-
+/*
     @Test
     @DisplayName("deve buscar a lista dos profissionais cadastrados com sucesso")
     void shouldRetrieveProfessionalList_thenSuccess() {

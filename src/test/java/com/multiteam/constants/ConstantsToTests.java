@@ -5,7 +5,7 @@ import java.util.UUID;
 public class ConstantsToTests {
 
     public final static String USER_OWNER_ADMIN = "e61fb@email.com";
-    public final static UUID OWNER_ID = UUID.fromString("ea4f0637-00b5-40ee-8cb3-9d35b80296ba");
+    public final static UUID OWNER_ID = UUID.fromString("40a57f58-b528-4daf-8d22-930eb2238edb");
     public final static UUID CLINIC_ID = UUID.fromString("7de48822-e6e9-4af7-aeef-a0ffa42e9d63");
     public final static UUID PROFESSIONAL_ID = UUID.fromString("d105b326-2224-4d43-8786-eaaca78c7626");
     public final static UUID PATIENT_ID = UUID.fromString("db0c0716-b298-4391-bc98-e53d08d8705a");

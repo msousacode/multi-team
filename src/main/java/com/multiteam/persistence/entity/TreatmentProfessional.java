@@ -1,6 +1,7 @@
 package com.multiteam.persistence.entity;
 
-import com.multiteam.enums.SituationEnum;
+import com.multiteam.core.enums.SituationEnum;
+import com.multiteam.professional.Professional;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;

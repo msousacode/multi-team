@@ -1,12 +1,10 @@
 package com.multiteam.controller;
 
 import com.multiteam.controller.dto.request.TreatmentRequest;
-import com.multiteam.enums.RoleEnum;
 import com.multiteam.persistence.entity.Treatment;
 import com.multiteam.persistence.projection.TreatmentView;
 import com.multiteam.service.TreatmentService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

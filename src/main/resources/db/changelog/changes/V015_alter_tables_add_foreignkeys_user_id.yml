@@ -4,44 +4,72 @@ databaseChangeLog:
       author: michael
       changes:
         - addColumn:
-            tableName: professionals
+            tableName: clinics
             columns:
               - column:
-                  name: user_id
+                  name: tenant_id
                   type: uuid
                   constraints:
                     nullable: true
         - addForeignKeyConstraint:
-            baseColumnNames: user_id
+            baseColumnNames: tenant_id
+            baseTableName: clinics
+            constraintName: fk_tenant_clinics_users
+            referencedColumnNames: user_id
+            referencedTableName: users
+        - addColumn:
+            tableName: professionals
+            columns:
+              - column:
+                  name: tenant_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            baseColumnNames: tenant_id
             baseTableName: professionals
-            constraintName: fk_professionals_users
+            constraintName: fk_tenant_professionals_users
             referencedColumnNames: user_id
             referencedTableName: users
         - addColumn:
             tableName: patients
             columns:
               - column:
-                  name: user_id
+                  name: tenant_id
                   type: uuid
                   constraints:
                     nullable: true
         - addForeignKeyConstraint:
-            baseColumnNames: user_id
+            baseColumnNames: tenant_id
             baseTableName: patients
-            constraintName: fk_patients_users
+            constraintName: fk_tenant_patients_users
+            referencedColumnNames: user_id
+            referencedTableName: users
+        - addColumn:
+            tableName: treatments
+            columns:
+              - column:
+                  name: tenant_id
+                  type: uuid
+                  constraints:
+                    nullable: true
+        - addForeignKeyConstraint:
+            baseColumnNames: tenant_id
+            baseTableName: treatments
+            constraintName: fk_tenant_treatments_users
             referencedColumnNames: user_id
             referencedTableName: users
         - addColumn:
             tableName: guests
             columns:
               - column:
-                  name: user_id
+                  name: tenant_id
                   type: uuid
                   constraints:
                     nullable: true
         - addForeignKeyConstraint:
-            baseColumnNames: user_id
+            baseColumnNames: tenant_id
             baseTableName: guests
-            constraintName: fk_guests_users
+            constraintName: fk_tenant_guests_users
             referencedColumnNames: user_id
             referencedTableName: users

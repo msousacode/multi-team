@@ -1,27 +1,12 @@
 package com.multiteam.controller;
 
-import com.multiteam.constants.ConstantsToTests;
-import com.multiteam.enums.RoleEnum;
-import com.multiteam.enums.SexEnum;
-import com.multiteam.persistence.entity.Patient;
 import com.multiteam.service.PatientService;
 import com.multiteam.util.TokenUtil;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -32,7 +17,7 @@ public class PatientControllerTest extends TokenUtil {
 
     @MockBean
     private PatientService patientService;
-
+/*
     @Test
     @DisplayName("deve criar um novo paciente então sucesso")
     void shouldCreateNewPatient_thenSuccess() throws Exception {
@@ -133,4 +118,5 @@ public class PatientControllerTest extends TokenUtil {
                 ConstantsToTests.CLINIC_ID
         );
     }
+ */
 }

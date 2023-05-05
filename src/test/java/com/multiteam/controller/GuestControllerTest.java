@@ -1,10 +1,8 @@
 package com.multiteam.controller;
 
 import com.multiteam.constants.ConstantsToTests;
-import com.multiteam.enums.RelationshipEnum;
-import com.multiteam.enums.RoleEnum;
-import com.multiteam.enums.SexEnum;
-import com.multiteam.persistence.entity.Guest;
+import com.multiteam.core.enums.RelationshipEnum;
+import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.service.GuestService;
 import com.multiteam.util.TokenUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @AutoConfigureMockMvc

@@ -1,10 +1,9 @@
 package com.multiteam.controller;
 
 import com.multiteam.constants.ConstantsToTests;
-import com.multiteam.enums.RoleEnum;
-import com.multiteam.enums.SituationEnum;
-import com.multiteam.enums.TreatmentEnum;
-import com.multiteam.persistence.entity.Treatment;
+import com.multiteam.core.enums.RoleEnum;
+import com.multiteam.core.enums.SituationEnum;
+import com.multiteam.core.enums.TreatmentEnum;
 import com.multiteam.persistence.projection.TreatmentView;
 import com.multiteam.service.TreatmentService;
 import com.multiteam.util.TokenUtil;
@@ -22,7 +21,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -236,11 +234,6 @@ public class TreatmentControllerTest extends TokenUtil {
 
             @Override
             public String getPatientName() {
-                return null;
-            }
-
-            @Override
-            public String getPatientMiddleName() {
                 return null;
             }
 

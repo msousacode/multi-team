@@ -1,6 +1,6 @@
 package com.multiteam.controller.dto.request;
 
-import com.multiteam.enums.RelationshipEnum;
+import com.multiteam.core.enums.RelationshipEnum;
 
 import java.util.UUID;
 

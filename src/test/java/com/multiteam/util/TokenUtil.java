@@ -1,8 +1,8 @@
 package com.multiteam.util;
 
 import com.multiteam.constants.ConstantsToTests;
-import com.multiteam.enums.RoleEnum;
-import com.multiteam.exception.BadRequestException;
+import com.multiteam.core.enums.RoleEnum;
+import com.multiteam.core.exception.BadRequestException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

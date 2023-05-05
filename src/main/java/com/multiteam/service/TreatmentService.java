@@ -7,7 +7,8 @@ import com.multiteam.persistence.entity.TreatmentProfessional;
 import com.multiteam.persistence.projection.TreatmentView;
 import com.multiteam.persistence.repository.TreatementProfessionalRepository;
 import com.multiteam.persistence.repository.TreatmentRepository;
-import com.multiteam.enums.SituationEnum;
+import com.multiteam.core.enums.SituationEnum;
+import com.multiteam.professional.ProfessionalService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 

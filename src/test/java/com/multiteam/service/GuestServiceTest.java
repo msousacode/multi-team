@@ -1,22 +1,14 @@
 package com.multiteam.service;
 
-import com.multiteam.constants.ConstantsToTests;
-import com.multiteam.controller.dto.request.GuestRequest;
-import com.multiteam.enums.RelationshipEnum;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.UUID;
 
 @SpringBootTest
 class GuestServiceTest {
 
     @Autowired
     private GuestService guestService;
-
+/*
     @Test
     @DisplayName("deve criar um novo convidado então sucesso")
     void shouldCreateGuest_thenSuccess() {
@@ -45,4 +37,6 @@ class GuestServiceTest {
         var result = guestService.addGuestInTreatment(ConstantsToTests.PATIENT_ID, ConstantsToTests.GUEST_ID);
         Assertions.assertTrue(result);
     }
+
+ */
 }

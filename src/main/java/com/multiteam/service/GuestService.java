@@ -2,13 +2,13 @@ package com.multiteam.service;
 
 
 import com.multiteam.controller.dto.request.GuestRequest;
-import com.multiteam.exception.OwnerException;
-import com.multiteam.exception.TreatmentNotExistsException;
+import com.multiteam.core.exception.OwnerException;
+import com.multiteam.core.exception.TreatmentNotExistsException;
 import com.multiteam.persistence.entity.Guest;
-import com.multiteam.persistence.entity.User;
+import com.multiteam.user.User;
 import com.multiteam.persistence.repository.GuestRespository;
-import com.multiteam.persistence.repository.UserRepository;
-import com.multiteam.enums.AuthProviderEnum;
+import com.multiteam.user.UserRepository;
+import com.multiteam.core.enums.AuthProviderEnum;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +45,7 @@ public class GuestService {
         if (treatment.isEmpty()) {
             return Boolean.FALSE;
         } else {
-            var user = new User.Builder(null, guestRequest.name(), guestRequest.email(), true, guestRequest.ownerId()).provider(AuthProviderEnum.local).build();
+            var user = new User.Builder(null, guestRequest.name(), guestRequest.email(), true).provider(AuthProviderEnum.local).build();
 
             var userResult = userRepository.save(user);
 

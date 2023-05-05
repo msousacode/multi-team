@@ -1,7 +1,7 @@
 package com.multiteam.controller.dto.request;
 
-import com.multiteam.enums.SituationEnum;
-import com.multiteam.enums.TreatmentEnum;
+import com.multiteam.core.enums.SituationEnum;
+import com.multiteam.core.enums.TreatmentEnum;
 
 import java.time.LocalDate;
 import java.util.UUID;

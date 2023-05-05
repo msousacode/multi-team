@@ -44,10 +44,24 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: owner_id
-                  type: uuid
+                  name: created_date
+                  type: timestamp
                   constraints:
-                    nullable: false
+                    updatable: false
+              - column:
+                  name: removed_date
+                  type: timestamp
+                  constraints:
+                    updatable: false
+              - column:
+                  name: updated_date
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: varchar(50)
+              - column:
+                  name: modified_by
+                  type: varchar(50)
         - addForeignKeyConstraint:
             baseColumnNames: credential_id
             baseTableName: professionals

@@ -1,7 +1,7 @@
 package com.multiteam.persistence.repository;
 
 import com.multiteam.persistence.entity.Role;
-import com.multiteam.enums.RoleEnum;
+import com.multiteam.core.enums.RoleEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

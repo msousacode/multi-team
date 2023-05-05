@@ -1,11 +1,12 @@
 package com.multiteam.service;
 
 import com.multiteam.controller.dto.PatientDTO;
-import com.multiteam.enums.SexEnum;
-import com.multiteam.enums.SituationEnum;
+import com.multiteam.core.enums.SexEnum;
+import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.persistence.entity.Patient;
 import com.multiteam.persistence.projection.PatientsProfessionalsView;
 import com.multiteam.persistence.repository.PatientRepository;
+import com.multiteam.user.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.multiteam.enums.AuthProviderEnum.local;
+import static com.multiteam.core.enums.AuthProviderEnum.local;
 
 @Service
 public class PatientService {
@@ -52,7 +53,7 @@ public class PatientService {
             return Boolean.FALSE;
         }
 
-        var user = userService.createUser(patientRequest.name(), patientRequest.email(), patientRequest.ownerId(), local);
+        var user = userService.createUser(patientRequest.name(), patientRequest.email(), local);
 
         if (user == null) {
             logger.error("An error occurred while creating the user, email: {}, ownerId: {}", patientRequest.email(), patientRequest.ownerId());

@@ -37,15 +37,23 @@ databaseChangeLog:
                   name: telephone
                   type: varchar(15)
               - column:
-                  name: created_date
-                  type: timestamp
-              - column:
-                  name: removed_date
-                  type: timestamp
-              - column:
                   name: observation
                   type: varchar(500)
               - column:
                   name: active
                   type: boolean
                   defaultValueBoolean: true
+              - column:
+                  name: created_by
+                  type: varchar(50)
+              - column:
+                  name: created_date
+                  type: timestamp
+                  constraints:
+                    updatable: false
+              - column:
+                  name: last_modified_by
+                  type: varchar(50)
+              - column:
+                  name: last_modified_date
+                  type: timestamp
