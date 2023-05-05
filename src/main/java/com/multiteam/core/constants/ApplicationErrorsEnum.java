@@ -1,4 +1,4 @@
-package com.multiteam.constants;
+package com.multiteam.core.constants;
 
 public enum ApplicationErrorsEnum {
 

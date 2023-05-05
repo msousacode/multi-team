@@ -1,11 +1,12 @@
 package com.multiteam.core.security.oauth2;
 
-import com.multiteam.configurations.AppPropertiesConfig;
+import com.multiteam.core.configurations.AppPropertiesConfiguration;
 import com.multiteam.core.exception.BadRequestException;
-import com.multiteam.core.security.TokenProvider;
+import com.multiteam.core.service.JwtService;
 import com.multiteam.core.utils.Cookies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.token.TokenService;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -23,14 +24,14 @@ import static com.multiteam.core.security.oauth2.HttpCookieOAuth2AuthorizationRe
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final TokenProvider tokenProvider;
+    private final JwtService tokenProvider;
 
-    private final AppPropertiesConfig appProperties;
+    private final AppPropertiesConfiguration appProperties;
 
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     @Autowired
-    OAuth2AuthenticationSuccessHandler(TokenProvider tokenProvider, AppPropertiesConfig appProperties,
+    OAuth2AuthenticationSuccessHandler(JwtService tokenProvider, AppPropertiesConfiguration appProperties,
                                        HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
         this.tokenProvider = tokenProvider;
         this.appProperties = appProperties;
@@ -60,7 +61,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        String token = tokenProvider.createToken(authentication);
+        String token = tokenProvider.createJwt(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)

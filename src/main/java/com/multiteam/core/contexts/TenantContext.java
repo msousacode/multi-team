@@ -1,5 +1,8 @@
 package com.multiteam.core.contexts;
 
+import com.multiteam.core.filters.TenantAuthenticationToken;
+import com.multiteam.core.models.UserPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -8,7 +11,6 @@ import java.util.UUID;
 public class TenantContext {
 
     public UUID getTenantId() {
-        //return (SecurityContextHolder.getContext().getAuthentication()).getTenantId();
-        return UUID.randomUUID();
+        return ((TenantAuthenticationToken) SecurityContextHolder.getContext().getAuthentication()).getTenantId();
     }
 }

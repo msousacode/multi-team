@@ -51,7 +51,7 @@ public class UserService {
         var role2 = roleRepository.findByRole(RoleEnum.PERM_TREATMENT_READ);
         var role3 = roleRepository.findByRole(RoleEnum.PERM_SCHEDULE_READ);
 
-        var user = new User.Builder(null, name, email, true)
+        var user = new User.Builder(null, null, name, email, true)
                 .roles(Set.of(role1, role2, role3))
                 .provider(providerEnum)
                 .password(new BCryptPasswordEncoder().encode(password)).build();
@@ -93,6 +93,7 @@ public class UserService {
 
         var builder = new User.Builder(
                 userDTO.id(),
+                userResult.get().getTenantId(),
                 userDTO.name(),
                 userDTO.email(),
                 userDTO.active())

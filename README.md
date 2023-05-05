@@ -23,3 +23,4 @@ Access directory `/target/site/index.html`
 
 
 
+SENDGRID_API_KEY=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;SENDGRID_EMAIL_FROM=avocat.sys@gmail.com;SPRING_PROFILES_ACTIVE=staging

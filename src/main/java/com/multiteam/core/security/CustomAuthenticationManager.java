@@ -1,6 +1,7 @@
 package com.multiteam.core.security;
 
 import com.multiteam.core.exception.BadRequestException;
+import com.multiteam.core.models.UserPrincipal;
 import com.multiteam.user.User;
 import com.multiteam.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

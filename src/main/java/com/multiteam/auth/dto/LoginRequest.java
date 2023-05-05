@@ -1,4 +1,4 @@
-package com.multiteam.controller.dto.payload;
+package com.multiteam.auth.dto;
 
 import org.springframework.util.Assert;
 

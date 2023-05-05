@@ -1,4 +1,4 @@
-package com.multiteam.core.security;
+package com.multiteam.core.models;
 
 import com.multiteam.user.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,12 +16,14 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
+    private UUID tenantId;
 
-    public UserPrincipal(UUID id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(UUID id, String email, String password, Collection<? extends GrantedAuthority> authorities, UUID tenantId) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.tenantId = tenantId;
     }
 
     public static UserPrincipal create(User user) {
@@ -32,7 +34,8 @@ public class UserPrincipal implements OAuth2User, UserDetails {
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
-                authorities
+                authorities,
+                user.getTenantId()
         );
     }
 
@@ -42,17 +45,8 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         return userPrincipal;
     }
 
-
-    public static UserPrincipal createManagerUser(User user) {
-        List<GrantedAuthority> authorities = Collections.
-                singletonList(new SimpleGrantedAuthority("ROLE_OWNER"));
-
-        return new UserPrincipal(
-                user.getId(),
-                user.getEmail(),
-                user.getPassword(),
-                authorities
-        );
+    public UUID getTenantId() {
+        return tenantId;
     }
 
     public UUID getId() {

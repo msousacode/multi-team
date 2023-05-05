@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -24,11 +25,9 @@ public class TokenUtil {
 
     private SecretKey secretKey;
 
-    protected String defaultAccessToken;
-
-    @BeforeEach
-    public void init() {
-        var secret = Base64.getEncoder().encodeToString(tokenSecret.getBytes());
+    @PostConstruct
+    private void init() {
+        var secret = Base64.getEncoder().encodeToString(this.tokenSecret.getBytes());
         secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -40,12 +39,14 @@ public class TokenUtil {
             authoritiesList.add(authority.getAuthority());
         }
 
+        Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(180000)));
+
         return Jwts.builder()
-                .setSubject(ConstantsToTests.USER_OWNER_ADMIN)
+                .setSubject(ConstantsToTests.OWNER_ID)
                 .claim("roles", authoritiesList)
-                .setIssuedAt(new Date())
-                .setExpiration(Date.from(Instant.now().plus(Duration.ofSeconds(864000000))))
-                .signWith(this.secretKey, SignatureAlgorithm.HS256)
+                .claim("tenantId", ConstantsToTests.TENANT_ID)
+                .setExpiration(expiryDate)
+                .signWith(secretKey)
                 .compact();
     }
 
@@ -53,7 +54,7 @@ public class TokenUtil {
 
         Collection<? extends GrantedAuthority> authorities = new ArrayList<>();
 
-        if(role.equals(RoleEnum.ROLE_OWNER)) {
+        if (role.equals(RoleEnum.ROLE_OWNER)) {
             authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_OWNER"));
 
         } else if (role.equals(RoleEnum.ROLE_ADMIN)) {

@@ -1,6 +1,6 @@
 package com.multiteam.core.security.oauth2;
 
-import com.multiteam.core.security.UserPrincipal;
+import com.multiteam.core.models.UserPrincipal;
 import com.multiteam.core.security.oauth2.user.OAuth2UserInfoFactory;
 import com.multiteam.core.exception.OAuth2AuthenticationProcessingException;
 import com.multiteam.user.User;
@@ -63,6 +63,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
         User user = new User.Builder(
+                null,
                 null,
                 oAuth2UserInfo.getName(),
                 oAuth2UserInfo.getEmail(),

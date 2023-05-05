@@ -1,4 +1,4 @@
-package com.multiteam.configurations;
+package com.multiteam.core.configurations;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ConfigurationProperties(prefix = "app")
-public class AppPropertiesConfig {
+public class AppPropertiesConfiguration {
 
     private final Auth auth = new Auth();
     private final OAuth2 oauth2 = new OAuth2();

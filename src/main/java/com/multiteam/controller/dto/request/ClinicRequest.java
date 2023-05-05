@@ -9,7 +9,6 @@ public record ClinicRequest(
         String email,
         String cellPhone,
         String telephone,
-        String observation,
-        UUID userId
+        String observation
 ) {
 }

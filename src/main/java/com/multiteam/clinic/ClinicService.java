@@ -28,26 +28,17 @@ public class ClinicService {
     @Transactional
     public Boolean createClinic(ClinicRequest clinicRequest) {
 
-        var user = userRepository.findById(clinicRequest.userId());
-
-        if (user.isEmpty()) {
-            logger.debug("check if user exists. userId: {}", clinicRequest.userId());
-            logger.error("empty user cannot create clinic userId: {}", clinicRequest.userId());
-            return Boolean.FALSE;
-        }
-
         var builder = new Clinic.Builder(
                 clinicRequest.clinicName(),
                 clinicRequest.cpfCnpj(),
                 clinicRequest.email(),
-                clinicRequest.cellPhone(),
-                user.get())
+                clinicRequest.cellPhone())
                 .active(true)
                 .build();
 
         clinicRespository.save(builder);
 
-        logger.info("clinic {} created by userId {}", builder.toString(), clinicRequest.userId());
+        logger.info("clinic created {}", builder.toString());
 
         return Boolean.TRUE;
     }
@@ -80,8 +71,7 @@ public class ClinicService {
                 clinicRequest.clinicName(),
                 clinicRequest.cpfCnpj(),
                 clinicRequest.email(),
-                clinicRequest.cellPhone(),
-                clinicResult.get().getUser())
+                clinicRequest.cellPhone())
                 .id(clinicRequest.id())
                 .build();
 

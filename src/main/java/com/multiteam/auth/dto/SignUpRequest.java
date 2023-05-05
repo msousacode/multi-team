@@ -1,4 +1,4 @@
-package com.multiteam.controller.dto.payload;
+package com.multiteam.auth.dto;
 
 import com.multiteam.persistence.entity.Role;
 import org.springframework.util.Assert;

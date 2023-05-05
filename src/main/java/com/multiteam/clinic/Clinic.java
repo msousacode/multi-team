@@ -1,7 +1,6 @@
 package com.multiteam.clinic;
 
 import com.multiteam.core.models.Tenantable;
-import com.multiteam.user.User;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -37,10 +36,6 @@ public class Clinic extends Tenantable {
     @Column(name = "active")
     private Boolean active;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private User user;
-
     public Clinic() {}
 
     public Clinic(Builder builder) {
@@ -52,7 +47,6 @@ public class Clinic extends Tenantable {
         this.telephone = builder.telephone;
         this.observation = builder.observation;
         this.active = builder.active;
-        this.user = builder.user;
     }
 
     public UUID getId() {
@@ -87,10 +81,6 @@ public class Clinic extends Tenantable {
         return active;
     }
 
-    public User getUser() {
-        return user;
-    }
-
     @Override
     public String toString() {
         return "Clinic{" +
@@ -109,16 +99,14 @@ public class Clinic extends Tenantable {
         private final String cpfCnpj;
         private final String email;
         private final String cellPhone;
-        private final User user;
 
         //optional
         private String telephone;
         private String observation;
         private Boolean active;
 
-        public Builder(String clinicName, String cpfCnpj, String email, String cellPhone, User user) {
+        public Builder(String clinicName, String cpfCnpj, String email, String cellPhone) {
 
-            Assert.notNull(user, "clinic needs to be associated with the user owner");
             Assert.notNull(clinicName, "clinic name not be null");
             Assert.notNull(cpfCnpj, "clinic cpf_cnpj not be null");
             Assert.notNull(email, "clinic email not be null");
@@ -132,7 +120,6 @@ public class Clinic extends Tenantable {
             this.cpfCnpj = cpfCnpj;
             this.email = email;
             this.cellPhone = cellPhone;
-            this.user = user;
         }
 
         public Builder id(final UUID id) {

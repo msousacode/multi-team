@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.UUID;
 
-import static com.multiteam.constants.ApplicationErrorsEnum.TREATMENT_DOES_NOT_EXIST;
+import static com.multiteam.core.constants.ApplicationErrorsEnum.TREATMENT_DOES_NOT_EXIST;
 
 @Service
 public class GuestService {
@@ -45,7 +45,7 @@ public class GuestService {
         if (treatment.isEmpty()) {
             return Boolean.FALSE;
         } else {
-            var user = new User.Builder(null, guestRequest.name(), guestRequest.email(), true).provider(AuthProviderEnum.local).build();
+            var user = new User.Builder(null, null, guestRequest.name(), guestRequest.email(), true).provider(AuthProviderEnum.local).build();
 
             var userResult = userRepository.save(user);
 

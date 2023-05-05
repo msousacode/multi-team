@@ -1,9 +1,10 @@
-package com.multiteam.service;
+package com.multiteam.auth;
 
-import com.multiteam.controller.dto.payload.LoginRequest;
-import com.multiteam.controller.dto.payload.SignUpRequest;
-import com.multiteam.controller.dto.response.CheckTokenResponse;
+import com.multiteam.auth.dto.LoginRequest;
+import com.multiteam.auth.dto.SignUpRequest;
+import com.multiteam.auth.dto.CheckTokenResponse;
 import com.multiteam.core.exception.BadRequestException;
+import com.multiteam.core.service.JwtService;
 import com.multiteam.persistence.entity.Role;
 import com.multiteam.user.User;
 import com.multiteam.persistence.repository.RoleRepository;
@@ -11,15 +12,15 @@ import com.multiteam.user.UserRepository;
 import com.multiteam.core.enums.AuthProviderEnum;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.security.CustomAuthenticationManager;
-import com.multiteam.core.security.TokenProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.UUID;
 
 @Service
 public class AuthService {
@@ -27,17 +28,20 @@ public class AuthService {
     private static final Logger logger = LogManager.getLogger(AuthService.class);
 
     private final CustomAuthenticationManager customAuthenticationManager;
-    private final TokenProvider jwtTokenProvider;
+    private final JwtService jwtService;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
+    //@Autowired
+    //private TokenProvider jwtTokenProvider;
+
     public AuthService(
             CustomAuthenticationManager customAuthenticationManager,
-            TokenProvider jwtTokenProvider,
+            JwtService jwtService,
             UserRepository userRepository,
             RoleRepository roleRepository) {
         this.customAuthenticationManager = customAuthenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
+        this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
@@ -51,14 +55,13 @@ public class AuthService {
                 )
         );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return jwtTokenProvider.createToken(authentication);
+        return jwtService.createJwt(authentication);
     }
 
+    /*
     public Boolean validateToken(String token) {
         return jwtTokenProvider.validateToken(token);
-    }
+    }*/
 
     @Transactional
     public void registerUser(SignUpRequest signUpRequest) {
@@ -70,16 +73,19 @@ public class AuthService {
         Role role = roleRepository.findByRole(RoleEnum.ROLE_OWNER);
         signUpRequest.roles().add(role);
 
+        UUID provisionalTenantId = UUID.fromString("61a9c194-386d-46e1-ab9d-d26d6d50a1fc");
+
         var builder = new User.Builder(
-                null, signUpRequest.name(), signUpRequest.email(), true)
+                null, provisionalTenantId, signUpRequest.name(), signUpRequest.email(), true)
                 .provider(AuthProviderEnum.local)
                 .password(new BCryptPasswordEncoder().encode(signUpRequest.password()))
                 .roles(signUpRequest.roles())
                 .build();
 
-        var userResult = userRepository.save(builder);
+        var result = userRepository.save(builder);
+        userRepository.updateTenantId(result.getId());
     }
-
+/*
     public CheckTokenResponse checkToken(final String token) {
         logger.info("check token {}", token);
         var userInfo = jwtTokenProvider.openToken(token);
@@ -93,5 +99,5 @@ public class AuthService {
             logger.debug("could not validate user token id {}", userInfo.get("userId"));
             return new CheckTokenResponse(null, null, false);
         }
-    }
+    }*/
 }

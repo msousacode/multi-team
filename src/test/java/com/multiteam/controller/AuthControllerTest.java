@@ -7,17 +7,17 @@ import org.springframework.http.MediaType;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AuthControllerTest extends MockMvcController {
 
     @Test
-    @DisplayName("deve criar um novo usuário sem roles então sucesso")
-    public void shouldRegisterNewUserWithOutRoles_thenSuccess() throws Exception {
+    public void shouldCreateNewUserOwnerThenSuccess() throws Exception {
 
         mockMvc.perform(
-                        post("/v1/auth/signup")
+                        post("/v1/auth/sign-up")
                                 .content(getNewUserWithoutRoleJson())
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -25,28 +25,28 @@ class AuthControllerTest extends MockMvcController {
     }
 
     @Test
+    public void shouldPerformAuthenticationUserThenGeneratedTokenWithSuccess() throws Exception {
+
+        mockMvc.perform(
+                        post("/v1/auth/sign-in")
+                                .content(getUserJson())
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").isNotEmpty());
+    }
+
+    @Test
     @DisplayName("deve criar um novo usuário com roles então sucesso")
     public void shouldRegisterNewUserWithRoles_thenSuccess() throws Exception {
 
         mockMvc.perform(
-                        post("/v1/auth/signup")
+                        post("/v1/auth/sign-up")
                                 .content(getNewUserWithRoleJson())
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isCreated());
-    }
-
-    @Test
-    @DisplayName("deve realizar a autenticação do usuário então sucesso")
-    public void shouldPerformAuthenticationUser_thenGeneratedTokenWithHttpStatus200() throws Exception {
-
-        mockMvc.perform(
-                        post("/v1/auth/login")
-                                .content(getUserJson())
-                                .contentType(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").isNotEmpty());
     }
 
     private String getNewUserWithRoleJson() {
@@ -74,7 +74,7 @@ class AuthControllerTest extends MockMvcController {
     private String getUserJson() {
         return """
                 {
-                    "email":"ab6ee@email.com",
+                    "email":"d97dc@email.com",
                     "password":"12345678"
                 }
                 """;

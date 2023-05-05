@@ -1,4 +1,4 @@
-package com.multiteam.controller.dto.response;
+package com.multiteam.auth.dto;
 
 public record CheckTokenResponse(String userId, String ownerId, boolean isValid) {
 }

@@ -1,4 +1,4 @@
-package com.multiteam.controller.dto.request;
+package com.multiteam.auth.dto;
 
 public record CheckTokenRequest(String token) {
 }

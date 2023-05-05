@@ -41,6 +41,9 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
+    @Column(name = "tenant_id")
+    private UUID tenantId;
+
     @Transient
     private String provisionalPassword;
 
@@ -56,6 +59,7 @@ public class User {
 
     public User(Builder builder) {
         this.id = builder.id;
+        this.tenantId = builder.tenantId;
         this.name = builder.name;
         this.email = builder.email;
         this.emailVerified = builder.emailVerified;
@@ -118,10 +122,19 @@ public class User {
         return roles;
     }
 
+    public UUID getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(UUID tenantId) {
+        this.tenantId = tenantId;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                "id=" + id +
+               ", tenantId='" + tenantId + '\'' +
                ", name='" + name + '\'' +
                ", email='" + email + '\'' +
                '}';
@@ -130,6 +143,7 @@ public class User {
     public static class Builder {
         //mandatory
         private UUID id;
+        private UUID tenantId;
         private final String name;
         private final String email;
         private final Boolean active;
@@ -143,11 +157,13 @@ public class User {
 
         public Builder(
                 final UUID id,
+                final UUID tenantId,
                 final String name,
                 final String email,
                 final Boolean active) {
 
             this.id = id;
+            this.tenantId = tenantId;
             this.name = name;
             this.email = email;
             this.active = active;

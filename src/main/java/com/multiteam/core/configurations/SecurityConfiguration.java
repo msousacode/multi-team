@@ -1,12 +1,12 @@
-package com.multiteam.configurations;
+package com.multiteam.core.configurations;
 
+import com.multiteam.core.filters.TenantAuthorizationFilter;
 import com.multiteam.core.security.CustomAuthenticationManager;
-import com.multiteam.core.security.TokenAuthenticationFilter;
-import com.multiteam.core.security.TokenProvider;
 import com.multiteam.core.security.oauth2.CustomOAuth2UserService;
 import com.multiteam.core.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.multiteam.core.security.oauth2.OAuth2AuthenticationFailureHandler;
 import com.multiteam.core.security.oauth2.OAuth2AuthenticationSuccessHandler;
+import com.multiteam.core.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class SecurityConfig extends GlobalMethodSecurityConfiguration {
+public class SecurityConfiguration extends GlobalMethodSecurityConfiguration {
 
     @Autowired
     private CustomAuthenticationManager authenticationManager;
@@ -49,7 +49,7 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
     }
 
     @Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http, TokenProvider tokenProvider) throws Exception {
+    protected SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService) throws Exception {
         //@formatter:off
         http
                 .cors()
@@ -80,9 +80,9 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
                         "/h2-console/**")
                 .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
-                .antMatchers(POST, "/v1/auth/login").permitAll()
+                .antMatchers(POST, "/v1/auth/sign-in").permitAll()
+                .antMatchers(POST, "/v1/auth/sign-up").permitAll()
                 .antMatchers(POST, "/v1/auth/token").permitAll()
-                .antMatchers(POST, "/v1/auth/signup").permitAll()
                 .antMatchers(POST, "/v1/auth/check-token").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -103,6 +103,6 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
                 .authenticationManager(authenticationManager);// authentication application
 
         // Add our custom Token based authentication filter
-        return http.addFilterBefore(new TokenAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class).build();
+        return http.addFilterBefore(new TenantAuthorizationFilter(jwtService), UsernamePasswordAuthenticationFilter.class).build();
     }
 }

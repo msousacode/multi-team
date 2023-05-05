@@ -29,8 +29,8 @@ public class ClinicController {
 
     @PreAuthorize("hasRole('OWNER')")
     @PostMapping
-    public ResponseEntity<?> createClinic(@RequestBody ClinicRequest clinicRequest) {
-        return (clinicService.createClinic(clinicRequest)) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    public ResponseEntity createClinic(@RequestBody ClinicRequest clinicRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(clinicService.createClinic(clinicRequest));
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")

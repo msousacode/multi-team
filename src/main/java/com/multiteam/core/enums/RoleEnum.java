@@ -1,8 +1,9 @@
 package com.multiteam.core.enums;
 
 public enum RoleEnum {
-    ROLE_ADMIN,
+    TENANT_ADMINISTRATOR_ID,
     ROLE_OWNER,
+    ROLE_ADMIN,
     ROLE_PATIENT,
     ROLE_GUEST,
     ROLE_PROFESSIONAL,
@@ -14,5 +15,5 @@ public enum RoleEnum {
     PERM_SCHEDULE_READ,
     PERM_SCHEDULE_WRITE,
     PERM_USER_READ,
-    PERM_USER_WRITE
+    PERM_USER_WRITE;
 }
