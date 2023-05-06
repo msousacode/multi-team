@@ -3,7 +3,7 @@ package com.multiteam.controller;
 import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.core.enums.RelationshipEnum;
 import com.multiteam.core.enums.RoleEnum;
-import com.multiteam.service.GuestService;
+import com.multiteam.guest.GuestService;
 import com.multiteam.util.TokenUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.service.PatientService;
+import com.multiteam.patient.PatientService;
 import com.multiteam.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

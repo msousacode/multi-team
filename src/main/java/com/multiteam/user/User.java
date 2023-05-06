@@ -2,7 +2,7 @@ package com.multiteam.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.multiteam.core.enums.AuthProviderEnum;
-import com.multiteam.persistence.entity.Role;
+import com.multiteam.role.Role;
 
 import javax.persistence.*;
 import java.util.HashSet;

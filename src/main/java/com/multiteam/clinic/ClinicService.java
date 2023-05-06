@@ -1,6 +1,5 @@
 package com.multiteam.clinic;
 
-import com.multiteam.clinic.dto.ClinicDTO;
 import com.multiteam.user.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

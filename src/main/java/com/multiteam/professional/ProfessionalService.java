@@ -2,8 +2,8 @@ package com.multiteam.professional;
 
 import com.multiteam.core.enums.SpecialtyEnum;
 import com.multiteam.clinic.ClinicService;
-import com.multiteam.service.EmailService;
-import com.multiteam.service.TreatmentService;
+import com.multiteam.core.service.EmailService;
+import com.multiteam.treatment.TreatmentService;
 import com.multiteam.user.UserRepository;
 import com.multiteam.user.UserService;
 import org.apache.logging.log4j.LogManager;

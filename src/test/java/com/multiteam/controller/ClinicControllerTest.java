@@ -2,7 +2,7 @@ package com.multiteam.controller;
 
 import com.multiteam.clinic.Clinic;
 import com.multiteam.clinic.ClinicService;
-import com.multiteam.clinic.dto.ClinicDTO;
+import com.multiteam.clinic.ClinicDTO;
 import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.util.TokenUtil;

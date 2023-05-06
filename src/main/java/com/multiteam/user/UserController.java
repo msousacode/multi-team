@@ -1,7 +1,5 @@
 package com.multiteam.user;
 
-import com.multiteam.controller.dto.UserDTO;
-import com.multiteam.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;

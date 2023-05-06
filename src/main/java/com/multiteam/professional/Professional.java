@@ -3,7 +3,7 @@ package com.multiteam.professional;
 import com.multiteam.core.enums.SpecialtyEnum;
 import com.multiteam.core.models.Tenantable;
 import com.multiteam.clinic.Clinic;
-import com.multiteam.persistence.entity.TreatmentProfessional;
+import com.multiteam.treatment.TreatmentProfessional;
 import com.multiteam.user.User;
 import org.springframework.util.Assert;
 

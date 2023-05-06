@@ -1,6 +1,6 @@
 package com.multiteam.auth.dto;
 
-import com.multiteam.persistence.entity.Role;
+import com.multiteam.role.Role;
 import org.springframework.util.Assert;
 
 import java.util.HashSet;
