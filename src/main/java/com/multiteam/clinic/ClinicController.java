@@ -46,9 +46,18 @@ public class ClinicController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @GetMapping("/{clinicId}")
-    public ResponseEntity<Clinic> getClinic(@PathVariable("clinicId") UUID clinicId) {
+    public ResponseEntity<ClinicDTO> getClinic(@PathVariable("clinicId") UUID clinicId) {
         return clinicService.getClinicById(clinicId)
-                .map(clinic -> ResponseEntity.status(HttpStatus.OK).body(clinic))
+                .map(clinic -> ResponseEntity.status(HttpStatus.OK).body(
+                        new ClinicDTO(
+                                clinic.getId(),
+                                clinic.getClinicName(),
+                                clinic.getCpfCnpj(),
+                                clinic.getEmail(),
+                                clinic.getCellPhone(),
+                                clinic.getTelephone(),
+                                clinic.getObservation())
+                ))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }

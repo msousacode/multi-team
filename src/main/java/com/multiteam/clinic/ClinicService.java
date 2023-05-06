@@ -52,7 +52,7 @@ public class ClinicService {
     }
 
     public Optional<Clinic> getClinicById(UUID clinicId) {
-        return clinicRespository.findById(clinicId);
+        return clinicRespository.findOneById(clinicId);
     }
 
     public List<Clinic> getClinics(Set<UUID> clinics) {

@@ -1,6 +1,7 @@
 package com.multiteam.controller;
 
 import com.multiteam.clinic.Clinic;
+import com.multiteam.clinic.dto.ClinicDTO;
 import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.util.TokenUtil;
@@ -75,7 +76,7 @@ public class ClinicControllerTest extends TokenUtil {
         headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
         HttpEntity<Object> request = new HttpEntity<>(headers);
 
-        ResponseEntity<Clinic> response = restTemplate.exchange(uri, HttpMethod.GET, request, Clinic.class);
+        ResponseEntity<ClinicDTO> response = restTemplate.exchange(uri, HttpMethod.GET, request, ClinicDTO.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
