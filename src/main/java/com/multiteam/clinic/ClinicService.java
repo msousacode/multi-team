@@ -1,6 +1,6 @@
 package com.multiteam.clinic;
 
-import com.multiteam.controller.dto.request.ClinicRequest;
+import com.multiteam.clinic.dto.ClinicDTO;
 import com.multiteam.user.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,16 +17,16 @@ public class ClinicService {
 
     private final Logger logger = LogManager.getLogger(ClinicService.class);
 
-    private final ClinicRespository clinicRespository;
+    private final ClinicRepository clinicRespository;
     private final UserRepository userRepository;
 
-    public ClinicService(ClinicRespository clinicRespository, UserRepository userRepository) {
+    public ClinicService(ClinicRepository clinicRespository, UserRepository userRepository) {
         this.clinicRespository = clinicRespository;
         this.userRepository = userRepository;
     }
 
     @Transactional
-    public Boolean createClinic(ClinicRequest clinicRequest) {
+    public Boolean createClinic(ClinicDTO clinicRequest) {
 
         var builder = new Clinic.Builder(
                 clinicRequest.clinicName(),
@@ -43,9 +43,12 @@ public class ClinicService {
         return Boolean.TRUE;
     }
 
-    public List<Clinic> getAllClinic(UUID ownerId) {
-        //return clinicRespository.findAllByUserId(ownerId);
-        return List.of();
+    public List<ClinicDTO> getAllClinic() {
+        return clinicRespository.findAll()
+                .stream().map(i -> new ClinicDTO(
+                        i.getId(), i.getClinicName(), i.getCpfCnpj(),
+                        i.getEmail(), i.getCellPhone(), i.getTelephone(),
+                        i.getObservation())).toList();
     }
 
     public Optional<Clinic> getClinicById(UUID clinicId) {
@@ -57,7 +60,7 @@ public class ClinicService {
     }
 
     @Transactional
-    public Boolean updateClinic(ClinicRequest clinicRequest) {
+    public Boolean updateClinic(ClinicDTO clinicRequest) {
 
         var clinicResult = clinicRespository.findById(clinicRequest.id());
 

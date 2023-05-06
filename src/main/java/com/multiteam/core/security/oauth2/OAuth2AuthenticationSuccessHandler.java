@@ -1,12 +1,11 @@
 package com.multiteam.core.security.oauth2;
 
-import com.multiteam.core.configurations.AppPropertiesConfiguration;
+import com.multiteam.core.configuration.AppPropertiesConfiguration;
 import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.core.service.JwtService;
 import com.multiteam.core.utils.Cookies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.token.TokenService;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;

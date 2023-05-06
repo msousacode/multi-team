@@ -1,6 +1,6 @@
 package com.multiteam;
 
-import com.multiteam.core.configurations.AppPropertiesConfiguration;
+import com.multiteam.core.configuration.AppPropertiesConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

@@ -1,4 +1,4 @@
-package com.multiteam.core.configurations;
+package com.multiteam.core.configuration;
 
 import com.multiteam.core.filters.TenantAuthorizationFilter;
 import com.multiteam.core.security.CustomAuthenticationManager;
@@ -50,8 +50,8 @@ public class SecurityConfiguration extends GlobalMethodSecurityConfiguration {
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService) throws Exception {
-        //@formatter:off
-        http
+
+        return http
                 .cors()
                 .and()
                 .sessionManagement()
@@ -64,28 +64,16 @@ public class SecurityConfiguration extends GlobalMethodSecurityConfiguration {
                 .httpBasic()
                 .disable()
                 .exceptionHandling()
-                //.authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/",
-                        "/error",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js",
-                        "/h2-console/**")
-                .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
                 .antMatchers(POST, "/v1/auth/sign-in").permitAll()
                 .antMatchers(POST, "/v1/auth/sign-up").permitAll()
                 .antMatchers(POST, "/v1/auth/token").permitAll()
                 .antMatchers(POST, "/v1/auth/check-token").permitAll()
-                .anyRequest().authenticated()
+                //.anyRequest().authenticated()
                 .and()
+                .addFilterBefore(new TenantAuthorizationFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login()
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorize")
@@ -100,9 +88,6 @@ public class SecurityConfiguration extends GlobalMethodSecurityConfiguration {
                 .successHandler(oAuth2AuthenticationSuccessHandler)
                 .failureHandler(oAuth2AuthenticationFailureHandler)
                 .and()
-                .authenticationManager(authenticationManager);// authentication application
-
-        // Add our custom Token based authentication filter
-        return http.addFilterBefore(new TenantAuthorizationFilter(jwtService), UsernamePasswordAuthenticationFilter.class).build();
+                .authenticationManager(authenticationManager).build();// authentication application
     }
 }

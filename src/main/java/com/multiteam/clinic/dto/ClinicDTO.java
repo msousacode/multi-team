@@ -1,8 +1,8 @@
-package com.multiteam.controller.dto.request;
+package com.multiteam.clinic.dto;
 
 import java.util.UUID;
 
-public record ClinicRequest(
+public record ClinicDTO(
         UUID id,
         String clinicName,
         String cpfCnpj,

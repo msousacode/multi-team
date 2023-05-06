@@ -2,20 +2,18 @@ package com.multiteam.service;
 
 
 import com.multiteam.controller.dto.request.GuestRequest;
+import com.multiteam.core.enums.AuthProviderEnum;
 import com.multiteam.core.exception.OwnerException;
 import com.multiteam.core.exception.TreatmentNotExistsException;
 import com.multiteam.persistence.entity.Guest;
-import com.multiteam.user.User;
 import com.multiteam.persistence.repository.GuestRespository;
+import com.multiteam.user.User;
 import com.multiteam.user.UserRepository;
-import com.multiteam.core.enums.AuthProviderEnum;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.UUID;
-
-import static com.multiteam.core.constants.ApplicationErrorsEnum.TREATMENT_DOES_NOT_EXIST;
 
 @Service
 public class GuestService {
@@ -76,7 +74,7 @@ public class GuestService {
         if (guest.isPresent() && !treatments.isEmpty())
             treatmentService.includeGuestInTreatment(guest.get(), treatments);
         else {
-            throw new TreatmentNotExistsException(TREATMENT_DOES_NOT_EXIST.name());//custom
+            throw new TreatmentNotExistsException("treatment does not exist");
         }
         return Boolean.TRUE;
     }

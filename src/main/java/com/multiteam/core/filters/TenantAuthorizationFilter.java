@@ -1,12 +1,12 @@
 package com.multiteam.core.filters;
 
+import com.multiteam.core.authentication.TenantAuthenticationToken;
 import com.multiteam.core.service.JwtService;
 import com.multiteam.core.utils.Constants;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -67,10 +67,6 @@ public class TenantAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private List<GrantedAuthority> getSimpleGrantedAuthorities(Jws<Claims> jwsClaims) {
-        //String role = jwsClaims.getBody().get(Constants.ROLE_NAME_CLAIM, String.class);
-        //SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(role);
-        //return Collections.singletonList(simpleGrantedAuthority);
-
         Collection<?> roles = jwsClaims.getBody().get("roles", Collection.class);
         if(roles != null) {
             return roles.stream()

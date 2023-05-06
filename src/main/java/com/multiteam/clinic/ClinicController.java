@@ -1,8 +1,6 @@
 package com.multiteam.clinic;
 
-import com.multiteam.controller.dto.request.ClinicRequest;
-import com.multiteam.clinic.Clinic;
-import com.multiteam.clinic.ClinicService;
+import com.multiteam.clinic.dto.ClinicDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,13 +27,13 @@ public class ClinicController {
 
     @PreAuthorize("hasRole('OWNER')")
     @PostMapping
-    public ResponseEntity createClinic(@RequestBody ClinicRequest clinicRequest) {
+    public ResponseEntity createClinic(@RequestBody ClinicDTO clinicRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(clinicService.createClinic(clinicRequest));
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @PutMapping
-    public ResponseEntity<?> updateClinic(@RequestBody ClinicRequest clinicRequest) {
+    public ResponseEntity<?> updateClinic(@RequestBody ClinicDTO clinicRequest) {
 
         if(clinicService.updateClinic(clinicRequest)){
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -45,9 +43,9 @@ public class ClinicController {
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
-    @GetMapping("/owner/{ownerId}")
-    public List<Clinic> getAllClinics(@PathVariable("ownerId") UUID ownerId) {
-        return clinicService.getAllClinic(ownerId);
+    @GetMapping
+    public ResponseEntity<List<ClinicDTO>> getAllClinics() {
+        return ResponseEntity.ok(clinicService.getAllClinic());
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")

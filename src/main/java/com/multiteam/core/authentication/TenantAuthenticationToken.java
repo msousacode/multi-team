@@ -1,4 +1,4 @@
-package com.multiteam.core.filters;
+package com.multiteam.core.authentication;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

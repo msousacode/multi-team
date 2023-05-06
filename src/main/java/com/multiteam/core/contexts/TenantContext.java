@@ -1,7 +1,6 @@
 package com.multiteam.core.contexts;
 
-import com.multiteam.core.filters.TenantAuthenticationToken;
-import com.multiteam.core.models.UserPrincipal;
+import com.multiteam.core.authentication.TenantAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
