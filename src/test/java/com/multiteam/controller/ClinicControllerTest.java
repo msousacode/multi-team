@@ -1,36 +1,26 @@
 package com.multiteam.controller;
 
+import com.multiteam.clinic.Clinic;
+import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.util.TokenUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 
-@AutoConfigureMockMvc
-@SpringBootTest
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ClinicControllerTest extends TokenUtil {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Test
-    void shouldGetPatientById_thenSuccess() throws Exception {
-
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .get("/v1/clinics")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER)))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    /*
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -69,9 +59,24 @@ public class ClinicControllerTest extends TokenUtil {
         headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
         HttpEntity<Object> request = new HttpEntity<>(headers);
 
-        ResponseEntity<List<Clinic>> response = restTemplate.exchange(uri, HttpMethod.GET, request, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Clinic>> response = restTemplate.exchange(uri, HttpMethod.GET, request, new ParameterizedTypeReference<>() {
+        });
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
-     */
+
+    @Test
+    void shouldGetClinicByIdThenSuccess() throws Exception {
+
+        URI uri = new URI("http://localhost:" + port + "/team/v1/clinics/" + ConstantsToTests.CLINIC_ID);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
+        HttpEntity<Object> request = new HttpEntity<>(headers);
+
+        ResponseEntity<Clinic> response = restTemplate.exchange(uri, HttpMethod.GET, request, Clinic.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+    }
 }
