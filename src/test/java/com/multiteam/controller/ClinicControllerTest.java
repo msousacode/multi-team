@@ -1,6 +1,7 @@
 package com.multiteam.controller;
 
 import com.multiteam.clinic.Clinic;
+import com.multiteam.clinic.ClinicService;
 import com.multiteam.clinic.dto.ClinicDTO;
 import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.core.enums.RoleEnum;
@@ -22,11 +23,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ClinicControllerTest extends TokenUtil {
 
+    @LocalServerPort
+    private int port;
+
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @LocalServerPort
-    private int port;
+    @Autowired
+    private ClinicService clinicService;
 
     @Test
     void shouldCreateNewClinicThenSuccess() throws Exception {
@@ -77,6 +81,29 @@ public class ClinicControllerTest extends TokenUtil {
         HttpEntity<Object> request = new HttpEntity<>(headers);
 
         ResponseEntity<ClinicDTO> response = restTemplate.exchange(uri, HttpMethod.GET, request, ClinicDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
+    void shouldUpdatedClinicThenSuccess() throws Exception {
+
+        URI uri = new URI("http://localhost:" + port + "/team/v1/clinics");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
+
+        var clinic = new Clinic.Builder(
+                UUID.randomUUID() + " @Test",
+                UUID.randomUUID().toString().substring(0, 14),
+                UUID.randomUUID().toString().substring(0, 15),
+                UUID.randomUUID().toString().substring(0, 15))
+                .id(UUID.fromString(ConstantsToTests.CLINIC_ID))
+                .build();
+
+        HttpEntity<Object> request = new HttpEntity<>(clinic, headers);
+
+        ResponseEntity<?> response = restTemplate.exchange(uri, HttpMethod.PUT, request, ClinicDTO.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }

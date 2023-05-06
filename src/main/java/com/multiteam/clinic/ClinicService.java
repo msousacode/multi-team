@@ -62,7 +62,7 @@ public class ClinicService {
     @Transactional
     public Boolean updateClinic(ClinicDTO clinicRequest) {
 
-        var clinicResult = clinicRespository.findById(clinicRequest.id());
+        var clinicResult = clinicRespository.findOneById(clinicRequest.id());
 
         if (clinicResult.isEmpty()) {
             logger.debug("check if professional exists. professionalId: {}", clinicRequest.id());
