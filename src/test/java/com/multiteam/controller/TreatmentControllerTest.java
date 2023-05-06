@@ -1,6 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.constants.ConstantsToTests;
+import com.multiteam.util.Constants;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.enums.TreatmentEnum;
@@ -183,7 +183,7 @@ public class TreatmentControllerTest extends TokenUtil {
 
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .get("/v1/treatments/" + ConstantsToTests.TREATMENT_ID)
+                                .get("/v1/treatments/" + Constants.TREATMENT_ID)
                                 .header("Authorization", "Bearer " + getToken(RoleEnum.PERM_TREATMENT_READ))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8"))
@@ -208,9 +208,9 @@ public class TreatmentControllerTest extends TokenUtil {
                         "Lorem ipsum dolor tincidunt etiam donec, mauris semper quisque aptent, tincidunt cubilia habitasse fames.",
                         TreatmentEnum.FONOAUDIOLOGIA,
                         SituationEnum.ANDAMENTO,
-                        ConstantsToTests.PATIENT_ID,
-                        ConstantsToTests.PROFESSIONAL_ID,
-                        ConstantsToTests.CLINIC_ID,
+                        Constants.PATIENT_ID,
+                        Constants.PROFESSIONAL_ID,
+                        Constants.CLINIC_ID,
                         LocalDate.now(),
                         LocalDate.now());
     }

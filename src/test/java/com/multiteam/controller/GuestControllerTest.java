@@ -1,6 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.constants.ConstantsToTests;
+import com.multiteam.util.Constants;
 import com.multiteam.core.enums.RelationshipEnum;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.guest.GuestService;
@@ -97,7 +97,7 @@ public class GuestControllerTest extends TokenUtil {
                 "12 9889-7878",
                 "owguest@guest.com",
                 true,
-                ConstantsToTests.PATIENT_ID
+                Constants.PATIENT_ID
         );
     }
 }

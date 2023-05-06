@@ -1,13 +1,14 @@
 package com.multiteam.util;
 
-import com.multiteam.constants.ConstantsToTests;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.exception.BadRequestException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -18,7 +19,14 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TokenUtil {
+
+    @LocalServerPort
+    protected int port;
+
+    @Autowired
+    protected TestRestTemplate restTemplate;
 
     @Value("${app.auth.tokenSecret}")
     private String tokenSecret;
@@ -42,9 +50,9 @@ public class TokenUtil {
         Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(180000)));
 
         return Jwts.builder()
-                .setSubject(ConstantsToTests.OWNER_ID)
+                .setSubject(Constants.OWNER_ID)
                 .claim("roles", authoritiesList)
-                .claim("tenantId", ConstantsToTests.TENANT_ID)
+                .claim("tenantId", Constants.TENANT_ID)
                 .setExpiration(expiryDate)
                 .signWith(secretKey)
                 .compact();

@@ -1,10 +1,10 @@
-package com.multiteam.constants;
+package com.multiteam.util;
 
 import java.util.UUID;
 
-public class ConstantsToTests {
+public class Constants {
 
-    public final static String USER_OWNER_ADMIN = "e61fb@email.com";
+    public final static String USER_OWNER_ADMIN = "d97dc@email.com";
     public final static String TENANT_ID = "befca8e7-080f-4aea-b387-36c48049c5b6";
     public final static String OWNER_ID = "befca8e7-080f-4aea-b387-36c48049c5b6";
     public final static String CLINIC_ID = "bdd88e61-becb-41b4-8af5-e035ab2618b9";

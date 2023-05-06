@@ -1,7 +1,7 @@
-package com.multiteam.auth;
+package com.multiteam.signin;
 
-import com.multiteam.auth.dto.LoginRequest;
-import com.multiteam.auth.dto.SignUpRequest;
+import com.multiteam.signin.dto.SignInDTO;
+import com.multiteam.signin.dto.SignUpDTO;
 import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.core.service.JwtService;
 import com.multiteam.role.Role;
@@ -21,19 +21,16 @@ import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Service
-public class AuthService {
+public class SignInService {
 
-    private static final Logger logger = LogManager.getLogger(AuthService.class);
+    private static final Logger logger = LogManager.getLogger(SignInService.class);
 
     private final CustomAuthenticationManager customAuthenticationManager;
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
-    //@Autowired
-    //private TokenProvider jwtTokenProvider;
-
-    public AuthService(
+    public SignInService(
             CustomAuthenticationManager customAuthenticationManager,
             JwtService jwtService,
             UserRepository userRepository,
@@ -44,7 +41,7 @@ public class AuthService {
         this.roleRepository = roleRepository;
     }
 
-    public String authenticationUser(LoginRequest loginRequest) {
+    public String signInUser(SignInDTO loginRequest) {
 
         var authentication = customAuthenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -56,13 +53,8 @@ public class AuthService {
         return jwtService.createJwt(authentication);
     }
 
-    /*
-    public Boolean validateToken(String token) {
-        return jwtTokenProvider.validateToken(token);
-    }*/
-
     @Transactional
-    public void registerUser(SignUpRequest signUpRequest) {
+    public void signUpUser(SignUpDTO signUpRequest) {
 
         if(userRepository.existsByEmail(signUpRequest.email())) {
             throw new BadRequestException("Email address already in use.");
