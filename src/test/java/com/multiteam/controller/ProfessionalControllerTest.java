@@ -1,6 +1,5 @@
 package com.multiteam.controller;
 
-import com.multiteam.clinic.Clinic;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.SpecialtyEnum;
 import com.multiteam.professional.ProfessionalDTO;
@@ -8,7 +7,10 @@ import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestTemplateBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
 import java.util.List;
@@ -23,7 +25,6 @@ public class ProfessionalControllerTest extends RestTemplateBase {
     void shouldCreateNewProfessionalThenSuccess() throws Exception {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/professionals");
-        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
 
         var professional = new ProfessionalDTO(
                 null,
@@ -33,6 +34,7 @@ public class ProfessionalControllerTest extends RestTemplateBase {
                 UUID.randomUUID() + "@email.com",
                 Set.of(ConstantsTest.CLINIC_ID));
 
+        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
         HttpEntity<Object> request = new HttpEntity<>(professional, headers);
 
         ResponseEntity<?> response = restTemplate.postForEntity(uri, request, null);
@@ -45,8 +47,6 @@ public class ProfessionalControllerTest extends RestTemplateBase {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/professionals");
 
-        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
-
         var professional = new ProfessionalDTO(
                 UUID.fromString(ConstantsTest.PROFESSIONAL_ID),
                 UUID.randomUUID().toString().substring(0, 14),
@@ -55,6 +55,7 @@ public class ProfessionalControllerTest extends RestTemplateBase {
                 UUID.randomUUID() + "@email.com",
                 Set.of(ConstantsTest.CLINIC_ID));
 
+        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
         HttpEntity<Object> request = new HttpEntity<>(professional, headers);
 
         ResponseEntity<?> response = restTemplate.exchange(uri, HttpMethod.PUT, request, ProfessionalDTO.class);
@@ -80,7 +81,6 @@ public class ProfessionalControllerTest extends RestTemplateBase {
         URI uri = new URI("http://localhost:" + port + "/team/v1/professionals/" + ConstantsTest.PROFESSIONAL_ID);
 
         headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
-
         HttpEntity<Object> request = new HttpEntity<>(headers);
 
         ResponseEntity<ProfessionalDTO> response = restTemplate.exchange(uri, HttpMethod.GET, request, ProfessionalDTO.class);

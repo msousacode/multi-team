@@ -35,7 +35,6 @@ class SignInControllerTest extends RestTemplateBase {
         var signUp = new SignUpDTO(UUID.randomUUID().toString().substring(0,10), UUID.randomUUID().toString().substring(0,10) + "@test.com", "12345678", Set.of());
 
         HttpEntity<Object> request = new HttpEntity<>(signUp, headers);
-
         ResponseEntity<String> response = restTemplate.postForEntity(uri, request, String.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.CREATED);
@@ -49,7 +48,6 @@ class SignInControllerTest extends RestTemplateBase {
         var signIn = new SignInDTO(ConstantsTest.EMAIL_OWNER, "12345678");
 
         HttpEntity<Object> request = new HttpEntity<>(signIn, headers);
-
         ResponseEntity<String> response = restTemplate.postForEntity(uri, request, String.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);

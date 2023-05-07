@@ -23,7 +23,6 @@ public class ClinicControllerTest extends RestTemplateBase {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/clinics");
 
-        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
 
         var clinic = new Clinic.Builder(
                 UUID.randomUUID() + " @Test",
@@ -32,6 +31,7 @@ public class ClinicControllerTest extends RestTemplateBase {
                 UUID.randomUUID().toString().substring(0, 15))
                 .build();
 
+        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
         HttpEntity<Object> request = new HttpEntity<>(clinic, headers);
 
         ResponseEntity<?> response = restTemplate.postForEntity(uri, request, null);
@@ -44,7 +44,6 @@ public class ClinicControllerTest extends RestTemplateBase {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/clinics");
 
-        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
 
         var clinic = new Clinic.Builder(
                 UUID.randomUUID() + " @Test",
@@ -54,6 +53,7 @@ public class ClinicControllerTest extends RestTemplateBase {
                 .id(UUID.fromString(ConstantsTest.CLINIC_ID))
                 .build();
 
+        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
         HttpEntity<Object> request = new HttpEntity<>(clinic, headers);
 
         ResponseEntity<?> response = restTemplate.exchange(uri, HttpMethod.PUT, request, ClinicDTO.class);
@@ -81,7 +81,6 @@ public class ClinicControllerTest extends RestTemplateBase {
         URI uri = new URI("http://localhost:" + port + "/team/v1/clinics/" + ConstantsTest.CLINIC_ID);
 
         headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
-
         HttpEntity<Object> request = new HttpEntity<>(headers);
 
         ResponseEntity<ClinicDTO> response = restTemplate.exchange(uri, HttpMethod.GET, request, ClinicDTO.class);

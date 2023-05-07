@@ -1,19 +1,18 @@
 package com.multiteam.controller;
 
-import com.multiteam.clinic.ClinicDTO;
 import com.multiteam.core.enums.RoleEnum;
-import com.multiteam.core.enums.SexEnum;
-import com.multiteam.patient.PatientDTO;
 import com.multiteam.user.UserDTO;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestResponsePage;
 import com.multiteam.util.RestTemplateBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,8 +27,6 @@ public class UserControllerTest extends RestTemplateBase {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/users");
 
-        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
-
         var user = new UserDTO(
                 UUID.fromString(ConstantsTest.USER_ID),
                 UUID.randomUUID().toString(),
@@ -37,6 +34,7 @@ public class UserControllerTest extends RestTemplateBase {
                 true,
                 Set.of(ConstantsTest.ROLE_OWNER_ID));
 
+        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
         HttpEntity<Object> request = new HttpEntity<>(user, headers);
 
         ResponseEntity<Boolean> response = restTemplate.exchange(uri, HttpMethod.PUT, request, Boolean.class);
