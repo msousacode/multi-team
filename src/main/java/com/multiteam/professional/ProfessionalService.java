@@ -78,8 +78,8 @@ public class ProfessionalService {
         return Boolean.TRUE;
     }
 
-    public List<Professional> getAllProfessionals(final UUID clinicId) {
-        return professionalRepository.findAllProfessionalsByClinicId(clinicId);
+    public List<ProfessionalDTO> getAllProfessionals() {
+        return professionalRepository.findAll().stream().map(ProfessionalDTO::fromProfessionalDTO).toList();
     }
 
     public Optional<Professional> getProfessionalById(final UUID professionalId) {
@@ -87,17 +87,13 @@ public class ProfessionalService {
     }
 
     public Optional<ProfessionalDTO> getProfessional(UUID professionalId) {
-        var professional = professionalRepository.findById(professionalId);
+        var professional = professionalRepository.findOneById(professionalId);
 
         if (professional.isEmpty()) {
             return Optional.empty();
         }
 
-        Set<String> clinicsIds = new HashSet<>();
-        professional.get().getClinics().forEach(i -> clinicsIds.add(i.getId().toString()));
-
-        return professional.map(i -> new ProfessionalDTO(
-                i.getId(), i.getName(), i.getSpecialty().getName(), i.getCellPhone(), i.getEmail(), clinicsIds));
+        return professional.map(ProfessionalDTO::fromProfessionalDTO);
     }
 
     @Transactional

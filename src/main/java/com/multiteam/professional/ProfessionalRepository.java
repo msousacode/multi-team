@@ -1,6 +1,6 @@
 package com.multiteam.professional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.multiteam.core.repositories.TenantableRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface ProfessionalRepository extends JpaRepository<Professional, UUID> {
+public interface ProfessionalRepository extends TenantableRepository<Professional> {
 
     @Query("""
             SELECT p FROM Professional p

@@ -1,5 +1,6 @@
 package com.multiteam.user;
 
+import com.multiteam.core.contexts.TenantContext;
 import com.multiteam.core.enums.AuthProviderEnum;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.role.RoleRepository;
@@ -22,10 +23,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final TenantContext tenantContext;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, TenantContext tenantContext) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.tenantContext = tenantContext;
     }
 
     public Optional<User> getOwnerById(UUID userId) {
@@ -49,10 +52,11 @@ public class UserService {
         var role2 = roleRepository.findByRole(RoleEnum.PERM_TREATMENT_READ);
         var role3 = roleRepository.findByRole(RoleEnum.PERM_SCHEDULE_READ);
 
-        var user = new User.Builder(null, null, name, email, true)
+        var user = new User.Builder(null, tenantContext.getTenantId(), name, email, true)
                 .roles(Set.of(role1, role2, role3))
                 .provider(providerEnum)
-                .password(new BCryptPasswordEncoder().encode(password)).build();
+                .password(new BCryptPasswordEncoder().encode(password))
+                .build();
         user.setProvisionalPassword(password);
         return userRepository.save(user);
     }

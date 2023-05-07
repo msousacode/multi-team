@@ -1,11 +1,16 @@
 package com.multiteam.controller;
 
+import com.multiteam.clinic.Clinic;
+import com.multiteam.clinic.ClinicDTO;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.SpecialtyEnum;
+import com.multiteam.professional.Professional;
+import com.multiteam.professional.ProfessionalDTO;
 import com.multiteam.professional.ProfessionalRepository;
 import com.multiteam.user.UserRepository;
 import com.multiteam.clinic.ClinicService;
 import com.multiteam.professional.ProfessionalService;
+import com.multiteam.util.ConstantsTests;
 import com.multiteam.util.TokenUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,216 +20,87 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.net.URI;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-@AutoConfigureMockMvc
-@SpringBootTest
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class ProfessionalControllerTest extends TokenUtil {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private ProfessionalRepository professionalRepository;
-
-    @MockBean
-    private ProfessionalService professionalService;
-
-    @MockBean
-    private UserRepository userRepository;
-
-    @MockBean
-    private ClinicService clinicService;
-
     @Test
-    @DisplayName("deve criar um novo profissional então sucesso usando roles OWNER e ADMIN")
-    void shouldCreateNewProfessional_thenSuccess() throws Exception {
+    void shouldCreateNewProfessionalThenSuccess() throws Exception {
 
-        BDDMockito.given(professionalService.createProfessional(Mockito.any())).willReturn(Boolean.TRUE);
+        URI uri = new URI("http://localhost:" + port + "/team/v1/professionals");
+        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
 
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .post("/v1/professionals")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER))
-                                .content(newProfessionalJson()))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
-    }
-/*
-    @Test
-    @DisplayName("deve buscar todos os profissionais usando roles OWNER e ADMIN")
-    void shouldGetAllProfessionals_thenSuccess() throws Exception {
-
-        BDDMockito.given(professionalRepository.findAllProfessionalsByClinicId(Mockito.any())).willReturn(List.of());
-
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .get("/v1/professionals/clinic/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER)))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    @DisplayName("deve buscar o profissional usando roles OWNER e ADMIN então sucesso")
-    void shouldGetProfessionalById_thenSuccess() throws Exception {
-
-        BDDMockito.given(professionalService.getProfessional(Mockito.any())).willReturn(Optional.of(getProfessionalDTO()));
-
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .get("/v1/professionals/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
-                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("utf-8"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    @DisplayName("deve atualizar o profissionais usando roles OWNER e ADMIN")
-    void shouldUpdateProfessional_thenSuccess() throws Exception {
-
-        BDDMockito.given(professionalService.updateProfessional(Mockito.any())).willReturn(Boolean.TRUE);
-
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .put("/v1/professionals")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER))
-                                .content(newProfessionalJson()))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    @DisplayName("deve inativar o profissional usando roles OWNER e ADMIN")
-    void shouldInactiveProfessional_thenSuccess() throws Exception {
-
-        BDDMockito.given(professionalService.inactiveProfessional(Mockito.any())).willReturn(Boolean.TRUE);
-
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .delete("/v1/professionals/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER))
-                                .content(newProfessionalJson()))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    @DisplayName("deve tentar criar um novo profissional usando roles erradas então falha")
-    void shouldCreateNewProfessionalWithRolesWrong_thenForbidden() throws Exception {
-
-        BDDMockito.given(professionalService.createProfessional(Mockito.any())).willReturn(Boolean.TRUE);
-
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .post("/v1/professionals")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_PROFESSIONAL))
-                                .content(newProfessionalJson()))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
-    }
-
-    @Test
-    @DisplayName("deve tentar buscar todos os profissionais usando roles erradas então falha")
-    void shouldGetAllProfessionalsWithRolesWrong_thenFail() throws Exception {
-
-        BDDMockito.given(professionalRepository.findAllProfessionalsByClinicId(Mockito.any())).willReturn(List.of());
-
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .get("/v1/professionals/clinic/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_PROFESSIONAL)))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
-    }
-
-    @Test
-    @DisplayName("deve tentar atualizar o profissional usando roles erradas então falha")
-    void shouldUpdateProfessionalWithRolesWrong_thenFail() throws Exception {
-
-        BDDMockito.given(professionalService.updateProfessional(Mockito.any())).willReturn(Boolean.TRUE);
-
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .put("/v1/professionals")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_PROFESSIONAL))
-                                .content(newProfessionalJson()))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
-    }
-
-    @Test
-    @DisplayName("deve tentar inativar o profissional usando roles erradas então falha")
-    void shouldInactiveProfessionalWithRolesWrong_thenFail() throws Exception {
-
-        BDDMockito.given(professionalService.inactiveProfessional(Mockito.any())).willReturn(Boolean.TRUE);
-
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .delete("/v1/professionals/3a3bc57e-e4d3-44cd-a528-d528f2fc2a04")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("utf-8")
-                                .header("Authorization", "Bearer " + getToken(RoleEnum.ROLE_PROFESSIONAL))
-                                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
-    }
-*/
-    private String newProfessionalJson() {
-        return """
-                {
-                    "name":"%s",
-                    "middleName":"%s",
-                    "specialty":"%s",
-                    "cellPhone":"%s",
-                    "email":"%s"
-                }
-                """.formatted(
-                UUID.randomUUID().toString().substring(0, 10),
-                UUID.randomUUID().toString().substring(0, 10),
+        var professional = new ProfessionalDTO(
+                null,
+                UUID.randomUUID().toString().substring(0, 14),
                 SpecialtyEnum.FONOAUDIOLOGIA.getName(),
-                "11 5656 - 0606",
-                UUID.randomUUID().toString().substring(0, 10) + "@email.com"
-        );
-    }
-/*
-    Optional<Clinic> getClinic() {
-        return Optional.ofNullable(
-                new Clinic.Builder("Teste", "000000000000000", "teste@teste", "1199999-9999").build());
+                UUID.randomUUID().toString().substring(0, 14),
+                UUID.randomUUID() + "@email.com",
+                Set.of(ConstantsTests.CLINIC_ID));
+
+        HttpEntity<Object> request = new HttpEntity<>(professional, headers);
+
+        ResponseEntity<?> response = restTemplate.postForEntity(uri, request, null);
+
+        assertEquals(response.getStatusCode(), HttpStatus.CREATED);
     }
 
-    private ProfessionalDTO getProfessionalDTO() {
-        return new ProfessionalDTO(
-                UUID.randomUUID(),
-                "Ana",
-                "Analu",
-                SpecialtyEnum.FONOAUDIOLOGIA.name(),
-                "(11) 98637-7492",
-                "anaanaludasilva@fosjc.unesp.br",
-                Set.of());
+    @Test
+    void shouldUpdatedProfessionalThenSuccess() throws Exception {
+
+        URI uri = new URI("http://localhost:" + port + "/team/v1/professionals");
+
+        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
+
+        var professional = new ProfessionalDTO(
+                UUID.fromString(ConstantsTests.PROFESSIONAL_ID),
+                UUID.randomUUID().toString().substring(0, 14),
+                SpecialtyEnum.FONOAUDIOLOGIA.getName(),
+                UUID.randomUUID().toString().substring(0, 14),
+                UUID.randomUUID() + "@email.com",
+                Set.of(ConstantsTests.CLINIC_ID));
+
+        HttpEntity<Object> request = new HttpEntity<>(professional, headers);
+
+        ResponseEntity<?> response = restTemplate.exchange(uri, HttpMethod.PUT, request, ProfessionalDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
-    private Professional getProfessional() {
-        return new Professional.Builder(
-                UUID.randomUUID(),
-                "Ana",
-                "Analu",
-                SpecialtyEnum.FONOAUDIOLOGIA,
-                "(11) 98637-7492",
-                "anaanaludasilva@fosjc.unesp.br",
-                true, List.of(), new User())
-                .build();
-    }*/
+    @Test
+    void shouldGetAllProfessionalsThenSuccess() throws Exception {
+        URI uri = new URI("http://localhost:" + port + "/team/v1/professionals");
+
+        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
+        HttpEntity<Object> request = new HttpEntity<>(headers);
+
+        ResponseEntity<List<Clinic>> response = restTemplate.exchange(uri, HttpMethod.GET, request, new ParameterizedTypeReference<>() {
+        });
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
+    void shouldGetProfessionalByIdThenSuccess() throws Exception {
+
+        URI uri = new URI("http://localhost:" + port + "/team/v1/professionals/" + ConstantsTests.PROFESSIONAL_ID);
+
+        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
+
+        HttpEntity<Object> request = new HttpEntity<>(headers);
+
+        ResponseEntity<ProfessionalDTO> response = restTemplate.exchange(uri, HttpMethod.GET, request, ProfessionalDTO.class);
+
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+    }
 }

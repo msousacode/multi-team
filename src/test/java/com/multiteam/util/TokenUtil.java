@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -28,6 +30,8 @@ public class TokenUtil {
     @Autowired
     protected TestRestTemplate restTemplate;
 
+    protected HttpHeaders headers = new HttpHeaders();
+
     @Value("${app.auth.tokenSecret}")
     private String tokenSecret;
 
@@ -37,6 +41,7 @@ public class TokenUtil {
     private void init() {
         var secret = Base64.getEncoder().encodeToString(this.tokenSecret.getBytes());
         secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        headers.setContentType(MediaType.APPLICATION_JSON);
     }
 
     public String generateToken(Collection<? extends GrantedAuthority> authorities) {
@@ -50,9 +55,9 @@ public class TokenUtil {
         Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(180000)));
 
         return Jwts.builder()
-                .setSubject(Constants.OWNER_ID)
+                .setSubject(ConstantsTests.OWNER_ID)
                 .claim("roles", authoritiesList)
-                .claim("tenantId", Constants.TENANT_ID)
+                .claim("tenantId", ConstantsTests.TENANT_ID)
                 .setExpiration(expiryDate)
                 .signWith(secretKey)
                 .compact();

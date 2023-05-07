@@ -36,9 +36,9 @@ public class ProfessionalController {
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
-    @GetMapping("/clinic/{clinicId}")
-    public List<Professional> getAllProfessionals(@PathVariable("clinicId") UUID clinicId) {
-        return professionalService.getAllProfessionals(clinicId);
+    @GetMapping
+    public List<ProfessionalDTO> getAllProfessionals() {
+        return professionalService.getAllProfessionals();
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
@@ -51,9 +51,9 @@ public class ProfessionalController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @PutMapping
-    public ResponseEntity<?> updateProfessional(@RequestBody ProfessionalDTO professionalRequest) {
+    public ResponseEntity<?> updateProfessional(@RequestBody ProfessionalDTO professionalDTO) {
 
-       if(professionalService.updateProfessional(professionalRequest)){
+       if(professionalService.updateProfessional(professionalDTO)){
            return ResponseEntity.status(HttpStatus.OK).build();
        } else {
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

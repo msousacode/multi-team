@@ -2,6 +2,7 @@ package com.multiteam.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.multiteam.core.enums.AuthProviderEnum;
+import com.multiteam.core.models.Tenantable;
 import com.multiteam.role.Role;
 
 import javax.persistence.*;

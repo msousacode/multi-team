@@ -44,24 +44,19 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: created_by
+                  type: varchar(50)
+              - column:
                   name: created_date
                   type: timestamp
                   constraints:
                     updatable: false
               - column:
-                  name: removed_date
-                  type: timestamp
-                  constraints:
-                    updatable: false
-              - column:
-                  name: updated_date
-                  type: timestamp
-              - column:
-                  name: created_by
+                  name: last_modified_by
                   type: varchar(50)
               - column:
-                  name: modified_by
-                  type: varchar(50)
+                  name: last_modified_date
+                  type: timestamp
         - addForeignKeyConstraint:
             baseColumnNames: credential_id
             baseTableName: professionals
