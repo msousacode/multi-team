@@ -31,10 +31,6 @@ public class UserService {
         this.tenantContext = tenantContext;
     }
 
-    public Optional<User> getOwnerById(UUID userId) {
-        return userRepository.findById(userId);
-    }
-
     public Page<UserDTO> getAllUsers(Pageable pageable) {
         return userRepository.findAllByTenantIdAndActiveIsTrue(tenantContext.getTenantId(), pageable).map(UserDTO::fromUserDTO);
     }

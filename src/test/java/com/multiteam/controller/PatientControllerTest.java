@@ -52,7 +52,6 @@ public class PatientControllerTest extends RestTemplateBase {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/patients");
 
-        HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
 
         var patient = new PatientDTO(

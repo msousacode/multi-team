@@ -73,7 +73,7 @@ public class SignInService {
                 .build();
 
         var result = userRepository.save(builder);
-        userRepository.updateTenantId(result.getId());
+        userRepository.updateTenantIdMyUser(result.getId(), result.getId());
     }
 /*
     public CheckTokenResponse checkToken(final String token) {
