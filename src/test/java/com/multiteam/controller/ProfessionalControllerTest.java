@@ -69,7 +69,7 @@ public class ProfessionalControllerTest extends RestTemplateBase {
         headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
         HttpEntity<Object> request = new HttpEntity<>(headers);
 
-        ResponseEntity<List<Clinic>> response = restTemplate.exchange(uri, HttpMethod.GET, request, new ParameterizedTypeReference<>() {
+        ResponseEntity<List<ProfessionalDTO>> response = restTemplate.exchange(uri, HttpMethod.GET, request, new ParameterizedTypeReference<>() {
         });
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }

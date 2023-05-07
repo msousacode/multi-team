@@ -7,6 +7,7 @@ public class ConstantsTest {
     public final static String EMAIL_OWNER = "a2a4ed89-d@test.com";
     public final static String OWNER_ID = "3db6983b-15ba-438d-973e-2b6cf19a2368";
     public final static String TENANT_ID = OWNER_ID;
+    public final static String USER_ID = "31141885-aba8-44d7-8374-9c9060a71c22";
     public final static String CLINIC_ID = "53cf11e7-aa74-4b41-8a70-cb9b1953154a";
     public final static String PROFESSIONAL_ID = "063166dd-b422-4337-a948-baf2535e7ecc";
     public final static String PATIENT_ID = "76b780dd-a875-4b34-82e4-6d61af7a4812";

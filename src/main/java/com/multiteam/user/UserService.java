@@ -35,12 +35,8 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-    public Page<UserDTO> getAllUsers(UUID ownerId, Pageable pageable) {
-        /*
-        return userRepository.findByOwnerIdAndActiveIsTrue(ownerId, pageable)
-                .map(i -> new UserDTO(i.getId(), i.getName(), i.getEmail(), i.getActive(), Set.of()));
-         */
-        return Page.empty();
+    public Page<UserDTO> getAllUsers(Pageable pageable) {
+        return userRepository.findAllByTenantIdAndActiveIsTrue(tenantContext.getTenantId(), pageable).map(UserDTO::fromUserDTO);
     }
 
     @Transactional
@@ -61,21 +57,16 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<UserDTO> getUserByOwnerId(UUID userId, UUID ownerId) {
-/*
-        var user = userRepository.findByIdAndOwnerId(userId, ownerId);
+    public Optional<UserDTO> getUser(UUID userId) {
+
+        var user = userRepository.findByTenantIdAndId(tenantContext.getTenantId(), userId);
 
         if (user.isEmpty()) {
-            logger.warn("user not found userId {}, ownerId {}", userId, ownerId);
+            logger.warn("user not found userId {}", userId);
             return Optional.empty();
         }
 
-        Set<String> rolesIds = new HashSet<>();
-        user.get().getRoles().forEach(i -> rolesIds.add(i.getId().toString()));
-
-        return user.map(i -> new UserDTO(i.getId(), i.getName(), i.getEmail(), i.getActive(), rolesIds));
-        */
-        return Optional.empty();
+        return user.map(UserDTO::fromUserDTO);
     }
 
     @Transactional
@@ -83,7 +74,7 @@ public class UserService {
 
         var userResult = userRepository.findById(userDTO.id());
 
-        if(userResult.isEmpty()) {
+        if (userResult.isEmpty()) {
             logger.warn("user not found with userId: {}", userDTO.id());
             return Boolean.FALSE;
         }

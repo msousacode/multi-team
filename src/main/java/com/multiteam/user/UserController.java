@@ -26,21 +26,17 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_USER_READ')")
-    @GetMapping("/owner/{ownerId}")
-    public ResponseEntity<Page<UserDTO>> getAllUserByOwnerId(
-            @PathVariable("ownerId") UUID ownerId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "100") int size) {
-        var result = userService.getAllUsers(ownerId, PageRequest.of(page, size));
+    @GetMapping
+    public ResponseEntity<Page<UserDTO>> getAllUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size) {
+        var result = userService.getAllUsers(PageRequest.of(page, size));
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
-    @GetMapping("/{userId}/owner/{ownerId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<UserDTO> getUser(
-            @PathVariable("userId") UUID userId,
-            @PathVariable("ownerId") UUID ownerId) {
-        return userService.getUserByOwnerId(userId, ownerId)
+            @PathVariable("userId") UUID userId) {
+        return userService.getUser(userId)
                 .map(professional -> ResponseEntity.status(HttpStatus.OK).body(professional))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
