@@ -6,6 +6,7 @@ import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.SexEnum;
 import com.multiteam.patient.Patient;
 import com.multiteam.patient.PatientDTO;
+import com.multiteam.professional.ProfessionalDTO;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestResponsePage;
 import com.multiteam.util.RestTemplateBase;
@@ -85,16 +86,16 @@ public class PatientControllerTest extends RestTemplateBase {
     }
 
     @Test
-    void shouldGetClinicByIdThenSuccess() throws Exception {
+    void shouldGetPatientByIdThenSuccess() throws Exception {
 
-        URI uri = new URI("http://localhost:" + port + "/team/v1/clinics/" + ConstantsTest.CLINIC_ID);
+        URI uri = new URI("http://localhost:" + port + "/team/v1/professionals/" + ConstantsTest.PROFESSIONAL_ID);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
         HttpEntity<Object> request = new HttpEntity<>(headers);
 
-        ResponseEntity<ClinicDTO> response = restTemplate.exchange(uri, HttpMethod.GET, request, ClinicDTO.class);
+        ResponseEntity<ProfessionalDTO> response = restTemplate.exchange(uri, HttpMethod.GET, request, ProfessionalDTO.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
