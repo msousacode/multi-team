@@ -11,9 +11,23 @@ databaseChangeLog:
                   type: uuid
                   constraints:
                     nullable: true
+        - addColumn:
+            tableName: patients
+            columns:
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: true
         - addForeignKeyConstraint:
             baseColumnNames: user_id
             baseTableName: professionals
             constraintName: fk_professionals_users
+            referencedColumnNames: user_id
+            referencedTableName: users
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: patients
+            constraintName: fk_patients_users
             referencedColumnNames: user_id
             referencedTableName: users

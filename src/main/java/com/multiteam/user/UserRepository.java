@@ -1,5 +1,6 @@
 package com.multiteam.user;
 
+import com.multiteam.core.annotations.DisableTenantFilter;
 import com.multiteam.core.repositories.TenantableRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,6 +16,7 @@ public interface UserRepository extends TenantableRepository<User> {
 
     Boolean existsByEmail(String email);
 
+    @DisableTenantFilter
     Optional<User> findByEmail(String email);
 
     @Modifying

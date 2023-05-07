@@ -1,11 +1,11 @@
 package com.multiteam.core.security;
 
-import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.core.models.UserPrincipal;
 import com.multiteam.user.User;
 import com.multiteam.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,9 +34,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 
         UserDetails user = loadUserByUsername(username);
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadRequestException("Bad credentials");
-        }
+        verifyPassword(password, user);
 
         if (!user.isEnabled()) {
             throw new DisabledException("User account is not active");
@@ -54,5 +52,11 @@ public class CustomAuthenticationManager implements AuthenticationManager {
         }
 
         return UserPrincipal.create(loginOptional.get());
+    }
+
+    private void verifyPassword(String password, UserDetails user) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new BadCredentialsException("Bad credentials");
+        }
     }
 }

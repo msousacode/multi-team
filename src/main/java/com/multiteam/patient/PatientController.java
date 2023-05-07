@@ -29,7 +29,6 @@ public class PatientController {
     @PostMapping
     public ResponseEntity<?> createPatient(
             @RequestBody PatientDTO patientRequest) {
-
         if (patientService.createPatient(patientRequest)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
@@ -38,13 +37,11 @@ public class PatientController {
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_READ')")
-    @GetMapping("/owner/{ownerId}")
+    @GetMapping
     public ResponseEntity<Page<PatientDTO>> getAllPatientByOwnerId(
-            @PathVariable("ownerId") UUID ownerId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "100") int size) {
-        var result = patientService.getAllPatientsByOwnerId(ownerId, PageRequest.of(page, size));
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(patientService.getAllPatients(PageRequest.of(page, size)));
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_READ')")
@@ -71,12 +68,11 @@ public class PatientController {
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_WRITE')")
-    @DeleteMapping("/{patientId}/owner/{ownerId}")
+    @DeleteMapping("/{patientId}")
     public ResponseEntity<?> inactivePatient(
-            @PathVariable("patientId") UUID patientId,
-            @PathVariable("ownerId") UUID ownerId) {
+            @PathVariable("patientId") UUID patientId) {
 
-        if(patientService.inactivePatient(patientId, ownerId)) {
+        if(patientService.inactivePatient(patientId)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

@@ -2,8 +2,8 @@ package com.multiteam.controller;
 
 import com.multiteam.signin.dto.SignInDTO;
 import com.multiteam.signin.dto.SignUpDTO;
-import com.multiteam.util.ConstantsTests;
-import com.multiteam.util.TokenUtil;
+import com.multiteam.util.ConstantsTest;
+import com.multiteam.util.RestTemplateBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -19,7 +19,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class SignInControllerTest extends TokenUtil {
+class SignInControllerTest extends RestTemplateBase {
 
     @LocalServerPort
     protected int port;
@@ -46,7 +46,7 @@ class SignInControllerTest extends TokenUtil {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/sign-in");
 
-        var signIn = new SignInDTO(ConstantsTests.USER_OWNER_ADMIN, "12345678");
+        var signIn = new SignInDTO(ConstantsTest.EMAIL_OWNER, "12345678");
 
         HttpEntity<Object> request = new HttpEntity<>(signIn, headers);
 

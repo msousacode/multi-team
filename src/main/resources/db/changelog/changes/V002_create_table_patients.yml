@@ -27,11 +27,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: owner_id
-                  type: uuid
-                  constraints:
-                    nullable: false
-              - column:
                   name: age
                   type: smallint
               - column:
@@ -41,3 +36,17 @@ databaseChangeLog:
                   name: active
                   type: boolean
                   defaultValueBoolean: false
+              - column:
+                  name: created_by
+                  type: varchar(50)
+              - column:
+                  name: created_date
+                  type: timestamp
+                  constraints:
+                    updatable: false
+              - column:
+                  name: last_modified_by
+                  type: varchar(50)
+              - column:
+                  name: last_modified_date
+                  type: timestamp

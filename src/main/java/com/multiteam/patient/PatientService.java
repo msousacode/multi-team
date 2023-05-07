@@ -43,23 +43,14 @@ public class PatientService {
     @Transactional
     public Boolean createPatient(PatientDTO patientRequest) {
 
-        var owner = userService.getOwnerById(patientRequest.ownerId());
-
-        if (owner.isEmpty()) {
-            logger.debug("check if owner exists. ownerId: {}", patientRequest.ownerId());
-            logger.error("owner cannot be null. ownerId: {}", patientRequest.ownerId());
-            return Boolean.FALSE;
-        }
-
         var user = userService.createUser(patientRequest.name(), patientRequest.email(), local);
 
         if (user == null) {
-            logger.error("An error occurred while creating the user, email: {}, ownerId: {}", patientRequest.email(), patientRequest.ownerId());
+            logger.error("An error occurred while creating the user, email: {}", patientRequest.email());
             return Boolean.FALSE;
         }
 
         var builder = new Patient.Builder(
-                owner.get().getId(),
                 patientRequest.name(),
                 SexEnum.get(patientRequest.sex()),
                 patientRequest.age(),
@@ -73,14 +64,14 @@ public class PatientService {
 
         logger.info("successfully created patient {} ", builder.toString());
 
-        if(emailService.sendEmailNewUser(user.getEmail(), user.getProvisionalPassword())){
+        if (emailService.sendEmailNewUser(user.getEmail(), user.getProvisionalPassword())) {
             logger.warn("user was created , but an error occurred when sending the first login email: {}", user.getEmail());
         }
         return Boolean.TRUE;
     }
 
     public Optional<Patient> getPatient(final UUID patientId, final UUID ownerId) {
-        return patientRepository.findByIdAndOwnerId(patientId, ownerId);
+        return patientRepository.findById(patientId);
     }
 
     public List<PatientsProfessionalsView> getAllPatientsByProfessionalId(UUID professionalId, SituationEnum situation) {
@@ -88,12 +79,12 @@ public class PatientService {
         return List.of();
     }
 
-    public Page<PatientDTO> getAllPatientsByOwnerId(UUID ownerId, Pageable pageable) {
-        return patientRepository.findAllByOwnerIdAndActiveIsTrue(ownerId, pageable).map(PatientDTO::fromPatientDTO);
+    public Page<PatientDTO> getAllPatients(Pageable pageable) {
+        return patientRepository.findAll(pageable).map(PatientDTO::fromPatientDTO);
     }
 
     @Transactional
-    public Boolean inactivePatient(UUID patientId, UUID ownerId) {
+    public Boolean inactivePatient(UUID patientId) {
 
         var patient = patientRepository.findById(patientId);
 
@@ -101,7 +92,7 @@ public class PatientService {
             return Boolean.FALSE;
         }
 
-        patientRepository.inactivePatient(patientId, ownerId);
+        patientRepository.inactivePatient(patientId);
 
         treatmentService.excludeTreatmentByPatientId(patientId);
 
@@ -116,7 +107,6 @@ public class PatientService {
         if (patientResult.isPresent()) {
 
             var builder = new Patient.Builder(
-                    patientResult.get().getOwnerId(),
                     patientRequest.name(),
                     SexEnum.get(patientRequest.sex()),
                     patientRequest.age(),
@@ -134,7 +124,7 @@ public class PatientService {
             return Boolean.TRUE;
 
         } else {
-            logger.error("error occurred while updating the patient: {}", patientRequest.ownerId());
+            logger.error("error occurred while updating the patient: {}", patientRequest.id());
             return Boolean.FALSE;
         }
     }

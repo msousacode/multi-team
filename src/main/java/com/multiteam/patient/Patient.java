@@ -1,6 +1,7 @@
 package com.multiteam.patient;
 
 import com.multiteam.core.enums.SexEnum;
+import com.multiteam.core.models.Tenantable;
 import com.multiteam.user.User;
 import org.springframework.util.Assert;
 
@@ -10,15 +11,12 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "patients")
-public class Patient {
+public class Patient extends Tenantable {
 
     @Id
     @GeneratedValue
     @Column(name = "patient_id")
     private UUID id;
-
-    @Column(name = "owner_id")
-    private UUID ownerId;
 
     @Column(name = "name")
     private String name;
@@ -48,7 +46,6 @@ public class Patient {
 
     private Patient(Builder builder) {
         this.id = builder.id;
-        this.ownerId = builder.ownerId;
         this.name = builder.name;
         this.sex = builder.sex;
         this.age = builder.age;
@@ -82,10 +79,6 @@ public class Patient {
         return dateBirth;
     }
 
-    public UUID getOwnerId() {
-        return ownerId;
-    }
-
     public User getUser() {
         return user;
     }
@@ -98,7 +91,6 @@ public class Patient {
 
         //mandatory
         private UUID id;
-        private final UUID ownerId;
         private final String name;
         private final SexEnum sex;
         private final Integer age;
@@ -110,7 +102,6 @@ public class Patient {
         private String cellPhone;
 
         public Builder(
-                final UUID ownerId,
                 final String name,
                 final SexEnum sex,
                 final Integer age,
@@ -118,13 +109,11 @@ public class Patient {
                 final User user) {
 
             Assert.notNull(dateBirth, "value dateBirth cannot be null");
-            Assert.notNull(ownerId, "value ownerId cannot be null");
             Assert.notNull(user, "user cannot be null");
             Assert.isTrue(!name.isEmpty(), "patient name cannot be empty");
             Assert.notNull(sex, "patient sex cannot be null");
             Assert.notNull(age, "patient age cannot be null");
 
-            this.ownerId = ownerId;
             this.name = name;
             this.sex = sex;
             this.age = age;
@@ -156,7 +145,6 @@ public class Patient {
     public String toString() {
         return "Patient{" +
                "id=" + id +
-               ", ownerId=" + ownerId +
                ", name='" + name + '\'' +
                '}';
     }

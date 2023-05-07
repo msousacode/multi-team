@@ -22,7 +22,7 @@ import java.time.Instant;
 import java.util.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TokenUtil {
+public class RestTemplateBase {
 
     @LocalServerPort
     protected int port;
@@ -55,9 +55,9 @@ public class TokenUtil {
         Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(180000)));
 
         return Jwts.builder()
-                .setSubject(ConstantsTests.OWNER_ID)
+                .setSubject(ConstantsTest.OWNER_ID)
                 .claim("roles", authoritiesList)
-                .claim("tenantId", ConstantsTests.TENANT_ID)
+                .claim("tenantId", ConstantsTest.TENANT_ID)
                 .setExpiration(expiryDate)
                 .signWith(secretKey)
                 .compact();

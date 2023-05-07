@@ -10,8 +10,6 @@ public record PatientDTO(
         String cellPhone,
         String sex,
         Integer age,
-        boolean active,
-        UUID ownerId,
         LocalDate dateBirth
 ) {
     private PatientDTO(Patient patient) {
@@ -22,8 +20,6 @@ public record PatientDTO(
                 patient.getCellPhone(),
                 patient.getSex().getDescription(),
                 patient.getAge(),
-                patient.isActive(),
-                patient.getOwnerId(),
                 patient.getDateBirth()
         );
     }
