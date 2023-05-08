@@ -8,11 +8,14 @@ import io.jsonwebtoken.security.SignatureException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
@@ -55,7 +58,7 @@ public class JwtService {
     }
 
     public Jws<Claims> parseJwt(String authorizationHeader) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
-        return jwtParser.parseClaimsJws(authorizationHeader.replace(Constants.BEARER_SCHEMA, ""));
+        return jwtParser.parseClaimsJws(authorizationHeader.substring(7));
     }
 
     public Map<String, String> openToken(String token) {
@@ -65,7 +68,7 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
 
-        String userId = claims.get("_ui", String.class);
+        String userId = claims.getSubject();
 
         Map<String, String> userInfo = new HashMap<>();
         userInfo.put("userId", userId);

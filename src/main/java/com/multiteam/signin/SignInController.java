@@ -35,7 +35,7 @@ public class SignInController {
     }
 
     @PostMapping("/check-token")
-    public ResponseEntity<TokenDTO> checkToken(@RequestBody String token) {
-        return ResponseEntity.ok(signInService.checkToken(token));
+    public ResponseEntity<TokenDTO> checkToken(@RequestBody TokenSigInDTO token) {
+        return ResponseEntity.ok(signInService.checkToken(token.token()));
     }
 }
