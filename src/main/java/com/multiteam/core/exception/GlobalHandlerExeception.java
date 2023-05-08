@@ -16,7 +16,7 @@ public class GlobalHandlerExeception extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({OAuth2AuthenticationProcessingException.class})
+    @ExceptionHandler(OAuth2AuthenticationProcessingException.class)
     public ResponseEntity<ApiErrorResponse> handlerForbiddenRequest(RuntimeException ex) {
         ApiErrorResponse errorDetails = new ApiErrorResponse.Builder(ex.getMessage(), ex.getCause(), ex.getStackTrace(), ex.getLocalizedMessage(), HttpStatus.FORBIDDEN.value()).build();
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);

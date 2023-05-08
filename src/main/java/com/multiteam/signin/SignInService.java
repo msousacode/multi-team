@@ -12,15 +12,22 @@ import com.multiteam.signin.dto.SignUpDTO;
 import com.multiteam.signin.dto.TokenDTO;
 import com.multiteam.user.User;
 import com.multiteam.user.UserRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class SignInService {
+
+    private final static Logger logger = LogManager.getLogger(SignInService.class);
 
     private final CustomAuthenticationManager customAuthenticationManager;
     private final JwtService jwtService;
@@ -53,7 +60,7 @@ public class SignInService {
     @Transactional
     public void signUpUser(SignUpDTO signUpRequest) {
 
-        if(userRepository.existsByEmail(signUpRequest.email())) {
+        if (userRepository.existsByEmail(signUpRequest.email())) {
             throw new BadRequestException("Email address already in use.");
         }
 
@@ -75,16 +82,11 @@ public class SignInService {
 
     public TokenDTO checkToken(final String token) {
         logger.info("check token {}", token);
-        var userInfo = jwtTokenProvider.openToken(token);
+        var userInfo = jwtService.openToken(token);
 
-        if(jwtTokenProvider.validateToken(token)) {
-            logger.info("valid token {}", token);
-            return new CheckTokenResponse(userInfo.get("userId"), userInfo.get("ownerId"), true);
-
-        } else {
-            logger.error("invalid token {}", token);
-            logger.debug("could not validate user token id {}", userInfo.get("userId"));
-            return new CheckTokenResponse(null, null, false);
-        }
+        logger.info("valid token {}", token);
+        return new TokenDTO(userInfo.get("userId"));
     }
+
+
 }

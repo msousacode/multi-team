@@ -3,6 +3,7 @@ package com.multiteam.signin;
 import com.multiteam.signin.dto.SignInDTO;
 import com.multiteam.signin.dto.SignUpDTO;
 import com.multiteam.signin.dto.TokenDTO;
+import com.multiteam.signin.dto.TokenSigInDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +24,8 @@ public class SignInController {
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<String> signInUser(@RequestBody SignInDTO signInDTO) {
-        return ResponseEntity.ok(signInService.signInUser(signInDTO));
+    public ResponseEntity<TokenSigInDTO> signInUser(@RequestBody SignInDTO signInDTO) {
+        return ResponseEntity.ok(new TokenSigInDTO(signInService.signInUser(signInDTO)));
     }
 
     @PostMapping("/sign-up")
@@ -35,12 +36,6 @@ public class SignInController {
 
     @PostMapping("/check-token")
     public ResponseEntity<TokenDTO> checkToken(@RequestBody String token) {
-        var result = signInService.checkToken(token);
-
-        if (result.isValid()) {
-            return ResponseEntity.ok(new TokenDTO(result.userId(), result.ownerId(), true));
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new CheckTokenResponse(null, null, false));
-        }
+        return ResponseEntity.ok(signInService.checkToken(token));
     }
 }
