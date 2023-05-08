@@ -2,6 +2,7 @@ package com.multiteam.signin;
 
 import com.multiteam.signin.dto.SignInDTO;
 import com.multiteam.signin.dto.SignUpDTO;
+import com.multiteam.signin.dto.TokenDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,15 +32,15 @@ public class SignInController {
         signInService.signUpUser(signUpRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-/*
+
     @PostMapping("/check-token")
-    public ResponseEntity<CheckTokenResponse> checkToken(@RequestBody CheckTokenRequest checkTokenRequest) {
-        var result = authService.checkToken(checkTokenRequest.token());
+    public ResponseEntity<TokenDTO> checkToken(@RequestBody String token) {
+        var result = signInService.checkToken(token);
 
         if (result.isValid()) {
-            return ResponseEntity.ok(new CheckTokenResponse(result.userId(), result.ownerId(), true));
+            return ResponseEntity.ok(new TokenDTO(result.userId(), result.ownerId(), true));
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new CheckTokenResponse(null, null, false));
         }
-    }*/
+    }
 }

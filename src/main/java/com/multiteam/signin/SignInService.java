@@ -9,6 +9,7 @@ import com.multiteam.role.Role;
 import com.multiteam.role.RoleRepository;
 import com.multiteam.signin.dto.SignInDTO;
 import com.multiteam.signin.dto.SignUpDTO;
+import com.multiteam.signin.dto.TokenDTO;
 import com.multiteam.user.User;
 import com.multiteam.user.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -70,5 +71,20 @@ public class SignInService {
 
         var result = userRepository.save(builder);
         userRepository.updateTenantIdMyUser(result.getId(), result.getId());
+    }
+
+    public TokenDTO checkToken(final String token) {
+        logger.info("check token {}", token);
+        var userInfo = jwtTokenProvider.openToken(token);
+
+        if(jwtTokenProvider.validateToken(token)) {
+            logger.info("valid token {}", token);
+            return new CheckTokenResponse(userInfo.get("userId"), userInfo.get("ownerId"), true);
+
+        } else {
+            logger.error("invalid token {}", token);
+            logger.debug("could not validate user token id {}", userInfo.get("userId"));
+            return new CheckTokenResponse(null, null, false);
+        }
     }
 }
