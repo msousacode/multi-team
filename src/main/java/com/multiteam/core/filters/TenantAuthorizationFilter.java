@@ -41,13 +41,12 @@ public class TenantAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String authorizationHeader = request.getHeader(Constants.AUTHORIZATION_HEADER);
 
-        try {
+        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith(Constants.BEARER_SCHEMA)) {
             TenantAuthenticationToken tenantAuthenticationToken = getTenantAuthenticationToken(authorizationHeader);
             SecurityContextHolder.getContext().setAuthentication(tenantAuthenticationToken);
-            filterChain.doFilter(request, response);
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
+
+        filterChain.doFilter(request, response);
     }
 
     private TenantAuthenticationToken getTenantAuthenticationToken(String authorizationHeader) {

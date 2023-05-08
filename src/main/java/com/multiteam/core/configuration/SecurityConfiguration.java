@@ -68,22 +68,9 @@ public class SecurityConfiguration {
                 //.authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-                .antMatchers("/",
-                        "/error",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js",
-                        "/h2-console/**")
-                .permitAll()
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
-                .antMatchers(POST, "/v1/auth/login").permitAll()
-                .antMatchers(POST, "/v1/auth/token").permitAll()
-                .antMatchers(POST, "/v1/auth/signup").permitAll()
+                .antMatchers(POST, "/v1/auth/sign-in").permitAll()
+                .antMatchers(POST, "/v1/auth/sign-up").permitAll()
                 .antMatchers(POST, "/v1/auth/check-token").permitAll()
                 .anyRequest().authenticated()
                 .and()
