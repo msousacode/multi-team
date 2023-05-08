@@ -78,8 +78,8 @@ public class ProfessionalService {
         return Boolean.TRUE;
     }
 
-    public List<ProfessionalDTO> getAllProfessionals() {
-        return professionalRepository.findAll().stream().map(ProfessionalDTO::fromProfessionalDTO).toList();
+    public List<ProfessionalDTO> getAllProfessionals(UUID clinicId) {
+        return professionalRepository.findAllProfessionalsByClinicId(clinicId).stream().map(ProfessionalDTO::fromProfessionalDTO).toList();
     }
 
     public Optional<Professional> getProfessionalById(final UUID professionalId) {

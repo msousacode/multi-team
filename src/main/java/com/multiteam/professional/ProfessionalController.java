@@ -36,9 +36,9 @@ public class ProfessionalController {
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
-    @GetMapping
-    public List<ProfessionalDTO> getAllProfessionals() {
-        return professionalService.getAllProfessionals();
+    @GetMapping("/clinic/{clinicId}")
+    public List<ProfessionalDTO> getAllProfessionals(@PathVariable("clinicId") UUID clinicId) {
+        return professionalService.getAllProfessionals(clinicId);
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
