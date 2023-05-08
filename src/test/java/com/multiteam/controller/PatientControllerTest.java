@@ -1,10 +1,8 @@
 package com.multiteam.controller;
 
-import com.multiteam.clinic.Clinic;
 import com.multiteam.clinic.ClinicDTO;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.SexEnum;
-import com.multiteam.patient.Patient;
 import com.multiteam.patient.PatientDTO;
 import com.multiteam.professional.ProfessionalDTO;
 import com.multiteam.util.ConstantsTest;
@@ -12,12 +10,13 @@ import com.multiteam.util.RestResponsePage;
 import com.multiteam.util.RestTemplateBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

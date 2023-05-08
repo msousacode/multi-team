@@ -78,18 +78,4 @@ public class TreatmentControllerTest extends RestTemplateBase {
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
-/*
-    @Test
-    void shouldGetPatientByIdThenSuccess() throws Exception {
-
-        URI uri = new URI("http://localhost:" + port + "/team/v1/professionals/" + ConstantsTest.PROFESSIONAL_ID);
-
-        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
-        HttpEntity<Object> request = new HttpEntity<>(headers);
-
-        ResponseEntity<ProfessionalDTO> response = restTemplate.exchange(uri, HttpMethod.GET, request, ProfessionalDTO.class);
-
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
-    }
- */
 }
