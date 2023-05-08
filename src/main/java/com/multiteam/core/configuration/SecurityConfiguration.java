@@ -21,7 +21,7 @@ import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class SecurityConfiguration extends GlobalMethodSecurityConfiguration {
+public class SecurityConfiguration {
 
     @Autowired
     private CustomAuthenticationManager authenticationManager;
@@ -51,7 +51,8 @@ public class SecurityConfiguration extends GlobalMethodSecurityConfiguration {
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService) throws Exception {
 
-        return http
+        //@formatter:off
+        http
                 .cors()
                 .and()
                 .sessionManagement()
@@ -64,18 +65,28 @@ public class SecurityConfiguration extends GlobalMethodSecurityConfiguration {
                 .httpBasic()
                 .disable()
                 .exceptionHandling()
+                //.authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/auth/**", "/oauth2/**").permitAll()
-                    .antMatchers(POST, "/v1/auth/sign-in").permitAll()
-                    .antMatchers(POST, "/v1/auth/sign-up").permitAll()
-                    .antMatchers(POST, "/v1/auth/check-token").permitAll()
+                .antMatchers("/",
+                        "/error",
+                        "/favicon.ico",
+                        "/**/*.png",
+                        "/**/*.gif",
+                        "/**/*.svg",
+                        "/**/*.jpg",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js",
+                        "/h2-console/**")
+                .permitAll()
+                .antMatchers("/auth/**", "/oauth2/**").permitAll()
+                .antMatchers(POST, "/v1/auth/login").permitAll()
+                .antMatchers(POST, "/v1/auth/token").permitAll()
+                .antMatchers(POST, "/v1/auth/signup").permitAll()
+                .antMatchers(POST, "/v1/auth/check-token").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                    .authorizeRequests()
-                    .anyRequest()
-                    .authenticated()
-                .and()
-                .addFilterBefore(new TenantAuthorizationFilter(jwtService), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login()
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorize")
@@ -90,6 +101,9 @@ public class SecurityConfiguration extends GlobalMethodSecurityConfiguration {
                 .successHandler(oAuth2AuthenticationSuccessHandler)
                 .failureHandler(oAuth2AuthenticationFailureHandler)
                 .and()
-                .authenticationManager(authenticationManager).build();// authentication application
+                .authenticationManager(authenticationManager);// authentication application
+
+        // Add our custom Token based authentication filter
+        return http.addFilterBefore(new TenantAuthorizationFilter(jwtService), UsernamePasswordAuthenticationFilter.class).build();
     }
 }
