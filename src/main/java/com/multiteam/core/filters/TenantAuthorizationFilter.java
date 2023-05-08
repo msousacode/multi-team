@@ -13,10 +13,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,9 +30,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-public class TenantAuthorizationFilter extends OncePerRequestFilter {
+public class TenantAuthorizationFilter extends GenericFilterBean {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
+    public static final String HEADER_PREFIX = "Bearer ";
 
     private final JwtService jwtService;
 
@@ -38,15 +42,23 @@ public class TenantAuthorizationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        String authorizationHeader = request.getHeader(Constants.AUTHORIZATION_HEADER);
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        String authorizationHeader = resolveToken((HttpServletRequest) request);
 
-        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith(Constants.BEARER_SCHEMA)) {
+        if (StringUtils.hasText(authorizationHeader)) {
             TenantAuthenticationToken tenantAuthenticationToken = getTenantAuthenticationToken(authorizationHeader);
             SecurityContextHolder.getContext().setAuthentication(tenantAuthenticationToken);
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(HEADER_PREFIX)) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
     private TenantAuthenticationToken getTenantAuthenticationToken(String authorizationHeader) {

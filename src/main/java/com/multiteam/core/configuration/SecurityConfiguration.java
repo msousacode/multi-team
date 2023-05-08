@@ -21,7 +21,7 @@ import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class SecurityConfiguration {
+public class SecurityConfiguration extends GlobalMethodSecurityConfiguration {
 
     @Autowired
     private CustomAuthenticationManager authenticationManager;

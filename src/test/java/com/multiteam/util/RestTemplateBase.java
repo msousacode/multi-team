@@ -52,7 +52,7 @@ public class RestTemplateBase {
             authoritiesList.add(authority.getAuthority());
         }
 
-        Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(180000)));
+        Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(3600)));
 
         return Jwts.builder()
                 .setSubject(ConstantsTest.OWNER_ID)

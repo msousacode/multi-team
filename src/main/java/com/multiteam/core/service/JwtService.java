@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -19,10 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class JwtService {
@@ -46,25 +44,33 @@ public class JwtService {
     public String createJwt(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(180000)));
+        Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(3600)));
+
+        Collection<? extends GrantedAuthority> authorities = userPrincipal.getAuthorities();
+
+        ArrayList<String> authoritiesList = new ArrayList<>(authorities.size());
+
+        for (GrantedAuthority authority : authorities) {
+            authoritiesList.add(authority.getAuthority());
+        }
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getId().toString())
-                .claim("roles", userPrincipal.getAuthorities())
+                .claim("roles", authoritiesList)
                 .claim("tenantId", userPrincipal.getTenantId())
                 .setExpiration(expiryDate)
-                .signWith(secretKey)
+                .signWith(this.secretKey)
                 .compact();
     }
 
     public Jws<Claims> parseJwt(String authorizationHeader) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
-        return jwtParser.parseClaimsJws(authorizationHeader.substring(7));
+        return jwtParser.parseClaimsJws(authorizationHeader);
     }
 
     public Map<String, String> openToken(String token) {
 
         Claims claims = Jwts.parser()
-                .setSigningKey(secretKey)
+                .setSigningKey(this.secretKey)
                 .parseClaimsJws(token)
                 .getBody();
 
