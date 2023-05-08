@@ -41,12 +41,13 @@ public class TenantAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String authorizationHeader = request.getHeader(Constants.AUTHORIZATION_HEADER);
 
-        if (!StringUtils.isEmpty(authorizationHeader) && authorizationHeader.startsWith(Constants.BEARER_SCHEMA)) {
+        try {
             TenantAuthenticationToken tenantAuthenticationToken = getTenantAuthenticationToken(authorizationHeader);
             SecurityContextHolder.getContext().setAuthentication(tenantAuthenticationToken);
+            filterChain.doFilter(request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-
-        filterChain.doFilter(request, response);
     }
 
     private TenantAuthenticationToken getTenantAuthenticationToken(String authorizationHeader) {
@@ -60,7 +61,8 @@ public class TenantAuthorizationFilter extends OncePerRequestFilter {
             List<GrantedAuthority> authorities = getSimpleGrantedAuthorities(jwsClaims);
             String tenantId = jwsClaims.getBody().get(Constants.TENANT_ID_CLAIM, String.class);
             tenantAuthenticationToken = new TenantAuthenticationToken(email, authorities, UUID.fromString(tenantId));
-        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException |
+                 IllegalArgumentException e) {
             log.error("Problems with JWT", e);
         }
 
@@ -69,7 +71,7 @@ public class TenantAuthorizationFilter extends OncePerRequestFilter {
 
     private List<GrantedAuthority> getSimpleGrantedAuthorities(Jws<Claims> jwsClaims) {
         Collection<?> roles = jwsClaims.getBody().get("roles", Collection.class);
-        if(roles != null) {
+        if (roles != null) {
             return roles.stream()
                     .map(authority -> new SimpleGrantedAuthority(authority.toString()))
                     .collect(Collectors.toList());

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(path = "/v1", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/auth", produces = APPLICATION_JSON_VALUE)
 public class SignInController {
 
     private final SignInService signInService;
