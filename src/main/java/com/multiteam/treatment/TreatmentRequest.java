@@ -5,7 +5,7 @@ import com.multiteam.core.enums.SituationEnum;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record TreatmentDTO(
+public record TreatmentRequest(
         UUID id,
         String description,
         SituationEnum situation,

@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,6 +14,7 @@ import java.util.UUID;
 public interface TreatmentRepository extends TenantableRepository<Treatment> {
     Set<Treatment> findAllByPatient_Id(UUID patientId);
 
+    /*
     @Query("""
             SELECT
             t.id AS id,
@@ -29,22 +29,9 @@ public interface TreatmentRepository extends TenantableRepository<Treatment> {
             WHERE tg.id = :guestId
             """)
     List<TreatmentView> getAllTreatmentsByGuestId(@Param("guestId") UUID guestId);
+    */
 
     @Modifying
     @Query("UPDATE Treatment tr SET tr.active = false WHERE tr.id = :treatmentId")
     void inactiveTreatment(@Param("treatmentId") UUID treatmentId);
-
-    @Query("""
-           SELECT
-           t.id AS id,
-           t.description AS description,
-           t.treatmentType AS treatmentType,
-           t.situation AS situation,
-           t.initialDate AS initialDate,
-           t.finalDate AS finalDate,
-           t.active AS active
-           FROM Treatment t
-           WHERE t.id = :treatmentId
-           """)
-    Optional<TreatmentView> findByIdProjection(@Param("treatmentId") UUID treatmentId);
 }

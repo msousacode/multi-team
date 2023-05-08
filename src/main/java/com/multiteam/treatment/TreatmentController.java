@@ -26,7 +26,7 @@ public class TreatmentController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @PostMapping
-    public ResponseEntity<?> createTreatment(@RequestBody TreatmentDTO treatmentDTO) {
+    public ResponseEntity<?> createTreatment(@RequestBody TreatmentRequest treatmentDTO) {
         if (treatmentService.includeTreatment(treatmentDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
@@ -42,14 +42,14 @@ public class TreatmentController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_READ')")
     @GetMapping("/{treatmentId}")
-    public ResponseEntity<TreatmentView> getTreatment(@PathVariable("treatmentId") UUID treatmentId) {
-        var treatmentOptional = treatmentService.getTreatmentById(treatmentId);
+    public ResponseEntity<TreatmentResponse> getTreatment(@PathVariable("treatmentId") UUID treatmentId) {
+        var treatmentOptional = treatmentService.getTreatment(treatmentId);
         return treatmentOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @PutMapping
-    public ResponseEntity<?> updateTreatment(@RequestBody TreatmentDTO treatmentDTO) {
+    public ResponseEntity<?> updateTreatment(@RequestBody TreatmentRequest treatmentDTO) {
         if(treatmentService.updateTreatment(treatmentDTO)){
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {

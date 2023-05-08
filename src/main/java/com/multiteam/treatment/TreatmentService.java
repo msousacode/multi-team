@@ -1,5 +1,6 @@
 package com.multiteam.treatment;
 
+import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.TreatmentEnum;
 import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.patient.Patient;
@@ -28,20 +29,23 @@ public class TreatmentService {
     private final TreatementProfessionalRepository treatementProfessionalRepository;
     private final PatientService patientService;
     private final ProfessionalService professionalService;
+    private final TenantContext tenantContext;
 
     public TreatmentService(
             TreatmentRepository treatmentRepository,
             TreatementProfessionalRepository treatementProfessionalRepository,
             @Lazy PatientService patientService,
-            @Lazy ProfessionalService professionalService) {
+            @Lazy ProfessionalService professionalService,
+            TenantContext tenantContext) {
         this.treatmentRepository = treatmentRepository;
         this.treatementProfessionalRepository = treatementProfessionalRepository;
         this.patientService = patientService;
         this.professionalService = professionalService;
+        this.tenantContext = tenantContext;
     }
 
     @Transactional
-    public Boolean includeTreatment(TreatmentDTO treatmentDTO) {
+    public Boolean includeTreatment(TreatmentRequest treatmentDTO) {
         logger.info("include treatment to patient id {}", treatmentDTO.patientId());
         var patient = getPatient(treatmentDTO);
         var professional = getProfessional(treatmentDTO);
@@ -73,7 +77,7 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean updateTreatment(TreatmentDTO treatmentDTO) {
+    public Boolean updateTreatment(TreatmentRequest treatmentDTO) {
 
         var result = treatmentRepository.findById(treatmentDTO.id());
 
@@ -137,8 +141,9 @@ public class TreatmentService {
         });
     }
 
-    public List<TreatmentView> getAllTreatmentsByGuestId(UUID guestId) {
-        return treatmentRepository.getAllTreatmentsByGuestId(guestId);
+    public List<TreatmentResponse> getAllTreatmentsByGuestId(UUID guestId) {
+        //return treatmentRepository.getAllTreatmentsByGuestId(guestId);
+        return List.of();
     }
 
     @Transactional
@@ -147,11 +152,11 @@ public class TreatmentService {
         treatments.forEach(t -> inactiveTreatment(t.getId()));
     }
 
-    public Optional<TreatmentView> getTreatmentById(UUID treatmentId) {
-        return treatmentRepository.findByIdProjection(treatmentId);
+    public Optional<TreatmentResponse> getTreatment(UUID treatmentId) {
+        return treatmentRepository.findOneById(treatmentId).map(TreatmentResponse::fromTreatmentResponse);
     }
 
-    private Optional<Patient> getPatient(TreatmentDTO treatmentDTO) {
+    private Optional<Patient> getPatient(TreatmentRequest treatmentDTO) {
         var patient = patientService.getPatient(treatmentDTO.patientId(), treatmentDTO.clinicId());
         if (patient.isEmpty()) {
             logger.error("patient not found. It is necessary to have a patient to include the treatment");
@@ -160,7 +165,7 @@ public class TreatmentService {
         return patient;
     }
 
-    private Optional<Professional> getProfessional(TreatmentDTO treatmentDTO) {
+    private Optional<Professional> getProfessional(TreatmentRequest treatmentDTO) {
         var professional = professionalService.getProfessionalById(treatmentDTO.professionalId());
         if (professional.isEmpty()) {
             logger.error("professional not found. It is necessary to have a professional to include the treatment");

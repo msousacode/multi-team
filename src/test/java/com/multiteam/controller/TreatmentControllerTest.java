@@ -2,7 +2,8 @@ package com.multiteam.controller;
 
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.SituationEnum;
-import com.multiteam.treatment.TreatmentDTO;
+import com.multiteam.treatment.TreatmentRequest;
+import com.multiteam.treatment.TreatmentResponse;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestTemplateBase;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ public class TreatmentControllerTest extends RestTemplateBase {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/treatments");
 
-        var treatment = new TreatmentDTO(
+        var treatment = new TreatmentRequest(
                 null,
                 "Lorem ipsum volutpat taciti tempor porttitor ultricies vitae, venenatis aenean laoreet nulla nibh dictumst auctor gravida, phasellus platea varius ultricies venenatis etiam. lacinia lorem dapibus nam donec fermentum vitae nec sem vivamus sociosqu, consequat ",
                 SituationEnum.ANDAMENTO,
@@ -47,7 +48,7 @@ public class TreatmentControllerTest extends RestTemplateBase {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/treatments");
 
-        var treatment = new TreatmentDTO(
+        var treatment = new TreatmentRequest(
                 UUID.fromString(ConstantsTest.TREATMENT_ID),
                 "Lorem ipsum volutpat taciti tempor porttitor ultricies vitae.",
                 SituationEnum.ANDAMENTO,
@@ -64,21 +65,20 @@ public class TreatmentControllerTest extends RestTemplateBase {
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
-/*
-    @Test
-    void shouldGetAllPatientsThenSuccess() throws Exception {
 
-        URI uri = new URI("http://localhost:" + port + "/team/v1/patients");
+    @Test
+    void shouldGetTreatmentByIdThenSuccess() throws Exception {
+
+        URI uri = new URI("http://localhost:" + port + "/team/v1/treatments/" + ConstantsTest.TREATMENT_ID);
 
         headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
         HttpEntity<Object> request = new HttpEntity<>(headers);
 
-        ParameterizedTypeReference<RestResponsePage<PatientDTO>> responseType = new ParameterizedTypeReference<>() { };
-        ResponseEntity<RestResponsePage<PatientDTO>> response = restTemplate.exchange(uri, HttpMethod.GET, request, responseType);
+        ResponseEntity<TreatmentResponse> response = restTemplate.exchange(uri, HttpMethod.GET, request, TreatmentResponse.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
-
+/*
     @Test
     void shouldGetPatientByIdThenSuccess() throws Exception {
 
