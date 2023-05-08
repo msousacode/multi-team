@@ -1,6 +1,6 @@
-package com.multiteam.core.listeners;
+package com.multiteam.core.listener;
 
-import com.multiteam.core.contexts.TenantContext;
+import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.models.Tenantable;
 import org.springframework.beans.factory.annotation.Autowired;
 

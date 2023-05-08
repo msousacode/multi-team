@@ -1,7 +1,7 @@
 package com.multiteam.core.aspect;
 
-import com.multiteam.core.annotations.DisableTenantFilter;
-import com.multiteam.core.contexts.TenantContext;
+import com.multiteam.core.annotation.DisableTenantFilter;
+import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.utils.Constants;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

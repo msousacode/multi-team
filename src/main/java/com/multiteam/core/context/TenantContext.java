@@ -1,4 +1,4 @@
-package com.multiteam.core.contexts;
+package com.multiteam.core.context;
 
 import com.multiteam.core.authentication.TenantAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

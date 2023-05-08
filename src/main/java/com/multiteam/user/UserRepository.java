@@ -1,7 +1,7 @@
 package com.multiteam.user;
 
-import com.multiteam.core.annotations.DisableTenantFilter;
-import com.multiteam.core.repositories.TenantableRepository;
+import com.multiteam.core.annotation.DisableTenantFilter;
+import com.multiteam.core.repository.TenantableRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;

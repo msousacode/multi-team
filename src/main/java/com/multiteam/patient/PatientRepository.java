@@ -1,16 +1,11 @@
 package com.multiteam.patient;
 
-import com.multiteam.core.repositories.TenantableRepository;
-import com.multiteam.patient.Patient;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.multiteam.core.repository.TenantableRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository

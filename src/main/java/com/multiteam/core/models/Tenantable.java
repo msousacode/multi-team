@@ -1,7 +1,7 @@
 package com.multiteam.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.multiteam.core.listeners.TenantEntityListener;
+import com.multiteam.core.listener.TenantEntityListener;
 import com.multiteam.core.utils.Constants;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;

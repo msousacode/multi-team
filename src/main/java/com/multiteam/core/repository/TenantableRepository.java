@@ -1,4 +1,4 @@
-package com.multiteam.core.repositories;
+package com.multiteam.core.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;

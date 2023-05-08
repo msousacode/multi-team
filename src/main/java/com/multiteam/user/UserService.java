@@ -1,6 +1,6 @@
 package com.multiteam.user;
 
-import com.multiteam.core.contexts.TenantContext;
+import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.AuthProviderEnum;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.role.RoleRepository;

@@ -1,6 +1,6 @@
 package com.multiteam.treatment;
 
-import com.multiteam.core.repositories.TenantableRepository;
+import com.multiteam.core.repository.TenantableRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
