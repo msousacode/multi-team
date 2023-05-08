@@ -1,6 +1,6 @@
 package com.multiteam.treatment;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.multiteam.core.repositories.TenantableRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Repository
-public interface TreatmentRepository extends JpaRepository<Treatment, UUID> {
+public interface TreatmentRepository extends TenantableRepository<Treatment> {
     Set<Treatment> findAllByPatient_Id(UUID patientId);
 
     @Query("""

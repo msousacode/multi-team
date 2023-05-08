@@ -1,9 +1,15 @@
 package com.multiteam.treatment;
 
+import com.multiteam.core.enums.TreatmentEnum;
+import com.multiteam.core.exception.BadRequestException;
+import com.multiteam.patient.Patient;
 import com.multiteam.patient.PatientService;
 import com.multiteam.guest.Guest;
 import com.multiteam.core.enums.SituationEnum;
+import com.multiteam.professional.Professional;
 import com.multiteam.professional.ProfessionalService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +21,8 @@ import java.util.UUID;
 
 @Service
 public class TreatmentService {
+
+    private static final Logger logger = LogManager.getLogger(TreatmentService.class);
 
     private final TreatmentRepository treatmentRepository;
     private final TreatementProfessionalRepository treatementProfessionalRepository;
@@ -33,24 +41,24 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean includeTreatment(TreatmentRequest treatmentRequest) {
+    public Boolean includeTreatment(TreatmentDTO treatmentDTO) {
+        logger.info("include treatment to patient id {}", treatmentDTO.patientId());
+        var patient = getPatient(treatmentDTO);
+        var professional = getProfessional(treatmentDTO);
 
-        var patient = patientService.getPatient(treatmentRequest.patientId(), treatmentRequest.clinicId());
-        var professional = professionalService.getProfessionalById(treatmentRequest.professionalId());
-
-        if (patient.isEmpty())
-            return Boolean.FALSE;
-        if (professional.isEmpty())
-            return Boolean.FALSE;
+        if (patient.isEmpty() || professional.isEmpty()) {
+            logger.error("patient or professional cannot be empty");
+            throw new BadRequestException("patient or professional cannot be empty");
+        }
 
         var builder = new Treatment.Builder(
                 null,
-                treatmentRequest.treatmentType(),
-                treatmentRequest.situation(),
-                treatmentRequest.initialDate(),
+                TreatmentEnum.get(professional.get().getSpecialty().getName()),
+                treatmentDTO.situation(),
+                treatmentDTO.initialDate(),
                 patient.get())
-                .finalDate(treatmentRequest.finalDate())
-                .description(treatmentRequest.description())
+                .finalDate(treatmentDTO.finalDate())
+                .description(treatmentDTO.description())
                 .active(true)
                 .build();
 
@@ -59,29 +67,40 @@ public class TreatmentService {
         var treatmentProfessional = new TreatmentProfessional(null, treatment, professional.get(), "", SituationEnum.ANDAMENTO);
         treatementProfessionalRepository.save(treatmentProfessional);
 
+        logger.info("successfully included treatment id: {}", treatment.getId());
+
         return Boolean.TRUE;
     }
 
     @Transactional
-    public Boolean updateTreatment(TreatmentRequest treatmentRequest) {
+    public Boolean updateTreatment(TreatmentDTO treatmentDTO) {
 
-        var result = treatmentRepository.findById(treatmentRequest.id());
+        var result = treatmentRepository.findById(treatmentDTO.id());
 
         if (result.isEmpty()) {
             return Boolean.FALSE;
         }
 
+        var patient = getPatient(treatmentDTO);
+        var professional = getProfessional(treatmentDTO);
+
+        if (patient.isEmpty() || professional.isEmpty()) {
+            logger.error("patient or professional cannot be empty");
+            throw new BadRequestException("patient or professional cannot be empty");
+        }
+
         var builder = new Treatment.Builder(
-                result.get().getId(),
-                treatmentRequest.treatmentType(),
-                treatmentRequest.situation(),
-                treatmentRequest.initialDate(),
+                treatmentDTO.id(),
+                TreatmentEnum.get(professional.get().getSpecialty().getName()),
+                treatmentDTO.situation(),
+                treatmentDTO.initialDate(),
                 result.get().getPatient())
-                .finalDate(treatmentRequest.finalDate())
+                .description(treatmentDTO.description())
+                .finalDate(treatmentDTO.finalDate())
                 .build();
 
         treatmentRepository.save(builder);
-
+        logger.info("successfully updated treatment");
         return Boolean.TRUE;
     }
 
@@ -130,5 +149,23 @@ public class TreatmentService {
 
     public Optional<TreatmentView> getTreatmentById(UUID treatmentId) {
         return treatmentRepository.findByIdProjection(treatmentId);
+    }
+
+    private Optional<Patient> getPatient(TreatmentDTO treatmentDTO) {
+        var patient = patientService.getPatient(treatmentDTO.patientId(), treatmentDTO.clinicId());
+        if (patient.isEmpty()) {
+            logger.error("patient not found. It is necessary to have a patient to include the treatment");
+            return Optional.empty();
+        }
+        return patient;
+    }
+
+    private Optional<Professional> getProfessional(TreatmentDTO treatmentDTO) {
+        var professional = professionalService.getProfessionalById(treatmentDTO.professionalId());
+        if (professional.isEmpty()) {
+            logger.error("professional not found. It is necessary to have a professional to include the treatment");
+            return Optional.empty();
+        }
+        return professional;
     }
 }

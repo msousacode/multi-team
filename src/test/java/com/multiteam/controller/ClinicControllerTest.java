@@ -23,7 +23,6 @@ public class ClinicControllerTest extends RestTemplateBase {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/clinics");
 
-
         var clinic = new Clinic.Builder(
                 UUID.randomUUID() + " @Test",
                 UUID.randomUUID().toString().substring(0, 14),

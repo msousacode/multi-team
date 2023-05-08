@@ -2,6 +2,7 @@ package com.multiteam.treatment;
 
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.enums.TreatmentEnum;
+import com.multiteam.core.models.Tenantable;
 import com.multiteam.patient.Patient;
 import com.multiteam.guest.Guest;
 import org.springframework.util.Assert;
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "treatments")
-public class Treatment {
+public class Treatment extends Tenantable {
 
     @Id
     @GeneratedValue

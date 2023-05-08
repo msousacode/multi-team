@@ -26,9 +26,8 @@ public class TreatmentController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @PostMapping
-    public ResponseEntity<?> createTreatment(@RequestBody TreatmentRequest treatmentRequest) {
-
-        if (treatmentService.includeTreatment(treatmentRequest)) {
+    public ResponseEntity<?> createTreatment(@RequestBody TreatmentDTO treatmentDTO) {
+        if (treatmentService.includeTreatment(treatmentDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -50,9 +49,8 @@ public class TreatmentController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @PutMapping
-    public ResponseEntity<?> updateTreatment(@RequestBody TreatmentRequest treatmentRequest) {
-
-        if(treatmentService.updateTreatment(treatmentRequest)){
+    public ResponseEntity<?> updateTreatment(@RequestBody TreatmentDTO treatmentDTO) {
+        if(treatmentService.updateTreatment(treatmentDTO)){
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
