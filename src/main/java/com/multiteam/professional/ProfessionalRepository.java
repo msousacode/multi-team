@@ -1,12 +1,13 @@
 package com.multiteam.professional;
 
 import com.multiteam.core.repository.TenantableRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -18,9 +19,9 @@ public interface ProfessionalRepository extends TenantableRepository<Professiona
             WHERE c.id = :clinicId
             AND p.active = true
             """)
-    List<Professional> findAllProfessionalsByClinicId(@Param("clinicId") UUID clinicId);
+    Page<Professional> findAllProfessionalsByClinicId(@Param("clinicId") final UUID clinicId, Pageable pageable);
 
     @Modifying
-    @Query("UPDATE Professional pr SET pr.active = false WHERE pr.id = :professionalId")
-    void professionalInactive(@Param("professionalId") UUID professionalId);
+    @Query("UPDATE Professional pr SET pr.active = false WHERE pr.id = :professionalId AND pr.tenantId = :tenantId")
+    void professionalInactive(@Param("professionalId") UUID professionalId, @Param("tenantId") final UUID tenantId);
 }

@@ -1,18 +1,23 @@
 package com.multiteam.professional;
 
-import com.multiteam.core.enums.SpecialtyEnum;
 import com.multiteam.clinic.ClinicService;
+import com.multiteam.core.context.TenantContext;
+import com.multiteam.core.enums.SpecialtyEnum;
 import com.multiteam.core.service.EmailService;
 import com.multiteam.treatment.TreatmentService;
-import com.multiteam.user.UserRepository;
 import com.multiteam.user.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import static com.multiteam.core.enums.AuthProviderEnum.local;
 
@@ -24,46 +29,46 @@ public class ProfessionalService {
     private final ProfessionalRepository professionalRepository;
     private final ClinicService clinicService;
     private final TreatmentService treatmentService;
-    private final UserRepository userRepository;
     private final EmailService emailService;
     private final UserService userService;
+    private final TenantContext tenantContext;
 
     public ProfessionalService(
             ProfessionalRepository professionalRepository,
             ClinicService clinicService,
             TreatmentService treatmentService,
-            UserRepository userRepository,
             EmailService emailService,
-            UserService userService) {
+            UserService userService,
+            TenantContext tenantContext) {
         this.professionalRepository = professionalRepository;
         this.clinicService = clinicService;
         this.treatmentService = treatmentService;
-        this.userRepository = userRepository;
         this.emailService = emailService;
         this.userService = userService;
+        this.tenantContext = tenantContext;
     }
 
     @Transactional
-    public Boolean createProfessional(ProfessionalDTO professionalRequest) {
+    public Boolean createProfessional(ProfessionalDTO professionalDTO) {
 
-        Set<UUID> clinicsIds = getUuids(professionalRequest);
+        Set<UUID> clinicsIds = getUuids(professionalDTO);
         Assert.isTrue(!clinicsIds.isEmpty(), "clinic list cannot be empty");
         var clinics = clinicService.getClinics(clinicsIds);
 
         if (clinics.isEmpty()) {
-            logger.debug("check if clinic exists. clinicId: {}", professionalRequest.clinicId());
-            logger.error("clinic cannot be null. clinicId: {}", professionalRequest.clinicId());
+            logger.debug("check if clinic exists. clinicId: {}", professionalDTO.clinicId());
+            logger.error("clinic cannot be null. clinicId: {}", professionalDTO.clinicId());
             return Boolean.FALSE;
         }
 
-        var user = userService.createUser(professionalRequest.name(), professionalRequest.email(), local);
+        var user = userService.createUser(professionalDTO.name(), professionalDTO.email(), local);
 
         var builder = new Professional.Builder(
                 null,
-                professionalRequest.name(),
-                SpecialtyEnum.get(professionalRequest.specialty()),
-                professionalRequest.cellPhone(),
-                professionalRequest.email(),
+                professionalDTO.name(),
+                SpecialtyEnum.get(professionalDTO.specialty()),
+                professionalDTO.cellPhone(),
+                professionalDTO.email(),
                 true,
                 clinics,
                 user)
@@ -72,14 +77,14 @@ public class ProfessionalService {
         professionalRepository.save(builder);
 
         if(emailService.sendEmailNewUser(user.getEmail(), user.getProvisionalPassword())){
-            logger.warn("user was created , but an error occurred when sending the first login email: {}", professionalRequest.email());
+            logger.warn("user was created , but an error occurred when sending the first login email: {}", professionalDTO.email());
         }
 
         return Boolean.TRUE;
     }
 
-    public List<ProfessionalDTO> getAllProfessionals(UUID clinicId) {
-        return professionalRepository.findAllProfessionalsByClinicId(clinicId).stream().map(ProfessionalDTO::fromProfessionalDTO).toList();
+    public Page<ProfessionalDTO> getAllProfessionals(final UUID clinicId, Pageable pageable) {
+        return professionalRepository.findAllProfessionalsByClinicId(clinicId, pageable).map(ProfessionalDTO::fromProfessionalDTO);
     }
 
     public Optional<Professional> getProfessionalById(final UUID professionalId) {
@@ -109,33 +114,33 @@ public class ProfessionalService {
         professional.get().getProfessionals().forEach(t -> treatmentService.inactiveTreatment(t.getTreatment().getId()));
         logger.info("treatments associated with professional {} has been inactivated", professionalId);
 
-        professionalRepository.professionalInactive(professional.get().getId());
+        professionalRepository.professionalInactive(professional.get().getId(), tenantContext.getTenantId());
         logger.info("professional has been inactivated, professionalId {}", professionalId);
 
         return Boolean.TRUE;
     }
 
     @Transactional
-    public Boolean updateProfessional(ProfessionalDTO professionalRequest) {
+    public Boolean updateProfessional(ProfessionalDTO professionalDTO) {
 
-        var professionalResult = professionalRepository.findById(professionalRequest.id());
+        var professionalResult = professionalRepository.findById(professionalDTO.id());
 
-        Set<UUID> clinicsIds = getUuids(professionalRequest);
+        Set<UUID> clinicsIds = getUuids(professionalDTO);
         Assert.isTrue(!clinicsIds.isEmpty(), "clinic list cannot be empty");
         var clinics = clinicService.getClinics(clinicsIds);
 
         if (professionalResult.isEmpty()) {
-            logger.debug("check if professional exists. professionalId: {}", professionalRequest.id());
-            logger.error("professional cannot be null. professionalId: {}", professionalRequest.id());
+            logger.debug("check if professional exists. professionalId: {}", professionalDTO.id());
+            logger.error("professional cannot be null. professionalId: {}", professionalDTO.id());
             return Boolean.FALSE;
         }
 
         var builder = new Professional.Builder(
                 professionalResult.get().getId(),
-                professionalRequest.name(),
-                SpecialtyEnum.get(professionalRequest.specialty()),
-                professionalRequest.cellPhone(),
-                professionalRequest.email(),
+                professionalDTO.name(),
+                SpecialtyEnum.get(professionalDTO.specialty()),
+                professionalDTO.cellPhone(),
+                professionalDTO.email(),
                 true,
                 clinics,
                 professionalResult.get().getUser())
@@ -148,9 +153,9 @@ public class ProfessionalService {
         return Boolean.TRUE;
     }
 
-    private static Set<UUID> getUuids(ProfessionalDTO professionalRequest) {
+    private static Set<UUID> getUuids(ProfessionalDTO professionalDTO) {
         Set<UUID> clinicsIds = new HashSet<>();
-        professionalRequest.clinicId().forEach(elem -> clinicsIds.add(UUID.fromString(elem)));
+        professionalDTO.clinicId().forEach(elem -> clinicsIds.add(UUID.fromString(elem)));
         return clinicsIds;
     }
 }
