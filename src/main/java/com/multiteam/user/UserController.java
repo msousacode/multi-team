@@ -25,6 +25,17 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO) {
+
+        if(userService.updateUser(userDTO)){
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_USER_READ')")
     @GetMapping
     public ResponseEntity<Page<UserDTO>> getAllUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100") int size) {
@@ -39,17 +50,6 @@ public class UserController {
         return userService.getUser(userId)
                 .map(professional -> ResponseEntity.status(HttpStatus.OK).body(professional))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    }
-
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
-    @PutMapping
-    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO) {
-
-        if(userService.updateUser(userDTO)){
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")

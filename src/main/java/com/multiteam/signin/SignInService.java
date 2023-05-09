@@ -22,7 +22,7 @@ import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Service
-public final class SignInService {
+public class SignInService {
 
     private final static Logger logger = LogManager.getLogger(SignInService.class);
 
