@@ -29,6 +29,8 @@ public class ClinicService {
                 clinicDTO.cpfCnpj(),
                 clinicDTO.email(),
                 clinicDTO.cellPhone())
+                .telephone(clinicDTO.telephone())
+                .observation(clinicDTO.observation())
                 .active(true)
                 .build();
 
