@@ -7,13 +7,11 @@ import com.multiteam.core.security.CustomAuthenticationManager;
 import com.multiteam.core.service.JwtService;
 import com.multiteam.role.Role;
 import com.multiteam.role.RoleRepository;
-import com.multiteam.signin.dto.SignInDTO;
-import com.multiteam.signin.dto.SignUpDTO;
-import com.multiteam.signin.dto.TokenDTO;
+import com.multiteam.signin.payload.SignInDTO;
+import com.multiteam.signin.payload.SignUpDTO;
+import com.multiteam.signin.payload.TokenDTO;
 import com.multiteam.user.User;
 import com.multiteam.user.UserRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,11 +19,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
-public class SignInService {
+public final class SignInService {
 
     private final static Logger logger = LogManager.getLogger(SignInService.class);
 
@@ -35,17 +32,17 @@ public class SignInService {
     private final RoleRepository roleRepository;
 
     public SignInService(
-            CustomAuthenticationManager customAuthenticationManager,
-            JwtService jwtService,
-            UserRepository userRepository,
-            RoleRepository roleRepository) {
+            final CustomAuthenticationManager customAuthenticationManager,
+            final JwtService jwtService,
+            final UserRepository userRepository,
+            final RoleRepository roleRepository) {
         this.customAuthenticationManager = customAuthenticationManager;
         this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
 
-    public String signInUser(SignInDTO loginRequest) {
+    public String signInUser(final SignInDTO loginRequest) {
 
         var authentication = customAuthenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -58,7 +55,7 @@ public class SignInService {
     }
 
     @Transactional
-    public void signUpUser(SignUpDTO signUpRequest) {
+    public void signUpUser(final SignUpDTO signUpRequest) {
 
         if (userRepository.existsByEmail(signUpRequest.email())) {
             throw new BadRequestException("Email address already in use.");

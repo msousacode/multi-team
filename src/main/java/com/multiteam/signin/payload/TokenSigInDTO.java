@@ -1,4 +1,4 @@
-package com.multiteam.signin.dto;
+package com.multiteam.signin.payload;
 
 public record TokenSigInDTO(String token) {
 }

@@ -12,8 +12,6 @@ import java.util.UUID;
 public interface PatientRepository extends TenantableRepository<Patient> {
 
     @Modifying
-    @Query("UPDATE Patient pa SET pa.active = false WHERE pa.id = :patientId")
-    void inactivePatient(@Param("patientId") UUID patientId);
-
-    //Optional<Patient> findByIdAndOwnerId(UUID patientId, UUID ownerId);
+    @Query("UPDATE Patient pa SET pa.active = false WHERE pa.id = :patientId AND pa.tenantId = :tenantId")
+    void inactivePatient(@Param("patientId") UUID patientId, @Param("tenantId") UUID tenantId);
 }

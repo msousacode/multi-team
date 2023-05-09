@@ -1,4 +1,4 @@
-package com.multiteam.signin.dto;
+package com.multiteam.signin.payload;
 
 import org.springframework.util.Assert;
 

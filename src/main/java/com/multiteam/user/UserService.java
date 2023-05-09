@@ -49,7 +49,9 @@ public class UserService {
                 .provider(providerEnum)
                 .password(new BCryptPasswordEncoder().encode(password))
                 .build();
+
         user.setProvisionalPassword(password);
+
         return userRepository.save(user);
     }
 

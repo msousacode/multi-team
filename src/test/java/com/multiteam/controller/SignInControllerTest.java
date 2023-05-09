@@ -1,7 +1,7 @@
 package com.multiteam.controller;
 
-import com.multiteam.signin.dto.SignInDTO;
-import com.multiteam.signin.dto.SignUpDTO;
+import com.multiteam.signin.payload.SignInDTO;
+import com.multiteam.signin.payload.SignUpDTO;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestTemplateBase;
 import org.junit.jupiter.api.Test;
