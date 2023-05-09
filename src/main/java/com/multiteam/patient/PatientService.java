@@ -70,8 +70,8 @@ public class PatientService {
         return Boolean.TRUE;
     }
 
-    public Optional<Patient> getPatient(final UUID patientId, final UUID ownerId) {
-        return patientRepository.findById(patientId);
+    public Optional<Patient> findOneById(UUID patientId) {
+        return patientRepository.findOneById(patientId);
     }
 
     public List<PatientsProfessionalsView> getAllPatientsByProfessionalId(UUID professionalId, SituationEnum situation) {

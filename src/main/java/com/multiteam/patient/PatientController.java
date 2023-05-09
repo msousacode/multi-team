@@ -45,12 +45,11 @@ public class PatientController {
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_READ')")
-    @GetMapping("{patientId}/owner/{ownerId}")
+    @GetMapping("{patientId}")
     public ResponseEntity<PatientDTO> getPatient(
-            @PathVariable("patientId") UUID patientId,
-            @PathVariable("ownerId") UUID ownerId) {
+            @PathVariable("patientId") UUID patientId) {
 
-        var result = patientService.getPatient(patientId, ownerId).map(PatientDTO::fromPatientDTO);
+        var result = patientService.findOneById(patientId).map(PatientDTO::fromPatientDTO);
         return result
                 .map(patient -> ResponseEntity.status(HttpStatus.OK).body(patient))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());

@@ -59,22 +59,24 @@ public class ClinicService {
     }
 
     @Transactional
-    public Boolean updateClinic(ClinicDTO clinicRequest) {
+    public Boolean updateClinic(ClinicDTO clinicDTO) {
 
-        var clinicResult = clinicRespository.findOneById(clinicRequest.id());
+        var clinicResult = clinicRespository.findOneById(clinicDTO.id());
 
         if (clinicResult.isEmpty()) {
-            logger.debug("check if professional exists. professionalId: {}", clinicRequest.id());
-            logger.error("professional cannot be null. professionalId: {}", clinicRequest.id());
+            logger.debug("check if professional exists. professionalId: {}", clinicDTO.id());
+            logger.error("professional cannot be null. professionalId: {}", clinicDTO.id());
             return Boolean.FALSE;
         }
 
         var builder = new Clinic.Builder(
-                clinicRequest.clinicName(),
-                clinicRequest.cpfCnpj(),
-                clinicRequest.email(),
-                clinicRequest.cellPhone())
-                .id(clinicRequest.id())
+                clinicDTO.clinicName(),
+                clinicDTO.cpfCnpj(),
+                clinicDTO.email(),
+                clinicDTO.cellPhone())
+                .telephone(clinicDTO.telephone())
+                .observation(clinicDTO.observation())
+                .id(clinicDTO.id())
                 .build();
 
         clinicRespository.save(builder);
