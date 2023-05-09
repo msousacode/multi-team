@@ -3,7 +3,12 @@ package com.multiteam.clinic;
 import com.multiteam.core.models.Tenantable;
 import org.springframework.util.Assert;
 
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
@@ -36,9 +41,10 @@ public class Clinic extends Tenantable {
     @Column(name = "active")
     private Boolean active;
 
-    public Clinic() {}
+    public Clinic() {
+    }
 
-    public Clinic(Builder builder) {
+    public Clinic(final Builder builder) {
         this.id = builder.id;
         this.clinicName = builder.clinicName;
         this.cpfCnpj = builder.cpfCnpj;
@@ -105,14 +111,14 @@ public class Clinic extends Tenantable {
         private String observation;
         private Boolean active;
 
-        public Builder(String clinicName, String cpfCnpj, String email, String cellPhone) {
+        public Builder(final String clinicName, final String cpfCnpj, final String email, final String cellPhone) {
 
             Assert.notNull(clinicName, "clinic name not be null");
-            Assert.notNull(cpfCnpj, "clinic cpf_cnpj not be null");
+            Assert.notNull(cpfCnpj, "clinic cpfCnpj not be null");
             Assert.notNull(email, "clinic email not be null");
             Assert.notNull(cellPhone, "clinic cell phone not be null");
             Assert.isTrue(!clinicName.isEmpty(), "clinic name not be empty");
-            Assert.isTrue(!cpfCnpj.isEmpty(), "clinic cpf_cnpj not be empty");
+            Assert.isTrue(!cpfCnpj.isEmpty(), "clinic cpfCnpj not be empty");
             Assert.isTrue(!email.isEmpty(), "clinic email not be empty");
             Assert.isTrue(!cellPhone.isEmpty(), "clinic cell phone not be empty");
 

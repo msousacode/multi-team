@@ -1,6 +1,5 @@
 package com.multiteam.clinic;
 
-import com.multiteam.user.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -16,26 +15,24 @@ public class ClinicService {
 
     private final Logger logger = LogManager.getLogger(ClinicService.class);
 
-    private final ClinicRepository clinicRespository;
-    private final UserRepository userRepository;
+    private final ClinicRepository clinicRepository;
 
-    public ClinicService(ClinicRepository clinicRespository, UserRepository userRepository) {
-        this.clinicRespository = clinicRespository;
-        this.userRepository = userRepository;
+    public ClinicService(final ClinicRepository clinicRepository) {
+        this.clinicRepository = clinicRepository;
     }
 
     @Transactional
-    public Boolean createClinic(ClinicDTO clinicRequest) {
+    public Boolean createClinic(final ClinicDTO clinicDTO) {
 
         var builder = new Clinic.Builder(
-                clinicRequest.clinicName(),
-                clinicRequest.cpfCnpj(),
-                clinicRequest.email(),
-                clinicRequest.cellPhone())
+                clinicDTO.clinicName(),
+                clinicDTO.cpfCnpj(),
+                clinicDTO.email(),
+                clinicDTO.cellPhone())
                 .active(true)
                 .build();
 
-        clinicRespository.save(builder);
+        clinicRepository.save(builder);
 
         logger.info("clinic created {}", builder.toString());
 
@@ -43,25 +40,21 @@ public class ClinicService {
     }
 
     public List<ClinicDTO> getAllClinic() {
-        return clinicRespository.findAll()
-                .stream().map(i -> new ClinicDTO(
-                        i.getId(), i.getClinicName(), i.getCpfCnpj(),
-                        i.getEmail(), i.getCellPhone(), i.getTelephone(),
-                        i.getObservation())).toList();
+        return clinicRepository.findAll().stream().map(ClinicDTO::new).toList();
     }
 
     public Optional<Clinic> getClinicById(UUID clinicId) {
-        return clinicRespository.findOneById(clinicId);
+        return clinicRepository.findOneById(clinicId);
     }
 
-    public List<Clinic> getClinics(Set<UUID> clinics) {
-        return clinicRespository.findAllById(clinics);
+    public List<Clinic> getClinics(final Set<UUID> clinics) {
+        return clinicRepository.findAllById(clinics);
     }
 
     @Transactional
-    public Boolean updateClinic(ClinicDTO clinicDTO) {
+    public Boolean updateClinic(final ClinicDTO clinicDTO) {
 
-        var clinicResult = clinicRespository.findOneById(clinicDTO.id());
+        var clinicResult = clinicRepository.findOneById(clinicDTO.id());
 
         if (clinicResult.isEmpty()) {
             logger.debug("check if professional exists. professionalId: {}", clinicDTO.id());
@@ -79,7 +72,7 @@ public class ClinicService {
                 .id(clinicDTO.id())
                 .build();
 
-        clinicRespository.save(builder);
+        clinicRepository.save(builder);
 
         logger.info("updated clinic: {}", builder.toString());
 

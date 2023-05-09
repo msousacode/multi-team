@@ -11,4 +11,15 @@ public record ClinicDTO(
         String telephone,
         String observation
 ) {
+    public ClinicDTO(Clinic clinic) {
+        this(
+                clinic.getId(),
+                clinic.getClinicName(),
+                clinic.getCpfCnpj(),
+                clinic.getEmail(),
+                clinic.getCellPhone(),
+                clinic.getTelephone(),
+                clinic.getObservation()
+        );
+    }
 }
