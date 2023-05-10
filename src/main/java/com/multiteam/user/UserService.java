@@ -70,9 +70,9 @@ public class UserService {
     @Transactional
     public Boolean updateUser(UserDTO userDTO) {
 
-        var userResult = userRepository.findById(userDTO.id());
+        var userOptional = userRepository.findById(userDTO.id());
 
-        if (userResult.isEmpty()) {
+        if (userOptional.isEmpty()) {
             logger.warn("user not found with userId: {}", userDTO.id());
             return Boolean.FALSE;
         }
@@ -84,11 +84,12 @@ public class UserService {
 
         var builder = new User.Builder(
                 userDTO.id(),
-                userResult.get().getTenantId(),
+                userOptional.get().getTenantId(),
                 userDTO.name(),
                 userDTO.email(),
                 userDTO.active())
                 .roles(rolesSet)
+                .password(userOptional.get().getPassword())
                 .build();
 
         userRepository.save(builder);
@@ -99,9 +100,9 @@ public class UserService {
     }
 
     @Transactional
-    public Boolean inactiveUser(UUID userId, UUID ownerId) {
-        //userRepository.inactiveUser(userId, ownerId);
-        logger.info("inactive userId: {}, ownerId: {}", userId, ownerId);
+    public Boolean inactiveUser(UUID userId) {
+        userRepository.inactiveUser(userId, tenantContext.getTenantId());
+        logger.info("inactive userId: {}", userId);
         return Boolean.TRUE;
     }
 }

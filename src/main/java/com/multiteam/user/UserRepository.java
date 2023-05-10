@@ -27,13 +27,8 @@ public interface UserRepository extends TenantableRepository<User> {
     Page<User> findAllByTenantIdAndActiveIsTrue(UUID tenantId, Pageable pageable);
 
     Optional<User> findByTenantIdAndId(UUID tenantId, UUID userId);
-    /*
-    Page<User> findByOwnerIdAndActiveIsTrue(UUID ownerId, Pageable pageable);
-
-    Optional<User> findByIdAndOwnerId(UUID userId, UUID ownerId);
 
     @Modifying
-    @Query("UPDATE User u SET u.active = false WHERE u.id = :userId AND u.ownerId = :ownerId")
-    void inactiveUser(@Param("userId") UUID userId, @Param("ownerId") UUID ownerId);
-     */
+    @Query("UPDATE User u SET u.active = false WHERE u.id = :userId AND u.tenantId = :tenantId")
+    void inactiveUser(UUID userId, UUID tenantId);
 }
