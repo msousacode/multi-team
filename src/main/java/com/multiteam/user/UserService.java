@@ -25,7 +25,7 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final TenantContext tenantContext;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, TenantContext tenantContext) {
+    public UserService(final UserRepository userRepository, final RoleRepository roleRepository, final TenantContext tenantContext) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.tenantContext = tenantContext;
@@ -36,7 +36,7 @@ public class UserService {
     }
 
     @Transactional
-    public User createUser(String name, String email, AuthProviderEnum providerEnum) {
+    public User createUser(final String name, final String email, final AuthProviderEnum providerEnum) {
 
         var password = UUID.randomUUID().toString().substring(0, 10);
 
@@ -55,7 +55,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<UserDTO> getUser(UUID userId) {
+    public Optional<UserDTO> getUser(final UUID userId) {
 
         var user = userRepository.findByTenantIdAndId(tenantContext.getTenantId(), userId);
 
@@ -68,7 +68,7 @@ public class UserService {
     }
 
     @Transactional
-    public Boolean updateUser(UserDTO userDTO) {
+    public Boolean updateUser(final UserDTO userDTO) {
 
         var userOptional = userRepository.findById(userDTO.id());
 
@@ -100,7 +100,7 @@ public class UserService {
     }
 
     @Transactional
-    public Boolean inactiveUser(UUID userId) {
+    public Boolean inactiveUser(final UUID userId) {
         userRepository.inactiveUser(userId, tenantContext.getTenantId());
         logger.info("inactive userId: {}", userId);
         return Boolean.TRUE;
