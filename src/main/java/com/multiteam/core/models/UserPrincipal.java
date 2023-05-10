@@ -11,12 +11,12 @@ import java.util.*;
 
 public class UserPrincipal implements OAuth2User, UserDetails {
 
-    private UUID id;
-    private String email;
-    private String password;
-    private Collection<? extends GrantedAuthority> authorities;
+    private final UUID id;
+    private final String email;
+    private final String password;
+    private final Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
-    private UUID tenantId;
+    private final UUID tenantId;
 
     public UserPrincipal(UUID id, String email, String password, Collection<? extends GrantedAuthority> authorities, UUID tenantId) {
         this.id = id;
@@ -27,8 +27,8 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     }
 
     public static UserPrincipal create(User user) {
-        List<GrantedAuthority> authorities = Collections.
-                singletonList(new SimpleGrantedAuthority("ROLE_OWNER"));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRole().name())));
 
         return new UserPrincipal(
                 user.getId(),

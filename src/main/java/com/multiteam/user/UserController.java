@@ -35,7 +35,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody final UserDTO userDTO) {
-        if(userService.updateUser(userDTO)){
+        if (userService.updateUser(userDTO)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -59,10 +59,21 @@ public class UserController {
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> inactiveUser(@PathVariable("userId") final UUID userId) {
-        if(userService.inactiveUser(userId)) {
+        if (userService.inactiveUser(userId)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @PutMapping("/reset")
+    public ResponseEntity<?> resetPassword(@RequestBody final PasswordResetDTO passwordResetDTO) {
+        if (!passwordResetDTO.password1().equals(passwordResetDTO.password2())) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            userService.resetPassword(passwordResetDTO);
+            return ResponseEntity.ok().build();
         }
     }
 }

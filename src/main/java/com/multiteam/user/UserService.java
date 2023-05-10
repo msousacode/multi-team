@@ -105,4 +105,13 @@ public class UserService {
         logger.info("inactive userId: {}", userId);
         return Boolean.TRUE;
     }
+
+    @Transactional
+    public void resetPassword(PasswordResetDTO passwordResetDTO) {
+        if (userRepository.findOneById(passwordResetDTO.id()).isPresent()) {
+            userRepository.updatePassword(passwordResetDTO.id(), new BCryptPasswordEncoder().encode(passwordResetDTO.password1()), tenantContext.getTenantId());
+        } else {
+            logger.error("user not found, userId: {}", passwordResetDTO.id());
+        }
+    }
 }

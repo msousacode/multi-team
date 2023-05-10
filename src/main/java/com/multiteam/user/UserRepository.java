@@ -30,5 +30,9 @@ public interface UserRepository extends TenantableRepository<User> {
 
     @Modifying
     @Query("UPDATE User u SET u.active = false WHERE u.id = :userId AND u.tenantId = :tenantId")
-    void inactiveUser(UUID userId, UUID tenantId);
+    void inactiveUser(@Param("userId") UUID userId, @Param("tenantId") UUID tenantId);
+
+    @Modifying
+    @Query("UPDATE User u SET u.password = :password1 WHERE u.id = :userId AND u.tenantId = :tenantId")
+    void updatePassword(@Param("userId") UUID userId, @Param("password1") String password1, @Param("tenantId") UUID tenantId);
 }
