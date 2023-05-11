@@ -35,7 +35,7 @@ public class TreatmentControllerTest extends RestTemplateBase {
                 LocalDate.now(),
                 null);
 
-        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
+        headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_PROFESSIONAL));
         HttpEntity<Object> request = new HttpEntity<>(treatment, headers);
 
         ResponseEntity<?> response = restTemplate.postForEntity(uri, request, null);

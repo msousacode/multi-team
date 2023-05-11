@@ -18,7 +18,7 @@ import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
-@Table(name = "professionals")
+@Table(name = "anamneses")
 public class Anamnese extends Tenantable {
 
     @Id
@@ -32,7 +32,7 @@ public class Anamnese extends Tenantable {
     @Column(name = "conclusion")
     private String conclusion;
 
-    @Column(name = "status")
+    @Column(name = "situation")
     @Enumerated(EnumType.STRING)
     private AnamneseEnum status;
 
@@ -49,6 +49,7 @@ public class Anamnese extends Tenantable {
         this.conclusion = anamnese.conclusion;
         this.status = anamnese.status;
         this.patient = anamnese.patient;
+        this.active = anamnese.active;
     }
 
     public UUID getId() {

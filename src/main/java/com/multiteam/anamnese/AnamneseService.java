@@ -39,7 +39,14 @@ public class AnamneseService {
             return Boolean.FALSE;
         }
 
-        var builder = new Anamnese.Builder(anamneseDTO.id(), anamneseDTO.status(), patient.get()).build();
+        var builder = new Anamnese.Builder(
+                anamneseDTO.id(),
+                anamneseDTO.status(),
+                patient.get())
+                .annotation(anamneseDTO.annotation())
+                .conclusion(anamneseDTO.conclusion())
+                .active(true)
+                .build();
 
         anamneseRepository.save(builder);
 

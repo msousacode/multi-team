@@ -35,7 +35,7 @@ public class AnamneseController {
     @PostMapping
     public ResponseEntity<?> createAnamnese(@RequestBody final AnamneseDTO anamneseDTO) {
         if (anamneseService.createAnamnese(anamneseDTO)) {
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

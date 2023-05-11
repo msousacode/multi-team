@@ -12,6 +12,6 @@ import java.util.UUID;
 public interface AnamneseRepository extends TenantableRepository<Anamnese> {
 
     @Modifying
-    @Query("UPDATE Anamnese a SET a.active = false WHERE a.id :anamneseId AND a.tenantId = :tenantId")
+    @Query("UPDATE Anamnese a SET a.active = false WHERE a.id = :anamneseId AND a.tenantId = :tenantId")
     void inactiveAnamnese(@Param("anamneseId") UUID anamneseId, @Param("tenantId") UUID tenantId);
 }
