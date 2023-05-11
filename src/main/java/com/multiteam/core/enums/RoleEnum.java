@@ -1,7 +1,6 @@
 package com.multiteam.core.enums;
 
 public enum RoleEnum {
-    TENANT_ADMINISTRATOR_ID,
     ROLE_OWNER,
     ROLE_ADMIN,
     ROLE_PATIENT,

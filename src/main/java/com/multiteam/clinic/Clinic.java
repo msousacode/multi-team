@@ -3,7 +3,6 @@ package com.multiteam.clinic;
 import com.multiteam.core.models.Tenantable;
 import org.springframework.util.Assert;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
