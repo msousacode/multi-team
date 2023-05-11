@@ -75,6 +75,13 @@ public class Anamnese extends Tenantable {
         return active;
     }
 
+    @Override
+    public String toString() {
+        return "Anamnese{" +
+               "id=" + id +
+               '}';
+    }
+
     public static class Builder {
         //mandatory
         private UUID id;
