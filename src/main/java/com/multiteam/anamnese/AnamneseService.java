@@ -1,6 +1,7 @@
 package com.multiteam.anamnese;
 
 import com.multiteam.core.context.TenantContext;
+import com.multiteam.core.enums.AnamneseEnum;
 import com.multiteam.patient.PatientService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,14 +35,14 @@ public class AnamneseService {
 
         var patient = patientService.findOneById(anamneseDTO.patientId());
 
-        if(patient.isEmpty()) {
+        if (patient.isEmpty()) {
             logger.error("patient not found. Verify if patient exists, patientId: {}", anamneseDTO.patientId());
             return Boolean.FALSE;
         }
 
         var builder = new Anamnese.Builder(
                 anamneseDTO.id(),
-                anamneseDTO.status(),
+                AnamneseEnum.OPEN,
                 patient.get())
                 .annotation(anamneseDTO.annotation())
                 .conclusion(anamneseDTO.conclusion())

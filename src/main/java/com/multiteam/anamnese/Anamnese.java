@@ -86,7 +86,7 @@ public class Anamnese extends Tenantable {
     public static class Builder {
         //mandatory
         private UUID id;
-        private final AnamneseEnum status;
+        private AnamneseEnum status;
         private final Patient patient;
 
         //optional
@@ -94,7 +94,7 @@ public class Anamnese extends Tenantable {
         private String conclusion;
         private boolean active;
 
-        public Builder(UUID id, final AnamneseEnum status, final Patient patient) {
+        public Builder(UUID id, AnamneseEnum status, final Patient patient) {
 
             Assert.notNull(status, "AnamneseEnum should not be null");
             Assert.notNull(patient, "patient needs to be associated with anamnese");
