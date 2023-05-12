@@ -30,7 +30,7 @@ public class JwtService {
     @Value("${app.auth.tokenSecret}")
     private String tokenSecret;
 
-    @Value("${app.auth.tokenExpired}")
+    @Value("${app.auth.tokenExpiration}")
     private Integer tokenExpired;
 
     private SecretKey secretKey;

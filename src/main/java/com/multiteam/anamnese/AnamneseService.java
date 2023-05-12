@@ -59,7 +59,7 @@ public class AnamneseService {
     }
 
     public List<AnamneseResponseDTO> getAllAnamneses(final UUID patientId) {
-        return anamneseRepository.findAll().stream().map(AnamneseResponseDTO::new).toList();
+        return anamneseRepository.findAllByPatientId(patientId).stream().map(AnamneseResponseDTO::new).toList();
     }
 
     public Optional<AnamneseDTO> getAnamnese(final UUID anamneseId) {
