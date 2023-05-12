@@ -1,5 +1,6 @@
-package com.multiteam.anamnese;
+package com.multiteam.anamnese.dto;
 
+import com.multiteam.anamnese.Anamnese;
 import com.multiteam.core.enums.AnamneseEnum;
 
 import java.util.UUID;

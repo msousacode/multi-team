@@ -35,6 +35,9 @@ public class RestTemplateBase {
     @Value("${app.auth.tokenSecret}")
     private String tokenSecret;
 
+    @Value("${app.auth.tokenExpired}")
+    private Integer tokenExpired;
+
     private SecretKey secretKey;
 
     @PostConstruct
@@ -52,7 +55,7 @@ public class RestTemplateBase {
             authoritiesList.add(authority.getAuthority());
         }
 
-        Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(3600)));
+        Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(tokenExpired)));
 
         return Jwts.builder()
                 .setSubject(ConstantsTest.OWNER_ID)

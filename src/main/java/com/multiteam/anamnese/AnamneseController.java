@@ -1,5 +1,7 @@
 package com.multiteam.anamnese;
 
+import com.multiteam.anamnese.dto.AnamneseDTO;
+import com.multiteam.anamnese.dto.AnamneseResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,8 +44,8 @@ public class AnamneseController {
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
-    @GetMapping("/{patientId}")
-    public ResponseEntity<List<AnamneseDTO>> getAllAnamneses(@PathVariable("patientId") final UUID patientId) {
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<List<AnamneseResponseDTO>> getAllAnamneses(@PathVariable("patientId") final UUID patientId) {
         return ResponseEntity.ok(anamneseService.getAllAnamneses(patientId));
     }
 

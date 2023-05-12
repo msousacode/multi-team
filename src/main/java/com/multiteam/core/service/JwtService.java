@@ -30,6 +30,9 @@ public class JwtService {
     @Value("${app.auth.tokenSecret}")
     private String tokenSecret;
 
+    @Value("${app.auth.tokenExpired}")
+    private Integer tokenExpired;
+
     private SecretKey secretKey;
 
     private JwtParser jwtParser;
@@ -44,7 +47,7 @@ public class JwtService {
     public String createJwt(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(3600)));
+        Date expiryDate = Date.from(Instant.now().plus(Duration.ofSeconds(tokenExpired)));
 
         Collection<? extends GrantedAuthority> authorities = userPrincipal.getAuthorities();
 

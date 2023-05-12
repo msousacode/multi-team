@@ -43,6 +43,9 @@ public class Anamnese extends Tenantable {
     @Column(name = "active")
     private boolean active;
 
+    public Anamnese() {
+    }
+
     private Anamnese(Builder anamnese) {
         this.id = anamnese.id;
         this.annotation = anamnese.annotation;

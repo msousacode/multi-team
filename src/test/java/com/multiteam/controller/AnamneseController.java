@@ -1,8 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.anamnese.Anamnese;
-import com.multiteam.anamnese.AnamneseDTO;
-import com.multiteam.clinic.Clinic;
+import com.multiteam.anamnese.dto.AnamneseDTO;
 import com.multiteam.core.enums.AnamneseEnum;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.util.ConstantsTest;

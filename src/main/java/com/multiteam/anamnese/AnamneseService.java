@@ -1,5 +1,7 @@
 package com.multiteam.anamnese;
 
+import com.multiteam.anamnese.dto.AnamneseDTO;
+import com.multiteam.anamnese.dto.AnamneseResponseDTO;
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.AnamneseEnum;
 import com.multiteam.patient.PatientService;
@@ -56,8 +58,8 @@ public class AnamneseService {
         return Boolean.TRUE;
     }
 
-    public List<AnamneseDTO> getAllAnamneses(final UUID patientId) {
-        return anamneseRepository.findAll().stream().map(AnamneseDTO::new).toList();
+    public List<AnamneseResponseDTO> getAllAnamneses(final UUID patientId) {
+        return anamneseRepository.findAll().stream().map(AnamneseResponseDTO::new).toList();
     }
 
     public Optional<AnamneseDTO> getAnamnese(final UUID anamneseId) {
