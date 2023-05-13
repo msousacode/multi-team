@@ -20,13 +20,13 @@ public class TreatmentController {
 
     private final TreatmentService treatmentService;
 
-    public TreatmentController(TreatmentService treatmentService) {
+    public TreatmentController(final TreatmentService treatmentService) {
         this.treatmentService = treatmentService;
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @PostMapping
-    public ResponseEntity<?> createTreatment(@RequestBody TreatmentRequest treatmentDTO) {
+    public ResponseEntity<?> createTreatment(@RequestBody final TreatmentDTO treatmentDTO) {
         if (treatmentService.includeTreatment(treatmentDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
@@ -49,7 +49,7 @@ public class TreatmentController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @PutMapping
-    public ResponseEntity<?> updateTreatment(@RequestBody TreatmentRequest treatmentDTO) {
+    public ResponseEntity<?> updateTreatment(@RequestBody TreatmentDTO treatmentDTO) {
         if(treatmentService.updateTreatment(treatmentDTO)){
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {

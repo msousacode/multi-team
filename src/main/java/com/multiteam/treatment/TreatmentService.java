@@ -45,10 +45,10 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean includeTreatment(TreatmentRequest treatmentDTO) {
+    public Boolean includeTreatment(TreatmentDTO treatmentDTO) {
         logger.info("include treatment to patient id {}", treatmentDTO.patientId());
         var patient = getPatient(treatmentDTO);
-        var professional = getProfessional(treatmentDTO);
+        var professional = getProfessional(treatmentDTO);//TODO Buscar profissionais
 
         if (patient.isEmpty() || professional.isEmpty()) {
             logger.error("patient or professional cannot be empty");
@@ -77,7 +77,7 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean updateTreatment(TreatmentRequest treatmentDTO) {
+    public Boolean updateTreatment(TreatmentDTO treatmentDTO) {
 
         var result = treatmentRepository.findById(treatmentDTO.id());
 
@@ -156,7 +156,7 @@ public class TreatmentService {
         return treatmentRepository.findOneById(treatmentId).map(TreatmentResponse::fromTreatmentResponse);
     }
 
-    private Optional<Patient> getPatient(TreatmentRequest treatmentDTO) {
+    private Optional<Patient> getPatient(TreatmentDTO treatmentDTO) {
         var patient = patientService.findOneById(treatmentDTO.patientId());
         if (patient.isEmpty()) {
             logger.error("patient not found. It is necessary to have a patient to include the treatment");
@@ -165,7 +165,7 @@ public class TreatmentService {
         return patient;
     }
 
-    private Optional<Professional> getProfessional(TreatmentRequest treatmentDTO) {
+    private Optional<Professional> getProfessional(TreatmentDTO treatmentDTO) {
         var professional = professionalService.getProfessionalById(treatmentDTO.professionalId());
         if (professional.isEmpty()) {
             logger.error("professional not found. It is necessary to have a professional to include the treatment");

@@ -12,15 +12,15 @@ public record ProfessionalDTO(
         String email,
         Set<String> clinicId
 ) {
-    public static ProfessionalDTO fromProfessionalDTO(Professional p) {
+    public static ProfessionalDTO fromProfessionalDTO(Professional professional) {
         Set<String> clinicsIds = new HashSet<>();
-        p.getClinics().forEach(i -> clinicsIds.add(i.getId().toString()));
+        professional.getClinics().forEach(i -> clinicsIds.add(i.getId().toString()));
         return new ProfessionalDTO(
-                p.getId(),
-                p.getName(),
-                p.getSpecialty().getName(),
-                p.getCellPhone(),
-                p.getEmail(),
+                professional.getId(),
+                professional.getName(),
+                professional.getSpecialty().getName(),
+                professional.getCellPhone(),
+                professional.getEmail(),
                 clinicsIds);
     }
 }

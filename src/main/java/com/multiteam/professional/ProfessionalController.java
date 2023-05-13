@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -78,5 +79,11 @@ public class ProfessionalController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'ROLE_PROFESSIONAL', 'PERM_TREATMENT_READ', 'PERM_TREATMENT_WRITE')")
+    @PostMapping("/use-treatments")
+    public ResponseEntity<List<ProfessionalDTO>> getProfessionalsUseTreatment(@RequestBody ProfessionalUseTreatmentDTO professionalUseTreatmentDTO) {
+        return ResponseEntity.ok(professionalService.getProfessionalsUseTreatment(professionalUseTreatmentDTO));
     }
 }

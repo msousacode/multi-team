@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -76,7 +77,7 @@ public class ProfessionalService {
 
         professionalRepository.save(builder);
 
-        if(emailService.sendEmailNewUser(user.getEmail(), user.getProvisionalPassword())){
+        if (emailService.sendEmailNewUser(user.getEmail(), user.getProvisionalPassword())) {
             logger.warn("user was created , but an error occurred when sending the first login email: {}", professionalDTO.email());
         }
 
@@ -157,5 +158,11 @@ public class ProfessionalService {
         Set<UUID> clinicsIds = new HashSet<>();
         professionalDTO.clinicId().forEach(elem -> clinicsIds.add(UUID.fromString(elem)));
         return clinicsIds;
+    }
+
+    public List<ProfessionalDTO> getProfessionalsUseTreatment(ProfessionalUseTreatmentDTO professionalUseTreatmentDTO) {
+        return professionalRepository
+                .findAllByClinics_Id(professionalUseTreatmentDTO.clinics())
+                .stream().map(ProfessionalDTO::fromProfessionalDTO).toList();
     }
 }
