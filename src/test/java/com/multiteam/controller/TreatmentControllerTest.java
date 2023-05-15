@@ -2,8 +2,8 @@ package com.multiteam.controller;
 
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.SituationEnum;
-import com.multiteam.treatment.TreatmentDTO;
-import com.multiteam.treatment.TreatmentResponse;
+import com.multiteam.treatment.dto.TreatmentRequest;
+import com.multiteam.treatment.dto.TreatmentResponse;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestTemplateBase;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class TreatmentControllerTest extends RestTemplateBase {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/treatments");
 
-        var treatment = new TreatmentDTO(
+        var treatment = new TreatmentRequest(
                 null,
                 "Lorem ipsum volutpat taciti tempor porttitor ultricies vitae, venenatis aenean laoreet nulla nibh dictumst auctor gravida, phasellus platea varius ultricies venenatis etiam. lacinia lorem dapibus nam donec fermentum vitae nec sem vivamus sociosqu, consequat ",
                 SituationEnum.ANDAMENTO,
@@ -48,7 +48,7 @@ public class TreatmentControllerTest extends RestTemplateBase {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/treatments");
 
-        var treatment = new TreatmentDTO(
+        var treatment = new TreatmentRequest(
                 UUID.fromString(ConstantsTest.TREATMENT_ID),
                 "Lorem ipsum volutpat taciti tempor porttitor ultricies vitae.",
                 SituationEnum.ANDAMENTO,

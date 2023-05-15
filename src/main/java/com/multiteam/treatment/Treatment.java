@@ -36,10 +36,6 @@ public class Treatment extends Tenantable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "treatment_type")
-    @Enumerated(EnumType.STRING)
-    private TreatmentEnum treatmentType;
-
     @Column(name = "situation")
     @Enumerated(EnumType.STRING)
     private SituationEnum situation;
@@ -72,10 +68,6 @@ public class Treatment extends Tenantable {
 
     public String getDescription() {
         return description;
-    }
-
-    public TreatmentEnum getTreatmentType() {
-        return treatmentType;
     }
 
     public SituationEnum getSituation() {
@@ -113,16 +105,14 @@ public class Treatment extends Tenantable {
     public Treatment() {
     }
 
-    public Treatment(UUID id, TreatmentEnum treatmentType, SituationEnum situation, Patient patient) {
+    public Treatment(UUID id, SituationEnum situation, Patient patient) {
         this.id = id;
-        this.treatmentType = treatmentType;
         this.situation = situation;
         this.patient = patient;
     }
 
     private Treatment(Builder builder) {
         this.id = builder.id;
-        this.treatmentType = builder.treatmentType;
         this.situation = builder.situation;
         this.initialDate = builder.initialDate;
         this.patient = builder.patient;
@@ -136,7 +126,6 @@ public class Treatment extends Tenantable {
 
         //mandatory
         private UUID id;
-        private final TreatmentEnum treatmentType;
         private final SituationEnum situation;
         private final LocalDate initialDate;
         private final Patient patient;
@@ -149,19 +138,16 @@ public class Treatment extends Tenantable {
 
         public Builder(
                 UUID id,
-                final TreatmentEnum treatmentType,
                 final SituationEnum situation,
                 final LocalDate initialDate,
                 final Patient patient) {
 
-            Assert.notNull(treatmentType, "treatmentType should not be null");
             Assert.notNull(situation, "situation not should be null");
             Assert.notNull(initialDate, "initialDate should not be null");
             Assert.isTrue(validateDateInitial(initialDate), "initial date must not be less than the current date");
             Assert.notNull(patient, "patient needs to be associated with treatment");
 
             this.id = id;
-            this.treatmentType = treatmentType;
             this.situation = situation;
             this.initialDate = initialDate;
             this.patient = patient;

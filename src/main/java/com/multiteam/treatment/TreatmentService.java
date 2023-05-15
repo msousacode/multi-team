@@ -1,17 +1,21 @@
 package com.multiteam.treatment;
 
 import com.multiteam.core.context.TenantContext;
-import com.multiteam.core.enums.TreatmentEnum;
+import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.exception.BadRequestException;
+import com.multiteam.guest.Guest;
 import com.multiteam.patient.Patient;
 import com.multiteam.patient.PatientService;
-import com.multiteam.guest.Guest;
-import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.professional.Professional;
 import com.multiteam.professional.ProfessionalService;
+import com.multiteam.treatment.dto.TreatmentFilter;
+import com.multiteam.treatment.dto.TreatmentRequest;
+import com.multiteam.treatment.dto.TreatmentResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -46,7 +50,7 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean createTreatment(TreatmentDTO treatmentDTO) {
+    public Boolean createTreatment(TreatmentRequest treatmentDTO) {
         logger.info("include treatment to patient id {}", treatmentDTO.patientId());
         var patient = getPatient(treatmentDTO);
         var professionals = getProfessional(treatmentDTO);//TODO Buscar profissionais
@@ -58,8 +62,7 @@ public class TreatmentService {
 
         var builder = new Treatment.Builder(
                 null,
-                TreatmentEnum.FONOAUDIOLOGIA,
-                SituationEnum.ANDAMENTO,
+                SituationEnum.get(treatmentDTO.situation()),//TODO Ajustar para conveter a partir do DTO
                 treatmentDTO.initialDate(),
                 patient.get())
                 .finalDate(treatmentDTO.finalDate())
@@ -80,7 +83,7 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean updateTreatment(TreatmentDTO treatmentDTO) {
+    public Boolean updateTreatment(TreatmentRequest treatmentDTO) {
 
         var result = treatmentRepository.findById(treatmentDTO.id());
 
@@ -98,8 +101,7 @@ public class TreatmentService {
 
         var builder = new Treatment.Builder(
                 treatmentDTO.id(),
-                TreatmentEnum.FONOAUDIOLOGIA,
-                SituationEnum.ANDAMENTO,
+                SituationEnum.get(treatmentDTO.situation()),
                 LocalDate.now(),
                 result.get().getPatient())
                 .description(treatmentDTO.observation())
@@ -111,8 +113,14 @@ public class TreatmentService {
         return Boolean.TRUE;
     }
 
-    public Set<Treatment> getAllTreatmentsByPatientId(UUID patientId) {
-        return treatmentRepository.findAllByPatient_Id(patientId);
+    public Page<TreatmentResponse> getAllTreatments(final TreatmentFilter filter, Pageable pageable) {
+
+        if(filter.patientId() != null) {
+            return treatmentRepository.findAllByPatient_Id(filter.patientId(), pageable).map(TreatmentResponse::fromTreatmentResponse);
+        }
+
+        return treatmentRepository.findAll(pageable).map(TreatmentResponse::fromTreatmentResponse);
+
     }
 
     @Transactional
@@ -151,15 +159,15 @@ public class TreatmentService {
 
     @Transactional
     public void excludeTreatmentByPatientId(UUID patientId) {
-        var treatments = getAllTreatmentsByPatientId(patientId);
-        treatments.forEach(t -> inactiveTreatment(t.getId()));
+        var treatments = getAllTreatments(null, null);
+        treatments.forEach(t -> inactiveTreatment(t.id()));
     }
 
     public Optional<TreatmentResponse> getTreatment(UUID treatmentId) {
         return treatmentRepository.findOneById(treatmentId).map(TreatmentResponse::fromTreatmentResponse);
     }
 
-    private Optional<Patient> getPatient(TreatmentDTO treatmentDTO) {
+    private Optional<Patient> getPatient(TreatmentRequest treatmentDTO) {
         var patient = patientService.findOneById(treatmentDTO.patientId());
         if (patient.isEmpty()) {
             logger.error("patient not found. It is necessary to have a patient to include the treatment");
@@ -168,7 +176,7 @@ public class TreatmentService {
         return patient;
     }
 
-    private List<Professional> getProfessional(TreatmentDTO treatmentDTO) {
+    private List<Professional> getProfessional(TreatmentRequest treatmentDTO) {
         return professionalService.getAllProfessionalsByClinics(treatmentDTO.professionals());
     }
 }

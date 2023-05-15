@@ -1,10 +1,10 @@
-package com.multiteam.treatment;
+package com.multiteam.treatment.dto;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-public record TreatmentDTO(
+public record TreatmentRequest(
         UUID id,
         String observation,
         String situation,

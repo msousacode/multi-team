@@ -1,11 +1,15 @@
 package com.multiteam.treatment;
 
+import com.multiteam.treatment.dto.TreatmentFilter;
+import com.multiteam.treatment.dto.TreatmentRequest;
+import com.multiteam.treatment.dto.TreatmentResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -26,7 +30,7 @@ public class TreatmentController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @PostMapping
-    public ResponseEntity<?> createTreatment(@RequestBody final TreatmentDTO treatmentDTO) {
+    public ResponseEntity<?> createTreatment(@RequestBody final TreatmentRequest treatmentDTO) {
         if (treatmentService.createTreatment(treatmentDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
@@ -35,9 +39,13 @@ public class TreatmentController {
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_READ')")
-    @GetMapping("/patient/{patientId}")
-    public Set<Treatment> getAllTreatments(@PathVariable("patientId") UUID patientId) {
-        return treatmentService.getAllTreatmentsByPatientId(patientId);
+    @PostMapping("/filter")
+    public ResponseEntity<Page<TreatmentResponse>> getAllTreatments(
+            @RequestBody TreatmentFilter filter,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size
+    ) {
+        return ResponseEntity.ok(treatmentService.getAllTreatments(filter, PageRequest.of(page, size)));
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_READ')")
@@ -49,7 +57,7 @@ public class TreatmentController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @PutMapping
-    public ResponseEntity<?> updateTreatment(@RequestBody TreatmentDTO treatmentDTO) {
+    public ResponseEntity<?> updateTreatment(@RequestBody TreatmentRequest treatmentDTO) {
         if(treatmentService.updateTreatment(treatmentDTO)){
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {

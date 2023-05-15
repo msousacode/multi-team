@@ -1,5 +1,6 @@
 package com.multiteam.anamnese.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.multiteam.anamnese.Anamnese;
 import com.multiteam.core.enums.AnamneseEnum;
 import com.multiteam.patient.PatientDTO;
@@ -14,6 +15,7 @@ public record AnamneseResponseDTO(
         String conclusion,
         AnamneseEnum status,
         boolean active,
+        @JsonFormat(pattern="dd/MM/yyyy")
         LocalDateTime createDate,
         PatientDTO patientDTO
 ) {

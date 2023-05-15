@@ -1,27 +1,32 @@
-package com.multiteam.treatment;
+package com.multiteam.treatment.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.patient.PatientDTO;
+import com.multiteam.treatment.Treatment;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 public record TreatmentResponse(
         UUID id,
-        String description,
         SituationEnum situation,
-        PatientDTO patientDTO,
+        @JsonFormat(pattern = "dd/MM/yyyy")
         LocalDate initialDate,
-        LocalDate finalDate
+        @JsonFormat(pattern = "dd/MM/yyyy")
+        LocalDate finalDate,
+        @JsonFormat(pattern = "dd/MM/yyyy")
+        LocalDate dateBirth,
+        String namePatient
 ) {
     private TreatmentResponse(Treatment treatment) {
         this(
                 treatment.getId(),
-                treatment.getDescription(),
                 treatment.getSituation(),
-                PatientDTO.fromPatientDTO(treatment.getPatient()),
                 treatment.getInitialDate(),
-                treatment.getFinalDate()
+                treatment.getFinalDate(),
+                treatment.getPatient().getDateBirth(),
+                treatment.getPatient().getName()
         );
     }
 

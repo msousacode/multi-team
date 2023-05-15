@@ -7,6 +7,7 @@ import com.multiteam.core.exception.TreatmentNotExistsException;
 import com.multiteam.treatment.TreatmentService;
 import com.multiteam.user.User;
 import com.multiteam.user.UserRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class GuestService {
     @Transactional
     public Boolean createGuest(GuestRequest guestRequest) {
 
-        var treatment = treatmentService.getAllTreatmentsByPatientId(guestRequest.patientId());
+        var treatment = treatmentService.getAllTreatments(null, Pageable.ofSize(10));
 
         if(guestRequest.ownerId() == null) {
             throw new OwnerException("value ownerId cannot be null");
@@ -58,7 +59,7 @@ public class GuestService {
 
             var guest = guestRespository.save(builder);
 
-            treatmentService.includeGuestInTreatment(guest, treatment);
+            treatmentService.includeGuestInTreatment(guest, null);
         }
         return Boolean.TRUE;
     }
@@ -66,11 +67,11 @@ public class GuestService {
     @Transactional
     public Boolean addGuestInTreatment(UUID patientId, UUID guestId) {
 
-        var treatments = treatmentService.getAllTreatmentsByPatientId(patientId);
+        var treatments = treatmentService.getAllTreatments(null, Pageable.ofSize(10));
         var guest = guestRespository.findById(guestId);
 
         if (guest.isPresent() && !treatments.isEmpty())
-            treatmentService.includeGuestInTreatment(guest.get(), treatments);
+            treatmentService.includeGuestInTreatment(guest.get(), null);
         else {
             throw new TreatmentNotExistsException("treatment does not exist");
         }
