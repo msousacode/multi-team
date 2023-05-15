@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -45,31 +46,33 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean includeTreatment(TreatmentDTO treatmentDTO) {
+    public Boolean createTreatment(TreatmentDTO treatmentDTO) {
         logger.info("include treatment to patient id {}", treatmentDTO.patientId());
         var patient = getPatient(treatmentDTO);
-        var professional = getProfessional(treatmentDTO);//TODO Buscar profissionais
+        var professionals = getProfessional(treatmentDTO);//TODO Buscar profissionais
 
-        if (patient.isEmpty() || professional.isEmpty()) {
+        if (patient.isEmpty() || professionals.isEmpty()) {
             logger.error("patient or professional cannot be empty");
             throw new BadRequestException("patient or professional cannot be empty");
         }
 
         var builder = new Treatment.Builder(
                 null,
-                TreatmentEnum.get(professional.get().getSpecialty().getName()),
-                treatmentDTO.situation(),
+                TreatmentEnum.FONOAUDIOLOGIA,
+                SituationEnum.ANDAMENTO,
                 treatmentDTO.initialDate(),
                 patient.get())
                 .finalDate(treatmentDTO.finalDate())
-                .description(treatmentDTO.description())
+                .description(treatmentDTO.observation())
                 .active(true)
                 .build();
 
         var treatment = treatmentRepository.save(builder);
 
-        var treatmentProfessional = new TreatmentProfessional(null, treatment, professional.get(), "", SituationEnum.ANDAMENTO);
-        treatementProfessionalRepository.save(treatmentProfessional);
+        professionals.forEach(professional -> {
+            var treatmentProfessional = new TreatmentProfessional(null, treatment, professional, "", SituationEnum.ANDAMENTO);
+            treatementProfessionalRepository.save(treatmentProfessional);
+        });
 
         logger.info("successfully included treatment id: {}", treatment.getId());
 
@@ -90,17 +93,17 @@ public class TreatmentService {
 
         if (patient.isEmpty() || professional.isEmpty()) {
             logger.error("patient or professional cannot be empty");
-            throw new BadRequestException("patient or professional cannot be empty");
+            throw new BadRequestException("patient or professional cannot be empty or null");
         }
 
         var builder = new Treatment.Builder(
                 treatmentDTO.id(),
-                TreatmentEnum.get(professional.get().getSpecialty().getName()),
-                treatmentDTO.situation(),
-                treatmentDTO.initialDate(),
+                TreatmentEnum.FONOAUDIOLOGIA,
+                SituationEnum.ANDAMENTO,
+                LocalDate.now(),
                 result.get().getPatient())
-                .description(treatmentDTO.description())
-                .finalDate(treatmentDTO.finalDate())
+                .description(treatmentDTO.observation())
+                .finalDate(LocalDate.now())
                 .build();
 
         treatmentRepository.save(builder);
@@ -165,12 +168,7 @@ public class TreatmentService {
         return patient;
     }
 
-    private Optional<Professional> getProfessional(TreatmentDTO treatmentDTO) {
-        var professional = professionalService.getProfessionalById(treatmentDTO.professionalId());
-        if (professional.isEmpty()) {
-            logger.error("professional not found. It is necessary to have a professional to include the treatment");
-            return Optional.empty();
-        }
-        return professional;
+    private List<Professional> getProfessional(TreatmentDTO treatmentDTO) {
+        return professionalService.getAllProfessionalsByClinics(treatmentDTO.professionals());
     }
 }

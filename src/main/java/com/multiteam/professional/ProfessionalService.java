@@ -165,4 +165,8 @@ public class ProfessionalService {
                 .findAllByClinics_Id(professionalUseTreatmentDTO.clinics())
                 .stream().map(ProfessionalDTO::fromProfessionalDTO).toList();
     }
+
+    public List<Professional> getAllProfessionalsByClinics(List<UUID> professionals) {
+        return professionalRepository.getAllProfessionalsByClinics(professionals);
+    }
 }

@@ -33,4 +33,9 @@ public interface ProfessionalRepository extends TenantableRepository<Professiona
             AND p.active = true
             """)
     List<Professional> findAllByClinics_Id(List<UUID> clinics);
+
+    @Query("""
+            SELECT p FROM Professional p WHERE p.id in (:professionals)
+            """)
+    List<Professional> getAllProfessionalsByClinics(@Param("professionals") List<UUID> professionals);
 }

@@ -27,7 +27,7 @@ public class TreatmentController {
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @PostMapping
     public ResponseEntity<?> createTreatment(@RequestBody final TreatmentDTO treatmentDTO) {
-        if (treatmentService.includeTreatment(treatmentDTO)) {
+        if (treatmentService.createTreatment(treatmentDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
