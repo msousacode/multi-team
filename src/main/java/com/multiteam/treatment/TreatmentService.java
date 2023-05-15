@@ -115,12 +115,10 @@ public class TreatmentService {
 
     public Page<TreatmentResponse> getAllTreatments(final TreatmentFilter filter, Pageable pageable) {
 
-        if(filter.patientId() != null) {
+        if (filter.patientId() != null) {
             return treatmentRepository.findAllByPatient_Id(filter.patientId(), pageable).map(TreatmentResponse::fromTreatmentResponse);
         }
-
         return treatmentRepository.findAll(pageable).map(TreatmentResponse::fromTreatmentResponse);
-
     }
 
     @Transactional
