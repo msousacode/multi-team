@@ -2,8 +2,8 @@ package com.multiteam.controller;
 
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.SituationEnum;
-import com.multiteam.treatment.dto.TreatmentRequest;
-import com.multiteam.treatment.dto.TreatmentResponse;
+import com.multiteam.modules.treatment.dto.TreatmentRequest;
+import com.multiteam.modules.treatment.dto.TreatmentResponse;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestTemplateBase;
 import org.junit.jupiter.api.Test;

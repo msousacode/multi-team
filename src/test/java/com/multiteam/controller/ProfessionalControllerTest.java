@@ -2,7 +2,7 @@ package com.multiteam.controller;
 
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.SpecialtyEnum;
-import com.multiteam.professional.ProfessionalDTO;
+import com.multiteam.modules.professional.ProfessionalDTO;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestTemplateBase;
 import org.junit.jupiter.api.Test;

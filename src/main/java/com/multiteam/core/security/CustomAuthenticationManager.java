@@ -1,8 +1,8 @@
 package com.multiteam.core.security;
 
 import com.multiteam.core.models.UserPrincipal;
-import com.multiteam.user.User;
-import com.multiteam.user.UserRepository;
+import com.multiteam.modules.user.User;
+import com.multiteam.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

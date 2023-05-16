@@ -1,6 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.anamnese.dto.AnamneseDTO;
+import com.multiteam.modules.anamnese.dto.AnamneseRequest;
 import com.multiteam.core.enums.AnamneseEnum;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.util.ConstantsTest;
@@ -22,7 +22,7 @@ public class AnamneseController extends RestTemplateBase {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/anamneses");
 
-        var clinic = new AnamneseDTO(
+        var clinic = new AnamneseRequest(
                 null,
                 "Lorem ipsum volutpat taciti tempor porttitor ultricies vitae, venenatis aenean laoreet nulla nibh dictumst auctor gravida, phasellus platea varius ultricies venenatis etiam. lacinia lorem dapibus nam donec fermentum vitae nec sem vivamus sociosqu, consequat ",
                 "Lorem ipsum volutpat taciti tempor porttitor ultricies vitae, venenatis aenean laoreet nulla nibh dictumst auctor gravida, phasellus platea varius ultricies venenatis etiam. lacinia lorem dapibus nam donec fermentum vitae nec sem vivamus sociosqu, consequat ",

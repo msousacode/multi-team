@@ -1,10 +1,10 @@
 package com.multiteam.controller;
 
-import com.multiteam.clinic.ClinicDTO;
+import com.multiteam.modules.clinic.ClinicDTO;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.SexEnum;
-import com.multiteam.patient.PatientDTO;
-import com.multiteam.professional.ProfessionalDTO;
+import com.multiteam.modules.patient.PatientDTO;
+import com.multiteam.modules.professional.ProfessionalDTO;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestResponsePage;
 import com.multiteam.util.RestTemplateBase;

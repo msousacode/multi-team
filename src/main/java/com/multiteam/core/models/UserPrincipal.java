@@ -1,6 +1,6 @@
 package com.multiteam.core.models;
 
-import com.multiteam.user.User;
+import com.multiteam.modules.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

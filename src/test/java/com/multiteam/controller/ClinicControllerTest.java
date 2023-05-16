@@ -1,7 +1,7 @@
 package com.multiteam.controller;
 
-import com.multiteam.clinic.Clinic;
-import com.multiteam.clinic.ClinicDTO;
+import com.multiteam.modules.clinic.Clinic;
+import com.multiteam.modules.clinic.ClinicDTO;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.util.RestTemplateBase;

@@ -1,7 +1,7 @@
 package com.multiteam.controller;
 
 import com.multiteam.core.enums.RoleEnum;
-import com.multiteam.user.UserDTO;
+import com.multiteam.modules.user.UserDTO;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestResponsePage;
 import com.multiteam.util.RestTemplateBase;
