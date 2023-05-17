@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -161,9 +162,9 @@ public class ProfessionalService {
     }
 
     public List<ProfessionalDTO> getProfessionalsUseTreatment(ProfessionalUseTreatmentDTO professionalUseTreatmentDTO) {
-        return professionalRepository
-                .findAllByClinics_Id(professionalUseTreatmentDTO.clinics())
-                .stream().map(ProfessionalDTO::fromProfessionalDTO).toList();
+        List<UUID> ids = new ArrayList<>();
+        professionalUseTreatmentDTO.clinics().forEach(clinicDTO -> ids.add(clinicDTO.id()));
+        return professionalRepository.findAllByClinics_Id(ids).stream().map(ProfessionalDTO::fromProfessionalDTO).toList();
     }
 
     public List<Professional> getAllProfessionalsByClinics(List<UUID> professionals) {

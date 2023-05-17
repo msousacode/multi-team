@@ -6,7 +6,6 @@ import com.multiteam.modules.anamnese.dto.AnamneseRequest;
 import com.multiteam.modules.anamnese.dto.AnamneseReportResponse;
 import com.multiteam.modules.anamnese.dto.AnamneseResponse;
 import com.multiteam.modules.patient.PatientService;
-import com.multiteam.modules.professional.ProfessionalService;
 import com.multiteam.modules.user.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -68,7 +67,7 @@ public class AnamneseService {
         return anamneseRepository.findAllByPatientId(patientId).stream().map(AnamneseResponse::new).toList();
     }
 
-    public Optional<AnamneseReportResponse> getAnamnese(final UUID anamneseId) {
+    public Optional<AnamneseReportResponse> getAnamneseReport(final UUID anamneseId) {
 
         var anamnese = anamneseRepository.findOneById(anamneseId);
 

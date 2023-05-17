@@ -3,11 +3,14 @@ package com.multiteam.modules.treatment;
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.exception.BadRequestException;
+import com.multiteam.modules.clinic.Clinic;
+import com.multiteam.modules.clinic.ClinicDTO;
 import com.multiteam.modules.guest.Guest;
 import com.multiteam.modules.patient.Patient;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
+import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
 import com.multiteam.modules.treatment.dto.TreatmentFilter;
 import com.multiteam.modules.treatment.dto.TreatmentRequest;
 import com.multiteam.modules.treatment.dto.TreatmentResponse;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -161,8 +165,25 @@ public class TreatmentService {
         treatments.forEach(t -> inactiveTreatment(t.getId()));
     }
 
-    public Optional<TreatmentResponse> getTreatment(UUID treatmentId) {
-        return treatmentRepository.findOneById(treatmentId).map(TreatmentResponse::fromTreatmentResponse);
+    public Optional<TreatmentEditResponse> getTreatment(final UUID treatmentId) {
+        var treatment = treatmentRepository.findOneById(treatmentId);
+
+        if (treatment.isEmpty()) {
+            logger.error("treatment not found id: {}", treatmentId);
+            return Optional.empty();
+        }
+
+        Set<UUID> professionals = new HashSet<>();
+        Set<Clinic> clinics = new HashSet<>();
+
+        var treatmentProfessionals = treatment.get().getTreatmentProfessionals();
+
+        treatmentProfessionals.forEach(treatmentProfessional -> {
+            professionals.add(treatmentProfessional.getProfessional().getId());
+            clinics.addAll(treatmentProfessional.getProfessional().getClinics());
+        });
+
+        return Optional.of(TreatmentEditResponse.fromTreatmentEditResponse(treatment.get(), clinics, professionals));
     }
 
     private Optional<Patient> getPatient(TreatmentRequest treatmentDTO) {

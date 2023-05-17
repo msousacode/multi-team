@@ -1,7 +1,8 @@
 package com.multiteam.modules.professional;
 
-import java.util.List;
-import java.util.UUID;
+import com.multiteam.modules.clinic.ClinicDTO;
 
-public record ProfessionalUseTreatmentDTO(List<UUID> clinics) {
+import java.util.List;
+
+public record ProfessionalUseTreatmentDTO(List<ClinicDTO> clinics) {
 }

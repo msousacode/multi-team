@@ -1,5 +1,6 @@
 package com.multiteam.modules.treatment;
 
+import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
 import com.multiteam.modules.treatment.dto.TreatmentFilter;
 import com.multiteam.modules.treatment.dto.TreatmentRequest;
 import com.multiteam.modules.treatment.dto.TreatmentResponse;
@@ -58,9 +59,9 @@ public class TreatmentController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_READ')")
     @GetMapping("/{treatmentId}")
-    public ResponseEntity<TreatmentResponse> getTreatment(@PathVariable("treatmentId") UUID treatmentId) {
-        var treatmentOptional = treatmentService.getTreatment(treatmentId);
-        return treatmentOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<TreatmentEditResponse> getTreatment(@PathVariable("treatmentId") UUID treatmentId) {
+        return treatmentService.getTreatment(treatmentId)
+                .map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")

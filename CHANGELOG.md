@@ -1,8 +1,9 @@
-### V0.0.1-SNAPSHOT
+### V0.0.1-rc
 - feat: SignUp
 - feat: SignIn
 - feat: Listar anamneses.
 - feat: Incluir anamnese.
+- feat: Gerar relatório de anamnese.
 - feat: Listar pacientes.
 - feat: Incluir paciente com envio de e-mail para primeiro acesso.
 - feat: Editar paciente.

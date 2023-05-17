@@ -52,11 +52,11 @@ public class AnamneseController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
     @GetMapping("/{anamneseId}")
-    public ResponseEntity<AnamneseReportResponse> getAnamnese(@PathVariable("anamneseId") final UUID anamneseId) {
-        var anamneseOptional = anamneseService.getAnamnese(anamneseId);
+    public ResponseEntity<AnamneseReportResponse> getAnamneseReport(@PathVariable("anamneseId") final UUID anamneseId) {
+        var anamneseOptional = anamneseService.getAnamneseReport(anamneseId);
         return anamneseOptional
                 .map(anamnese -> ResponseEntity.status(HttpStatus.OK).body(anamnese))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
