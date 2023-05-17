@@ -17,11 +17,6 @@ databaseChangeLog:
                   name: description
                   type: varchar(500)
               - column:
-                  name: treatment_type
-                  type: varchar(100)
-                  constraints:
-                    nullable: false
-              - column:
                   name: situation
                   type: varchar(50)
                   constraints:
