@@ -1,4 +1,4 @@
-### V0.0.1-rc
+### V0.0.1-rc-1
 - feat: SignUp
 - feat: SignIn
 - feat: Listar anamneses.
@@ -20,3 +20,5 @@
 - feat: Listar clínica.
 - feat: Incluir clínica.
 - feat: Editar clínica.
+- feat: Listar tratamentos.
+- feat: Incluir tratamentos.
