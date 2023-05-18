@@ -164,7 +164,7 @@ public class ProfessionalService {
     public List<ProfessionalDTO> getProfessionalsUseTreatment(ProfessionalUseTreatmentDTO professionalUseTreatmentDTO) {
         List<UUID> ids = new ArrayList<>();
         professionalUseTreatmentDTO.clinics().forEach(clinicDTO -> ids.add(clinicDTO.id()));
-        return professionalRepository.findAllByClinics_Id(ids).stream().map(ProfessionalDTO::fromProfessionalDTO).toList();
+        return professionalRepository.findAllByClinicsId(ids).stream().map(ProfessionalDTO::fromProfessionalDTO).toList();
     }
 
     public List<Professional> getAllProfessionalsByClinics(List<UUID> professionals) {

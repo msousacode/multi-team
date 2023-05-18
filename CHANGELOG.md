@@ -22,3 +22,4 @@
 - feat: Editar clínica.
 - feat: Listar tratamentos.
 - feat: Incluir tratamentos.
+- feat: Editar tratamentos.

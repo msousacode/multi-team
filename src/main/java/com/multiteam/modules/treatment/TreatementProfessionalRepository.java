@@ -15,4 +15,8 @@ public interface TreatementProfessionalRepository extends JpaRepository<Treatmen
     @Modifying
     @Query("UPDATE TreatmentProfessional tp SET tp.situationType = :situation WHERE tp.treatment.id = :treatmentId")
     void inactiveProfessionalsByTreatmentId(@Param("treatmentId") UUID treatmentId, @Param("situation") SituationEnum situation);
+
+    @Modifying
+    @Query("DELETE FROM TreatmentProfessional tp WHERE tp.treatment.id = :id")
+    void deleteByTreatment_Id(UUID id);
 }

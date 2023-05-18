@@ -63,11 +63,16 @@ public class TreatmentProfessional {
                 return professional;
         }
 
+        public void setTreatment(Treatment treatment) {
+                this.treatment = treatment;
+        }
+
+        public void setProfessional(Professional professional) {
+                this.professional = professional;
+        }
+
         public String getAnnotation() {
                 return annotation;
         }
 
-        public SituationEnum getSituationType() {
-                return situationType;
-        }
 }

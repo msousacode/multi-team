@@ -54,7 +54,7 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean createTreatment(TreatmentRequest treatmentDTO) {
+    public Boolean createTreatment(final TreatmentRequest treatmentDTO) {
         logger.info("include treatment to patient id {}", treatmentDTO.patientId());
         var patient = getPatient(treatmentDTO);
         var professionals = getProfessional(treatmentDTO);//TODO Buscar profissionais
@@ -87,33 +87,54 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean updateTreatment(TreatmentRequest treatmentDTO) {
+    public Boolean updateTreatment(final TreatmentRequest treatmentRequest) {
 
-        var result = treatmentRepository.findById(treatmentDTO.id());
+        var result = treatmentRepository.findById(treatmentRequest.id());
 
         if (result.isEmpty()) {
+            logger.error("error when updating treatment id: {}", treatmentRequest.id());
             return Boolean.FALSE;
         }
 
-        var patient = getPatient(treatmentDTO);
-        var professional = getProfessional(treatmentDTO);
+        var patient = getPatient(treatmentRequest);
+        var professionals = getProfessional(treatmentRequest);
 
-        if (patient.isEmpty() || professional.isEmpty()) {
+        if (patient.isEmpty() || professionals.isEmpty()) {
             logger.error("patient or professional cannot be empty");
             throw new BadRequestException("patient or professional cannot be empty or null");
         }
 
         var builder = new Treatment.Builder(
-                treatmentDTO.id(),
-                SituationEnum.get(treatmentDTO.situation()),
-                LocalDate.now(),
+                result.get().getId(),
+                SituationEnum.get(treatmentRequest.situation()),
+                treatmentRequest.initialDate(),
                 result.get().getPatient())
-                .description(treatmentDTO.observation())
-                .finalDate(LocalDate.now())
+                .description(treatmentRequest.observation())
+                .finalDate(treatmentRequest.finalDate())
                 .build();
 
-        treatmentRepository.save(builder);
+        var treatment = treatmentRepository.save(builder);
+
+        /**
+         *
+         *
+         * !!!!!!!!!!! Arrumar
+         */
+
+        treatementProfessionalRepository.deleteByTreatment_Id(treatmentRequest.id());
+
+        professionals.forEach(professional -> {
+            var treatmentProfessional = new TreatmentProfessional(null, treatment, professional, "", treatment.getSituation());
+            treatementProfessionalRepository.save(treatmentProfessional);
+        });
+
+        /***
+         *
+         *
+         */
+
         logger.info("successfully updated treatment");
+
         return Boolean.TRUE;
     }
 
@@ -147,7 +168,7 @@ public class TreatmentService {
     }
 
     @Transactional
-    public void includeGuestInTreatment(Guest guest, Set<Treatment> treatments) {
+    public void includeGuestInTreatment(final Guest guest, final Set<Treatment> treatments) {
         treatments.forEach(treatment -> {
             treatment.addGuestsInTreatment(guest);
             treatmentRepository.save(treatment);
@@ -180,13 +201,16 @@ public class TreatmentService {
 
         treatmentProfessionals.forEach(treatmentProfessional -> {
             professionals.add(treatmentProfessional.getProfessional().getId());
+            //get clinics utilizando o clinicId da clinica em que o tratamento esta alocado.
             clinics.addAll(treatmentProfessional.getProfessional().getClinics());
         });
+
+        //pequisa as clinicas e alimenta o objeto clinics.addAll()
 
         return Optional.of(TreatmentEditResponse.fromTreatmentEditResponse(treatment.get(), clinics, professionals));
     }
 
-    private Optional<Patient> getPatient(TreatmentRequest treatmentDTO) {
+    private Optional<Patient> getPatient(final TreatmentRequest treatmentDTO) {
         var patient = patientService.findOneById(treatmentDTO.patientId());
         if (patient.isEmpty()) {
             logger.error("patient not found. It is necessary to have a patient to include the treatment");
@@ -195,7 +219,7 @@ public class TreatmentService {
         return patient;
     }
 
-    private List<Professional> getProfessional(TreatmentRequest treatmentDTO) {
+    private List<Professional> getProfessional(final TreatmentRequest treatmentDTO) {
         return professionalService.getAllProfessionalsByClinics(treatmentDTO.professionals());
     }
 }

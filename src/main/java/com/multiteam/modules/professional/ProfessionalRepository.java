@@ -27,12 +27,12 @@ public interface ProfessionalRepository extends TenantableRepository<Professiona
     void professionalInactive(@Param("professionalId") UUID professionalId, @Param("tenantId") final UUID tenantId);
 
     @Query("""
-            SELECT p FROM Professional p
+            SELECT DISTINCT p FROM Professional p
             JOIN p.clinics c
             WHERE c.id in (:clinics)
             AND p.active = true
             """)
-    List<Professional> findAllByClinics_Id(List<UUID> clinics);
+    List<Professional> findAllByClinicsId(List<UUID> clinics);
 
     @Query("""
             SELECT p FROM Professional p WHERE p.id in (:professionals)

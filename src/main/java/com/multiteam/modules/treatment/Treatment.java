@@ -143,7 +143,6 @@ public class Treatment extends Tenantable {
 
             Assert.notNull(situation, "situation not should be null");
             Assert.notNull(initialDate, "initialDate should not be null");
-            Assert.isTrue(validateDateInitial(initialDate), "initial date must not be less than the current date");
             Assert.notNull(patient, "patient needs to be associated with treatment");
 
             this.id = id;
@@ -174,10 +173,6 @@ public class Treatment extends Tenantable {
 
         public Treatment build() {
             return new Treatment(this);
-        }
-
-        private static boolean validateDateInitial(LocalDate initialDate) {
-            return !LocalDate.now().isAfter(initialDate);
         }
     }
 }
