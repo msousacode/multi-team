@@ -1,10 +1,19 @@
 package com.multiteam.modules.treatment;
 
 import com.multiteam.core.enums.SituationEnum;
+import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.professional.Professional;
 import org.springframework.util.Assert;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
@@ -24,8 +33,9 @@ public class TreatmentProfessional {
         @JoinColumn(name = "professional_id")
         private Professional professional;
 
-        @Column(name = "annotation")
-        private String annotation;
+        @ManyToOne
+        @JoinColumn(name = "clinic_id")
+        private Clinic clinic;
 
         @Column(name = "situation_type")
         @Enumerated(EnumType.STRING)
@@ -34,20 +44,21 @@ public class TreatmentProfessional {
         public TreatmentProfessional() {}
 
         public TreatmentProfessional(
-                UUID id,
-                Treatment treatment,
-                Professional professional,
-                String annotation,
-                SituationEnum situationType) {
+                final UUID id,
+                final Treatment treatment,
+                final Professional professional,
+                final Clinic clinic,
+                final SituationEnum situationType) {
 
                 Assert.notNull(treatment, "treatment should not be null");
                 Assert.notNull(professional, "professional should not be null");
+                Assert.notNull(professional, "clinic should not be null");
                 Assert.notNull(situationType, "situationType should not be null");
 
                 this.id = id;
                 this.treatment = treatment;
                 this.professional = professional;
-                this.annotation = annotation;
+                this.clinic = clinic;
                 this.situationType = situationType;
         }
 
@@ -63,6 +74,10 @@ public class TreatmentProfessional {
                 return professional;
         }
 
+        public Clinic getClinic() {
+                return clinic;
+        }
+
         public void setTreatment(Treatment treatment) {
                 this.treatment = treatment;
         }
@@ -70,9 +85,4 @@ public class TreatmentProfessional {
         public void setProfessional(Professional professional) {
                 this.professional = professional;
         }
-
-        public String getAnnotation() {
-                return annotation;
-        }
-
 }

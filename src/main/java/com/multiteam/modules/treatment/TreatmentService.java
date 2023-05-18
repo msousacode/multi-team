@@ -76,10 +76,8 @@ public class TreatmentService {
 
         var treatment = treatmentRepository.save(builder);
 
-        professionals.forEach(professional -> {
-            var treatmentProfessional = new TreatmentProfessional(null, treatment, professional, "", SituationEnum.ANDAMENTO);
-            treatementProfessionalRepository.save(treatmentProfessional);
-        });
+        //Salva o vínculo entre Tratamento, Profissional e Clínica
+        saveLinkTreatmentProfessional(professionals, treatment);
 
         logger.info("successfully included treatment id: {}", treatment.getId());
 
@@ -115,23 +113,7 @@ public class TreatmentService {
 
         var treatment = treatmentRepository.save(builder);
 
-        /**
-         *
-         *
-         * !!!!!!!!!!! Arrumar
-         */
-
-        treatementProfessionalRepository.deleteByTreatment_Id(treatmentRequest.id());
-
-        professionals.forEach(professional -> {
-            var treatmentProfessional = new TreatmentProfessional(null, treatment, professional, "", treatment.getSituation());
-            treatementProfessionalRepository.save(treatmentProfessional);
-        });
-
-        /***
-         *
-         *
-         */
+        saveLinkTreatmentProfessional(professionals, treatment);
 
         logger.info("successfully updated treatment");
 
@@ -221,5 +203,17 @@ public class TreatmentService {
 
     private List<Professional> getProfessional(final TreatmentRequest treatmentDTO) {
         return professionalService.getAllProfessionalsByClinics(treatmentDTO.professionals());
+    }
+
+    private void saveLinkTreatmentProfessional(List<Professional> professionals, Treatment treatment) {
+
+        treatementProfessionalRepository.deleteByTreatment_Id(treatment.getId());
+
+        professionals.forEach(professional -> {
+            professional.getClinics().forEach(clinic -> {
+                var treatmentProfessional = new TreatmentProfessional(null, treatment, professional, clinic, SituationEnum.ANDAMENTO);
+                treatementProfessionalRepository.save(treatmentProfessional);
+            });
+        });
     }
 }
