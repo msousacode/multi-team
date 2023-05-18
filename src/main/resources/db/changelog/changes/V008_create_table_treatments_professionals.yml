@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: V007
+      id: V008
       author: michael
       changes:
         - createTable:
@@ -19,8 +19,11 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: annotation
-                  type: varchar(500)
+                  name: clinic_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
               - column:
                   name: situation_type
                   type: varchar(20)
@@ -38,3 +41,9 @@ databaseChangeLog:
             constraintName: fk_treatments_professionals_professionals
             referencedColumnNames: professional_id
             referencedTableName: professionals
+        - addForeignKeyConstraint:
+            baseColumnNames: clinic_id
+            baseTableName: treatments_professionals
+            constraintName: fk_clinics_professionals_professionals
+            referencedColumnNames: clinic_id
+            referencedTableName: clinics

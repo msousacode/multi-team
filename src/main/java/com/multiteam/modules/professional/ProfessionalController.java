@@ -1,5 +1,9 @@
 package com.multiteam.modules.professional;
 
+import com.multiteam.modules.professional.dto.ProfessionalDTO;
+import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentRequest;
+import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentResponse;
+import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -87,7 +91,7 @@ public class ProfessionalController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'ROLE_PROFESSIONAL', 'PERM_TREATMENT_READ', 'PERM_TREATMENT_WRITE')")
     @PostMapping("/use-treatments")
-    public ResponseEntity<List<ProfessionalDTO>> getProfessionalsUseTreatment(@RequestBody ProfessionalUseTreatmentDTO professionalUseTreatmentDTO) {
+    public ResponseEntity<List<ProfessionalUseTreatmentView>> getProfessionalsUseTreatment(@RequestBody ProfessionalUseTreatmentRequest professionalUseTreatmentDTO) {
         return ResponseEntity.ok(professionalService.getProfessionalsUseTreatment(professionalUseTreatmentDTO));
     }
 }

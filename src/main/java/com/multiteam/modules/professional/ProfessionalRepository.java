@@ -1,6 +1,7 @@
 package com.multiteam.modules.professional;
 
 import com.multiteam.core.repository.TenantableRepository;
+import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,12 +28,17 @@ public interface ProfessionalRepository extends TenantableRepository<Professiona
     void professionalInactive(@Param("professionalId") UUID professionalId, @Param("tenantId") final UUID tenantId);
 
     @Query("""
-            SELECT DISTINCT p FROM Professional p
+            SELECT
+            p.id AS professionalId,
+            p.name AS name,
+            c.id AS clinicId,
+            c.clinicName AS clinicName
+            FROM Professional p
             JOIN p.clinics c
             WHERE c.id in (:clinics)
             AND p.active = true
             """)
-    List<Professional> findAllByClinicsId(List<UUID> clinics);
+    List<ProfessionalUseTreatmentView> findAllByClinicsId(List<UUID> clinics);
 
     @Query("""
             SELECT p FROM Professional p WHERE p.id in (:professionals)

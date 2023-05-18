@@ -1,4 +1,6 @@
-package com.multiteam.modules.professional;
+package com.multiteam.modules.professional.dto;
+
+import com.multiteam.modules.professional.Professional;
 
 import java.util.HashSet;
 import java.util.Set;

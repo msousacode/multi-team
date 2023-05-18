@@ -4,6 +4,10 @@ import com.multiteam.modules.clinic.ClinicService;
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.SpecialtyEnum;
 import com.multiteam.core.service.EmailService;
+import com.multiteam.modules.professional.dto.ProfessionalDTO;
+import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentRequest;
+import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentResponse;
+import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentView;
 import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.user.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -161,10 +165,10 @@ public class ProfessionalService {
         return clinicsIds;
     }
 
-    public List<ProfessionalDTO> getProfessionalsUseTreatment(ProfessionalUseTreatmentDTO professionalUseTreatmentDTO) {
+    public List<ProfessionalUseTreatmentView> getProfessionalsUseTreatment(ProfessionalUseTreatmentRequest professionalUseTreatmentDTO) {
         List<UUID> ids = new ArrayList<>();
         professionalUseTreatmentDTO.clinics().forEach(clinicDTO -> ids.add(clinicDTO.id()));
-        return professionalRepository.findAllByClinicsId(ids).stream().map(ProfessionalDTO::fromProfessionalDTO).toList();
+        return professionalRepository.findAllByClinicsId(ids);
     }
 
     public List<Professional> getAllProfessionalsByClinics(List<UUID> professionals) {
