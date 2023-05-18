@@ -23,3 +23,4 @@
 - feat: Listar tratamentos.
 - feat: Incluir tratamentos.
 - feat: Editar tratamentos.
+- feat: Inativar tratamentos.

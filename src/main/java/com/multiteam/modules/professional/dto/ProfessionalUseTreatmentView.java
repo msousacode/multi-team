@@ -5,6 +5,8 @@ public interface ProfessionalUseTreatmentView {
 
     String getName();
 
+    String getSpecialty();
+
     String getClinicId();
 
     String getClinicName();

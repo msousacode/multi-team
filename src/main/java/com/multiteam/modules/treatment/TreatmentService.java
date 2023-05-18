@@ -4,7 +4,6 @@ import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.modules.clinic.Clinic;
-import com.multiteam.modules.clinic.ClinicDTO;
 import com.multiteam.modules.guest.Guest;
 import com.multiteam.modules.patient.Patient;
 import com.multiteam.modules.patient.PatientService;
@@ -22,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -109,6 +107,7 @@ public class TreatmentService {
                 result.get().getPatient())
                 .description(treatmentRequest.observation())
                 .finalDate(treatmentRequest.finalDate())
+                .active(result.get().isActive())
                 .build();
 
         var treatment = treatmentRepository.save(builder);
@@ -123,7 +122,7 @@ public class TreatmentService {
     public Page<TreatmentResponse> getAllTreatments(final TreatmentFilter filter, Pageable pageable) {
 
         if (filter.patientId() != null) {
-            return treatmentRepository.findAllByPatient_Id(filter.patientId(), pageable).map(TreatmentResponse::fromTreatmentResponse);
+            return treatmentRepository.findAllByPatient_IdAndActiveIsTrue(filter.patientId(), pageable).map(TreatmentResponse::fromTreatmentResponse);
         }
         return treatmentRepository.findAll(pageable).map(TreatmentResponse::fromTreatmentResponse);
     }
@@ -133,15 +132,16 @@ public class TreatmentService {
 
         var treatment = treatmentRepository.findById(treatmentId);
 
-        if (treatment.isEmpty())
+        if (treatment.isEmpty()) {
             return Boolean.FALSE;
+        }
 
         //inactive professionals of treatment
         treatementProfessionalRepository.inactiveProfessionalsByTreatmentId(treatmentId, SituationEnum.INATIVO);
 
         //exclude all guests
-        treatment.get().getGuests().removeAll(treatment.get().getGuests());
-        treatmentRepository.save(treatment.get());
+        //treatment.get().getGuests().removeAll(treatment.get().getGuests());
+        //treatmentRepository.save(treatment.get());
 
         //inactive treatment
         treatmentRepository.inactiveTreatment(treatmentId);

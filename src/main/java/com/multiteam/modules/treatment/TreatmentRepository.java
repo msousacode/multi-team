@@ -14,7 +14,7 @@ import java.util.UUID;
 @Repository
 public interface TreatmentRepository extends TenantableRepository<Treatment> {
 
-    Page<Treatment> findAllByPatient_Id(@Param("patientId") UUID patientId, Pageable pageable);
+    Page<Treatment> findAllByPatient_IdAndActiveIsTrue(@Param("patientId") UUID patientId, Pageable pageable);
 
     @Query("""
             SELECT t FROM Treatment t

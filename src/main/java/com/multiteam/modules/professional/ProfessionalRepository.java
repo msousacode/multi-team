@@ -31,6 +31,7 @@ public interface ProfessionalRepository extends TenantableRepository<Professiona
             SELECT
             p.id AS professionalId,
             p.name AS name,
+            p.specialty AS specialty,
             c.id AS clinicId,
             c.clinicName AS clinicName
             FROM Professional p

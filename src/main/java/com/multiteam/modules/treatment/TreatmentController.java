@@ -66,8 +66,8 @@ public class TreatmentController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @PutMapping
-    public ResponseEntity<?> updateTreatment(@RequestBody TreatmentRequest treatmentDTO) {
-        if(treatmentService.updateTreatment(treatmentDTO)){
+    public ResponseEntity<?> updateTreatment(@RequestBody final TreatmentRequest treatmentRequest) {
+        if(treatmentService.updateTreatment(treatmentRequest)){
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -76,8 +76,7 @@ public class TreatmentController {
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')" )
     @DeleteMapping("/{treatmentId}")
-    public ResponseEntity<?> inactiveTreatment(@PathVariable("treatmentId") UUID treatmentId) {
-
+    public ResponseEntity<?> inactiveTreatment(@PathVariable("treatmentId") final UUID treatmentId) {
         if(treatmentService.inactiveTreatment(treatmentId)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
