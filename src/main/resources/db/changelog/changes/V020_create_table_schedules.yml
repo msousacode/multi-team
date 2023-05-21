@@ -19,12 +19,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: start
+                  name: date_start
                   type: datetime
                   constraints:
                     nullable: false
               - column:
-                  name: end
+                  name: date_end
                   type: datetime
               - column:
                   name: url

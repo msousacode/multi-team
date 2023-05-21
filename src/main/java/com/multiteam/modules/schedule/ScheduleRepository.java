@@ -1,10 +1,8 @@
 package com.multiteam.modules.schedule;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.multiteam.core.repository.TenantableRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
 @Repository
-public interface ScheduleRepository extends JpaRepository<Schedule, UUID> {
+public interface ScheduleRepository extends TenantableRepository<Schedule> {
 }
