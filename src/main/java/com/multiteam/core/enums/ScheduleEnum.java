@@ -2,7 +2,7 @@ package com.multiteam.core.enums;
 
 public enum ScheduleEnum {
     CONFIRMADO,
+    NAO_CONFIRMADO,
     CANCELADO,
-    BLOQUEADO_TEMPORARIAMENTE,
-    PENDENTE_REAGENDAMENTO;
+    REALIZADO;
 }
