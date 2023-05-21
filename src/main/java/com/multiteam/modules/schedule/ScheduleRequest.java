@@ -13,6 +13,7 @@ public record ScheduleRequest(
         String url,
         String description,
         String color,
-        Boolean active
+        Boolean active,
+        String status
 ) {
 }

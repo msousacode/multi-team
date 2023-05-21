@@ -1,6 +1,5 @@
 package com.multiteam.modules.schedule;
 
-import com.multiteam.modules.professional.dto.ProfessionalDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

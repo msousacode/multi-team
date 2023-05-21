@@ -61,7 +61,7 @@ public class ScheduleService {
                 .end(scheduleRequest.end())
                 .url(scheduleRequest.url())
                 .description(scheduleRequest.description())
-                .color("").build();
+                .color("green").build();
 
         scheduleRepository.save(builder);
 
