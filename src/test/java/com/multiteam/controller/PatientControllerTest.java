@@ -1,6 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.modules.clinic.ClinicDTO;
+import com.multiteam.modules.clinic.dto.ClinicDTO;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.SexEnum;
 import com.multiteam.modules.patient.PatientDTO;

@@ -3,7 +3,7 @@ package com.multiteam.modules.treatment.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.modules.clinic.Clinic;
-import com.multiteam.modules.clinic.ClinicDTO;
+import com.multiteam.modules.clinic.dto.ClinicDTO;
 import com.multiteam.modules.treatment.Treatment;
 
 import java.time.LocalDate;

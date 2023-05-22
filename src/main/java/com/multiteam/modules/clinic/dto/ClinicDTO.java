@@ -1,4 +1,6 @@
-package com.multiteam.modules.clinic;
+package com.multiteam.modules.clinic.dto;
+
+import com.multiteam.modules.clinic.Clinic;
 
 import java.util.UUID;
 

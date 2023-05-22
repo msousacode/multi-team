@@ -1,6 +1,6 @@
 package com.multiteam.modules.treatment.dto;
 
-import com.multiteam.modules.clinic.ClinicDTO;
+import com.multiteam.modules.clinic.dto.ClinicDTO;
 
 import java.time.LocalDate;
 import java.util.List;

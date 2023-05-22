@@ -1,5 +1,7 @@
 package com.multiteam.modules.clinic;
 
+import com.multiteam.modules.clinic.dto.ClinicDTO;
+import com.multiteam.modules.clinic.dto.ClinicUseInCacheResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -79,5 +81,9 @@ public class ClinicService {
         logger.info("updated clinic: {}", builder.toString());
 
         return Boolean.TRUE;
+    }
+
+    public List<ClinicUseInCacheResponse> getAllClinicsUseInCache() {
+        return clinicRepository.findAll().stream().map(ClinicUseInCacheResponse::new).toList();
     }
 }

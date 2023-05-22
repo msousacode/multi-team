@@ -1,5 +1,7 @@
 package com.multiteam.modules.clinic;
 
+import com.multiteam.modules.clinic.dto.ClinicDTO;
+import com.multiteam.modules.clinic.dto.ClinicUseInCacheResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -55,6 +57,11 @@ public class ClinicController {
     @GetMapping
     public ResponseEntity<List<ClinicDTO>> getAllClinics() {
         return ResponseEntity.ok(clinicService.getAllClinic());
+    }
+
+    @GetMapping("/use-cache")
+    public ResponseEntity<List<ClinicUseInCacheResponse>> getAllClinicsUseInCache() {
+        return ResponseEntity.ok(clinicService.getAllClinicsUseInCache());
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
