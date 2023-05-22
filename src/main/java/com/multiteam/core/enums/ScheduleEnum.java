@@ -6,10 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ScheduleEnum {
+    AGENDADO("blue"),
     CONFIRMADO("green"),
-    NAO_CONFIRMADO("yellow"),
-    CANCELADO("red"),
-    REALIZADO("blue");
+    AUSENCIA("red"),
+    CANCELADO("orange"),
+    REAGENDADO("yellow"),
+    REALIZADO("black");
 
     private String color;
     private static final Map<String, ScheduleEnum> lookup = new HashMap<>();

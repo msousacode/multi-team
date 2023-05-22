@@ -18,8 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -35,10 +34,10 @@ public class Schedule extends Tenantable {
     private String title;
 
     @Column(name = "date_start")
-    private Calendar start;
+    private LocalDateTime start;
 
     @Column(name = "date_end")
-    private Calendar end;
+    private LocalDateTime end;
 
     @Column(name = "url")
     private String url;
@@ -91,11 +90,11 @@ public class Schedule extends Tenantable {
         return title;
     }
 
-    public Calendar getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public Calendar getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
@@ -135,7 +134,7 @@ public class Schedule extends Tenantable {
 
         //mandatory
         private final String title;
-        private final Calendar start;
+        private final LocalDateTime start;
         private final Professional professional;
         private final Clinic clinic;
         private final boolean active;
@@ -144,14 +143,14 @@ public class Schedule extends Tenantable {
         //optionals
         private UUID id;
         private Patient patient;
-        private Calendar end;
+        private LocalDateTime end;
         private String url;
         private String description;
         private String color;
 
         public Builder(
                 final String title,
-                final Calendar start,
+                final LocalDateTime start,
                 final Professional professional,
                 final Clinic clinic,
                 final boolean active,
@@ -182,7 +181,7 @@ public class Schedule extends Tenantable {
             return this;
         }
 
-        public Builder end(Calendar end) {
+        public Builder end(LocalDateTime end) {
             this.end = end;
             return this;
         }

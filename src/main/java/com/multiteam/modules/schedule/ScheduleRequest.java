@@ -1,6 +1,6 @@
 package com.multiteam.modules.schedule;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ScheduleRequest(
@@ -8,12 +8,13 @@ public record ScheduleRequest(
         UUID clientId,
         UUID professionalId,
         String title,
-        Calendar start,
-        Calendar end,
+        LocalDateTime start,
+        LocalDateTime end,
         String url,
         String description,
         String color,
         Boolean active,
-        String status
+        String status,
+        Boolean allDay
 ) {
 }
