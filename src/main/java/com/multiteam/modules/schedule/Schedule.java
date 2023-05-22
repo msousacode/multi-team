@@ -67,6 +67,8 @@ public class Schedule extends Tenantable {
     @JoinColumn(name = "clinic_id")
     private Clinic clinic;
 
+    public Schedule(){}
+
     public Schedule(Builder builder) {
         this.title = builder.title;
         this.start = builder.start;

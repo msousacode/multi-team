@@ -10,6 +10,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ScheduleService {
@@ -66,6 +68,10 @@ public class ScheduleService {
         scheduleRepository.save(builder);
 
         return Boolean.TRUE;
+    }
+
+    public List<ScheduleResponse> getAllById(final UUID clinicId) {
+        return scheduleRepository.findAllByClinicIdAndActiveIsTrue(clinicId).stream().map(ScheduleResponse::fromScheduleResponse).toList();
     }
 
 /*
