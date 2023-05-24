@@ -1,11 +1,13 @@
 package com.multiteam.modules.schedule;
 
+import com.multiteam.modules.professional.dto.ProfessionalDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,5 +44,23 @@ public class ScheduleController {
     @GetMapping("/clinic/{clinicId}")
     public List<ScheduleResponse> getAllById(@PathVariable("clinicId") final UUID clinicId) {
         return scheduleService.getAllById(clinicId);
+    }
+
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'SCHEDULE_READ', 'SCHEDULE_WRITE')")
+    @GetMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleResponse> getSchedule(@PathVariable("scheduleId") final UUID scheduleId) {
+        return scheduleService.getSchedule(scheduleId)
+                .map(schedule -> ResponseEntity.ok().body(schedule))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'SCHEDULE_WRITE')")
+    @PutMapping
+    public ResponseEntity<?> updateSchedule(@RequestBody final ScheduleRequest scheduleRequest) {
+        if (scheduleService.updateSchedule(scheduleRequest)) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }
