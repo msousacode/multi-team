@@ -39,7 +39,7 @@ public class ScheduleService {
 
         var professional = professionalService.getProfessionalById(scheduleRequest.professionalId());
 
-        var clinic = clinicService.getClinicById(scheduleRequest.clientId());
+        var clinic = clinicService.getClinicById(scheduleRequest.clinicId());
 
 
         if (professional.isEmpty() || clinic.isEmpty()) {
@@ -47,13 +47,16 @@ public class ScheduleService {
             return Boolean.FALSE;
         }
 
+        var title = professional.get().getSpecialty().getName().concat(" | ").concat(professional.get().getName());
+
         Patient patient = null;
         if (scheduleRequest.patientId() != null) {
             patient = patientService.findOneById(scheduleRequest.patientId()).orElse(null);
+            title.concat(" | ").concat(patient.getName()).concat(" Nasc: ").concat(patient.getDateBirth().toString());
         }
 
         var builder = new Schedule.Builder(
-                scheduleRequest.title(),
+                title,
                 scheduleRequest.start(),
                 professional.get(),
                 clinic.get(),
