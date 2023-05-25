@@ -3,7 +3,7 @@ package com.multiteam.controller;
 import com.multiteam.modules.clinic.dto.ClinicDTO;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.SexEnum;
-import com.multiteam.modules.patient.PatientDTO;
+import com.multiteam.modules.patient.dto.PatientDTO;
 import com.multiteam.modules.professional.dto.ProfessionalDTO;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestResponsePage;

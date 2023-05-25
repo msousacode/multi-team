@@ -24,3 +24,6 @@
 - feat: Incluir tratamentos.
 - feat: Editar tratamentos.
 - feat: Inativar tratamentos.
+- feat: Listar agendamentos.
+- feat: Incluir agendamentos.
+- feat: Editar agendamentos.

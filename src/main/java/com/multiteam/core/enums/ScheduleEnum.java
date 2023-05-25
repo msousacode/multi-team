@@ -11,7 +11,7 @@ public enum ScheduleEnum {
     AUSENCIA("red"),
     CANCELADO("orange"),
     REAGENDADO("yellow"),
-    REALIZADO("black");
+    REALIZADO("pink");
 
     private String color;
     private static final Map<String, ScheduleEnum> lookup = new HashMap<>();
@@ -26,13 +26,13 @@ public enum ScheduleEnum {
 
     static {
         for (ScheduleEnum s : ScheduleEnum.values()) {
-            lookup.put(s.getColor(), s);
+            lookup.put(s.name(), s);
         }
     }
 
-    public static ScheduleEnum get(String name) {
+    public static String get(String name) {
         var value = lookup.get(name);
         Assert.notNull(value, "schedule type not can be null");
-        return value;
+        return value.getColor();
     }
 }

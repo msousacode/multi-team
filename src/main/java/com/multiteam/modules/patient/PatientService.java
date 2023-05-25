@@ -3,6 +3,8 @@ package com.multiteam.modules.patient;
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.SexEnum;
 import com.multiteam.core.service.EmailService;
+import com.multiteam.modules.patient.dto.PatientDTO;
+import com.multiteam.modules.patient.dto.PatientFilter;
 import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.user.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -127,5 +130,9 @@ public class PatientService {
             logger.error("error occurred while updating the patient: {}", patientDTO.id());
             return Boolean.FALSE;
         }
+    }
+
+    public List<PatientDTO> getPatientSearch(PatientFilter patientFilter) {
+        return patientRepository.findByNameContainsIgnoreCase(patientFilter.patientName()).stream().map(PatientDTO::fromPatientDTO).toList();
     }
 }

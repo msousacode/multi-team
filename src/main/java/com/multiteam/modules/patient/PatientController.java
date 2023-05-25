@@ -1,5 +1,7 @@
 package com.multiteam.modules.patient;
 
+import com.multiteam.modules.patient.dto.PatientDTO;
+import com.multiteam.modules.patient.dto.PatientFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -37,8 +40,8 @@ public class PatientController {
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_WRITE')")
     @PostMapping
     public ResponseEntity<?> createPatient(
-            @RequestBody final PatientDTO patientRequest) {
-        if (patientService.createPatient(patientRequest)) {
+            @RequestBody final PatientDTO patientDTO) {
+        if (patientService.createPatient(patientDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -73,6 +76,12 @@ public class PatientController {
         return optionalPatient
                 .map(patient -> ResponseEntity.status(HttpStatus.OK).body(patient))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_WRITE')")
+    @PostMapping("/search")
+    public ResponseEntity<List<PatientDTO>> getPatientSearch(@RequestBody final PatientFilter patientFilter) {
+        return ResponseEntity.status(HttpStatus.OK).body(patientService.getPatientSearch(patientFilter));
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_WRITE')")

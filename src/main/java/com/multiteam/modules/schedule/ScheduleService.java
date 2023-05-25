@@ -1,5 +1,6 @@
 package com.multiteam.modules.schedule;
 
+import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.ScheduleEnum;
 import com.multiteam.modules.clinic.ClinicService;
 import com.multiteam.modules.patient.Patient;
@@ -24,16 +25,19 @@ public class ScheduleService {
     private final ClinicService clinicService;
     private final PatientService patientService;
     private final ScheduleRepository scheduleRepository;
+    private final TenantContext tenantContext;
 
     public ScheduleService(
             final ProfessionalService professionalService,
             final ClinicService clinicService,
             final PatientService patientService,
-            final ScheduleRepository scheduleRepository) {
+            final ScheduleRepository scheduleRepository,
+            final TenantContext tenantContext) {
         this.professionalService = professionalService;
         this.clinicService = clinicService;
         this.patientService = patientService;
         this.scheduleRepository = scheduleRepository;
+        this.tenantContext = tenantContext;
     }
 
     @Transactional
@@ -52,9 +56,12 @@ public class ScheduleService {
         var title = professional.get().getSpecialty().getName().concat(" | ").concat(professional.get().getName());
 
         Patient patient = null;
-        if (scheduleRequest.patientId() != null) {
-            patient = patientService.findOneById(scheduleRequest.patientId()).orElse(null);
-            title.concat(" | ").concat(patient.getName()).concat(" Nasc: ").concat(patient.getDateBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        if (scheduleRequest.patient() != null) {
+            patient = patientService.findOneById(scheduleRequest.patient().id()).orElse(null);
+            title = title.concat(" | ")
+                    .concat(patient.getName())
+                    .concat(" | Nasc: ")
+                    .concat(patient.getDateBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         }
 
         var builder = new Schedule.Builder(
@@ -100,10 +107,10 @@ public class ScheduleService {
                 .concat(" | ");
 
         Patient patient = null;
-        if(scheduleRequest.patientId() != null) {
-            patient = patientService.findOneById(scheduleRequest.patientId()).get();
-            title.concat(patient.getName())
-                    .concat(" | ")
+        if (scheduleRequest.patient() != null) {
+            patient = patientService.findOneById(scheduleRequest.patient().id()).get();
+            title = title.concat(patient.getName())
+                    .concat(" | Nasc: ")
                     .concat(patient.getDateBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         }
 
@@ -117,6 +124,7 @@ public class ScheduleService {
                     clinic.get(),
                     true,
                     ScheduleEnum.valueOf(scheduleRequest.status()))
+                    .color(ScheduleEnum.get(scheduleRequest.status()))
                     .end(scheduleRequest.end())
                     .description(scheduleRequest.description())
                     .patient(patient).id(schedule.get().getId())
@@ -130,91 +138,8 @@ public class ScheduleService {
         return Boolean.TRUE;
     }
 
-/*
-    public Page<ProfessionalDTO> getAllProfessionals(final UUID clinicId, Pageable pageable) {
-        return professionalRepository.findAllProfessionalsByClinicId(clinicId, pageable).map(ProfessionalDTO::fromProfessionalDTO);
-    }
-
-    public Optional<Professional> getProfessionalById(final UUID professionalId) {
-        return professionalRepository.findById(professionalId);
-    }
-
-    public Optional<ProfessionalDTO> getProfessional(UUID professionalId) {
-        var professional = professionalRepository.findOneById(professionalId);
-
-        if (professional.isEmpty()) {
-            return Optional.empty();
-        }
-
-        return professional.map(ProfessionalDTO::fromProfessionalDTO);
-    }
-
     @Transactional
-    public Boolean inactiveProfessional(UUID professionalId) {
-
-        var professional = professionalRepository.findById(professionalId);
-
-        if (professional.isEmpty()) {
-            logger.error("verify if exists professional with id: {}", professionalId);
-            return Boolean.FALSE;
-        }
-
-        professional.get().getProfessionals().forEach(t -> treatmentService.inactiveTreatment(t.getTreatment().getId()));
-        logger.info("treatments associated with professional {} has been inactivated", professionalId);
-
-        professionalRepository.professionalInactive(professional.get().getId(), tenantContext.getTenantId());
-        logger.info("professional has been inactivated, professionalId {}", professionalId);
-
-        return Boolean.TRUE;
+    public void inactiveSchedule(final UUID scheduleId) {
+        scheduleRepository.inactiveScheduleById(scheduleId, tenantContext.getTenantId());
     }
-
-    @Transactional
-    public Boolean updateProfessional(ProfessionalDTO professionalDTO) {
-
-        var professionalResult = professionalRepository.findById(professionalDTO.id());
-
-        Set<UUID> clinicsIds = getUuids(professionalDTO);
-        Assert.isTrue(!clinicsIds.isEmpty(), "clinic list cannot be empty");
-        var clinics = clinicService.getClinics(clinicsIds);
-
-        if (professionalResult.isEmpty()) {
-            logger.debug("check if professional exists. professionalId: {}", professionalDTO.id());
-            logger.error("professional cannot be null. professionalId: {}", professionalDTO.id());
-            return Boolean.FALSE;
-        }
-
-        var builder = new Professional.Builder(
-                professionalResult.get().getId(),
-                professionalDTO.name(),
-                SpecialtyEnum.get(professionalDTO.specialty()),
-                professionalDTO.cellPhone(),
-                professionalDTO.email(),
-                true,
-                clinics,
-                professionalResult.get().getUser())
-                .build();
-
-        professionalRepository.save(builder);
-
-        logger.info("updated professional: {}", new Professional().toString());
-
-        return Boolean.TRUE;
-    }
-
-    private static Set<UUID> getUuids(ProfessionalDTO professionalDTO) {
-        Set<UUID> clinicsIds = new HashSet<>();
-        professionalDTO.clinicId().forEach(elem -> clinicsIds.add(UUID.fromString(elem)));
-        return clinicsIds;
-    }
-
-    public List<ProfessionalUseTreatmentView> getProfessionalsUseTreatment(ProfessionalUseTreatmentRequest professionalUseTreatmentDTO) {
-        List<UUID> ids = new ArrayList<>();
-        professionalUseTreatmentDTO.clinics().forEach(clinicDTO -> ids.add(clinicDTO.id()));
-        return professionalRepository.findAllByClinicsId(ids);
-    }
-
-    public List<Professional> getAllProfessionalsByClinics(List<UUID> professionals) {
-        return professionalRepository.getAllProfessionalsByClinics(professionals);
-    }
- */
 }

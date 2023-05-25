@@ -1,4 +1,6 @@
-package com.multiteam.modules.patient;
+package com.multiteam.modules.patient.dto;
+
+import com.multiteam.modules.patient.Patient;
 
 import java.time.LocalDate;
 import java.util.UUID;

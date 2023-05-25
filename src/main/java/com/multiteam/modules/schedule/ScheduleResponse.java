@@ -1,11 +1,12 @@
 package com.multiteam.modules.schedule;
 
+import com.multiteam.modules.patient.dto.PatientDTO;
+
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public record ScheduleResponse(
-        //PatientDTO patient,
-        //ClinicDTO client,
+        PatientDTO patient,
         UUID professionalId,
         UUID id,
         String title,
@@ -20,8 +21,7 @@ public record ScheduleResponse(
     private ScheduleResponse(Schedule schedule) {
 
         this(
-                //PatientDTO.fromPatientDTO(schedule.getPatient()),
-                //new ClinicDTO(schedule.getClinic()),
+                schedule.getPatient() != null ? PatientDTO.fromPatientDTO(schedule.getPatient()) : null,
                 schedule.getProfessional().getId(),
                 schedule.getId(),
                 schedule.getTitle(),
