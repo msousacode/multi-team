@@ -1,5 +1,7 @@
 package com.multiteam.modules.user;
 
+import com.multiteam.modules.role.Role;
+import com.multiteam.modules.role.RoleRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -29,7 +33,7 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(final UserService userService) {
         this.userService = userService;
     }
 
@@ -81,5 +85,10 @@ public class UserController {
             userService.resetPassword(passwordResetDTO);
             return ResponseEntity.ok().build();
         }
+    }
+
+    @GetMapping("/{userId}/roles")
+    public ResponseEntity<Set<Role>> getRolesPermissions(@PathVariable("userId") final UUID userId) {
+        return ResponseEntity.ok().body(userService.getRolesPermissions(userId));
     }
 }

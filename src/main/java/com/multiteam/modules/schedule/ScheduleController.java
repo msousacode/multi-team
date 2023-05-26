@@ -1,6 +1,5 @@
 package com.multiteam.modules.schedule;
 
-import com.multiteam.modules.professional.dto.ProfessionalDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +31,7 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'SCHEDULE_READ', 'SCHEDULE_WRITE')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_SCHEDULE_READ', 'PERM_SCHEDULE_WRITE')")
     @PostMapping
     public ResponseEntity<?> createSchedule(@RequestBody final ScheduleRequest scheduleRequest) {
         if (scheduleService.createSchedule(scheduleRequest)) {
@@ -47,7 +46,7 @@ public class ScheduleController {
         return scheduleService.getAllById(clinicId);
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'SCHEDULE_READ', 'SCHEDULE_WRITE')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_SCHEDULE_READ', 'PERM_SCHEDULE_WRITE')")
     @GetMapping("/{scheduleId}")
     public ResponseEntity<ScheduleResponse> getSchedule(@PathVariable("scheduleId") final UUID scheduleId) {
         return scheduleService.getSchedule(scheduleId)
@@ -55,7 +54,7 @@ public class ScheduleController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'SCHEDULE_WRITE')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_SCHEDULE_WRITE')")
     @PutMapping
     public ResponseEntity<?> updateSchedule(@RequestBody final ScheduleRequest scheduleRequest) {
         if (scheduleService.updateSchedule(scheduleRequest)) {
@@ -65,7 +64,7 @@ public class ScheduleController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('SCHEDULE_WRITE')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_SCHEDULE_WRITE')")
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<Void> inactiveSchedule(@PathVariable("scheduleId") final UUID scheduleId) {
         scheduleService.inactiveSchedule(scheduleId);

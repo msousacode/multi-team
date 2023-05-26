@@ -3,6 +3,7 @@ package com.multiteam.modules.user;
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.AuthProviderEnum;
 import com.multiteam.core.enums.RoleEnum;
+import com.multiteam.modules.role.Role;
 import com.multiteam.modules.role.RoleRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -113,5 +114,9 @@ public class UserService {
         } else {
             logger.error("user not found, userId: {}", passwordResetDTO.id());
         }
+    }
+
+    public Set<Role> getRolesPermissions(final UUID userId) {
+        return userRepository.findById(userId).map(User::getRoles).orElse(Set.of());
     }
 }

@@ -27,3 +27,5 @@
 - feat: Listar agendamentos.
 - feat: Incluir agendamentos.
 - feat: Editar agendamentos.
+- feat: Excluir agendmantos.
+- feat: Configuração do menu.

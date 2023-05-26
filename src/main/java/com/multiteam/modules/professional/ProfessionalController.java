@@ -59,7 +59,7 @@ public class ProfessionalController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_SCHEDULE_READ')")
     @GetMapping("/clinic/{clinicId}")
     public ResponseEntity<Page<ProfessionalDTO>> getAllProfessionals(
             @PathVariable("clinicId") final UUID clinicId,
