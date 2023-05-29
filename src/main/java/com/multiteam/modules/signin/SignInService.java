@@ -2,6 +2,7 @@ package com.multiteam.modules.signin;
 
 import com.multiteam.core.enums.AuthProviderEnum;
 import com.multiteam.core.enums.RoleEnum;
+import com.multiteam.core.enums.UserEnum;
 import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.core.security.CustomAuthenticationManager;
 import com.multiteam.core.service.JwtService;
@@ -71,6 +72,7 @@ public class SignInService {
                 .provider(AuthProviderEnum.local)
                 .password(new BCryptPasswordEncoder().encode(signUpRequest.password()))
                 .roles(signUpRequest.roles())
+                .userType(UserEnum.OWNER)
                 .build();
 
         var result = userRepository.save(builder);

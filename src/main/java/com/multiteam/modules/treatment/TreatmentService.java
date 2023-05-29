@@ -124,7 +124,7 @@ public class TreatmentService {
         if (filter.patientId() != null) {
             return treatmentRepository.findAllByPatient_IdAndActiveIsTrue(filter.patientId(), pageable).map(TreatmentResponse::fromTreatmentResponse);
         }
-        return treatmentRepository.findAll(pageable).map(TreatmentResponse::fromTreatmentResponse);
+        return treatmentRepository.findAllByPatient_NameContainingIgnoreCase(filter.patientName(), pageable).map(TreatmentResponse::fromTreatmentResponse);
     }
 
     @Transactional

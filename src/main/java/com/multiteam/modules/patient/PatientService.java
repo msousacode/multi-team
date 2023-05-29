@@ -2,6 +2,7 @@ package com.multiteam.modules.patient;
 
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.SexEnum;
+import com.multiteam.core.enums.UserEnum;
 import com.multiteam.core.service.EmailService;
 import com.multiteam.modules.patient.dto.PatientDTO;
 import com.multiteam.modules.patient.dto.PatientFilter;
@@ -14,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -48,7 +48,7 @@ public class PatientService {
     @Transactional
     public Boolean createPatient(final PatientDTO patientDTO) {
 
-        var user = userService.createUser(patientDTO.name(), patientDTO.email(), local);
+        var user = userService.createUser(patientDTO.name(), patientDTO.email(), local, UserEnum.PROFISSIONAL);
 
         if (user == null) {
             logger.error("An error occurred while creating the user, email: {}", patientDTO.email());

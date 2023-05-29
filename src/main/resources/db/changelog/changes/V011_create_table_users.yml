@@ -48,3 +48,6 @@ databaseChangeLog:
                   type: uuid
                   constraints:
                     nullable: false
+              - column:
+                  name: user_type
+                  type: varchar(20)

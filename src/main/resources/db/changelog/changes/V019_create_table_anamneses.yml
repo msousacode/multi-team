@@ -15,10 +15,10 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: annotation
-                  type: varchar(1000)
+                  type: text
               - column:
                   name: conclusion
-                  type: varchar(1000)
+                  type: text
               - column:
                   name: situation
                   type: varchar(10)

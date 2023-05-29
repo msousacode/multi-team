@@ -6,6 +6,7 @@ import com.multiteam.modules.treatment.dto.TreatmentRequest;
 import com.multiteam.modules.treatment.dto.TreatmentResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,9 +53,11 @@ public class TreatmentController {
     public ResponseEntity<Page<TreatmentResponse>> getAllTreatments(
             @RequestBody TreatmentFilter filter,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "100") int size
+            @RequestParam(defaultValue = "100") int size,
+            @RequestParam(value = "sort", defaultValue = "createdDate") String sort,
+            @RequestParam(value = "direction", defaultValue = "DESC") String direction
     ) {
-        return ResponseEntity.ok(treatmentService.getAllTreatments(filter, PageRequest.of(page, size)));
+        return ResponseEntity.ok(treatmentService.getAllTreatments(filter, PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(direction), sort))));
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_READ')")
@@ -67,17 +70,17 @@ public class TreatmentController {
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @PutMapping
     public ResponseEntity<?> updateTreatment(@RequestBody final TreatmentRequest treatmentRequest) {
-        if(treatmentService.updateTreatment(treatmentRequest)){
+        if (treatmentService.updateTreatment(treatmentRequest)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')" )
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
     @DeleteMapping("/{treatmentId}")
     public ResponseEntity<?> inactiveTreatment(@PathVariable("treatmentId") final UUID treatmentId) {
-        if(treatmentService.inactiveTreatment(treatmentId)) {
+        if (treatmentService.inactiveTreatment(treatmentId)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

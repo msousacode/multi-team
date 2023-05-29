@@ -9,11 +9,12 @@ public record UserDTO(
         String name,
         String email,
         Boolean active,
-        Set<String> roles
+        Set<String> roles,
+        String userType
 ) {
     public static UserDTO fromUserDTO(User user) {
         Set<String> roles = new HashSet<>();
         user.getRoles().forEach(i -> roles.add(i.getId().toString()));
-        return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getActive(), roles);
+        return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getActive(), roles, user.getUserType().name());
     }
 }

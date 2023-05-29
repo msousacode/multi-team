@@ -2,6 +2,7 @@ package com.multiteam.modules.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.multiteam.core.enums.AuthProviderEnum;
+import com.multiteam.core.enums.UserEnum;
 import com.multiteam.modules.role.Role;
 
 import javax.persistence.Column;
@@ -57,6 +58,10 @@ public class User {
     @Transient
     private String provisionalPassword;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_type")
+    private UserEnum userType;
+
     @ManyToMany
     @JoinTable(
             name = "users_roles",
@@ -78,6 +83,7 @@ public class User {
         this.active = builder.active;
         this.roles = builder.roles;
         this.password = builder.password;
+        this.userType = builder.userType;
     }
 
     public UUID getId() {
@@ -140,6 +146,10 @@ public class User {
         this.tenantId = tenantId;
     }
 
+    public UserEnum getUserType() {
+        return userType;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -147,6 +157,7 @@ public class User {
                ", tenantId='" + tenantId + '\'' +
                ", name='" + name + '\'' +
                ", email='" + email + '\'' +
+               ", userType='" + userType + '\'' +
                '}';
     }
 
@@ -164,6 +175,7 @@ public class User {
         private Boolean emailVerified;
         private AuthProviderEnum provider;
         private Set<Role> roles;
+        private UserEnum userType;
 
         public Builder(
                 final UUID id,
@@ -201,6 +213,11 @@ public class User {
 
         public Builder roles(Set<Role> roles) {
             this.roles = roles;
+            return this;
+        }
+
+        public Builder userType(UserEnum userType) {
+            this.userType = userType;
             return this;
         }
 

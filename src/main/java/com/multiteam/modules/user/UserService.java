@@ -3,6 +3,7 @@ package com.multiteam.modules.user;
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.AuthProviderEnum;
 import com.multiteam.core.enums.RoleEnum;
+import com.multiteam.core.enums.UserEnum;
 import com.multiteam.modules.role.Role;
 import com.multiteam.modules.role.RoleRepository;
 import org.apache.logging.log4j.LogManager;
@@ -37,7 +38,7 @@ public class UserService {
     }
 
     @Transactional
-    public User createUser(final String name, final String email, final AuthProviderEnum providerEnum) {
+    public User createUser(final String name, final String email, final AuthProviderEnum providerEnum, final UserEnum userEnum) {
 
         var password = UUID.randomUUID().toString().substring(0, 10);
 
@@ -49,6 +50,7 @@ public class UserService {
                 .roles(Set.of(role1, role2, role3))
                 .provider(providerEnum)
                 .password(new BCryptPasswordEncoder().encode(password))
+                .userType(userEnum)
                 .build();
 
         user.setProvisionalPassword(password);

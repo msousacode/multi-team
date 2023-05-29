@@ -1,12 +1,12 @@
 package com.multiteam.modules.professional;
 
+import com.multiteam.core.enums.UserEnum;
 import com.multiteam.modules.clinic.ClinicService;
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.SpecialtyEnum;
 import com.multiteam.core.service.EmailService;
 import com.multiteam.modules.professional.dto.ProfessionalDTO;
 import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentRequest;
-import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentResponse;
 import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentView;
 import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.user.UserService;
@@ -67,7 +67,7 @@ public class ProfessionalService {
             return Boolean.FALSE;
         }
 
-        var user = userService.createUser(professionalDTO.name(), professionalDTO.email(), local);
+        var user = userService.createUser(professionalDTO.name(), professionalDTO.email(), local, UserEnum.PROFISSIONAL);
 
         var builder = new Professional.Builder(
                 null,
