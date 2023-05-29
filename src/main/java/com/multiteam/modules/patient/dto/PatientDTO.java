@@ -1,5 +1,6 @@
 package com.multiteam.modules.patient.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.multiteam.modules.patient.Patient;
 
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ public record PatientDTO(
         String cellPhone,
         String sex,
         Integer age,
+        @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate dateBirth
 ) {
     private PatientDTO(Patient patient) {

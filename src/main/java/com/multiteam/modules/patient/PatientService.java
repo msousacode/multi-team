@@ -79,8 +79,8 @@ public class PatientService {
         return patientRepository.findOneById(patientId);
     }
 
-    public Page<PatientDTO> getAllPatients(Pageable pageable) {
-        return patientRepository.findAllByTenantIdAndActiveIsTrue(tenantContext.getTenantId(), pageable).map(PatientDTO::fromPatientDTO);
+    public Page<PatientDTO> getAllPatients(final PatientFilter patientFilter, Pageable pageable) {
+        return patientRepository.findAllByNameContainingIgnoreCase(patientFilter.patientName(), pageable).map(PatientDTO::fromPatientDTO);
     }
 
     @Transactional
@@ -130,9 +130,5 @@ public class PatientService {
             logger.error("error occurred while updating the patient: {}", patientDTO.id());
             return Boolean.FALSE;
         }
-    }
-
-    public List<PatientDTO> getPatientSearch(PatientFilter patientFilter) {
-        return patientRepository.findByNameContainsIgnoreCase(patientFilter.patientName()).stream().map(PatientDTO::fromPatientDTO).toList();
     }
 }

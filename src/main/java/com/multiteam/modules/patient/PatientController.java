@@ -59,14 +59,15 @@ public class PatientController {
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_READ')")
-    @GetMapping
+    @PostMapping("/filter")
     public ResponseEntity<Page<PatientDTO>> getAllPatients(
+            @RequestBody final PatientFilter patientFilter,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "100") int size,
             @RequestParam(value = "sort", defaultValue = "createdDate") String sort,
             @RequestParam(value = "direction", defaultValue = "DESC") String direction) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(patientService.getAllPatients(PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(direction), sort))));
+                .body(patientService.getAllPatients(patientFilter, PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(direction), sort))));
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_READ')")
@@ -76,12 +77,6 @@ public class PatientController {
         return optionalPatient
                 .map(patient -> ResponseEntity.status(HttpStatus.OK).body(patient))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    }
-
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_WRITE')")
-    @PostMapping("/search")
-    public ResponseEntity<List<PatientDTO>> getPatientSearch(@RequestBody final PatientFilter patientFilter) {
-        return ResponseEntity.status(HttpStatus.OK).body(patientService.getPatientSearch(patientFilter));
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_PATIENT_WRITE')")
