@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AnamneseController extends RestTemplateBase {
+public class AnamneseControllerTest extends RestTemplateBase {
 
     @Test
     void shouldCreateNewAnamneseThenSuccess() throws Exception {

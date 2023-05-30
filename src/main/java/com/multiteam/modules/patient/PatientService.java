@@ -48,7 +48,7 @@ public class PatientService {
     @Transactional
     public Boolean createPatient(final PatientDTO patientDTO) {
 
-        var user = userService.createUser(patientDTO.name(), patientDTO.email(), local, UserEnum.PROFISSIONAL);
+        var user = userService.createUser(patientDTO.name(), patientDTO.email(), local, UserEnum.PACIENTE);
 
         if (user == null) {
             logger.error("An error occurred while creating the user, email: {}", patientDTO.email());

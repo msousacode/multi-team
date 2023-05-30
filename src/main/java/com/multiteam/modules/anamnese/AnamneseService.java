@@ -64,7 +64,11 @@ public class AnamneseService {
     }
 
     public List<AnamneseResponse> getAllAnamneses(final UUID patientId) {
-        return anamneseRepository.findAllByPatientId(patientId).stream().map(AnamneseResponse::new).toList();
+        return anamneseRepository.findAllByPatientId(patientId)
+                .stream().map(i -> {
+                    var creator = userService.getUser(UUID.fromString(i.getCreatedBy()));
+                    return new AnamneseResponse(i, creator.get());
+                }).toList();
     }
 
     public Optional<AnamneseReportResponse> getAnamneseReport(final UUID anamneseId) {
