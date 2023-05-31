@@ -5,6 +5,8 @@ import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.modules.treatment.Treatment;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public record TreatmentResponse(
@@ -16,20 +18,30 @@ public record TreatmentResponse(
         LocalDate finalDate,
         @JsonFormat(pattern = "dd/MM/yyyy")
         LocalDate dateBirth,
-        String namePatient
+        String namePatient,
+        List<ProfessionalInTreatment> treatments
 ) {
-    private TreatmentResponse(Treatment treatment) {
+    private TreatmentResponse(Treatment treatment, List<ProfessionalInTreatment> list) {
         this(
                 treatment.getId(),
                 treatment.getSituation(),
                 treatment.getInitialDate(),
                 treatment.getFinalDate(),
                 treatment.getPatient().getDateBirth(),
-                treatment.getPatient().getName()
+                treatment.getPatient().getName(),
+                list
         );
     }
 
     public static TreatmentResponse fromTreatmentResponse(Treatment treatment) {
-        return new TreatmentResponse(treatment);
+        List<ProfessionalInTreatment> list = new ArrayList<>();
+        treatment.getTreatmentProfessionals().forEach(i -> list.add(new ProfessionalInTreatment(i.getProfessional().getName(), i.getTreatment().getSituation())));
+        return new TreatmentResponse(treatment, list);
+    }
+
+    public record ProfessionalInTreatment(
+            String nameProfessional,
+            SituationEnum situation
+    ) {
     }
 }

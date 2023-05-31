@@ -120,7 +120,7 @@ public class TreatmentService {
     }
 
     public Page<TreatmentResponse> getAllTreatments(final TreatmentFilter filter, Pageable pageable) {
-
+        //TODO ajustar para ser uma query única.
         if (filter.patientId() != null) {
             return treatmentRepository.findAllByPatient_IdAndActiveIsTrue(filter.patientId(), pageable).map(TreatmentResponse::fromTreatmentResponse);
         }
