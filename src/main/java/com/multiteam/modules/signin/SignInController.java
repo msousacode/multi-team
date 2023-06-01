@@ -1,5 +1,6 @@
 package com.multiteam.modules.signin;
 
+import com.multiteam.modules.signin.payload.ForgotDTO;
 import com.multiteam.modules.signin.payload.TokenSigInDTO;
 import com.multiteam.modules.signin.payload.SignInDTO;
 import com.multiteam.modules.signin.payload.SignUpDTO;
@@ -37,5 +38,10 @@ public final class SignInController {
     @PostMapping("/check-token")
     public ResponseEntity<TokenDTO> checkToken(@RequestBody final TokenSigInDTO token) {
         return ResponseEntity.ok(signInService.checkToken(token.token()));
+    }
+
+    @PostMapping("/forgot")
+    public ResponseEntity<?> forgot(@RequestBody final ForgotDTO forgotDTO) {
+        return ResponseEntity.ok(signInService.forget(forgotDTO.email()));
     }
 }

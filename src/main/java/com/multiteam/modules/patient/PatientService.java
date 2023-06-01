@@ -69,9 +69,10 @@ public class PatientService {
 
         logger.info("successfully created patient {} ", builder.toString());
 
+        /* TODO código foi comentado, pois será utilizado em outro momento, quando a plataforma aceitar o acesso do paciente para eventuais consultas.
         if (emailService.sendEmailNewUser(user.getEmail(), user.getProvisionalPassword())) {
             logger.warn("user was created , but an error occurred when sending the first login email: {}", user.getEmail());
-        }
+        }*/
         return Boolean.TRUE;
     }
 

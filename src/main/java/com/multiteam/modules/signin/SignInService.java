@@ -4,7 +4,9 @@ import com.multiteam.core.enums.AuthProviderEnum;
 import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.UserEnum;
 import com.multiteam.core.exception.BadRequestException;
+import com.multiteam.core.models.EmailVO;
 import com.multiteam.core.security.CustomAuthenticationManager;
+import com.multiteam.core.service.EmailService;
 import com.multiteam.core.service.JwtService;
 import com.multiteam.modules.role.Role;
 import com.multiteam.modules.role.RoleRepository;
@@ -13,6 +15,7 @@ import com.multiteam.modules.signin.payload.SignUpDTO;
 import com.multiteam.modules.signin.payload.TokenDTO;
 import com.multiteam.modules.user.User;
 import com.multiteam.modules.user.UserRepository;
+import com.sendgrid.helpers.mail.objects.Content;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,16 +34,19 @@ public class SignInService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final EmailService emailService;
 
     public SignInService(
             final CustomAuthenticationManager customAuthenticationManager,
             final JwtService jwtService,
             final UserRepository userRepository,
-            final RoleRepository roleRepository) {
+            final RoleRepository roleRepository,
+            final EmailService emailService) {
         this.customAuthenticationManager = customAuthenticationManager;
         this.jwtService = jwtService;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.emailService = emailService;
     }
 
     public String signInUser(final SignInDTO loginRequest) {
@@ -87,5 +93,46 @@ public class SignInService {
         return new TokenDTO(userInfo.get("userId"));
     }
 
+    @Transactional
+    public Boolean forget(String email) {
+        var user = userRepository.findByEmail(email.trim());
 
+        if (user.isEmpty()) {
+            return Boolean.FALSE;
+        }
+        String passwordProvisional = UUID.randomUUID().toString().substring(0, 10);
+
+        user.get().setPassword(new BCryptPasswordEncoder().encode(passwordProvisional));
+
+        userRepository.save(user.get());
+
+        logger.info("Password of user {} been changed by forget action", email);
+
+        String subject = getSubject();
+        Content content = getContent(user.get(), passwordProvisional);
+
+        var emailVO = EmailVO.buildEmail(user.get(), subject, content);
+
+        if (emailService.sendEmailNewUser(emailVO)) {
+            logger.warn("password was updated, but an error occurred when sending the first login email: {}", email);
+        }
+
+        return Boolean.TRUE;
+    }
+
+    private static String getSubject() {
+        return "Team Clinic | Recuperação de acesso";
+    }
+
+    private static Content getContent(User user, String passwordProvisional) {
+        return new Content("text/plain",
+                """
+                     Vi que você está com problemas para se autenticar na plataforma e pediu uma restauração de senha. 
+                     Caso queira prosseguir com esta requisição, basta realizar o seu login utilizando a senha provisória abaixo. 
+                     
+                     Para logar no Portal, utilize as credenciais:
+                     E-mail: %s
+                     Senha: %s
+                """.formatted(user.getEmail(), passwordProvisional));
+    }
 }

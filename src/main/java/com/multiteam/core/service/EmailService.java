@@ -1,5 +1,6 @@
 package com.multiteam.core.service;
 
+import com.multiteam.core.models.EmailVO;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -25,22 +26,15 @@ public class EmailService {
     @Value("${sendgrid.email.from}")
     private String emailFrom;
 
-    public boolean sendEmailNewUser(String email, String password) {
+    public boolean sendEmailNewUser(EmailVO email) {
 
         boolean success = true;
 
-        Email to = new Email(email.trim());
+        Email to = new Email(email.email().trim());
         Email from = new Email(emailFrom);
-        String subject = "O Seu Acesso Chegou! | Team Clinic";
+        String subject = email.subject();
+        Content content = email.content();
 
-        Content content = new Content("text/plain",
-                """
-                     Olá! Você foi convidado a fazer parte do Portal Team Clinic. 
-                     
-                     Para logar no Portal, utilize as credenciais:
-                     E-mail: %s
-                     Senha: %s
-                """.formatted(email, password));
         Mail mail = new Mail(from, subject, to, content);
 
         SendGrid sg = new SendGrid(sendGridApiKey);

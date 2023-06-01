@@ -1,15 +1,18 @@
 package com.multiteam.modules.professional;
 
-import com.multiteam.core.enums.UserEnum;
-import com.multiteam.modules.clinic.ClinicService;
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.SpecialtyEnum;
+import com.multiteam.core.enums.UserEnum;
+import com.multiteam.core.models.EmailVO;
 import com.multiteam.core.service.EmailService;
+import com.multiteam.modules.clinic.ClinicService;
 import com.multiteam.modules.professional.dto.ProfessionalDTO;
 import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentRequest;
 import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentView;
 import com.multiteam.modules.treatment.TreatmentService;
+import com.multiteam.modules.user.User;
 import com.multiteam.modules.user.UserService;
+import com.sendgrid.helpers.mail.objects.Content;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
@@ -82,7 +85,12 @@ public class ProfessionalService {
 
         professionalRepository.save(builder);
 
-        if (emailService.sendEmailNewUser(user.getEmail(), user.getProvisionalPassword())) {
+        String subject = getSubject();
+        Content content = getContent(user);
+
+        var email = EmailVO.buildEmail(user, subject, content);
+
+        if (emailService.sendEmailNewUser(email)) {
             logger.warn("user was created , but an error occurred when sending the first login email: {}", professionalDTO.email());
         }
 
@@ -173,5 +181,20 @@ public class ProfessionalService {
 
     public List<Professional> getAllProfessionalsByClinics(List<UUID> professionals) {
         return professionalRepository.getAllProfessionalsByClinics(professionals);
+    }
+
+    private static String getSubject() {
+        return "Team Clinic | O Seu Acesso Chegou!";
+    }
+
+    private static Content getContent(User user) {
+        return new Content("text/plain",
+                """
+                             Olá! Você foi convidado a fazer parte do Portal Team Clinic. 
+                             
+                             Para logar no Portal, utilize as credenciais:
+                             E-mail: %s
+                             Senha: %s
+                        """.formatted(user.getEmail(), user.getProvisionalPassword()));
     }
 }
