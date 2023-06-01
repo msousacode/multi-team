@@ -1,7 +1,6 @@
 package com.multiteam.modules.user;
 
 import com.multiteam.modules.role.Role;
-import com.multiteam.modules.role.RoleRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -88,7 +86,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/roles")
-    public ResponseEntity<Set<Role>> getRolesPermissions(@PathVariable("userId") final UUID userId) {
+    public ResponseEntity<List<Role>> getRolesPermissions(@PathVariable("userId") final UUID userId) {
         return ResponseEntity.ok().body(userService.getRolesPermissions(userId));
     }
 }

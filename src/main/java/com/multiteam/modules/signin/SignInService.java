@@ -56,22 +56,22 @@ public class SignInService {
     }
 
     @Transactional
-    public void signUpUser(final SignUpDTO signUpRequest) {
+    public void signUpUser(final SignUpDTO signUpDTO) {
 
-        if (userRepository.existsByEmail(signUpRequest.email())) {
+        if (userRepository.existsByEmail(signUpDTO.email())) {
             throw new BadRequestException("Email address already in use.");
         }
 
         Role role = roleRepository.findByRole(RoleEnum.ROLE_OWNER);
-        signUpRequest.roles().add(role);
+        signUpDTO.roles().add(role);
 
         UUID provisionalTenantId = UUID.fromString("61a9c194-386d-46e1-ab9d-d26d6d50a1fc");
 
         var builder = new User.Builder(
-                null, provisionalTenantId, signUpRequest.name(), signUpRequest.email(), true)
+                null, provisionalTenantId, signUpDTO.name(), signUpDTO.email(), true)
                 .provider(AuthProviderEnum.local)
-                .password(new BCryptPasswordEncoder().encode(signUpRequest.password()))
-                .roles(signUpRequest.roles())
+                .password(new BCryptPasswordEncoder().encode(signUpDTO.password()))
+                .roles(signUpDTO.roles())
                 .userType(UserEnum.OWNER)
                 .build();
 

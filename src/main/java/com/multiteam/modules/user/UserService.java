@@ -8,14 +8,16 @@ import com.multiteam.modules.role.Role;
 import com.multiteam.modules.role.RoleRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -47,7 +49,7 @@ public class UserService {
         var role3 = roleRepository.findByRole(RoleEnum.PERM_SCHEDULE_READ);
 
         var user = new User.Builder(null, tenantContext.getTenantId(), name, email, true)
-                .roles(Set.of(role1, role2, role3))
+                .roles(List.of(role1, role2, role3))
                 .provider(providerEnum)
                 .password(new BCryptPasswordEncoder().encode(password))
                 .userType(userEnum)
@@ -70,12 +72,13 @@ public class UserService {
         return user.map(UserDTO::fromUserDTO);
     }
 
+    @CacheEvict(cacheNames = "roles", allEntries = true)
     @Transactional
     public Boolean updateUser(final UserDTO userDTO) {
 
-        var userOptional = userRepository.findById(userDTO.id());
+        var user = userRepository.findById(userDTO.id());
 
-        if (userOptional.isEmpty()) {
+        if (user.isEmpty()) {
             logger.warn("user not found with userId: {}", userDTO.id());
             return Boolean.FALSE;
         }
@@ -83,21 +86,14 @@ public class UserService {
         var rolesIds = userDTO.roles().stream().map(UUID::fromString).toList();
 
         var roles = roleRepository.findAllById(rolesIds);
-        var rolesSet = Set.copyOf(roles);
 
-        var builder = new User.Builder(
-                userDTO.id(),
-                userOptional.get().getTenantId(),
-                userDTO.name(),
-                userDTO.email(),
-                userDTO.active())
-                .roles(rolesSet)
-                .password(userOptional.get().getPassword())
-                .build();
+        user.get().setName(userDTO.name());
+        user.get().setEmail(userDTO.email());
+        user.get().setRoles(roles);
 
-        userRepository.save(builder);
+        userRepository.save(user.get());
 
-        logger.info("updated user: {} ", builder.toString());
+        logger.info("updated user: {} ", user.toString());
 
         return Boolean.TRUE;
     }
@@ -118,7 +114,9 @@ public class UserService {
         }
     }
 
-    public Set<Role> getRolesPermissions(final UUID userId) {
-        return userRepository.findById(userId).map(User::getRoles).orElse(Set.of());
+    @Cacheable("roles")
+    public List<Role> getRolesPermissions(final UUID userId) {
+        logger.info("consulting permissions ...");
+        return userRepository.findById(userId).map(User::getRoles).orElse(List.of());
     }
 }

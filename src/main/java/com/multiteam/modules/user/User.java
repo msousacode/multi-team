@@ -16,8 +16,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -67,7 +67,7 @@ public class User {
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    private List<Role> roles = new ArrayList<>();
 
     public User() {
     }
@@ -134,7 +134,7 @@ public class User {
         return provisionalPassword;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
@@ -148,6 +148,38 @@ public class User {
 
     public UserEnum getUserType() {
         return userType;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setEmailVerified(Boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setProvider(AuthProviderEnum provider) {
+        this.provider = provider;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public void setUserType(UserEnum userType) {
+        this.userType = userType;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -174,7 +206,7 @@ public class User {
         private String imageUrl;
         private Boolean emailVerified;
         private AuthProviderEnum provider;
-        private Set<Role> roles;
+        private List<Role> roles;
         private UserEnum userType;
 
         public Builder(
@@ -211,7 +243,7 @@ public class User {
             return this;
         }
 
-        public Builder roles(Set<Role> roles) {
+        public Builder roles(List<Role> roles) {
             this.roles = roles;
             return this;
         }
