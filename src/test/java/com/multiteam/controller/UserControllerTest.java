@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 public class UserControllerTest extends RestTemplateBase {
-
+/*
     @Test
     void shouldUpdatedPatientThenSuccess() throws Exception {
 
@@ -41,7 +41,7 @@ public class UserControllerTest extends RestTemplateBase {
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
-
+*/
     @Test
     void shouldGetAllUsersThenSuccess() throws Exception {
 

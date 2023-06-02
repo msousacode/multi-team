@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -32,7 +33,7 @@ class SignInControllerTest extends RestTemplateBase {
 
         URI uri = new URI("http://localhost:" + port + "/team/v1/sign-up");
 
-        var signUp = new SignUpDTO(UUID.randomUUID().toString().substring(0,10), UUID.randomUUID().toString().substring(0,10) + "@test.com", "12345678", Set.of());
+        var signUp = new SignUpDTO(UUID.randomUUID().toString().substring(0,10), UUID.randomUUID().toString().substring(0,10) + "@test.com", "12345678", List.of());
 
         HttpEntity<Object> request = new HttpEntity<>(signUp, headers);
         ResponseEntity<String> response = restTemplate.postForEntity(uri, request, String.class);

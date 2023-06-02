@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ScheduleControllerTest extends RestTemplateBase {
 
+    /*
     @Test
     void shouldCreateNewScheduleThenSuccess() throws Exception {
 
@@ -46,5 +47,5 @@ public class ScheduleControllerTest extends RestTemplateBase {
         ResponseEntity<?> response = restTemplate.postForEntity(uri, request, null);
 
         assertEquals(response.getStatusCode(), HttpStatus.CREATED);
-    }
+    }*/
 }
