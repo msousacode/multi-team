@@ -71,6 +71,7 @@ public class SecurityConfiguration extends GlobalMethodSecurityConfiguration {
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
                 .antMatchers(POST, "/v1/auth/sign-in").permitAll()
                 .antMatchers(POST, "/v1/auth/sign-up").permitAll()
+                .antMatchers(POST, "/v1/auth/info-token").permitAll()
                 .antMatchers(POST, "/v1/auth/check-token").permitAll()
                 .antMatchers(POST, "/v1/auth/forgot").permitAll()
                 .anyRequest().authenticated()

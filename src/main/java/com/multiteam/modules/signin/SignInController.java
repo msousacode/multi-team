@@ -35,9 +35,14 @@ public final class SignInController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/check-token")
-    public ResponseEntity<TokenDTO> checkToken(@RequestBody final TokenSigInDTO token) {
-        return ResponseEntity.ok(signInService.checkToken(token.token()));
+    @PostMapping("/info-token")
+    public ResponseEntity<TokenDTO> infoToken(@RequestBody final TokenSigInDTO token) {
+        return ResponseEntity.ok(signInService.infoToken(token.token()));
+    }
+
+    @PostMapping("/validate-token")
+    public ResponseEntity<Boolean> validateToken(@RequestBody final TokenSigInDTO token) {
+        return ResponseEntity.ok(signInService.validateToken(token.token()));
     }
 
     @PostMapping("/forgot")

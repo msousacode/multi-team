@@ -85,7 +85,7 @@ public class SignInService {
         userRepository.updateTenantIdMyUser(result.getId(), result.getId());
     }
 
-    public TokenDTO checkToken(final String token) {
+    public TokenDTO infoToken(final String token) {
         logger.info("check token {}", token);
         var userInfo = jwtService.openToken(token);
 
@@ -134,5 +134,9 @@ public class SignInService {
                      E-mail: %s
                      Senha: %s
                 """.formatted(user.getEmail(), passwordProvisional));
+    }
+
+    public Boolean validateToken(String token) {
+        return jwtService.validateToken(token);
     }
 }
