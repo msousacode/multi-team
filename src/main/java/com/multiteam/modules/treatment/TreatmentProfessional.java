@@ -1,6 +1,7 @@
 package com.multiteam.modules.treatment;
 
 import com.multiteam.core.enums.SituationEnum;
+import com.multiteam.core.models.Auditable;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.professional.Professional;
 import org.springframework.util.Assert;
@@ -18,7 +19,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "treatments_professionals")
-public class TreatmentProfessional {
+public class TreatmentProfessional extends Auditable {
 
         @Id
         @GeneratedValue
@@ -40,6 +41,9 @@ public class TreatmentProfessional {
         @Column(name = "situation_type")
         @Enumerated(EnumType.STRING)
         private SituationEnum situationType;
+
+        @Column(name = "annotation")
+        private String annotation;
 
         public TreatmentProfessional() {}
 
@@ -84,5 +88,29 @@ public class TreatmentProfessional {
 
         public void setProfessional(Professional professional) {
                 this.professional = professional;
+        }
+
+        public void setId(UUID id) {
+                this.id = id;
+        }
+
+        public void setClinic(Clinic clinic) {
+                this.clinic = clinic;
+        }
+
+        public SituationEnum getSituationType() {
+                return situationType;
+        }
+
+        public void setSituationType(SituationEnum situationType) {
+                this.situationType = situationType;
+        }
+
+        public String getAnnotation() {
+                return annotation;
+        }
+
+        public void setAnnotation(String annotation) {
+                this.annotation = annotation;
         }
 }

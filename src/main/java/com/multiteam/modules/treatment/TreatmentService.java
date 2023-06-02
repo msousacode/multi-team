@@ -9,6 +9,7 @@ import com.multiteam.modules.patient.Patient;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
+import com.multiteam.modules.treatment.dto.TreatmentAnnotationRequest;
 import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
 import com.multiteam.modules.treatment.dto.TreatmentFilter;
 import com.multiteam.modules.treatment.dto.TreatmentRequest;
@@ -120,7 +121,6 @@ public class TreatmentService {
     }
 
     public Page<TreatmentResponse> getAllTreatments(final TreatmentFilter filter, Pageable pageable) {
-        //TODO ajustar para ser uma query única.
         if (filter.patientId() != null) {
             return treatmentRepository.findAllByPatient_IdAndActiveIsTrue(filter.patientId(), pageable).map(TreatmentResponse::fromTreatmentResponse);
         }
@@ -139,7 +139,7 @@ public class TreatmentService {
         //inactive professionals of treatment
         treatementProfessionalRepository.inactiveProfessionalsByTreatmentId(treatmentId, SituationEnum.INATIVO);
 
-        //exclude all guests
+        //exclude all guests TODO será usado futuramente release 2 quando houver a funcionalidade de convidados
         //treatment.get().getGuests().removeAll(treatment.get().getGuests());
         //treatmentRepository.save(treatment.get());
 
@@ -215,5 +215,13 @@ public class TreatmentService {
                 treatementProfessionalRepository.save(treatmentProfessional);
             });
         });
+    }
+
+    @Transactional
+    public void includeAnnotation(TreatmentAnnotationRequest treatmentAnnotationRequest) {
+        TreatmentProfessional treatment = treatementProfessionalRepository.findByTreatment_Id(treatmentAnnotationRequest.treatmentId());
+        treatment.setAnnotation(treatmentAnnotationRequest.annotation());
+
+        treatementProfessionalRepository.save(treatment);
     }
 }

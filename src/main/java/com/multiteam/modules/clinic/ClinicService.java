@@ -33,7 +33,15 @@ public class ClinicService {
                 clinicDTO.cellPhone())
                 .telephone(clinicDTO.telephone())
                 .observation(clinicDTO.observation())
-                .active(true)
+                .active(Boolean.TRUE)
+                .site(clinicDTO.site())
+                .inscEstadual(clinicDTO.inscEstadual())
+                .city(clinicDTO.city())
+                .address(clinicDTO.address())
+                .district(clinicDTO.district())
+                .number(clinicDTO.number())
+                .state(clinicDTO.state())
+                .zipCode(clinicDTO.zipCode())
                 .build();
 
         clinicRepository.save(builder);
@@ -58,27 +66,30 @@ public class ClinicService {
     @Transactional
     public Boolean updateClinic(final ClinicDTO clinicDTO) {
 
-        var clinicResult = clinicRepository.findOneById(clinicDTO.id());
+        var clinic = clinicRepository.findOneById(clinicDTO.id());
 
-        if (clinicResult.isEmpty()) {
+        if (clinic.isEmpty()) {
             logger.debug("check if clinic exists. clinicId: {}", clinicDTO.id());
             logger.error("clinic cannot be null. clinicId: {}", clinicDTO.id());
             return Boolean.FALSE;
         }
 
-        var builder = new Clinic.Builder(
-                clinicDTO.clinicName(),
-                clinicDTO.cpfCnpj(),
-                clinicDTO.email(),
-                clinicDTO.cellPhone())
-                .telephone(clinicDTO.telephone())
-                .observation(clinicDTO.observation())
-                .id(clinicDTO.id())
-                .build();
+        clinic.get().setClinicName(clinicDTO.clinicName());
+        clinic.get().setCpfCnpj(clinicDTO.cpfCnpj());
+        clinic.get().setEmail(clinicDTO.email());
+        clinic.get().setCellPhone(clinicDTO.cellPhone());
+        clinic.get().setTelephone(clinicDTO.telephone());
+        clinic.get().setObservation(clinicDTO.observation());
+        clinic.get().setZipCode(clinicDTO.zipCode());
+        clinic.get().setAddress(clinicDTO.address());
+        clinic.get().setInscEstadual(clinicDTO.inscEstadual());
+        clinic.get().setNumber(clinicDTO.number());
+        clinic.get().setCity(clinicDTO.city());
+        clinic.get().setState(clinicDTO.state());
 
-        clinicRepository.save(builder);
+        clinicRepository.save(clinic.get());
 
-        logger.info("updated clinic: {}", builder.toString());
+        logger.info("updated clinic: {}", clinic.get().toString());
 
         return Boolean.TRUE;
     }

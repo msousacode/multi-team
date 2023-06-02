@@ -1,5 +1,6 @@
 package com.multiteam.modules.treatment;
 
+import com.multiteam.modules.treatment.dto.TreatmentAnnotationRequest;
 import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
 import com.multiteam.modules.treatment.dto.TreatmentFilter;
 import com.multiteam.modules.treatment.dto.TreatmentRequest;
@@ -87,4 +88,9 @@ public class TreatmentController {
         }
     }
 
+    @PostMapping("/{treatmentId}")
+    public ResponseEntity<Void> includeAnnotation(@RequestBody final TreatmentAnnotationRequest treatmentAnnotationRequest) {
+        treatmentService.includeAnnotation(treatmentAnnotationRequest);
+        return ResponseEntity.ok().build();
+    }
 }

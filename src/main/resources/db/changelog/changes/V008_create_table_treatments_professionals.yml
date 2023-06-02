@@ -29,6 +29,23 @@ databaseChangeLog:
                   type: varchar(20)
                   constraints:
                     nullable: false
+              - column:
+                  name: annotation
+                  type: text
+              - column:
+                  name: created_by
+                  type: varchar(50)
+              - column:
+                  name: created_date
+                  type: timestamp
+                  constraints:
+                    updatable: false
+              - column:
+                  name: last_modified_by
+                  type: varchar(50)
+              - column:
+                  name: last_modified_date
+                  type: timestamp
         - addForeignKeyConstraint:
             baseColumnNames: treatment_id
             baseTableName: treatments_professionals

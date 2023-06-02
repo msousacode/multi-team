@@ -40,6 +40,30 @@ databaseChangeLog:
                   name: observation
                   type: varchar(500)
               - column:
+                  name: site
+                  type: varchar(100)
+              - column:
+                  name: insc_estadual
+                  type: varchar(20)
+              - column:
+                  name: zip_code
+                  type: varchar(8)
+              - column:
+                  name: address
+                  type: varchar(100)
+              - column:
+                  name: number
+                  type: varchar(5)
+              - column:
+                  name: city
+                  type: varchar(100)
+              - column:
+                  name: district
+                  type: varchar(100)
+              - column:
+                  name: state
+                  type: varchar(100)
+              - column:
                   name: active
                   type: boolean
                   defaultValueBoolean: true

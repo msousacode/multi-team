@@ -11,7 +11,15 @@ public record ClinicDTO(
         String email,
         String cellPhone,
         String telephone,
-        String observation
+        String observation,
+        String site,
+        String inscEstadual,
+        String zipCode,
+        String address,
+        String number,
+        String district,
+        String city,
+        String state
 ) {
     public ClinicDTO(Clinic clinic) {
         this(
@@ -21,7 +29,15 @@ public record ClinicDTO(
                 clinic.getEmail(),
                 clinic.getCellPhone(),
                 clinic.getTelephone(),
-                clinic.getObservation()
+                clinic.getObservation(),
+                clinic.getSite(),
+                clinic.getInscEstadual(),
+                clinic.getZipCode(),
+                clinic.getAddress(),
+                clinic.getNumber(),
+                clinic.getDistrict(),
+                clinic.getCity(),
+                clinic.getState()
         );
     }
 }

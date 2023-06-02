@@ -19,4 +19,6 @@ public interface TreatementProfessionalRepository extends JpaRepository<Treatmen
     @Modifying
     @Query("DELETE FROM TreatmentProfessional tp WHERE tp.treatment.id = :id")
     void deleteByTreatment_Id(UUID id);
+
+    TreatmentProfessional findByTreatment_Id(UUID treatmentId);
 }
