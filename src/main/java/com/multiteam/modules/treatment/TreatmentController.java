@@ -1,8 +1,10 @@
 package com.multiteam.modules.treatment;
 
+import com.multiteam.modules.treatment.dto.TreatmentAnnotationDTO;
 import com.multiteam.modules.treatment.dto.TreatmentAnnotationRequest;
 import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
 import com.multiteam.modules.treatment.dto.TreatmentFilter;
+import com.multiteam.modules.treatment.dto.TreatmentProfessionalAnnotationDTO;
 import com.multiteam.modules.treatment.dto.TreatmentRequest;
 import com.multiteam.modules.treatment.dto.TreatmentResponse;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -88,9 +91,19 @@ public class TreatmentController {
         }
     }
 
-    @PostMapping("/{treatmentId}")
+    @PostMapping("/annotations")
     public ResponseEntity<Void> includeAnnotation(@RequestBody final TreatmentAnnotationRequest treatmentAnnotationRequest) {
         treatmentService.includeAnnotation(treatmentAnnotationRequest);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/patient/{patientId}/annotations")
+    public ResponseEntity<List<TreatmentAnnotationDTO>> getAnnotations(@PathVariable("patientId") final UUID patientId) {
+        return ResponseEntity.ok(treatmentService.getallAnnotations(patientId));
+    }
+
+    @GetMapping("/annotations/{treatmentProfessionalId}")
+    public ResponseEntity<TreatmentProfessionalAnnotationDTO> getAnnotationsById(@PathVariable("treatmentProfessionalId") final UUID treatmentProfessionalId) {
+        return ResponseEntity.ok(treatmentService.getAnnotationsById(treatmentProfessionalId));
     }
 }

@@ -1,6 +1,5 @@
 package com.multiteam.modules.treatment;
 
-import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.modules.clinic.Clinic;
@@ -9,9 +8,11 @@ import com.multiteam.modules.patient.Patient;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
+import com.multiteam.modules.treatment.dto.TreatmentAnnotationDTO;
 import com.multiteam.modules.treatment.dto.TreatmentAnnotationRequest;
 import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
 import com.multiteam.modules.treatment.dto.TreatmentFilter;
+import com.multiteam.modules.treatment.dto.TreatmentProfessionalAnnotationDTO;
 import com.multiteam.modules.treatment.dto.TreatmentRequest;
 import com.multiteam.modules.treatment.dto.TreatmentResponse;
 import org.apache.logging.log4j.LogManager;
@@ -34,22 +35,19 @@ public class TreatmentService {
     private static final Logger logger = LogManager.getLogger(TreatmentService.class);
 
     private final TreatmentRepository treatmentRepository;
-    private final TreatementProfessionalRepository treatementProfessionalRepository;
+    private final TreatementProfessionalRepository treatmentProfessionalRepository;
     private final PatientService patientService;
     private final ProfessionalService professionalService;
-    private final TenantContext tenantContext;
 
     public TreatmentService(
             TreatmentRepository treatmentRepository,
             TreatementProfessionalRepository treatementProfessionalRepository,
             @Lazy PatientService patientService,
-            @Lazy ProfessionalService professionalService,
-            TenantContext tenantContext) {
+            @Lazy ProfessionalService professionalService) {
         this.treatmentRepository = treatmentRepository;
-        this.treatementProfessionalRepository = treatementProfessionalRepository;
+        this.treatmentProfessionalRepository = treatementProfessionalRepository;
         this.patientService = patientService;
         this.professionalService = professionalService;
-        this.tenantContext = tenantContext;
     }
 
     @Transactional
@@ -137,7 +135,7 @@ public class TreatmentService {
         }
 
         //inactive professionals of treatment
-        treatementProfessionalRepository.inactiveProfessionalsByTreatmentId(treatmentId, SituationEnum.INATIVO);
+        treatmentProfessionalRepository.inactiveProfessionalsByTreatmentId(treatmentId, SituationEnum.INATIVO);
 
         //exclude all guests TODO será usado futuramente release 2 quando houver a funcionalidade de convidados
         //treatment.get().getGuests().removeAll(treatment.get().getGuests());
@@ -207,21 +205,31 @@ public class TreatmentService {
 
     private void saveLinkTreatmentProfessional(List<Professional> professionals, Treatment treatment) {
 
-        treatementProfessionalRepository.deleteByTreatment_Id(treatment.getId());
+        treatmentProfessionalRepository.deleteByTreatment_Id(treatment.getId());
 
         professionals.forEach(professional -> {
             professional.getClinics().forEach(clinic -> {
                 var treatmentProfessional = new TreatmentProfessional(null, treatment, professional, clinic, SituationEnum.ANDAMENTO);
-                treatementProfessionalRepository.save(treatmentProfessional);
+                treatmentProfessionalRepository.save(treatmentProfessional);
             });
         });
     }
 
     @Transactional
     public void includeAnnotation(TreatmentAnnotationRequest treatmentAnnotationRequest) {
-        TreatmentProfessional treatment = treatementProfessionalRepository.findByTreatment_Id(treatmentAnnotationRequest.treatmentId());
+        TreatmentProfessional treatment = treatmentProfessionalRepository.findByTreatment_Id(treatmentAnnotationRequest.treatmentId());
         treatment.setAnnotation(treatmentAnnotationRequest.annotation());
 
-        treatementProfessionalRepository.save(treatment);
+        treatmentProfessionalRepository.save(treatment);
+    }
+
+    public List<TreatmentAnnotationDTO> getallAnnotations(final UUID patientId) {
+        return treatmentProfessionalRepository
+                .findAllByTreatment_Patient_IdAndAnnotationIsNotNull(patientId).stream().map(TreatmentAnnotationDTO::new).toList();
+    }
+
+    public TreatmentProfessionalAnnotationDTO getAnnotationsById(final UUID treatmentProfessionalId) {
+        return treatmentProfessionalRepository.findById(treatmentProfessionalId)
+                .map(TreatmentProfessionalAnnotationDTO::new).orElse(null);
     }
 }

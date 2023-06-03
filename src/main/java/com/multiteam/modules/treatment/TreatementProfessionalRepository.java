@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -21,4 +22,6 @@ public interface TreatementProfessionalRepository extends JpaRepository<Treatmen
     void deleteByTreatment_Id(UUID id);
 
     TreatmentProfessional findByTreatment_Id(UUID treatmentId);
+
+    List<TreatmentProfessional> findAllByTreatment_Patient_IdAndAnnotationIsNotNull(UUID patientId);
 }

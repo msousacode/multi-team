@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -26,7 +27,7 @@ public class TreatmentProfessional extends Auditable {
         @Column(name = "treatment_professional_id")
         private UUID id;
 
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "treatment_id")
         private Treatment treatment;
 
@@ -34,7 +35,7 @@ public class TreatmentProfessional extends Auditable {
         @JoinColumn(name = "professional_id")
         private Professional professional;
 
-        @ManyToOne
+        @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "clinic_id")
         private Clinic clinic;
 
