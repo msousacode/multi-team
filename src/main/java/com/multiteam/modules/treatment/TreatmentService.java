@@ -1,7 +1,10 @@
 package com.multiteam.modules.treatment;
 
+import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.exception.BadRequestException;
+import com.multiteam.core.exception.ProfessionalException;
+import com.multiteam.core.exception.TreatmentException;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.guest.Guest;
 import com.multiteam.modules.patient.Patient;
@@ -20,6 +23,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -38,16 +43,19 @@ public class TreatmentService {
     private final TreatementProfessionalRepository treatmentProfessionalRepository;
     private final PatientService patientService;
     private final ProfessionalService professionalService;
+    private final TenantContext tenantContext;
 
     public TreatmentService(
             TreatmentRepository treatmentRepository,
             TreatementProfessionalRepository treatementProfessionalRepository,
             @Lazy PatientService patientService,
-            @Lazy ProfessionalService professionalService) {
+            @Lazy ProfessionalService professionalService,
+            TenantContext tenantContext) {
         this.treatmentRepository = treatmentRepository;
         this.treatmentProfessionalRepository = treatementProfessionalRepository;
         this.patientService = patientService;
         this.professionalService = professionalService;
+        this.tenantContext = tenantContext;
     }
 
     @Transactional
@@ -213,14 +221,6 @@ public class TreatmentService {
                 treatmentProfessionalRepository.save(treatmentProfessional);
             });
         });
-    }
-
-    @Transactional
-    public void includeAnnotation(TreatmentAnnotationRequest treatmentAnnotationRequest) {
-        TreatmentProfessional treatment = treatmentProfessionalRepository.findByTreatment_Id(treatmentAnnotationRequest.treatmentId());
-        treatment.setAnnotation(treatmentAnnotationRequest.annotation());
-
-        treatmentProfessionalRepository.save(treatment);
     }
 
     public List<TreatmentAnnotationDTO> getallAnnotations(final UUID patientId) {

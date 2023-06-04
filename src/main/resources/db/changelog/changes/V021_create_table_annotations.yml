@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: V021
+      author: michael
+      changes:
+        - createTable:
+            tableName: annotations
+            columns:
+              - column:
+                  name: annotation_id
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: annotation
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: treatment_professional_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+              - column:
+                  name: created_by
+                  type: varchar(50)
+              - column:
+                  name: created_date
+                  type: timestamp
+                  constraints:
+                    updatable: false
+              - column:
+                  name: last_modified_by
+                  type: varchar(50)
+              - column:
+                  name: last_modified_date
+                  type: timestamp
+        - addForeignKeyConstraint:
+            baseColumnNames: treatment_professional_id
+            baseTableName: annotations
+            constraintName: fk_annotations_treatments_professionals
+            referencedColumnNames: treatment_professional_id
+            referencedTableName: treatments_professionals

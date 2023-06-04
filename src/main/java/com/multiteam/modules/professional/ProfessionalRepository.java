@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -45,4 +46,6 @@ public interface ProfessionalRepository extends TenantableRepository<Professiona
             SELECT p FROM Professional p WHERE p.id in (:professionals)
             """)
     List<Professional> getAllProfessionalsByClinics(@Param("professionals") List<UUID> professionals);
+
+    Optional<Professional> findProfessionalByUser_Id(UUID professionalId);
 }

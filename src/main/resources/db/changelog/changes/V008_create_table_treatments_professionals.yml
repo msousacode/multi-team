@@ -10,19 +10,16 @@ databaseChangeLog:
                   name: treatment_id
                   type: uuid
                   constraints:
-                    primaryKey: true
                     nullable: false
               - column:
                   name: professional_id
                   type: uuid
                   constraints:
-                    primaryKey: true
                     nullable: false
               - column:
                   name: clinic_id
                   type: uuid
                   constraints:
-                    primaryKey: true
                     nullable: false
               - column:
                   name: situation_type

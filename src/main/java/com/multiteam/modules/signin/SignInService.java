@@ -137,6 +137,6 @@ public class SignInService {
     }
 
     public Boolean validateToken(String token) {
-        return jwtService.validateToken(token);
+          return jwtService.validateToken(token);
     }
 }

@@ -3,7 +3,7 @@ package com.multiteam.modules.guest;
 
 import com.multiteam.core.enums.AuthProviderEnum;
 import com.multiteam.core.exception.OwnerException;
-import com.multiteam.core.exception.TreatmentNotExistsException;
+import com.multiteam.core.exception.TreatmentException;
 import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.user.User;
 import com.multiteam.modules.user.UserRepository;
@@ -73,7 +73,7 @@ public class GuestService {
         if (guest.isPresent() && !treatments.isEmpty())
             treatmentService.includeGuestInTreatment(guest.get(), null);
         else {
-            throw new TreatmentNotExistsException("treatment does not exist");
+            throw new TreatmentException("treatment does not exist");
         }
         return Boolean.TRUE;
     }

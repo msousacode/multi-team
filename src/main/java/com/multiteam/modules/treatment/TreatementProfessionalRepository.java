@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -24,4 +25,6 @@ public interface TreatementProfessionalRepository extends JpaRepository<Treatmen
     TreatmentProfessional findByTreatment_Id(UUID treatmentId);
 
     List<TreatmentProfessional> findAllByTreatment_Patient_IdAndAnnotationIsNotNull(UUID patientId);
+
+    Optional<TreatmentProfessional> findByTreatment_IdAndProfessional_Id(UUID treatmentId, UUID id);
 }
