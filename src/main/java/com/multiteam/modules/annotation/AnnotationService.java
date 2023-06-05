@@ -2,11 +2,15 @@ package com.multiteam.modules.annotation;
 
 import com.multiteam.core.exception.ProfessionalException;
 import com.multiteam.core.exception.TreatmentException;
+import com.multiteam.modules.annotation.dto.AnnotationDTO;
+import com.multiteam.modules.annotation.dto.AnnototionSearch;
 import com.multiteam.modules.professional.ProfessionalService;
 import com.multiteam.modules.treatment.TreatementProfessionalRepository;
 import com.multiteam.modules.treatment.TreatmentService;
+import com.multiteam.modules.treatment.dto.TreatmentAnnotationDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -72,7 +76,12 @@ public class AnnotationService {
 
     }
 
-    public List<Object> getAllAnnotations(UUID patientId) {
-        return List.of();
+    public List<TreatmentAnnotationDTO> getAllAnnotations(final AnnototionSearch search) {
+
+        Specification<Annotation> spec = AnnotationSpecification.findAllAnnotations(search);
+        var list = annotationRepository.findAll(spec);
+
+        return list.stream().map(TreatmentAnnotationDTO::new).toList();
+
     }
 }

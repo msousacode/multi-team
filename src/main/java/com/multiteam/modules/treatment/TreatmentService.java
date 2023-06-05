@@ -223,11 +223,6 @@ public class TreatmentService {
         });
     }
 
-    public List<TreatmentAnnotationDTO> getallAnnotations(final UUID patientId) {
-        return treatmentProfessionalRepository
-                .findAllByTreatment_Patient_IdAndAnnotationIsNotNull(patientId).stream().map(TreatmentAnnotationDTO::new).toList();
-    }
-
     public TreatmentProfessionalAnnotationDTO getAnnotationsById(final UUID treatmentProfessionalId) {
         return treatmentProfessionalRepository.findById(treatmentProfessionalId)
                 .map(TreatmentProfessionalAnnotationDTO::new).orElse(null);

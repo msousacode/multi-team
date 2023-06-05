@@ -1,7 +1,7 @@
 package com.multiteam.modules.treatment.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.multiteam.modules.treatment.TreatmentProfessional;
+import com.multiteam.modules.annotation.Annotation;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,12 +13,12 @@ public record TreatmentAnnotationDTO(
         @JsonFormat(pattern = "dd/MM/yyyy")
         LocalDateTime createdDate
 ) {
-    public TreatmentAnnotationDTO(TreatmentProfessional treatmentProfessional) {
+    public TreatmentAnnotationDTO(Annotation annotation) {
         this(
-                treatmentProfessional.getId(),
-                treatmentProfessional.getProfessional().getName(),
-                treatmentProfessional.getProfessional().getSpecialty().getName(),
-                treatmentProfessional.getCreatedDate()
+                annotation.getId(),
+                annotation.getTreatmentProfessional().getProfessional().getName(),
+                annotation.getTreatmentProfessional().getProfessional().getSpecialty().getName(),
+                annotation.getCreatedDate()
         );
     }
 }

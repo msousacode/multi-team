@@ -1,4 +1,4 @@
-package com.multiteam.modules.annotation;
+package com.multiteam.modules.annotation.dto;
 
 import java.util.UUID;
 
