@@ -25,7 +25,7 @@ public class AnnotationSpecification {
             } else if (search.patientId() != null) {
                 return builder.equal(annotationsJoin.get("treatment").get("patient").get("id"), search.patientId());
             } else {
-                throw new BadRequestException("");
+                throw new BadRequestException("not found parameters to this consult");
             }
         };
     }
