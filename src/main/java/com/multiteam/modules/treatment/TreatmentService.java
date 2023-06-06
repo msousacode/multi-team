@@ -222,9 +222,4 @@ public class TreatmentService {
             });
         });
     }
-
-    public TreatmentProfessionalAnnotationDTO getAnnotationsById(final UUID treatmentProfessionalId) {
-        return treatmentProfessionalRepository.findById(treatmentProfessionalId)
-                .map(TreatmentProfessionalAnnotationDTO::new).orElse(null);
-    }
 }

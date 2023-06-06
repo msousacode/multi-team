@@ -8,6 +8,7 @@ import com.multiteam.modules.professional.ProfessionalService;
 import com.multiteam.modules.treatment.TreatementProfessionalRepository;
 import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.treatment.dto.TreatmentAnnotationDTO;
+import com.multiteam.modules.treatment.dto.TreatmentProfessionalAnnotationDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.jpa.domain.Specification;
@@ -68,8 +69,20 @@ public class AnnotationService {
         annotationRepository.save(annotation);
     }
 
-    public void getAnnotation(final UUID annotationId) {
+    @Transactional
+    public Boolean updateAnnotation(final AnnotationDTO annotationDTO) {
 
+        var annotationResult = annotationRepository.findById(annotationDTO.treatmentId());
+
+        if (annotationResult.isEmpty()) {
+            logger.warn("annotation not found treatment_professional_id: {}", annotationDTO.treatmentId());
+            return Boolean.FALSE;
+        }
+
+        annotationResult.get().setAnnotation(annotationDTO.annotation());
+        annotationRepository.save(annotationResult.get());
+
+        return Boolean.TRUE;
     }
 
     public void inactiveAnnotation(final UUID annotationId) {
@@ -82,6 +95,10 @@ public class AnnotationService {
         var list = annotationRepository.findAll(spec);
 
         return list.stream().map(TreatmentAnnotationDTO::new).toList();
+    }
 
+    public AnnotationDTO getAnnotation(final UUID treatmentProfessionalId) {
+        return annotationRepository.findById(treatmentProfessionalId)
+                .map(AnnotationDTO::new).orElse(null);
     }
 }
