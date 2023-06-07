@@ -11,23 +11,34 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class GlobalHandlerExeception extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({IllegalArgumentException.class, TreatmentException.class})
+    @ExceptionHandler({IllegalArgumentException.class, TreatmentException.class, ProfessionalException.class})
     public ResponseEntity<ApiErrorResponse> handlerBadRequest(RuntimeException ex) {
         ApiErrorResponse errorDetails = new ApiErrorResponse.Builder(
-                ex.getMessage(), ex.getCause(), ex.getStackTrace(), ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value()).action("400 Bad Request indica que o servidor não pode ou não irá processar a requisição devido a alguma coisa que foi entendida como um erro do cliente.").build();
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+                ex.getMessage(),
+                ex.getStackTrace(),
+                HttpStatus.BAD_REQUEST.value())
+                .action("400 Bad Request indica que o servidor não pode ou não irá processar a requisição devido a alguma coisa que foi entendida como um erro do cliente.")
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails);
     }
 
     @ExceptionHandler({OAuth2AuthenticationProcessingException.class, AccessDeniedException.class, BadCredentialsException.class})
     public ResponseEntity<ApiErrorResponse> handlerForbiddenRequest(RuntimeException ex) {
-        ApiErrorResponse errorDetails = new ApiErrorResponse.Builder(ex.getMessage(), ex.getCause(), ex.getStackTrace(), ex.getLocalizedMessage(), HttpStatus.FORBIDDEN.value()).build();
+        ApiErrorResponse errorDetails = new ApiErrorResponse.Builder(
+                ex.getMessage(),
+                ex.getStackTrace(),
+                HttpStatus.FORBIDDEN.value())
+                .build();
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(OwnerException.class)
     public ResponseEntity<ApiErrorResponse> handlerOwnerExceptionBadRequest(OwnerException ex) {
         ApiErrorResponse errorDetails = new ApiErrorResponse.Builder(
-                ex.getMessage(), ex.getCause(), ex.getStackTrace(), ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value()).action("Esse erro significa que o client (frontend) não enviou o ownerId obrigatório para realizar a operação.").build();
+                ex.getMessage(),
+                ex.getStackTrace(),
+                HttpStatus.BAD_REQUEST.value())
+                .action("Esse erro significa que o client (frontend) não enviou o ownerId obrigatório para realizar a operação.").build();
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 }

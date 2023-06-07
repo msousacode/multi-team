@@ -29,3 +29,7 @@
 - feat: Editar agendamentos.
 - feat: Excluir agendmantos.
 - feat: Configuração do menu.
+- feat: Incluir anotações.
+- feat: Editar anotações.
+- feat: Inativar anotações.
+- feat: Listar anotações.

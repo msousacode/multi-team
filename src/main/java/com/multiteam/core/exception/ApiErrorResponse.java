@@ -14,21 +14,35 @@ public class ApiErrorResponse {
     private UUID errorId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", locale = "pt-BR", timezone = "Brazil/East")
     private LocalDateTime timestamp;
-    private Throwable cause;
-    private StackTraceElement[] stackTrace;
     private String detailMessage;
     private String action;
-    private String classError;
     private int httpCode;
+
+    public UUID getErrorId() {
+        return errorId;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public String getDetailMessage() {
+        return detailMessage;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public int getHttpCode() {
+        return httpCode;
+    }
 
     private ApiErrorResponse(Builder builder) {
         this.errorId = builder.errorId;
         this.timestamp = builder.timestamp;
-        this.cause = builder.cause;
-        this.stackTrace = builder.stackTrace;
         this.detailMessage = builder.detailMessage;
         this.action = builder.action;
-        this.classError = builder.classError;
         this.httpCode = builder.httpCode;
     }
 
@@ -39,25 +53,21 @@ public class ApiErrorResponse {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", locale = "pt-BR", timezone = "Brazil/East")
         private final LocalDateTime timestamp;
         private final String detailMessage;
-        private final Throwable cause;
         private final StackTraceElement[] stackTrace;
-        private final String classError;
         private final int httpCode;
 
         //optional
         private String action;
 
-        public Builder(String detailMessage, Throwable cause, StackTraceElement[] stackTrace, String classError, int httpCode) {
+        public Builder(String detailMessage, StackTraceElement[] stackTrace, int httpCode) {
             this.errorId = UUID.randomUUID();
             this.timestamp = LocalDateTime.now();
             this.detailMessage = detailMessage;
-            this.cause = cause;
             this.stackTrace = stackTrace;
-            this.classError = classError;
             this.httpCode = httpCode;
 
-            logger.error("error_id {} --- cause: {}", this.errorId, detailMessage);
-            logger.error("error_id {} --- trace: {}", this.errorId, stackTrace);
+            logger.error("ApiError ERROR_ID: {} DETAIL MESSAGE: {}", this.errorId, detailMessage);
+            logger.error("ApiError STACK_TRACE: {} CAUSE: {}", this.errorId, stackTrace);
         }
 
         public Builder action(String action) {
