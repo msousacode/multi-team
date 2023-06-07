@@ -4,6 +4,7 @@ import com.multiteam.modules.annotation.dto.AnnotationDTO;
 import com.multiteam.modules.annotation.dto.AnnototionSearch;
 import com.multiteam.modules.treatment.dto.TreatmentAnnotationDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,5 +51,11 @@ public class AnnotationController {
     @GetMapping("/{treatmentProfessionalId}")
     public ResponseEntity<AnnotationDTO> getAnnotation(@PathVariable("treatmentProfessionalId") final UUID treatmentProfessionalId) {
         return ResponseEntity.ok(annotationService.getAnnotation(treatmentProfessionalId));
+    }
+
+    @DeleteMapping("/{annotationId}")
+    public ResponseEntity<?> inactiveAnnotation(@PathVariable("annotationId") final UUID annotationId) {
+        annotationService.inactiveAnnotation(annotationId);
+        return ResponseEntity.ok().build();
     }
 }
