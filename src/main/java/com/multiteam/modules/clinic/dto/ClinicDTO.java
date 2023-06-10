@@ -40,4 +40,8 @@ public record ClinicDTO(
                 clinic.getState()
         );
     }
+
+    public static ClinicDTO createWithIdAndName(Clinic clinic) {
+        return new ClinicDTO(clinic.getId(), clinic.getClinicName(), null, null, null, null, null, null, null, null, null, null, null, null, null);
+    }
 }

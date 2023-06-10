@@ -1,5 +1,6 @@
 package com.multiteam.modules.schedule;
 
+import com.multiteam.modules.clinic.dto.ClinicDTO;
 import com.multiteam.modules.patient.dto.PatientDTO;
 
 import java.time.format.DateTimeFormatter;
@@ -16,7 +17,8 @@ public record ScheduleResponse(
         String description,
         String color,
         Boolean active,
-        String status
+        String status,
+        ClinicDTO clinic
 ) {
     private ScheduleResponse(Schedule schedule) {
 
@@ -31,7 +33,8 @@ public record ScheduleResponse(
                 schedule.getDescription(),
                 schedule.getColor(),
                 schedule.isActive(),
-                schedule.getStatus().name()
+                schedule.getStatus().name(),
+                ClinicDTO.createWithIdAndName(schedule.getClinic())
         );
     }
 
