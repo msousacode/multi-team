@@ -9,7 +9,7 @@ public enum ScheduleEnum {
     AGENDADO("blue"),
     CONFIRMADO("green"),
     AUSENCIA("red"),
-    CANCELADO("orange"),
+    CANCELADO("gray"),
     REAGENDADO("yellow"),
     REALIZADO("pink");
 

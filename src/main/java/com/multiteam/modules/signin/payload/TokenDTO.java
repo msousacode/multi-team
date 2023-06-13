@@ -1,4 +1,4 @@
 package com.multiteam.modules.signin.payload;
 
-public record TokenDTO(String userId) {
+public record TokenDTO(String userId, String userName) {
 }

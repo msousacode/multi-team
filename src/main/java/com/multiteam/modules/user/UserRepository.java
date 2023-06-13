@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,4 +36,7 @@ public interface UserRepository extends TenantableRepository<User> {
     @Modifying
     @Query("UPDATE User u SET u.password = :password1 WHERE u.id = :userId AND u.tenantId = :tenantId")
     void updatePassword(@Param("userId") UUID userId, @Param("password1") String password1, @Param("tenantId") UUID tenantId);
+
+    @Query("FROM User u WHERE u.id = :userId")
+    User getUserById(UUID userId);
 }

@@ -90,7 +90,7 @@ public class SignInService {
         var userInfo = jwtService.openToken(token);
 
         logger.info("valid token {}", token);
-        return new TokenDTO(userInfo.get("userId"));
+        return new TokenDTO(userInfo.get("userId"), userInfo.get("userName"));
     }
 
     @Transactional

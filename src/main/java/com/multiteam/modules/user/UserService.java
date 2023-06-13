@@ -60,6 +60,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User getUserById(final UUID userId) {
+        return userRepository.getUserById(userId);
+    }
+
     public Optional<UserDTO> getUser(final UUID userId) {
 
         var user = userRepository.findByTenantIdAndId(tenantContext.getTenantId(), userId);

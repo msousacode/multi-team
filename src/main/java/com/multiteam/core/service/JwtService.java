@@ -1,6 +1,7 @@
 package com.multiteam.core.service;
 
 import com.multiteam.core.models.UserPrincipal;
+import com.multiteam.modules.user.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -28,6 +29,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 public class JwtService {
@@ -43,6 +45,12 @@ public class JwtService {
     private SecretKey secretKey;
 
     private JwtParser jwtParser;
+
+    private final UserService userService;
+
+    public JwtService(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostConstruct
     private void init() {
@@ -81,8 +89,11 @@ public class JwtService {
         Claims claims = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
         String userId = claims.getSubject();
 
+        var user = userService.getUserById(UUID.fromString(userId));
+
         Map<String, String> userInfo = new HashMap<>();
         userInfo.put("userId", userId);
+        userInfo.put("userName", user.getName());
 
         return userInfo;
     }
