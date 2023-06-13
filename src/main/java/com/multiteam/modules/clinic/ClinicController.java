@@ -33,7 +33,7 @@ public class ClinicController {
     this.clinicService = clinicService;
   }
 
-  @PreAuthorize("hasRole('OWNER', 'ADMIN')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @PostMapping
   public ResponseEntity<?> createClinic(@RequestBody final ClinicDTO clinicDTO) {
     if (clinicService.createClinic(clinicDTO)) {
