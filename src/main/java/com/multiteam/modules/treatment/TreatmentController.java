@@ -38,7 +38,7 @@ public class TreatmentController {
     this.treatmentService = treatmentService;
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
+  @PreAuthorize("hasAuthority('PERM_TREATMENT_WRITE')")
   @PostMapping
   public ResponseEntity<?> createTreatment(@RequestBody final TreatmentRequest treatmentDTO) {
     if (treatmentService.createTreatment(treatmentDTO)) {
@@ -69,7 +69,7 @@ public class TreatmentController {
         .map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
+  @PreAuthorize("hasAuthority('PERM_TREATMENT_WRITE')")
   @PutMapping
   public ResponseEntity<?> updateTreatment(@RequestBody final TreatmentRequest treatmentRequest) {
     if (treatmentService.updateTreatment(treatmentRequest)) {
@@ -79,7 +79,7 @@ public class TreatmentController {
     }
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
+  @PreAuthorize("hasAuthority('PERM_TREATMENT_WRITE')")
   @DeleteMapping("/{treatmentId}")
   public ResponseEntity<?> inactiveTreatment(@PathVariable("treatmentId") final UUID treatmentId) {
     if (treatmentService.inactiveTreatment(treatmentId)) {

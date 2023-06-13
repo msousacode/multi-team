@@ -27,3 +27,7 @@ databaseChangeLog:
             sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_SCHEDULE_READ');"
         - sql:
             sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_SCHEDULE_WRITE');"
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_ANAMNESE_READ');"
+        - sql:
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_ANAMNESE_WRITE');"

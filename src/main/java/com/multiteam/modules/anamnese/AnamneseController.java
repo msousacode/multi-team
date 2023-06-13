@@ -33,7 +33,7 @@ public class AnamneseController {
     this.anamneseService = anamneseService;
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_ANAMNESE_WRITE')")
+  @PreAuthorize("hasAuthority('PERM_ANAMNESE_WRITE')")
   @PostMapping
   public ResponseEntity<?> createAnamnese(@RequestBody final AnamneseRequest anamneseDTO) {
     if (anamneseService.createAnamnese(anamneseDTO)) {
@@ -60,7 +60,7 @@ public class AnamneseController {
         .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_ANAMNESE_WRITE')")
+  @PreAuthorize("hasAuthority('PERM_ANAMNESE_WRITE')")
   @DeleteMapping("/{anamneseId}")
   public ResponseEntity<?> inactiveAnamnese(@PathVariable("anamneseId") final UUID anamneseId) {
     if (anamneseService.inactiveAnamnese(anamneseId)) {
