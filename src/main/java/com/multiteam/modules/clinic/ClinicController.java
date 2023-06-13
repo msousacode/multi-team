@@ -20,56 +20,56 @@ import java.util.UUID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RequestMapping(
-        path = "/v1/clinics",
-        produces = APPLICATION_JSON_VALUE,
-        consumes = APPLICATION_JSON_VALUE
+    path = "/v1/clinics",
+    produces = APPLICATION_JSON_VALUE,
+    consumes = APPLICATION_JSON_VALUE
 )
 @RestController
 public class ClinicController {
 
-    private final ClinicService clinicService;
+  private final ClinicService clinicService;
 
-    public ClinicController(final ClinicService clinicService) {
-        this.clinicService = clinicService;
-    }
+  public ClinicController(final ClinicService clinicService) {
+    this.clinicService = clinicService;
+  }
 
-    @PreAuthorize("hasRole('OWNER')")
-    @PostMapping
-    public ResponseEntity<?> createClinic(@RequestBody final ClinicDTO clinicDTO) {
-        if (clinicService.createClinic(clinicDTO)) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+  @PreAuthorize("hasRole('OWNER')")
+  @PostMapping
+  public ResponseEntity<?> createClinic(@RequestBody final ClinicDTO clinicDTO) {
+    if (clinicService.createClinic(clinicDTO)) {
+      return ResponseEntity.status(HttpStatus.OK).build();
+    } else {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+  }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
-    @PutMapping
-    public ResponseEntity<?> updateClinic(@RequestBody final ClinicDTO clinicDTO) {
-        if (clinicService.updateClinic(clinicDTO)) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+  @PutMapping
+  public ResponseEntity<?> updateClinic(@RequestBody final ClinicDTO clinicDTO) {
+    if (clinicService.updateClinic(clinicDTO)) {
+      return ResponseEntity.status(HttpStatus.OK).build();
+    } else {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+  }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
-    @GetMapping
-    public ResponseEntity<List<ClinicDTO>> getAllClinics() {
-        return ResponseEntity.ok(clinicService.getAllClinic());
-    }
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
+  @GetMapping
+  public ResponseEntity<List<ClinicDTO>> getAllClinics() {
+    return ResponseEntity.ok(clinicService.getAllClinic());
+  }
 
-    @GetMapping("/use-cache")
-    public ResponseEntity<List<ClinicUseInCacheResponse>> getAllClinicsUseInCache() {
-        return ResponseEntity.ok(clinicService.getAllClinicsUseInCache());
-    }
+  @GetMapping("/use-cache")
+  public ResponseEntity<List<ClinicUseInCacheResponse>> getAllClinicsUseInCache() {
+    return ResponseEntity.ok(clinicService.getAllClinicsUseInCache());
+  }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
-    @GetMapping("/{clinicId}")
-    public ResponseEntity<ClinicDTO> getClinicById(@PathVariable("clinicId") final UUID clinicId) {
-        var clinicOptional = clinicService.getClinicById(clinicId);
-        return clinicOptional
-                .map(clinic -> ResponseEntity.status(HttpStatus.OK).body(new ClinicDTO(clinic)))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    }
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
+  @GetMapping("/{clinicId}")
+  public ResponseEntity<ClinicDTO> getClinicById(@PathVariable("clinicId") final UUID clinicId) {
+    var clinicOptional = clinicService.getClinicById(clinicId);
+    return clinicOptional
+        .map(clinic -> ResponseEntity.status(HttpStatus.OK).body(new ClinicDTO(clinic)))
+        .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+  }
 }

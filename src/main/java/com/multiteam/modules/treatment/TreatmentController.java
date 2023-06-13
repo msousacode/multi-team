@@ -25,65 +25,67 @@ import java.util.UUID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RequestMapping(
-        path = "/v1/treatments",
-        produces = APPLICATION_JSON_VALUE,
-        consumes = APPLICATION_JSON_VALUE
+    path = "/v1/treatments",
+    produces = APPLICATION_JSON_VALUE,
+    consumes = APPLICATION_JSON_VALUE
 )
 @RestController
 public class TreatmentController {
 
-    private final TreatmentService treatmentService;
+  private final TreatmentService treatmentService;
 
-    public TreatmentController(final TreatmentService treatmentService) {
-        this.treatmentService = treatmentService;
-    }
+  public TreatmentController(final TreatmentService treatmentService) {
+    this.treatmentService = treatmentService;
+  }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
-    @PostMapping
-    public ResponseEntity<?> createTreatment(@RequestBody final TreatmentRequest treatmentDTO) {
-        if (treatmentService.createTreatment(treatmentDTO)) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
+  @PostMapping
+  public ResponseEntity<?> createTreatment(@RequestBody final TreatmentRequest treatmentDTO) {
+    if (treatmentService.createTreatment(treatmentDTO)) {
+      return ResponseEntity.status(HttpStatus.CREATED).build();
+    } else {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+  }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_READ')")
-    @PostMapping("/filter")
-    public ResponseEntity<Page<TreatmentResponse>> getAllTreatments(
-            @RequestBody TreatmentFilter filter,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "100") int size,
-            @RequestParam(value = "sort", defaultValue = "createdDate") String sort,
-            @RequestParam(value = "direction", defaultValue = "DESC") String direction
-    ) {
-        return ResponseEntity.ok(treatmentService.getAllTreatments(filter, PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(direction), sort))));
-    }
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_READ')")
+  @PostMapping("/filter")
+  public ResponseEntity<Page<TreatmentResponse>> getAllTreatments(
+      @RequestBody TreatmentFilter filter,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "100") int size,
+      @RequestParam(value = "sort", defaultValue = "createdDate") String sort,
+      @RequestParam(value = "direction", defaultValue = "DESC") String direction
+  ) {
+    return ResponseEntity.ok(treatmentService.getAllTreatments(filter,
+        PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(direction), sort))));
+  }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_READ')")
-    @GetMapping("/{treatmentId}")
-    public ResponseEntity<TreatmentEditResponse> getTreatment(@PathVariable("treatmentId") UUID treatmentId) {
-        return treatmentService.getTreatment(treatmentId)
-                .map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_READ')")
+  @GetMapping("/{treatmentId}")
+  public ResponseEntity<TreatmentEditResponse> getTreatment(
+      @PathVariable("treatmentId") UUID treatmentId) {
+    return treatmentService.getTreatment(treatmentId)
+        .map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+  }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
-    @PutMapping
-    public ResponseEntity<?> updateTreatment(@RequestBody final TreatmentRequest treatmentRequest) {
-        if (treatmentService.updateTreatment(treatmentRequest)) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
+  @PutMapping
+  public ResponseEntity<?> updateTreatment(@RequestBody final TreatmentRequest treatmentRequest) {
+    if (treatmentService.updateTreatment(treatmentRequest)) {
+      return ResponseEntity.status(HttpStatus.OK).build();
+    } else {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+  }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
-    @DeleteMapping("/{treatmentId}")
-    public ResponseEntity<?> inactiveTreatment(@PathVariable("treatmentId") final UUID treatmentId) {
-        if (treatmentService.inactiveTreatment(treatmentId)) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_WRITE')")
+  @DeleteMapping("/{treatmentId}")
+  public ResponseEntity<?> inactiveTreatment(@PathVariable("treatmentId") final UUID treatmentId) {
+    if (treatmentService.inactiveTreatment(treatmentId)) {
+      return ResponseEntity.status(HttpStatus.OK).build();
+    } else {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+  }
 }

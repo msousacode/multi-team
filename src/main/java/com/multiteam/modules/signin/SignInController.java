@@ -18,35 +18,35 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(path = "/v1/auth", produces = APPLICATION_JSON_VALUE)
 public final class SignInController {
 
-    private final SignInService signInService;
+  private final SignInService signInService;
 
-    private SignInController(final SignInService authService) {
-        this.signInService = authService;
-    }
+  private SignInController(final SignInService authService) {
+    this.signInService = authService;
+  }
 
-    @PostMapping("/sign-in")
-    public ResponseEntity<TokenSigInDTO> signInUser(@RequestBody final SignInDTO signInDTO) {
-        return ResponseEntity.ok(new TokenSigInDTO(signInService.signInUser(signInDTO)));
-    }
+  @PostMapping("/sign-in")
+  public ResponseEntity<TokenSigInDTO> signInUser(@RequestBody final SignInDTO signInDTO) {
+    return ResponseEntity.ok(new TokenSigInDTO(signInService.signInUser(signInDTO)));
+  }
 
-    @PostMapping("/sign-up")
-    public ResponseEntity<Void> signUpUser(@RequestBody final SignUpDTO signUpRequest) {
-        signInService.signUpUser(signUpRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+  @PostMapping("/sign-up")
+  public ResponseEntity<Void> signUpUser(@RequestBody final SignUpDTO signUpRequest) {
+    signInService.signUpUser(signUpRequest);
+    return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
 
-    @PostMapping("/info-token")
-    public ResponseEntity<TokenDTO> infoToken(@RequestBody final TokenSigInDTO token) {
-        return ResponseEntity.ok(signInService.infoToken(token.token()));
-    }
+  @PostMapping("/info-token")
+  public ResponseEntity<TokenDTO> infoToken(@RequestBody final TokenSigInDTO token) {
+    return ResponseEntity.ok(signInService.infoToken(token.token()));
+  }
 
-    @PostMapping("/validate-token")
-    public ResponseEntity<Boolean> validateToken(@RequestBody final TokenSigInDTO token) {
-        return ResponseEntity.ok(signInService.validateToken(token.token()));
-    }
+  @PostMapping("/validate-token")
+  public ResponseEntity<Boolean> validateToken(@RequestBody final TokenSigInDTO token) {
+    return ResponseEntity.ok(signInService.validateToken(token.token()));
+  }
 
-    @PostMapping("/forgot")
-    public ResponseEntity<?> forgot(@RequestBody final ForgotDTO forgotDTO) {
-        return ResponseEntity.ok(signInService.forget(forgotDTO.email()));
-    }
+  @PostMapping("/forgot")
+  public ResponseEntity<?> forgot(@RequestBody final ForgotDTO forgotDTO) {
+    return ResponseEntity.ok(signInService.forget(forgotDTO.email()));
+  }
 }

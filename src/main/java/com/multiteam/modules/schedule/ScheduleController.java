@@ -18,56 +18,58 @@ import java.util.UUID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RequestMapping(
-        path = "/v1/schedules",
-        produces = APPLICATION_JSON_VALUE,
-        consumes = APPLICATION_JSON_VALUE
+    path = "/v1/schedules",
+    produces = APPLICATION_JSON_VALUE,
+    consumes = APPLICATION_JSON_VALUE
 )
 @RestController
 public class ScheduleController {
 
-    private final ScheduleService scheduleService;
+  private final ScheduleService scheduleService;
 
-    public ScheduleController(final ScheduleService scheduleService) {
-        this.scheduleService = scheduleService;
-    }
+  public ScheduleController(final ScheduleService scheduleService) {
+    this.scheduleService = scheduleService;
+  }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_SCHEDULE_READ', 'PERM_SCHEDULE_WRITE')")
-    @PostMapping
-    public ResponseEntity<?> createSchedule(@RequestBody final ScheduleRequest scheduleRequest) {
-        if (scheduleService.createSchedule(scheduleRequest)) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_SCHEDULE_WRITE')")
+  @PostMapping
+  public ResponseEntity<?> createSchedule(@RequestBody final ScheduleRequest scheduleRequest) {
+    if (scheduleService.createSchedule(scheduleRequest)) {
+      return ResponseEntity.status(HttpStatus.CREATED).build();
+    } else {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+  }
 
-    @GetMapping("/clinic/{clinicId}")
-    public List<ScheduleResponse> getAllById(@PathVariable("clinicId") final UUID clinicId) {
-        return scheduleService.getAllById(clinicId);
-    }
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_SCHEDULE_READ')")
+  @GetMapping("/clinic/{clinicId}")
+  public List<ScheduleResponse> getAllById(@PathVariable("clinicId") final UUID clinicId) {
+    return scheduleService.getAllById(clinicId);
+  }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_SCHEDULE_READ', 'PERM_SCHEDULE_WRITE')")
-    @GetMapping("/{scheduleId}")
-    public ResponseEntity<ScheduleResponse> getSchedule(@PathVariable("scheduleId") final UUID scheduleId) {
-        return scheduleService.getSchedule(scheduleId)
-                .map(schedule -> ResponseEntity.ok().body(schedule))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_SCHEDULE_READ')")
+  @GetMapping("/{scheduleId}")
+  public ResponseEntity<ScheduleResponse> getSchedule(
+      @PathVariable("scheduleId") final UUID scheduleId) {
+    return scheduleService.getSchedule(scheduleId)
+        .map(schedule -> ResponseEntity.ok().body(schedule))
+        .orElseGet(() -> ResponseEntity.notFound().build());
+  }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_SCHEDULE_WRITE')")
-    @PutMapping
-    public ResponseEntity<?> updateSchedule(@RequestBody final ScheduleRequest scheduleRequest) {
-        if (scheduleService.updateSchedule(scheduleRequest)) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_SCHEDULE_WRITE')")
+  @PutMapping
+  public ResponseEntity<?> updateSchedule(@RequestBody final ScheduleRequest scheduleRequest) {
+    if (scheduleService.updateSchedule(scheduleRequest)) {
+      return ResponseEntity.status(HttpStatus.OK).build();
+    } else {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+  }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_SCHEDULE_WRITE')")
-    @DeleteMapping("/{scheduleId}")
-    public ResponseEntity<Void> inactiveSchedule(@PathVariable("scheduleId") final UUID scheduleId) {
-        scheduleService.inactiveSchedule(scheduleId);
-        return ResponseEntity.ok().build();
-    }
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_SCHEDULE_WRITE')")
+  @DeleteMapping("/{scheduleId}")
+  public ResponseEntity<Void> inactiveSchedule(@PathVariable("scheduleId") final UUID scheduleId) {
+    scheduleService.inactiveSchedule(scheduleId);
+    return ResponseEntity.ok().build();
+  }
 }
