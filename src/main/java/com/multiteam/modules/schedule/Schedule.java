@@ -132,6 +132,50 @@ public class Schedule extends Tenantable {
         return clinic;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public void setEnd(LocalDateTime end) {
+        this.end = end;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public void setStatus(ScheduleEnum status) {
+        this.status = status;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public void setProfessional(Professional professional) {
+        this.professional = professional;
+    }
+
+    public void setClinic(Clinic clinic) {
+        this.clinic = clinic;
+    }
+
     public static class Builder {
 
         //mandatory
