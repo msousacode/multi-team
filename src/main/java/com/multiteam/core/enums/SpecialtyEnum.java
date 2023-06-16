@@ -1,48 +1,45 @@
 package com.multiteam.core.enums;
 
-import org.springframework.util.Assert;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.util.Assert;
 
 public enum SpecialtyEnum {
 
-    ATENDIMENTO_ABA("Atendimento ABA"),
-    ATENDIMENTO_EM_GRUPO("Atendimento em grupo"),
-    CONSULTORIA("Consultoria"),
-    TERAPIA_FAMILIAR("Ter. Familiar Cognit. Comportamental"),
-    TERAPIA_OCUPACIONAL("Terapia Ocupacional"),
-    FONOAUDIOLOGIA("Fonoaudiologia"),
-    PSICOPEDAGOGIA("Psicopedagogia"),
-    PSICOMOTRICIDADE("Psicomotricidade"),
-    PET_TERAPIA("Pet Terapia"),
-    FISIOTERAPIA("Fisioterapia"),
-    EDUCACAO_FISICA("Educação Física Especializada"),
-    REFORCO_ESCOLAR("Reforço escolar"),
-    ORIENTACAO_PROFISSIONAL("Orientação profissional"),
-    JIU_JITSU("Jiu-Jitsu"),
-    TREINAMENTO_EQUIPES("Treinamento de equipes");
+  FONOAUDIOLOGIA("Fonoaudiologia"),
+  MUSICOTERAPIA("Musicoterapia"),
+  PSICOLOGIA("Psicologia"),
+  PSICOMOTRICIDADE("Psicomotricidade"),
+  TERAPIA_OCUPACIONAL("Terapia Ocupacional"),
+  TERAPIA_FAMILIAR("Terapia Familiar"),
+  PSICOPEDAGOGIA("Psicopedagogia"),
+  NEUROPSICOLOGIA("Neuropsicológia"),
+  PET_TERAPIA("Pet Terapia"),
+  FISIOTERAPIA("Fisioterapia"),
+  EDUCACAO_FISICA("Educação Física Especializada"),
+  REFORCO_ESCOLAR("Reforço escolar"),
+  ACOMPANHANTE_TERAPEUTICO("Acompanhante Terapêutico");
 
-    private final String name;
-    private static final Map<String, SpecialtyEnum> lookup = new HashMap<>();
+  private final String name;
+  private static final Map<String, SpecialtyEnum> lookup = new HashMap<>();
 
-    SpecialtyEnum(String name) {
-        this.name = name;
+  SpecialtyEnum(String name) {
+    this.name = name;
+  }
+
+  static {
+    for (SpecialtyEnum s : SpecialtyEnum.values()) {
+      lookup.put(s.getName(), s);
     }
+  }
 
-    static {
-        for (SpecialtyEnum s : SpecialtyEnum.values()) {
-            lookup.put(s.getName(), s);
-        }
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getName() {
-        return name;
-    }
-
-    public static SpecialtyEnum get(String name) {
-        var value = lookup.get(name);
-        Assert.notNull(value, "specialty not can be null");
-        return value;
-    }
+  public static SpecialtyEnum get(String name) {
+    var value = lookup.get(name);
+    Assert.notNull(value, "specialty not can be null");
+    return value;
+  }
 }
