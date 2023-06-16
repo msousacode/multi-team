@@ -2,7 +2,6 @@ package com.multiteam.modules.guest;
 
 
 import com.multiteam.core.enums.AuthProviderEnum;
-import com.multiteam.core.exception.OwnerException;
 import com.multiteam.core.exception.TreatmentException;
 import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.user.User;
@@ -36,7 +35,7 @@ public class GuestService {
         var treatment = treatmentService.getAllTreatments(null, Pageable.ofSize(10));
 
         if(guestRequest.ownerId() == null) {
-            throw new OwnerException("value ownerId cannot be null");
+            //throw new OwnerException("value ownerId cannot be null");
         }
 
         if (treatment.isEmpty()) {

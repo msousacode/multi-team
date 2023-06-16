@@ -1,11 +1,15 @@
 package com.multiteam.modules.schedule;
 
 import com.multiteam.core.context.TenantContext;
+import com.multiteam.core.enums.MessageErrorApplication;
 import com.multiteam.core.enums.ScheduleEnum;
+import com.multiteam.core.exception.ScheduleException;
 import com.multiteam.modules.clinic.ClinicService;
 import com.multiteam.modules.patient.Patient;
 import com.multiteam.modules.patient.PatientService;
+import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +45,9 @@ public class ScheduleService {
 
   @Transactional
   public Boolean createSchedule(ScheduleRequest scheduleRequest) {
+
+    checkIfProfessionalScheduleIsBusy(scheduleRequest.professionalId(), scheduleRequest.start(),
+        scheduleRequest.end());
 
     var professional = professionalService.getProfessionalById(scheduleRequest.professionalId());
 
@@ -90,47 +97,43 @@ public class ScheduleService {
   }
 
   @Transactional
-  public boolean updateSchedule(ScheduleRequest scheduleRequest) {
+  public Boolean updateSchedule(ScheduleRequest scheduleRequest) {
+
+    checkIfProfessionalScheduleIsBusy(scheduleRequest.professionalId(), scheduleRequest.start(),
+        scheduleRequest.end());
 
     var professional = professionalService.getProfessionalById(scheduleRequest.professionalId());
 
     var clinic = clinicService.getClinicById(scheduleRequest.clinicId());
 
     if (professional.isEmpty() || clinic.isEmpty()) {
+      logger.error(MessageErrorApplication.PROFESSIONAL_OR_CLINIC_NOT_CAN_BE_EMPTY.getMessage());
       return Boolean.FALSE;
     }
 
-    var title = professional.get()
-        .getSpecialty().getName()
-        .concat(" | ")
-        .concat(professional.get().getName())
-        .concat(" | ");
+    String title = generateTitleSchedule(professional.get());
 
     Patient patient = null;
     if (scheduleRequest.patient() != null) {
       patient = patientService.findOneById(scheduleRequest.patient().id()).get();
-      title = title.concat(patient.getName())
-          .concat(" | Nasc: ")
+      title = title.concat(patient.getName()).concat(" | Nasc: ")
           .concat(patient.getDateBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     }
 
     var schedule = scheduleRepository.findOneById(scheduleRequest.id());
 
     if (schedule.isPresent()) {
-      var builder = new Schedule.Builder(
-          title,
-          scheduleRequest.start(),
-          professional.get(),
-          clinic.get(),
-          true,
-          ScheduleEnum.valueOf(scheduleRequest.status()))
-          .color(ScheduleEnum.getColorByStatus(scheduleRequest.status()))
-          .end(scheduleRequest.end())
-          .description(scheduleRequest.description())
-          .patient(patient).id(schedule.get().getId())
-          .build();
 
-      scheduleRepository.save(builder);
+      schedule.get().setTitle(title);
+      schedule.get().setProfessional(professional.get());
+      schedule.get().setStatus(ScheduleEnum.valueOf(scheduleRequest.status()));
+      schedule.get().setColor(ScheduleEnum.getColorByStatus(scheduleRequest.status()));
+      schedule.get().setStart(scheduleRequest.start());
+      schedule.get().setEnd(scheduleRequest.end());
+      schedule.get().setDescription(scheduleRequest.description());
+      schedule.get().setPatient(patient);
+
+      scheduleRepository.save(schedule.get());
 
     } else {
       return Boolean.FALSE;
@@ -141,5 +144,23 @@ public class ScheduleService {
   @Transactional
   public void inactiveSchedule(final UUID scheduleId) {
     scheduleRepository.inactiveScheduleById(scheduleId, tenantContext.getTenantId());
+  }
+
+  private void checkIfProfessionalScheduleIsBusy(UUID professionalId, LocalDateTime start,
+      LocalDateTime end) {
+    int NO_SCHEDULES = 0;
+    if (scheduleRepository.findAllScheduleOfProfessional(professionalId, start, end)
+        > NO_SCHEDULES) {
+      logger.error(MessageErrorApplication.CONFLICT_SCHEDULE.getMessage());
+      throw new ScheduleException(MessageErrorApplication.CONFLICT_SCHEDULE.getMessage());
+    }
+  }
+
+  private String generateTitleSchedule(Professional professional) {
+    return professional
+        .getSpecialty().getName()
+        .concat(" | ")
+        .concat(professional.getName())
+        .concat(" | ");
   }
 }
