@@ -14,34 +14,34 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: clinic_name
-                  type: varchar(100)
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:
                   name: cpf_cnpj
-                  type: varchar(14)
+                  type: varchar(20)
                   constraints:
                     nullable: false
               - column:
                   name: email
-                  type: varchar(50)
+                  type: varchar(255)
                   constraints:
                     nullable: false
                     unique: true
               - column:
                   name: cell_phone
-                  type: varchar(15)
+                  type: varchar(20)
                   constraints:
                     nullable: false
               - column:
                   name: telephone
-                  type: varchar(15)
+                  type: varchar(20)
               - column:
                   name: observation
-                  type: varchar(500)
+                  type: varchar(1000)
               - column:
                   name: site
-                  type: varchar(100)
+                  type: varchar(255)
               - column:
                   name: insc_estadual
                   type: varchar(20)
@@ -50,26 +50,26 @@ databaseChangeLog:
                   type: varchar(8)
               - column:
                   name: address
-                  type: varchar(100)
+                  type: varchar(255)
               - column:
                   name: number
                   type: varchar(5)
               - column:
                   name: city
-                  type: varchar(100)
+                  type: varchar(255)
               - column:
                   name: district
-                  type: varchar(100)
+                  type: varchar(50)
               - column:
                   name: state
-                  type: varchar(100)
+                  type: varchar(20)
               - column:
                   name: active
                   type: boolean
                   defaultValueBoolean: true
               - column:
                   name: created_by
-                  type: varchar(50)
+                  type: varchar(20)
               - column:
                   name: created_date
                   type: timestamp
@@ -77,7 +77,7 @@ databaseChangeLog:
                     updatable: false
               - column:
                   name: last_modified_by
-                  type: varchar(50)
+                  type: varchar(20)
               - column:
                   name: last_modified_date
                   type: timestamp

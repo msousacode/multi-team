@@ -15,22 +15,22 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: name
-                  type: varchar(100)
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:
                   name: specialty
-                  type: varchar(100)
+                  type: varchar(50)
                   constraints:
                     nullable: false
               - column:
                   name: cell_phone
-                  type: varchar(15)
+                  type: varchar(20)
                   constraints:
                     nullable: false
               - column:
                   name: email
-                  type: varchar(100)
+                  type: varchar(255)
                   constraints:
                     nullable: false
                     unique: true
@@ -45,7 +45,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: created_by
-                  type: varchar(50)
+                  type: varchar(20)
               - column:
                   name: created_date
                   type: timestamp
@@ -53,7 +53,7 @@ databaseChangeLog:
                     updatable: false
               - column:
                   name: last_modified_by
-                  type: varchar(50)
+                  type: varchar(20)
               - column:
                   name: last_modified_date
                   type: timestamp

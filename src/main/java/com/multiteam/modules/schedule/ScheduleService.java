@@ -9,6 +9,7 @@ import com.multiteam.modules.patient.Patient;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -46,6 +47,7 @@ public class ScheduleService {
   @Transactional
   public Boolean createSchedule(ScheduleRequest scheduleRequest) {
 
+    validateDates(scheduleRequest);
     checkIfProfessionalScheduleIsBusy(scheduleRequest.professionalId(), scheduleRequest.start(),
         scheduleRequest.end());
 
@@ -99,6 +101,7 @@ public class ScheduleService {
   @Transactional
   public Boolean updateSchedule(ScheduleRequest scheduleRequest) {
 
+    validateDates(scheduleRequest);
     checkIfProfessionalScheduleIsBusy(scheduleRequest.professionalId(), scheduleRequest.start(),
         scheduleRequest.end());
 
@@ -146,11 +149,24 @@ public class ScheduleService {
     scheduleRepository.inactiveScheduleById(scheduleId, tenantContext.getTenantId());
   }
 
+  private void validateDates(ScheduleRequest scheduleRequest) {
+
+    LocalDate currentDate = LocalDate.now();
+
+    if(scheduleRequest.start().isBefore(currentDate.atStartOfDay())){
+      logger.error(MessageErrorApplication.CONFLICT_CURRENT_DATE.getMessage());
+      throw new ScheduleException(MessageErrorApplication.CONFLICT_CURRENT_DATE.getMessage());
+    }
+
+     if(scheduleRequest.end().isBefore(scheduleRequest.start())){
+       logger.error(MessageErrorApplication.CONFLICT_DATES.getMessage());
+       throw new ScheduleException(MessageErrorApplication.CONFLICT_DATES.getMessage());
+     }
+  }
+
   private void checkIfProfessionalScheduleIsBusy(UUID professionalId, LocalDateTime start,
       LocalDateTime end) {
-    int NO_SCHEDULES = 0;
-    if (scheduleRepository.findAllScheduleOfProfessional(professionalId, start, end)
-        > NO_SCHEDULES) {
+    if (!scheduleRepository.findAllScheduleOfProfessional(professionalId, start, end).isEmpty()) {
       logger.error(MessageErrorApplication.CONFLICT_SCHEDULE.getMessage());
       throw new ScheduleException(MessageErrorApplication.CONFLICT_SCHEDULE.getMessage());
     }

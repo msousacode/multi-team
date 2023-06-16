@@ -18,7 +18,7 @@ public interface ScheduleRepository extends TenantableRepository<Schedule> {
   @Query("UPDATE Schedule s SET s.active = false WHERE s.id = :scheduleId AND s.tenantId = :tenantId")
   void inactiveScheduleById(UUID scheduleId, UUID tenantId);
 
-  @Query("SELECT COUNT(1) FROM Schedule s WHERE s.professional.id = :professionalId AND s.start >= :start AND s.end <= :end")
-  Integer findAllScheduleOfProfessional(UUID professionalId, LocalDateTime start,
+  @Query("FROM Schedule s WHERE s.professional.id = :professionalId AND s.start >= :start AND s.end <= :end")
+  List<Schedule> findAllScheduleOfProfessional(UUID professionalId, LocalDateTime start,
       LocalDateTime end);
 }

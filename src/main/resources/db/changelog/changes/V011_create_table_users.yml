@@ -15,28 +15,28 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: name
-                  type: varchar(50)
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:
                   name: email
-                  type: varchar(100)
+                  type: varchar(255)
                   constraints:
                     nullable: false
                     unique: true
               - column:
                   name: password
-                  type: varchar(100)
+                  type: varchar(50)
               - column:
                   name: image_url
-                  type: varchar(250)
+                  type: varchar(255)
               - column:
                   name: email_verified
                   type: boolean
                   defaultValueBoolean: false
               - column:
                   name: provider
-                  type: varchar(20)
+                  type: varchar(10)
               - column:
                   name: active
                   type: boolean

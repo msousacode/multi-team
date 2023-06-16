@@ -15,10 +15,10 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: description
-                  type: varchar(500)
+                  type: varchar(1000)
               - column:
                   name: situation
-                  type: varchar(50)
+                  type: varchar(20)
                   constraints:
                     nullable: false
               - column:
@@ -42,7 +42,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: created_by
-                  type: varchar(50)
+                  type: varchar(20)
               - column:
                   name: created_date
                   type: timestamp
@@ -50,7 +50,7 @@ databaseChangeLog:
                     updatable: false
               - column:
                   name: last_modified_by
-                  type: varchar(50)
+                  type: varchar(20)
               - column:
                   name: last_modified_date
                   type: timestamp
