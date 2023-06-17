@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import javax.transaction.Transactional;
+import net.bytebuddy.asm.Advice.Local;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,6 @@ public class ScheduleService {
   @Transactional
   public Boolean createSchedule(ScheduleRequest scheduleRequest) {
 
-    validateDates(scheduleRequest);
     checkIfProfessionalScheduleIsBusy(scheduleRequest.professionalId(), scheduleRequest.start(),
         scheduleRequest.end());
 
@@ -101,7 +101,6 @@ public class ScheduleService {
   @Transactional
   public Boolean updateSchedule(ScheduleRequest scheduleRequest) {
 
-    validateDates(scheduleRequest);
     checkIfProfessionalScheduleIsBusy(scheduleRequest.professionalId(), scheduleRequest.start(),
         scheduleRequest.end());
 
@@ -149,16 +148,16 @@ public class ScheduleService {
     scheduleRepository.inactiveScheduleById(scheduleId, tenantContext.getTenantId());
   }
 
-  private void validateDates(ScheduleRequest scheduleRequest) {
+  private void validateDates(LocalDateTime start, LocalDateTime end) {
 
     LocalDate currentDate = LocalDate.now();
 
-    if(scheduleRequest.start().isBefore(currentDate.atStartOfDay())){
+    if(start.isBefore(currentDate.atStartOfDay())){
       logger.error(MessageErrorApplication.CONFLICT_CURRENT_DATE.getMessage());
       throw new ScheduleException(MessageErrorApplication.CONFLICT_CURRENT_DATE.getMessage());
     }
 
-     if(scheduleRequest.end().isBefore(scheduleRequest.start())){
+     if(end.isBefore(start)){
        logger.error(MessageErrorApplication.CONFLICT_DATES.getMessage());
        throw new ScheduleException(MessageErrorApplication.CONFLICT_DATES.getMessage());
      }
@@ -166,6 +165,7 @@ public class ScheduleService {
 
   private void checkIfProfessionalScheduleIsBusy(UUID professionalId, LocalDateTime start,
       LocalDateTime end) {
+    validateDates(start, end);
     if (!scheduleRepository.findAllScheduleOfProfessional(professionalId, start, end).isEmpty()) {
       logger.error(MessageErrorApplication.CONFLICT_SCHEDULE.getMessage());
       throw new ScheduleException(MessageErrorApplication.CONFLICT_SCHEDULE.getMessage());

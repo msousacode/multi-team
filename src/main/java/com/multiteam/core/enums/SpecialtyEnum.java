@@ -17,7 +17,7 @@ public enum SpecialtyEnum {
   PET_TERAPIA("Pet Terapia"),
   FISIOTERAPIA("Fisioterapia"),
   EDUCACAO_FISICA("Educação Física Especializada"),
-  REFORCO_ESCOLAR("Reforço escolar"),
+  REFORCO_ESCOLAR("Reforço Escolar"),
   ACOMPANHANTE_TERAPEUTICO("Acompanhante Terapêutico");
 
   private final String name;
