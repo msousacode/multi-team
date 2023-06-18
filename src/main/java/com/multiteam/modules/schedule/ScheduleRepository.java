@@ -18,7 +18,13 @@ public interface ScheduleRepository extends TenantableRepository<Schedule> {
   @Query("UPDATE Schedule s SET s.active = false WHERE s.id = :scheduleId AND s.tenantId = :tenantId")
   void inactiveScheduleById(UUID scheduleId, UUID tenantId);
 
-  @Query("FROM Schedule s WHERE s.professional.id = :professionalId AND s.status in ('AGENDADO', 'CONFIRMADO') AND (s.start >= :start or s.end <= :end) AND s.active = true")
+  @Query("""
+      FROM Schedule s
+      WHERE s.professional.id = :professionalId
+      AND s.status in ('AGENDADO', 'CONFIRMADO')
+      AND (s.start < :end AND s.end > :start)
+      AND s.active = true
+      """)
   List<Schedule> findAllScheduleOfProfessional(UUID professionalId, LocalDateTime start,
       LocalDateTime end);
 }
