@@ -1,7 +1,7 @@
 package com.multiteam.modules.treatment;
 
 import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
-import com.multiteam.modules.treatment.dto.TreatmentFilter;
+import com.multiteam.modules.treatment.dto.TreatmentSearch;
 import com.multiteam.modules.treatment.dto.TreatmentRequest;
 import com.multiteam.modules.treatment.dto.TreatmentResponse;
 import org.springframework.data.domain.Page;
@@ -49,15 +49,15 @@ public class TreatmentController {
   }
 
   @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_TREATMENT_READ')")
-  @PostMapping("/filter")
+  @PostMapping("/search")
   public ResponseEntity<Page<TreatmentResponse>> getAllTreatments(
-      @RequestBody TreatmentFilter filter,
+      @RequestBody TreatmentSearch search,
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "100") int size,
       @RequestParam(value = "sort", defaultValue = "createdDate") String sort,
       @RequestParam(value = "direction", defaultValue = "DESC") String direction
   ) {
-    return ResponseEntity.ok(treatmentService.getAllTreatments(filter,
+    return ResponseEntity.ok(treatmentService.getAllTreatments(search,
         PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(direction), sort))));
   }
 

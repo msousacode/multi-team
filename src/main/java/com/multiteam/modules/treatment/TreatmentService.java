@@ -3,19 +3,14 @@ package com.multiteam.modules.treatment;
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.exception.BadRequestException;
-import com.multiteam.core.exception.ProfessionalException;
-import com.multiteam.core.exception.TreatmentException;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.guest.Guest;
 import com.multiteam.modules.patient.Patient;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
-import com.multiteam.modules.treatment.dto.TreatmentAnnotationDTO;
-import com.multiteam.modules.treatment.dto.TreatmentAnnotationRequest;
 import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
-import com.multiteam.modules.treatment.dto.TreatmentFilter;
-import com.multiteam.modules.treatment.dto.TreatmentProfessionalAnnotationDTO;
+import com.multiteam.modules.treatment.dto.TreatmentSearch;
 import com.multiteam.modules.treatment.dto.TreatmentRequest;
 import com.multiteam.modules.treatment.dto.TreatmentResponse;
 import org.apache.logging.log4j.LogManager;
@@ -23,8 +18,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -126,7 +119,7 @@ public class TreatmentService {
         return Boolean.TRUE;
     }
 
-    public Page<TreatmentResponse> getAllTreatments(final TreatmentFilter filter, Pageable pageable) {
+    public Page<TreatmentResponse> getAllTreatments(final TreatmentSearch filter, Pageable pageable) {
         if (filter.patientId() != null) {
             return treatmentRepository.findAllByPatient_IdAndActiveIsTrue(filter.patientId(), pageable).map(TreatmentResponse::fromTreatmentResponse);
         }
