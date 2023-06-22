@@ -2,6 +2,7 @@ package com.multiteam.modules.treatment;
 
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.models.Tenantable;
+import com.multiteam.modules.document.Document;
 import com.multiteam.modules.guest.Guest;
 import com.multiteam.modules.patient.Patient;
 import org.springframework.util.Assert;
@@ -60,6 +61,10 @@ public class Treatment extends Tenantable {
 
     @OneToMany(mappedBy = "treatment")
     private Set<TreatmentProfessional> treatmentProfessionals;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "document_treatment_id")
+    private Document document;
 
     public UUID getId() {
         return id;

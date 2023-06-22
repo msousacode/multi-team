@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: V022
+      author: michael
+      changes:
+        - createTable:
+            tableName: documents
+            columns:
+              - column:
+                  name: document_id
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: document_path
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_name
+                  type: varchar(255)
+              - column:
+                  name: file_metadata
+                  type: varchar(255)
+              - column:
+                  name: size
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: document_treatment_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: document_patient_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(50)
+              - column:
+                  name: created_date
+                  type: timestamp
+                  constraints:
+                    updatable: false
+              - column:
+                  name: last_modified_by
+                  type: varchar(50)
+              - column:
+                  name: last_modified_date
+                  type: timestamp
+        - addForeignKeyConstraint:
+            baseColumnNames: document_treatment_id
+            baseTableName: documents
+            constraintName: fk_documents_treatments
+            referencedColumnNames: treatment_id
+            referencedTableName: treatments
+        - addForeignKeyConstraint:
+            baseColumnNames: document_patient_id
+            baseTableName: documents
+            constraintName: fk_documents_patients
+            referencedColumnNames: patient_id
+            referencedTableName: patients
