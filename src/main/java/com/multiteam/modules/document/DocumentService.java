@@ -1,11 +1,14 @@
 package com.multiteam.modules.document;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
+import com.multiteam.core.enums.ApplicationError;
 import com.multiteam.core.enums.DocumentType;
+import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.treatment.TreatmentService;
-import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import javax.transaction.Transactional;
@@ -40,11 +43,14 @@ public class DocumentService {
 
     saveDocument(treatmentId, patientId, partFile);
 
-    File arquivoUpload = new File(partFile.getOriginalFilename());
-    PutObjectRequest putObjectRequest = new PutObjectRequest(s3BucketName,
-        partFile.getOriginalFilename(), arquivoUpload);
+    ObjectMetadata data = new ObjectMetadata();
+    data.setContentType(partFile.getContentType());
+    data.setContentLength(partFile.getSize());
 
-    amazonS3.putObject(putObjectRequest);
+    PutObjectRequest putObjectRequest = new PutObjectRequest(s3BucketName,
+        partFile.getOriginalFilename(), partFile.getInputStream(), data);
+
+    PutObjectResult objectResult = amazonS3.putObject(putObjectRequest);
 
     return Boolean.TRUE;
   }
@@ -53,18 +59,20 @@ public class DocumentService {
   private void saveDocument(UUID treatmentId, UUID patientId, MultipartFile partFile) {
     Document document = new Document();
 
-    if (patientId != null) {
-      var patient = patientService.findOneById(patientId);
-      document.setPatient(patient.get());
+    var patient = patientService.findOneById(patientId);
+    var treatment = treatmentService.findTreatment(treatmentId);
+
+    if (patient.isEmpty() & treatment.isEmpty()) {
+      throw new BadRequestException(ApplicationError.PATIENT_OR_TREATMENT_NOT_CAN_BE_EMPTY.getMessage());
     }
 
-    if (treatmentId != null) {
-      var treatment = treatmentService.findTreatment(treatmentId);
-      document.setTreatment(treatment.get());
-    }
+    document.setPatient(patient.get());
+    document.setTreatment(treatment.get());
+
     document.setFileName(partFile.getOriginalFilename());
     document.setSize(Double.valueOf(partFile.getSize()));
     document.setDocumentType(DocumentType.DOC);
+    document.setDocumentPath("");
 
     documentRepository.save(document);
   }

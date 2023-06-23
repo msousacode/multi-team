@@ -1,7 +1,7 @@
 package com.multiteam.modules.schedule;
 
 import com.multiteam.core.context.TenantContext;
-import com.multiteam.core.enums.MessageErrorApplication;
+import com.multiteam.core.enums.ApplicationError;
 import com.multiteam.core.enums.ScheduleEnum;
 import com.multiteam.core.exception.ScheduleException;
 import com.multiteam.modules.clinic.ClinicService;
@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import javax.transaction.Transactional;
-import net.bytebuddy.asm.Advice.Local;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -109,7 +108,7 @@ public class ScheduleService {
     var clinic = clinicService.getClinicById(scheduleRequest.clinicId());
 
     if (professional.isEmpty() || clinic.isEmpty()) {
-      logger.error(MessageErrorApplication.PROFESSIONAL_OR_CLINIC_NOT_CAN_BE_EMPTY.getMessage());
+      logger.error(ApplicationError.PROFESSIONAL_OR_CLINIC_NOT_CAN_BE_EMPTY.getMessage());
       return Boolean.FALSE;
     }
 
@@ -153,13 +152,13 @@ public class ScheduleService {
     LocalDate currentDate = LocalDate.now();
 
     if(start.isBefore(currentDate.atStartOfDay())){
-      logger.error(MessageErrorApplication.CONFLICT_CURRENT_DATE.getMessage());
-      throw new ScheduleException(MessageErrorApplication.CONFLICT_CURRENT_DATE.getMessage());
+      logger.error(ApplicationError.CONFLICT_CURRENT_DATE.getMessage());
+      throw new ScheduleException(ApplicationError.CONFLICT_CURRENT_DATE.getMessage());
     }
 
      if(end.isBefore(start)){
-       logger.error(MessageErrorApplication.CONFLICT_DATES.getMessage());
-       throw new ScheduleException(MessageErrorApplication.CONFLICT_DATES.getMessage());
+       logger.error(ApplicationError.CONFLICT_DATES.getMessage());
+       throw new ScheduleException(ApplicationError.CONFLICT_DATES.getMessage());
      }
   }
 
@@ -167,8 +166,8 @@ public class ScheduleService {
       LocalDateTime end) {
     validateDates(start, end);
     if (!scheduleRepository.findAllScheduleOfProfessional(professionalId, start, end).isEmpty()) {
-      logger.error(MessageErrorApplication.CONFLICT_SCHEDULE.getMessage());
-      throw new ScheduleException(MessageErrorApplication.CONFLICT_SCHEDULE.getMessage());
+      logger.error(ApplicationError.CONFLICT_SCHEDULE.getMessage());
+      throw new ScheduleException(ApplicationError.CONFLICT_SCHEDULE.getMessage());
     }
   }
 
