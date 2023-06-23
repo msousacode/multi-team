@@ -2,13 +2,18 @@ package com.multiteam.modules.document;
 
 import com.multiteam.core.enums.DocumentType;
 import com.multiteam.core.models.Auditable;
+import com.multiteam.modules.patient.Patient;
+import com.multiteam.modules.treatment.Treatment;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,7 +26,7 @@ public class Document extends Auditable {
   private UUID id;
 
   @Column(name = "document_path")
-  private String docmentpath;
+  private String documentPath;
 
   @Column(name = "file_name")
   private String fileName;
@@ -36,6 +41,14 @@ public class Document extends Auditable {
   @Enumerated(EnumType.STRING)
   private DocumentType documentType;
 
+  @JoinColumn(name = "patient_id")
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Patient patient;
+
+  @JoinColumn(name = "treatment_id")
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Treatment treatment;
+
   public Document() {
   }
 
@@ -47,12 +60,12 @@ public class Document extends Auditable {
     this.id = id;
   }
 
-  public String getDocmentpath() {
-    return docmentpath;
+  public String getDocumentPath() {
+    return documentPath;
   }
 
-  public void setDocmentpath(String docmentpath) {
-    this.docmentpath = docmentpath;
+  public void setDocumentPath(String documentPath) {
+    this.documentPath = documentPath;
   }
 
   public String getFileName() {
@@ -85,5 +98,21 @@ public class Document extends Auditable {
 
   public void setDocumentType(DocumentType documentType) {
     this.documentType = documentType;
+  }
+
+  public Patient getPatient() {
+    return patient;
+  }
+
+  public void setPatient(Patient patient) {
+    this.patient = patient;
+  }
+
+  public Treatment getTreatment() {
+    return treatment;
+  }
+
+  public void setTreatment(Treatment treatment) {
+    this.treatment = treatment;
   }
 }

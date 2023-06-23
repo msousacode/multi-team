@@ -19,6 +19,7 @@
 		<google.api.version>2.2.0</google.api.version>
 		<jacoco.version>0.8.8</jacoco.version>
 		<sendgrid.version>4.9.3</sendgrid.version>
+		<amazon-awssdk-s3.version>2.20.90</amazon-awssdk-s3.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -87,6 +88,13 @@
 			<artifactId>snakeyaml</artifactId>
 			<version>${snakeyaml.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.12.470</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

@@ -215,4 +215,8 @@ public class TreatmentService {
             });
         });
     }
+
+    public Optional<Treatment> findTreatment(UUID treatmentId) {
+        return treatmentRepository.findById(treatmentId);
+    }
 }

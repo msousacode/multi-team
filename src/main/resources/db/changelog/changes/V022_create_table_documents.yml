@@ -30,12 +30,15 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: document_treatment_id
+                  name: document_type
+                  type: varchar(50)
+              - column:
+                  name: treatment_id
                   type: uuid
                   constraints:
                     nullable: false
               - column:
-                  name: document_patient_id
+                  name: patient_id
                   type: uuid
                   constraints:
                     nullable: false
@@ -54,13 +57,13 @@ databaseChangeLog:
                   name: last_modified_date
                   type: timestamp
         - addForeignKeyConstraint:
-            baseColumnNames: document_treatment_id
+            baseColumnNames: treatment_id
             baseTableName: documents
             constraintName: fk_documents_treatments
             referencedColumnNames: treatment_id
             referencedTableName: treatments
         - addForeignKeyConstraint:
-            baseColumnNames: document_patient_id
+            baseColumnNames: patient_id
             baseTableName: documents
             constraintName: fk_documents_patients
             referencedColumnNames: patient_id
