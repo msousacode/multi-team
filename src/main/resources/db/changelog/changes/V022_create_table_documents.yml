@@ -14,15 +14,12 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: document_path
+                  name: document_key
                   type: varchar(255)
                   constraints:
                     nullable: false
               - column:
                   name: file_name
-                  type: varchar(255)
-              - column:
-                  name: file_metadata
                   type: varchar(255)
               - column:
                   name: size

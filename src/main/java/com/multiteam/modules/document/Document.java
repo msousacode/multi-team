@@ -25,17 +25,14 @@ public class Document extends Auditable {
   @Column(name = "document_id")
   private UUID id;
 
-  @Column(name = "document_path")
-  private String documentPath;
+  @Column(name = "document_key")//Name saved in bucket S3
+  private String documentKey;
 
   @Column(name = "file_name")
   private String fileName;
 
   @Column(name = "size")
   private Double size;
-
-  @Column(name = "file_metadata")
-  private String fileMetadata;
 
   @Column(name = "document_type")
   @Enumerated(EnumType.STRING)
@@ -60,12 +57,12 @@ public class Document extends Auditable {
     this.id = id;
   }
 
-  public String getDocumentPath() {
-    return documentPath;
+  public String getDocumentKey() {
+    return documentKey;
   }
 
-  public void setDocumentPath(String documentPath) {
-    this.documentPath = documentPath;
+  public void setDocumentKey(String documentKey) {
+    this.documentKey = documentKey;
   }
 
   public String getFileName() {
@@ -82,14 +79,6 @@ public class Document extends Auditable {
 
   public void setSize(Double size) {
     this.size = size;
-  }
-
-  public String getFileMetadata() {
-    return fileMetadata;
-  }
-
-  public void setFileMetadata(String fileMetadata) {
-    this.fileMetadata = fileMetadata;
   }
 
   public DocumentType getDocumentType() {
