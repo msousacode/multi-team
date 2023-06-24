@@ -2,6 +2,7 @@ package com.multiteam.modules.document;
 
 import com.multiteam.modules.document.dto.DocumentDTO;
 import com.multiteam.modules.document.dto.DocumentSearch;
+import com.multiteam.modules.document.dto.UrlPreSignedDTO;
 import java.io.IOException;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -60,9 +61,9 @@ public class DocumentController {
 
   @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_DOCUMENT_READ', 'PERM_DOCUMENT_WRITE')")
   @GetMapping("/download/{documentId}/key/{nameKey}")
-  public ResponseEntity<String> generatePresignedUrl(
+  public ResponseEntity<UrlPreSignedDTO> generatePresignedUrl(
       @PathVariable("documentId") final UUID documentId,
       @PathVariable("nameKey") final String nameKey) {
-    return ResponseEntity.ok(documentService.generatePresignedUrl(documentId, nameKey));
+    return ResponseEntity.ok(new UrlPreSignedDTO(documentService.generatePresignedUrl(documentId, nameKey)));
   }
 }
