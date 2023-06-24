@@ -1,18 +1,25 @@
 package com.multiteam.modules.document;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.multiteam.core.enums.ApplicationError;
 import com.multiteam.core.enums.DocumentType;
 import com.multiteam.core.exception.BadRequestException;
+import com.multiteam.modules.document.dto.DocumentSearch;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.treatment.TreatmentService;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Date;
 import java.util.UUID;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -63,7 +70,8 @@ public class DocumentService {
   }
 
   @Transactional
-  private void saveDocument(UUID treatmentId, UUID patientId, MultipartFile partFile, String key, String filenameExtension) {
+  private void saveDocument(UUID treatmentId, UUID patientId, MultipartFile partFile, String key,
+      String filenameExtension) {
     Document document = new Document();
 
     var patient = patientService.findOneById(patientId);
@@ -83,5 +91,27 @@ public class DocumentService {
     document.setDocumentType(DocumentType.getType(filenameExtension));
 
     documentRepository.save(document);
+  }
+
+  public Page<Document> getDocumentsSearch(DocumentSearch documentSearch, Pageable pageable) {
+    return documentRepository.findAllByPatient_IdAndTreatment_Id(documentSearch.patientId(),
+        documentSearch.treatmentId(), pageable);
+  }
+
+  public String generatePresignedUrl(UUID documentId, String nameKey) {
+
+    var expiration = new Date();
+    long expTimeMillis = expiration.getTime();
+    expTimeMillis += 100 * 60 * 60;
+    expiration.setTime(expTimeMillis);
+
+    GeneratePresignedUrlRequest generatePresignedUrlRequest =
+        new GeneratePresignedUrlRequest(s3BucketName, nameKey)
+            .withMethod(HttpMethod.GET)
+            .withExpiration(expiration);
+
+    URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
+
+    return url.toString();
   }
 }
