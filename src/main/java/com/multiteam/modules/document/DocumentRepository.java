@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, UUID> {
 
-  Page<Document> findAllByPatient_IdAndTreatment_Id(UUID patientId, UUID treatmentId, Pageable pageable);
+  Page<Document> findAllByPatient_Id(UUID patientId, Pageable pageable);
 }

@@ -46,13 +46,12 @@ public class DocumentService {
     this.patientService = patientService;
   }
 
-  public Boolean uploadDocumentS3(final UUID treatmentId, final UUID patientId,
-      final MultipartFile partFile) {
+  public Boolean uploadDocumentS3(final UUID patientId, final MultipartFile partFile) {
 
     String filenameExtension = StringUtils.getFilenameExtension(partFile.getOriginalFilename());
     String key = UUID.randomUUID().toString() + "." + filenameExtension;
 
-    saveDocument(treatmentId, patientId, partFile, key, filenameExtension);
+    saveDocument(patientId, partFile, key, filenameExtension);
 
     ObjectMetadata data = new ObjectMetadata();
     data.setContentType(partFile.getContentType());
@@ -70,20 +69,18 @@ public class DocumentService {
   }
 
   @Transactional
-  private void saveDocument(UUID treatmentId, UUID patientId, MultipartFile partFile, String key,
+  private void saveDocument(UUID patientId, MultipartFile partFile, String key,
       String filenameExtension) {
     Document document = new Document();
 
     var patient = patientService.findOneById(patientId);
-    var treatment = treatmentService.findTreatment(treatmentId);
 
-    if (patient.isEmpty() & treatment.isEmpty()) {
+    if (patient.isEmpty()) {
       throw new BadRequestException(
-          ApplicationError.PATIENT_OR_TREATMENT_NOT_CAN_BE_EMPTY.getMessage());
+          ApplicationError.PATIENT_NOT_FOUND.getMessage());
     }
 
     document.setPatient(patient.get());
-    document.setTreatment(treatment.get());
 
     document.setFileName(partFile.getOriginalFilename());
     document.setDocumentKey(key);
@@ -94,8 +91,7 @@ public class DocumentService {
   }
 
   public Page<Document> getDocumentsSearch(DocumentSearch documentSearch, Pageable pageable) {
-    return documentRepository.findAllByPatient_IdAndTreatment_Id(documentSearch.patientId(),
-        documentSearch.treatmentId(), pageable);
+    return documentRepository.findAllByPatient_Id(documentSearch.patientId(), pageable);
   }
 
   public String generatePresignedUrl(UUID documentId, String nameKey) {

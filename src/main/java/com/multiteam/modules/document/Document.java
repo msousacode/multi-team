@@ -3,7 +3,6 @@ package com.multiteam.modules.document;
 import com.multiteam.core.enums.DocumentType;
 import com.multiteam.core.models.Auditable;
 import com.multiteam.modules.patient.Patient;
-import com.multiteam.modules.treatment.Treatment;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,10 +40,6 @@ public class Document extends Auditable {
   @JoinColumn(name = "patient_id")
   @ManyToOne(fetch = FetchType.LAZY)
   private Patient patient;
-
-  @JoinColumn(name = "treatment_id")
-  @ManyToOne(fetch = FetchType.LAZY)
-  private Treatment treatment;
 
   public Document() {
   }
@@ -95,13 +90,5 @@ public class Document extends Auditable {
 
   public void setPatient(Patient patient) {
     this.patient = patient;
-  }
-
-  public Treatment getTreatment() {
-    return treatment;
-  }
-
-  public void setTreatment(Treatment treatment) {
-    this.treatment = treatment;
   }
 }

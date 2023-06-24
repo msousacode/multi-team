@@ -32,13 +32,12 @@ public class DocumentController {
   }
 
   @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_DOCUMENT_WRITE')")
-  @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/upload/patient/{patientId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Boolean> uploadDocument(
-      @RequestParam("tre") UUID treatmentId,
-      @RequestParam("pat") UUID patientId,
+      @PathVariable("patientId") final UUID patientId,
       @RequestParam("file") MultipartFile file
   ) throws IOException {
-    if (documentService.uploadDocumentS3(treatmentId, patientId, file)) {
+    if (documentService.uploadDocumentS3(patientId, file)) {
       return ResponseEntity.status(HttpStatus.CREATED).build();
     } else {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
