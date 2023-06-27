@@ -2,8 +2,11 @@ package com.multiteam.modules.patient;
 
 import com.multiteam.core.enums.SexEnum;
 import com.multiteam.core.models.Tenantable;
+import com.multiteam.modules.treatment.Treatment;
 import com.multiteam.modules.user.User;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +16,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.springframework.util.Assert;
@@ -51,6 +55,9 @@ public class Patient extends Tenantable {
 
   @Column(name = "cell_phone")
   private String cellPhone;
+
+  @OneToMany(mappedBy = "patient")
+  private List<Treatment> treatments = new ArrayList<>();
 
   public Patient() {
   }
@@ -133,6 +140,14 @@ public class Patient extends Tenantable {
 
   public void setCellPhone(String cellPhone) {
     this.cellPhone = cellPhone;
+  }
+
+  public List<Treatment> getTreatments() {
+    return treatments;
+  }
+
+  public void setTreatments(List<Treatment> treatments) {
+    this.treatments = treatments;
   }
 
   public static class Builder {
