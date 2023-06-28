@@ -48,8 +48,7 @@ public record PatientDTO(
     var treatment = treatments.get(0);
 
     return """
-        Paciente possui tratamento em %s com data ínicio %s até %s
-        """.formatted(
+        Paciente possui tratamento em %s com data ínicio %s até %s""".formatted(
         treatment.getSituation(),
         treatment.getInitialDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
         treatment.getFinalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
