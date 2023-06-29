@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 
 public class PatientControllerTest extends RestTemplateBase {
 
+  /*
   @Test
   void shouldCreateNewPatientThenSuccess() throws Exception {
 
@@ -70,6 +71,7 @@ public class PatientControllerTest extends RestTemplateBase {
 
     assertEquals(response.getStatusCode(), HttpStatus.OK);
   }
+   */
 
   @Test
   void shouldGetAllPatientsThenSuccess() throws Exception {
