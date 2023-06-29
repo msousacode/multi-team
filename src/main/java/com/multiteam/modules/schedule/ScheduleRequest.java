@@ -2,7 +2,9 @@ package com.multiteam.modules.schedule;
 
 import com.multiteam.modules.patient.dto.PatientDTO;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public record ScheduleRequest(
@@ -15,6 +17,7 @@ public record ScheduleRequest(
         String description,
         Boolean active,
         String status,
-        Boolean allDay
+        Boolean repeatEvent,
+        List<Integer> dayOfWeek
 ) {
 }

@@ -4,16 +4,21 @@ import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.ApplicationError;
 import com.multiteam.core.enums.ScheduleEnum;
 import com.multiteam.core.exception.ScheduleException;
+import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.clinic.ClinicService;
 import com.multiteam.modules.patient.Patient;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
@@ -50,42 +55,78 @@ public class ScheduleService {
     checkIfProfessionalScheduleIsBusy(scheduleRequest.professionalId(), scheduleRequest.start(),
         scheduleRequest.end());
 
-    var professional = professionalService.getProfessionalById(scheduleRequest.professionalId());
-
     var clinic = clinicService.getClinicById(scheduleRequest.clinicId());
+    var patient = patientService.findOneById(scheduleRequest.patient().id()).orElse(null);
+    var professional = professionalService.getProfessionalById(scheduleRequest.professionalId());
 
     if (professional.isEmpty() || clinic.isEmpty()) {
       logger.error("values professional or clinic cannot be null or empty");
       return Boolean.FALSE;
     }
 
-    var title = professional.get().getSpecialty().getName().concat(" | ")
-        .concat(professional.get().getName());
+    String title = generateTitle(professional.get(), scheduleRequest, patient);
 
-    Patient patient = null;
-    if (scheduleRequest.patient() != null) {
-      patient = patientService.findOneById(scheduleRequest.patient().id()).orElse(null);
+    if (scheduleRequest.repeatEvent()) {
+      var targetDays = discoveryTargetDays(scheduleRequest);
+      String finalTitle = title;
+
+      targetDays.forEach(day -> {
+        var dayEnd = LocalDateTime.of(day.toLocalDate(), scheduleRequest.end().toLocalTime());
+        saveSchedule(day, dayEnd, finalTitle, professional.get(), clinic.get(), patient,
+            scheduleRequest.description());
+      });
+
+      return Boolean.TRUE;
+    } else {
+      var builder = new Schedule.Builder(
+          title,
+          scheduleRequest.start(),
+          professional.get(),
+          clinic.get(),
+          true,
+          ScheduleEnum.AGENDADO)
+          .patient(patient)
+          .end(scheduleRequest.end())
+          .description(scheduleRequest.description())
+          .color(ScheduleEnum.AGENDADO.getColor()).build();
+
+      scheduleRepository.save(builder);
+
+      return Boolean.TRUE;
+    }
+  }
+
+  private void saveSchedule(LocalDateTime day, LocalDateTime dayEnd, String title,
+      Professional professional, Clinic clinic, Patient patient, String description) {
+    var builder = new Schedule.Builder(
+        title,
+        day,
+        professional,
+        clinic,
+        true,
+        ScheduleEnum.AGENDADO)
+        .patient(patient)
+        .end(dayEnd)
+        .description(description)
+        .color(ScheduleEnum.AGENDADO.getColor()).build();
+
+    scheduleRepository.save(builder);
+  }
+
+  private String generateTitle(Professional professional, ScheduleRequest scheduleRequest,
+      Patient patient) {
+    professional.getSpecialty().getName().concat(" | ")
+        .concat(professional.getName());
+
+    String title = "";
+
+    if (patient != null) {
       title = title.concat(" | ")
           .concat(patient.getName())
           .concat(" | Nasc: ")
           .concat(patient.getDateBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     }
-
-    var builder = new Schedule.Builder(
-        title,
-        scheduleRequest.start(),
-        professional.get(),
-        clinic.get(),
-        true,
-        ScheduleEnum.AGENDADO)
-        .patient(patient)
-        .end(scheduleRequest.end())
-        .description(scheduleRequest.description())
-        .color(ScheduleEnum.AGENDADO.getColor()).build();
-
-    scheduleRepository.save(builder);
-
-    return Boolean.TRUE;
+    return title;
   }
 
   public List<ScheduleResponse> getAllById(final UUID clinicId) {
@@ -151,15 +192,15 @@ public class ScheduleService {
 
     LocalDate currentDate = LocalDate.now();
 
-    if(start.isBefore(currentDate.atStartOfDay())){
+    if (start.isBefore(currentDate.atStartOfDay())) {
       logger.error(ApplicationError.CONFLICT_CURRENT_DATE.getMessage());
       throw new ScheduleException(ApplicationError.CONFLICT_CURRENT_DATE.getMessage());
     }
 
-     if(end.isBefore(start)){
-       logger.error(ApplicationError.CONFLICT_DATES.getMessage());
-       throw new ScheduleException(ApplicationError.CONFLICT_DATES.getMessage());
-     }
+    if (end.isBefore(start)) {
+      logger.error(ApplicationError.CONFLICT_DATES.getMessage());
+      throw new ScheduleException(ApplicationError.CONFLICT_DATES.getMessage());
+    }
   }
 
   private void checkIfProfessionalScheduleIsBusy(UUID professionalId, LocalDateTime start,
@@ -177,5 +218,29 @@ public class ScheduleService {
         .concat(" | ")
         .concat(professional.getName())
         .concat(" | ");
+  }
+
+  private Set<LocalDateTime> discoveryTargetDays(ScheduleRequest scheduleRequest) {
+
+    var dateStart = scheduleRequest.start();
+    var dateEnd = scheduleRequest.end();
+
+    Set<LocalDateTime> daysTarget = new HashSet<>();
+
+    scheduleRequest.dayOfWeek().forEach(day -> {
+
+      var referenceDate = dateStart;
+
+      while (referenceDate.isBefore(dateEnd)) {
+        var targetDay = referenceDate.with(TemporalAdjusters.next(DayOfWeek.of(day)));
+        daysTarget.add(targetDay);
+        if (referenceDate.isAfter(dateEnd)) {
+          break;
+        }
+        referenceDate = targetDay;
+      }
+    });
+
+    return daysTarget;
   }
 }
