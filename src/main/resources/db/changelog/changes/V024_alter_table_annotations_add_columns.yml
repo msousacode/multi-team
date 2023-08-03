@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: V024
+      author: michael
+      changes:
+        - addColumn:
+            tableName: annotations
+            columns:
+              - column:
+                  name: observation
+                  type: varchar(6000)
+              - column:
+                  name: date_initial
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_end
+                  type: timestamp
+                  constraints:
+                    nullable: false
+

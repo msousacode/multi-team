@@ -3,15 +3,14 @@ package com.multiteam.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.multiteam.core.enums.RoleEnum;
-import com.multiteam.core.enums.SexEnum;
-import com.multiteam.modules.clinic.dto.ClinicDTO;
 import com.multiteam.modules.patient.dto.PatientDTO;
+import com.multiteam.modules.patient.dto.PatientFilter;
 import com.multiteam.modules.professional.dto.ProfessionalDTO;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestResponsePage;
 import com.multiteam.util.RestTemplateBase;
 import java.net.URI;
-import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.ParameterizedTypeReference;
@@ -100,6 +99,24 @@ public class PatientControllerTest extends RestTemplateBase {
 
     ResponseEntity<ProfessionalDTO> response = restTemplate.exchange(uri, HttpMethod.GET, request,
         ProfessionalDTO.class);
+
+    assertEquals(response.getStatusCode(), HttpStatus.OK);
+  }
+
+  @Test
+  void findAllTreatmentAndSituationProgressByProfessionalId_ThenSuccess() throws Exception {
+
+    URI uri = new URI("http://localhost:" + port + "/team/v1/patients/mobile/filter");
+
+    PatientFilter filter = new PatientFilter("", UUID.fromString(ConstantsTest.PROFESSIONAL_ID));
+
+    headers.set("Authorization", "Bearer " + getToken(RoleEnum.ROLE_OWNER));
+
+    HttpEntity<Object> request = new HttpEntity<>(filter, headers);
+
+    ResponseEntity<List<PatientDTO>> response = restTemplate.exchange(uri, HttpMethod.POST, request,
+        new ParameterizedTypeReference<>() {
+        });
 
     assertEquals(response.getStatusCode(), HttpStatus.OK);
   }

@@ -35,14 +35,14 @@ public class AnnotationController {
 
   @PreAuthorize("hasRole('PROFESSIONAL')")
   @PostMapping
-  public ResponseEntity<Void> includeAnnotation(@RequestBody final AnnotationDTO annotationDTO) {
+  public ResponseEntity<Void> includeAnnotation(@RequestBody AnnotationDTO annotationDTO) {
     annotationService.createAnnotation(annotationDTO);
     return ResponseEntity.ok().build();
   }
 
   @PreAuthorize("hasRole('PROFESSIONAL')")
   @PutMapping
-  public ResponseEntity<Void> upddateAnnotation(@RequestBody final AnnotationDTO annotationDTO) {
+  public ResponseEntity<Void> upddateAnnotation(@RequestBody AnnotationDTO annotationDTO) {
     return annotationService.updateAnnotation(annotationDTO) ? ResponseEntity.ok().build()
         : ResponseEntity.badRequest().build();
   }

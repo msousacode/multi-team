@@ -34,4 +34,14 @@ public class GlobalHandlerExeception extends ResponseEntityExceptionHandler {
         .build();
     return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
   }
+
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public ResponseEntity<ApiErrorResponse> handlerResourceNotFoundException(RuntimeException ex) {
+    ApiErrorResponse errorDetails = new ApiErrorResponse.Builder(
+        ex.getMessage(),
+        ex.getStackTrace(),
+        HttpStatus.NOT_FOUND.value())
+        .build();
+    return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+  }
 }

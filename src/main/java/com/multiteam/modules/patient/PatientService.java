@@ -10,6 +10,7 @@ import com.multiteam.modules.patient.dto.PatientDTO;
 import com.multiteam.modules.patient.dto.PatientFilter;
 import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.user.UserService;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import javax.transaction.Transactional;
@@ -81,7 +82,7 @@ public class PatientService {
     return patientRepository.findOneById(patientId);
   }
 
-  public Page<PatientDTO> getAllPatients(final PatientFilter patientFilter, Pageable pageable) {
+  public Page<PatientDTO> findAllTreatmentAndSituationProgressByProfessionalId(final PatientFilter patientFilter, Pageable pageable) {
     return patientRepository.findAllByNameContainingIgnoreCase(patientFilter.patientName(),
         pageable).map(PatientDTO::fromPatientDTO);
   }
@@ -128,5 +129,9 @@ public class PatientService {
       logger.error("error occurred while updating the patient: {}", patientDTO.id());
       return Boolean.FALSE;
     }
+  }
+
+  public List<Patient> findAllTreatmentAndSituationProgressByProfessionalId(PatientFilter patientFilter) {
+    return patientRepository.findAllTreatmentAndSituationProgressByProfessionalId(patientFilter.professionalId());
   }
 }

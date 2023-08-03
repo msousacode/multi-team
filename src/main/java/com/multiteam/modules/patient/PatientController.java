@@ -1,7 +1,11 @@
 package com.multiteam.modules.patient;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 import com.multiteam.modules.patient.dto.PatientDTO;
 import com.multiteam.modules.patient.dto.PatientFilter;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -17,11 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.UUID;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RequestMapping(
     path = "/v1/patients",
@@ -67,7 +66,7 @@ public class PatientController {
       @RequestParam(value = "sort", defaultValue = "createdDate") String sort,
       @RequestParam(value = "direction", defaultValue = "DESC") String direction) {
     return ResponseEntity.status(HttpStatus.OK)
-        .body(patientService.getAllPatients(patientFilter,
+        .body(patientService.findAllTreatmentAndSituationProgressByProfessionalId(patientFilter,
             PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(direction), sort))));
   }
 
@@ -88,5 +87,13 @@ public class PatientController {
     } else {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+  }
+
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_PATIENT_READ')")
+  @PostMapping("/mobile/filter")
+  public ResponseEntity<List<PatientDTO>> getAllPatients(
+      @RequestBody final PatientFilter patientFilter) {
+    var patients = patientService.findAllTreatmentAndSituationProgressByProfessionalId(patientFilter).stream().map(PatientDTO::fromPatientDTO).toList();
+    return ResponseEntity.status(HttpStatus.OK).body(patients);
   }
 }
