@@ -20,6 +20,7 @@
 		<jacoco.version>0.8.8</jacoco.version>
 		<sendgrid.version>4.9.3</sendgrid.version>
 		<amazon-awssdk-s3.version>2.20.90</amazon-awssdk-s3.version>
+		<lombok.version>1.18.26</lombok.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -93,6 +94,13 @@
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-s3</artifactId>
 			<version>1.12.470</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
