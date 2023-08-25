@@ -1,8 +1,12 @@
 package com.multiteam.modules.annotation;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 import com.multiteam.modules.annotation.dto.AnnotationDTO;
 import com.multiteam.modules.annotation.dto.AnnototionSearch;
 import com.multiteam.modules.treatment.dto.TreatmentAnnotationDTO;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,15 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.UUID;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 @RequestMapping(
     path = "/v1/annotations",
-    produces = APPLICATION_JSON_VALUE,
-    consumes = APPLICATION_JSON_VALUE
+    produces = APPLICATION_JSON_VALUE
 )
 @RestController
 public class AnnotationController {
@@ -34,9 +32,11 @@ public class AnnotationController {
   }
 
   @PreAuthorize("hasRole('PROFESSIONAL')")
-  @PostMapping
-  public ResponseEntity<Void> createAnnotation(@RequestBody AnnotationDTO annotationDTO) {
-    annotationService.createAnnotation(annotationDTO);
+  @PostMapping("/treatment/{treatmentId}")
+  public ResponseEntity<Void> createAnnotation(
+      @PathVariable("treatmentId") final UUID treatmentId,
+      @RequestBody AnnotationDTO annotationDTO) {
+    annotationService.createAnnotation(annotationDTO, treatmentId);
     return ResponseEntity.ok().build();
   }
 

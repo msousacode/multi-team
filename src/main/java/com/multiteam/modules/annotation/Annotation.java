@@ -1,6 +1,7 @@
 package com.multiteam.modules.annotation;
 
 import com.multiteam.core.models.Auditable;
+import com.multiteam.modules.annotation.dto.AnnotationDetailDTO;
 import com.multiteam.modules.treatment.TreatmentProfessional;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,7 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "annotations")
 public class Annotation extends Auditable {
@@ -53,47 +58,14 @@ public class Annotation extends Auditable {
     this.treatmentProfessional = treatmentProfessional;
   }
 
-  public UUID getId() {
-    return id;
-  }
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public String getAnnotation() {
+  public static Annotation toAnnoation(AnnotationDetailDTO annotationDTO, TreatmentProfessional treatmentProfessional) {
+    Annotation annotation = new Annotation();
+    annotation.setTreatmentProfessional(treatmentProfessional);
+    annotation.setAnnotation(annotationDTO.annotation());
+    annotation.setObservation(annotationDTO.observation());
+    annotation.setDateInitial(LocalDateTime.of(annotationDTO.dateStart(), annotationDTO.hourStart()));
+    annotation.setDateEnd(LocalDateTime.of(annotationDTO.dateEnd(), annotationDTO.hourEnd()));
+    annotation.setActive(Boolean.TRUE);
     return annotation;
-  }
-
-  public void setAnnotation(String annotation) {
-    this.annotation = annotation;
-  }
-
-  public Boolean getActive() {
-    return active;
-  }
-
-  public void setActive(Boolean active) {
-    this.active = active;
-  }
-
-  public TreatmentProfessional getTreatmentProfessional() {
-    return treatmentProfessional;
-  }
-
-  public void setTreatmentProfessional(TreatmentProfessional treatmentProfessional) {
-    this.treatmentProfessional = treatmentProfessional;
-  }
-
-  public String getObservation() {
-    return observation;
-  }
-
-  public LocalDateTime getDateInitial() {
-    return dateInitial;
-  }
-
-  public LocalDateTime getDateEnd() {
-    return dateEnd;
   }
 }

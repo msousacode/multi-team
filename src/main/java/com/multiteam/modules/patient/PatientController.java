@@ -24,8 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping(
     path = "/v1/patients",
-    produces = APPLICATION_JSON_VALUE,
-    consumes = APPLICATION_JSON_VALUE
+    produces = APPLICATION_JSON_VALUE
 )
 @RestController
 public class PatientController {

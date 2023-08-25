@@ -1,14 +1,15 @@
 package com.multiteam.modules.annotation.dto;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 public record AnnotationDetailDTO(
     UUID treatmentId,
     LocalDate dateStart,
-    String hourStart,
+    LocalTime hourStart,
     LocalDate dateEnd,
-    String hourEnd,
+    LocalTime hourEnd,
     String annotation,
     String observation,
     boolean sync,

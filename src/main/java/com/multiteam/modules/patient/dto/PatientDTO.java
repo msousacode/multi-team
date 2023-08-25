@@ -5,7 +5,6 @@ import com.multiteam.modules.patient.Patient;
 import com.multiteam.modules.treatment.Treatment;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.UUID;
 
 public record PatientDTO(
@@ -18,10 +17,9 @@ public record PatientDTO(
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate dateBirth,
     String cpf,
-    String treatment
+    String treatmentObservation,
+    UUID treatmentId
 ) {
-  
-  static UUID treatmentId;
 
   private PatientDTO(Patient patient) {
     this(
@@ -33,7 +31,8 @@ public record PatientDTO(
         patient.getAge(),
         patient.getDateBirth(),
         patient.getCpf(),
-        buildTreatment(patient.getTreatments())
+        buildTreatment(patient.getTreatments().get(0)),
+        patient.getTreatments().get(0).getId()
     );
   }
 
@@ -41,13 +40,9 @@ public record PatientDTO(
     return new PatientDTO(patient);
   }
 
-  private static String buildTreatment(List<Treatment> treatments) {
+  private static String buildTreatment(Treatment treatment) {
 
-    if (!treatments.isEmpty()) {
-
-      var treatment = treatments.get(0);
-
-      treatmentId = treatment.getId();
+    if (treatment != null) {
 
       return """
           Paciente possui tratamento em %s com data ínicio %s até %s""".formatted(
@@ -55,7 +50,6 @@ public record PatientDTO(
           treatment.getInitialDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
           treatment.getFinalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     }
-
     return "";
   }
 }

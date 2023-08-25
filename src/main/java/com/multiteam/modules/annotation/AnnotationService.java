@@ -9,9 +9,12 @@ import com.multiteam.modules.treatment.TreatementProfessionalRepository;
 import com.multiteam.modules.treatment.dto.TreatmentAnnotationDTO;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +24,9 @@ import org.springframework.stereotype.Service;
 public class AnnotationService {
 
   private final Logger logger = LogManager.getLogger(Annotation.class);
+
+  @Autowired
+  private ModelMapper modelMapper;
 
   private final AnnotationRepository annotationRepository;
   private final ProfessionalService professionalService;
@@ -36,7 +42,7 @@ public class AnnotationService {
   }
 
   @Transactional
-  public void createAnnotation(final AnnotationDTO annotationDTO) {
+  public void createAnnotation(final AnnotationDTO annotationDTO, UUID treatmentId) {
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -51,25 +57,26 @@ public class AnnotationService {
     }
 
     var treatmentProfessional = treatementProfessionalRepository.findByTreatment_IdAndProfessional_Id(
-        annotationDTO.treatmentId(), professional.get().getId());
+        treatmentId, professional.get().getId());
 
     if (treatmentProfessional.isEmpty()) {
       logger.error("treatment not found or professional not added in treatment");
       throw new TreatmentException("treatment not found or professional not added in treatment");
     }
 
-    Annotation annotation = new Annotation();
-    //annotation.setAnnotation(annotationDTO.annotation());
-    annotation.setTreatmentProfessional(treatmentProfessional.get());
-    annotation.setActive(Boolean.TRUE);
+    var annotations = annotationDTO.annotations().stream()
+        .map(e -> Annotation.toAnnoation(e, treatmentProfessional.get())).collect(
+            Collectors.toList());
 
-    annotationRepository.save(annotation);
+    annotationRepository.deleteAllByTreatmentProfessional_Id(treatmentProfessional.get().getId());
+
+    annotationRepository.saveAll(annotations);
   }
 
   @Transactional
   public Boolean updateAnnotation(final AnnotationDTO annotationDTO) {
 
-    var annotationResult = annotationRepository.findById(annotationDTO.treatmentId());
+    /*var annotationResult = annotationRepository.findById(annotationDTO.treatmentId());
 
     if (annotationResult.isEmpty()) {
       logger.warn("annotation not found treatment_professional_id: {}",
@@ -79,7 +86,7 @@ public class AnnotationService {
 
     //annotationResult.get().setAnnotation(annotationDTO.annotation());
     annotationRepository.save(annotationResult.get());
-
+*/
     return Boolean.TRUE;
   }
 

@@ -21,6 +21,7 @@
 		<sendgrid.version>4.9.3</sendgrid.version>
 		<amazon-awssdk-s3.version>2.20.90</amazon-awssdk-s3.version>
 		<lombok.version>1.18.26</lombok.version>
+		<modelmapper.version>3.1.1</modelmapper.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -112,6 +113,12 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${modelmapper.version}</version>
 		</dependency>
 	</dependencies>
 
