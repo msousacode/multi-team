@@ -131,7 +131,7 @@ public class PatientService {
     }
   }
 
-  public List<Patient> findAllTreatmentAndSituationProgressByProfessionalId(PatientFilter patientFilter) {
-    return patientRepository.findAllTreatmentAndSituationProgressByProfessionalId(patientFilter.professionalId());
+  public List<Patient> findAllTreatmentAndSituationProgressByProfessionalId(UUID professionalId) {
+    return patientRepository.findAllTreatmentAndSituationProgressByProfessionalId(professionalId);
   }
 }

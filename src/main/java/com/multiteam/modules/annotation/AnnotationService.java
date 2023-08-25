@@ -59,7 +59,7 @@ public class AnnotationService {
     }
 
     Annotation annotation = new Annotation();
-    annotation.setAnnotation(annotationDTO.annotation());
+    //annotation.setAnnotation(annotationDTO.annotation());
     annotation.setTreatmentProfessional(treatmentProfessional.get());
     annotation.setActive(Boolean.TRUE);
 
@@ -77,7 +77,7 @@ public class AnnotationService {
       return Boolean.FALSE;
     }
 
-    annotationResult.get().setAnnotation(annotationDTO.annotation());
+    //annotationResult.get().setAnnotation(annotationDTO.annotation());
     annotationRepository.save(annotationResult.get());
 
     return Boolean.TRUE;
@@ -96,7 +96,7 @@ public class AnnotationService {
   }
 
   public AnnotationDTO getAnnotation(final UUID treatmentProfessionalId) {
-    return annotationRepository.findById(treatmentProfessionalId)
-        .map(AnnotationDTO::new).orElse(null);
+    return null;//annotationRepository.findById(treatmentProfessionalId)
+    //.map(AnnotationDTO::new).orElse(null);
   }
 }

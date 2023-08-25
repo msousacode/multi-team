@@ -1,4 +1,4 @@
-package com.multiteam.modules.signin.payload;
+package com.multiteam.modules.sign.payload;
 
 import com.multiteam.modules.role.Role;
 import org.springframework.util.Assert;

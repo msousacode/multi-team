@@ -198,7 +198,7 @@ public class ProfessionalService {
                         """.formatted(user.getEmail(), user.getProvisionalPassword()));
     }
 
-    public Optional<Professional> getProfessionalByUserId(final UUID professionalId) {
-        return professionalRepository.findProfessionalByUser_Id(professionalId);
+    public Optional<Professional> getProfessionalByUserId(final UUID userId) {
+        return professionalRepository.findProfessionalByUser_Id(userId);
     }
 }

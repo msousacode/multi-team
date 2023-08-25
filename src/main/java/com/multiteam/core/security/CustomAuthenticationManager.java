@@ -56,7 +56,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 
     private void verifyPassword(String password, UserDetails user) {
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadCredentialsException("Bad credentials");
+            throw   new BadCredentialsException("Bad credentials");
         }
     }
 }

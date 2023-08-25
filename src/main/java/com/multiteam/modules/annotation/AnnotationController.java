@@ -35,7 +35,7 @@ public class AnnotationController {
 
   @PreAuthorize("hasRole('PROFESSIONAL')")
   @PostMapping
-  public ResponseEntity<Void> includeAnnotation(@RequestBody AnnotationDTO annotationDTO) {
+  public ResponseEntity<Void> createAnnotation(@RequestBody AnnotationDTO annotationDTO) {
     annotationService.createAnnotation(annotationDTO);
     return ResponseEntity.ok().build();
   }

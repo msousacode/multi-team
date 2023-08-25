@@ -89,11 +89,10 @@ public class PatientController {
     }
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_PATIENT_READ')")
-  @PostMapping("/mobile/filter")
-  public ResponseEntity<List<PatientDTO>> getAllPatients(
-      @RequestBody final PatientFilter patientFilter) {
-    var patients = patientService.findAllTreatmentAndSituationProgressByProfessionalId(patientFilter).stream().map(PatientDTO::fromPatientDTO).toList();
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL') or hasAuthority('PERM_PATIENT_READ')")
+  @GetMapping("/professional/{professionalId}")
+  public ResponseEntity<List<PatientDTO>> getAllPatients(@PathVariable("professionalId") final UUID professionalId) {
+    var patients = patientService.findAllTreatmentAndSituationProgressByProfessionalId(professionalId).stream().map(PatientDTO::fromPatientDTO).toList();
     return ResponseEntity.status(HttpStatus.OK).body(patients);
   }
 }

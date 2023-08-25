@@ -25,8 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping(
     path = "/v1/professionals",
-    produces = APPLICATION_JSON_VALUE,
-    consumes = APPLICATION_JSON_VALUE
+    produces = APPLICATION_JSON_VALUE
 )
 @RestController
 public class ProfessionalController {
@@ -70,7 +69,7 @@ public class ProfessionalController {
             PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(direction), sort))));
   }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_PROFESSIONAL_READ')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_PROFESSIONAL_READ')")
   @GetMapping("/{professionalId}")
   public ResponseEntity<ProfessionalDTO> getProfessional(
       @PathVariable("professionalId") final UUID professionalId) {
@@ -96,5 +95,13 @@ public class ProfessionalController {
       @RequestBody ProfessionalUseTreatmentRequest professionalUseTreatmentDTO) {
     return ResponseEntity.ok(
         professionalService.getProfessionalsUseTreatment(professionalUseTreatmentDTO));
+  }
+
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
+  @GetMapping("/user/{userId}")
+  public ResponseEntity<?> getProfessionalIdByUserId(@PathVariable("userId") final UUID userId) {
+    return professionalService.getProfessionalByUserId(userId)
+        .map(professional -> ResponseEntity.ok(
+            professional.getId().toString())).orElse(ResponseEntity.notFound().build());
   }
 }

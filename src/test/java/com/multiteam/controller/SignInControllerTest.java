@@ -1,7 +1,7 @@
 package com.multiteam.controller;
 
-import com.multiteam.modules.signin.payload.SignInDTO;
-import com.multiteam.modules.signin.payload.SignUpDTO;
+import com.multiteam.modules.sign.payload.SignInDTO;
+import com.multiteam.modules.sign.payload.SignUpDTO;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestTemplateBase;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

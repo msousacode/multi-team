@@ -1,4 +1,4 @@
-package com.multiteam.modules.signin;
+package com.multiteam.modules.sign;
 
 import com.multiteam.core.enums.AuthProviderEnum;
 import com.multiteam.core.enums.RoleEnum;
@@ -10,9 +10,9 @@ import com.multiteam.core.service.EmailService;
 import com.multiteam.core.service.JwtService;
 import com.multiteam.modules.role.Role;
 import com.multiteam.modules.role.RoleRepository;
-import com.multiteam.modules.signin.payload.SignInDTO;
-import com.multiteam.modules.signin.payload.SignUpDTO;
-import com.multiteam.modules.signin.payload.TokenDTO;
+import com.multiteam.modules.sign.payload.SignInDTO;
+import com.multiteam.modules.sign.payload.SignUpDTO;
+import com.multiteam.modules.sign.payload.TokenDTO;
 import com.multiteam.modules.user.User;
 import com.multiteam.modules.user.UserRepository;
 import com.sendgrid.helpers.mail.objects.Content;
@@ -71,7 +71,7 @@ public class SignInService {
         Role role = roleRepository.findByRole(RoleEnum.ROLE_OWNER);
         signUpDTO.roles().add(role);
 
-        UUID provisionalTenantId = UUID.fromString("61a9c194-386d-46e1-ab9d-d26d6d50a1fc");
+        UUID provisionalTenantId = UUID.fromString("61a9c194-386d-46e1-ab9d-d26d6d50a1fc");//TODO ver isso aqui
 
         var builder = new User.Builder(
                 null, provisionalTenantId, signUpDTO.name(), signUpDTO.email(), true)

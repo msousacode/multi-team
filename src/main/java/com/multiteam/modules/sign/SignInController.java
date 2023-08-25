@@ -1,10 +1,10 @@
-package com.multiteam.modules.signin;
+package com.multiteam.modules.sign;
 
-import com.multiteam.modules.signin.payload.ForgotDTO;
-import com.multiteam.modules.signin.payload.TokenSigInDTO;
-import com.multiteam.modules.signin.payload.SignInDTO;
-import com.multiteam.modules.signin.payload.SignUpDTO;
-import com.multiteam.modules.signin.payload.TokenDTO;
+import com.multiteam.modules.sign.payload.ForgotDTO;
+import com.multiteam.modules.sign.payload.TokenSigInDTO;
+import com.multiteam.modules.sign.payload.SignInDTO;
+import com.multiteam.modules.sign.payload.SignUpDTO;
+import com.multiteam.modules.sign.payload.TokenDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
