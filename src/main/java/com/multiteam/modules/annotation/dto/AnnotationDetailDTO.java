@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 public record AnnotationDetailDTO(
+
     UUID treatmentId,
     LocalDate dateStart,
     LocalTime hourStart,
