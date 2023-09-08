@@ -83,7 +83,7 @@ public class PatientService {
   }
 
   public Page<PatientDTO> findAllTreatmentAndSituationProgressByProfessionalId(final PatientFilter patientFilter, Pageable pageable) {
-    return patientRepository.findAllByNameContainingIgnoreCase(patientFilter.patientName(),
+    return patientRepository.findAllByNameContainingIgnoreCaseAndActiveIsTrue(patientFilter.patientName(),
         pageable).map(PatientDTO::fromPatientDTO);
   }
 

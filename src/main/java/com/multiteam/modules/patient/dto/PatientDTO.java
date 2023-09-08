@@ -49,7 +49,7 @@ public record PatientDTO(
                     Paciente possui tratamento em %s com data ínicio %s até %s""".formatted(
                     treatment.getSituation(),
                     treatment.getInitialDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    treatment.getFinalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                    treatment.getFinalDate() == null ? "Não informada" : treatment.getFinalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         }
         return "";
     }

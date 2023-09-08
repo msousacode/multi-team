@@ -1,8 +1,8 @@
 package com.multiteam.modules.treatment;
 
-import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.exception.BadRequestException;
+import com.multiteam.modules.annotation.AnnotationService;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.guest.Guest;
 import com.multiteam.modules.patient.Patient;
@@ -36,19 +36,19 @@ public class TreatmentService {
     private final TreatementProfessionalRepository treatmentProfessionalRepository;
     private final PatientService patientService;
     private final ProfessionalService professionalService;
-    private final TenantContext tenantContext;
+    private final AnnotationService annotationService;
 
     public TreatmentService(
             TreatmentRepository treatmentRepository,
             TreatementProfessionalRepository treatementProfessionalRepository,
             @Lazy PatientService patientService,
             @Lazy ProfessionalService professionalService,
-            TenantContext tenantContext) {
+            @Lazy AnnotationService annotationService) {
         this.treatmentRepository = treatmentRepository;
         this.treatmentProfessionalRepository = treatementProfessionalRepository;
         this.patientService = patientService;
         this.professionalService = professionalService;
-        this.tenantContext = tenantContext;
+        this.annotationService = annotationService;
     }
 
     @Transactional
@@ -75,7 +75,7 @@ public class TreatmentService {
         var treatment = treatmentRepository.save(builder);
 
         //Salva o vínculo entre Tratamento, Profissional e Clínica
-        saveLinkTreatmentProfessional(professionals, treatment);
+        saveRelationshipTreatmentProfessional(professionals, treatment);
 
         logger.info("successfully included treatment id: {}", treatment.getId());
 
@@ -85,9 +85,9 @@ public class TreatmentService {
     @Transactional
     public Boolean updateTreatment(final TreatmentRequest treatmentRequest) {
 
-        var result = treatmentRepository.findById(treatmentRequest.id());
+        var treatment = treatmentRepository.findById(treatmentRequest.id());
 
-        if (result.isEmpty()) {
+        if (treatment.isEmpty()) {
             logger.error("error when updating treatment id: {}", treatmentRequest.id());
             return Boolean.FALSE;
         }
@@ -101,18 +101,21 @@ public class TreatmentService {
         }
 
         var builder = new Treatment.Builder(
-                result.get().getId(),
+                treatment.get().getId(),
                 SituationEnum.get(treatmentRequest.situation()),
                 treatmentRequest.initialDate(),
-                result.get().getPatient())
+                treatment.get().getPatient())
                 .description(treatmentRequest.observation())
                 .finalDate(treatmentRequest.finalDate())
-                .active(result.get().isActive())
+                .active(treatment.get().isActive())
                 .build();
 
-        var treatment = treatmentRepository.save(builder);
+        //inactive professionals of treatment
+        treatmentProfessionalRepository.inactiveRelationshipTreatementAndProfessionalByTreatment_Id(SituationEnum.INATIVO, treatment.get().getId());
 
-        saveLinkTreatmentProfessional(professionals, treatment);
+        var treatmentSaved = treatmentRepository.save(builder);
+
+        saveRelationshipTreatmentProfessional(professionals, treatmentSaved);
 
         logger.info("successfully updated treatment");
 
@@ -123,7 +126,7 @@ public class TreatmentService {
         if (filter.patientId() != null) {
             return treatmentRepository.findAllByPatient_IdAndActiveIsTrue(filter.patientId(), pageable).map(TreatmentResponse::fromTreatmentResponse);
         }
-        return treatmentRepository.findAllByPatient_NameContainingIgnoreCase(filter.patientName(), pageable).map(TreatmentResponse::fromTreatmentResponse);
+        return treatmentRepository.findAllByPatient_NameContainingIgnoreCaseAndActiveIsTrue(filter.patientName(), pageable).map(TreatmentResponse::fromTreatmentResponse);
     }
 
     @Transactional
@@ -136,7 +139,7 @@ public class TreatmentService {
         }
 
         //inactive professionals of treatment
-        treatmentProfessionalRepository.inactiveProfessionalsByTreatmentId(treatmentId, SituationEnum.INATIVO);
+        treatmentProfessionalRepository.inactiveRelationshipTreatementAndProfessionalByTreatment_Id(SituationEnum.INATIVO, treatmentId);
 
         //exclude all guests TODO será usado futuramente release 2 quando houver a funcionalidade de convidados
         //treatment.get().getGuests().removeAll(treatment.get().getGuests());
@@ -181,7 +184,9 @@ public class TreatmentService {
         var treatmentProfessionals = treatment.get().getTreatmentProfessionals();
 
         treatmentProfessionals.forEach(treatmentProfessional -> {
-            professionals.add(treatmentProfessional.getProfessional().getId());
+            if(treatmentProfessional.getActive()) {
+                professionals.add(treatmentProfessional.getProfessional().getId());
+            }
             //get clinics utilizando o clinicId da clinica em que o tratamento esta alocado.
             clinics.addAll(treatmentProfessional.getProfessional().getClinics());
         });
@@ -204,10 +209,7 @@ public class TreatmentService {
         return professionalService.getAllProfessionalsByClinics(treatmentDTO.professionals());
     }
 
-    private void saveLinkTreatmentProfessional(List<Professional> professionals, Treatment treatment) {
-
-        treatmentProfessionalRepository.deleteByTreatment_Id(treatment.getId());
-
+    private void saveRelationshipTreatmentProfessional(List<Professional> professionals, Treatment treatment) {
         professionals.forEach(professional -> {
             professional.getClinics().forEach(clinic -> {
                 var treatmentProfessional = new TreatmentProfessional(null, treatment, professional, clinic, SituationEnum.ANDAMENTO);

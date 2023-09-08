@@ -120,7 +120,6 @@ public class UserService {
 
     @Cacheable("roles")
     public List<Role> getRolesPermissions(final UUID userId) {
-        logger.info("consulting permissions ...");
         return userRepository.findById(userId).map(User::getRoles).orElse(List.of());
     }
 }

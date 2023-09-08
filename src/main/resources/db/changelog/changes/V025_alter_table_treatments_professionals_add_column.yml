@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: V025
+      author: michael
+      changes:
+        - addColumn:
+            tableName: treatments_professionals
+            columns:
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true

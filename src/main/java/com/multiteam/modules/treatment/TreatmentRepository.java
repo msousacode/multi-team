@@ -26,5 +26,5 @@ public interface TreatmentRepository extends TenantableRepository<Treatment> {
     @Query("UPDATE Treatment tr SET tr.active = false WHERE tr.id = :treatmentId")
     void inactiveTreatment(UUID treatmentId);
 
-    Page<Treatment> findAllByPatient_NameContainingIgnoreCase(String patientName, Pageable pageable);
+    Page<Treatment> findAllByPatient_NameContainingIgnoreCaseAndActiveIsTrue(String patientName, Pageable pageable);
 }

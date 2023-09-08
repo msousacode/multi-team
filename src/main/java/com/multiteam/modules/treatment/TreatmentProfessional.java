@@ -4,6 +4,8 @@ import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.models.Auditable;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.professional.Professional;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
 import javax.persistence.Column;
@@ -18,6 +20,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.UUID;
 
+@NoArgsConstructor
+@Getter
 @Entity
 @Table(name = "treatments_professionals")
 public class TreatmentProfessional extends Auditable {
@@ -46,7 +50,8 @@ public class TreatmentProfessional extends Auditable {
         @Column(name = "annotation")
         private String annotation;
 
-        public TreatmentProfessional() {}
+        @Column(name = "active")
+        private Boolean active;
 
         public TreatmentProfessional(
                 final UUID id,
@@ -65,53 +70,6 @@ public class TreatmentProfessional extends Auditable {
                 this.professional = professional;
                 this.clinic = clinic;
                 this.situationType = situationType;
-        }
-
-        public UUID getId() {
-                return id;
-        }
-
-        public Treatment getTreatment() {
-                return treatment;
-        }
-
-        public Professional getProfessional() {
-                return professional;
-        }
-
-        public Clinic getClinic() {
-                return clinic;
-        }
-
-        public void setTreatment(Treatment treatment) {
-                this.treatment = treatment;
-        }
-
-        public void setProfessional(Professional professional) {
-                this.professional = professional;
-        }
-
-        public void setId(UUID id) {
-                this.id = id;
-        }
-
-        public void setClinic(Clinic clinic) {
-                this.clinic = clinic;
-        }
-
-        public SituationEnum getSituationType() {
-                return situationType;
-        }
-
-        public void setSituationType(SituationEnum situationType) {
-                this.situationType = situationType;
-        }
-
-        public String getAnnotation() {
-                return annotation;
-        }
-
-        public void setAnnotation(String annotation) {
-                this.annotation = annotation;
+                this.active = true;
         }
 }
