@@ -3,7 +3,7 @@ package com.multiteam.modules.schedule;
 import com.multiteam.core.enums.ScheduleEnum;
 import com.multiteam.core.models.Tenantable;
 import com.multiteam.modules.clinic.Clinic;
-import com.multiteam.modules.patient.Patient;
+import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.professional.Professional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;

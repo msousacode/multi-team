@@ -3,7 +3,7 @@ package com.multiteam.modules.treatment;
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.models.Tenantable;
 import com.multiteam.modules.guest.Guest;
-import com.multiteam.modules.patient.Patient;
+import com.multiteam.modules.patient.model.Patient;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;

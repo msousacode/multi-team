@@ -1,7 +1,7 @@
-package com.multiteam.modules.patient.dto;
+package com.multiteam.modules.patient.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.multiteam.modules.patient.Patient;
+import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.treatment.Treatment;
 
 import java.time.LocalDate;

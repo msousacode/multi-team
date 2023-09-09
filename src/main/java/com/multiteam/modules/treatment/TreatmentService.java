@@ -5,7 +5,7 @@ import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.modules.annotation.AnnotationService;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.guest.Guest;
-import com.multiteam.modules.patient.Patient;
+import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;

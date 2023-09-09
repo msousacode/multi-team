@@ -6,7 +6,7 @@ import com.multiteam.core.enums.ScheduleEnum;
 import com.multiteam.core.exception.ScheduleException;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.clinic.ClinicService;
-import com.multiteam.modules.patient.Patient;
+import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;

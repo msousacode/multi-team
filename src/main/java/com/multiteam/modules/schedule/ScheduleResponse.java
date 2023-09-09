@@ -1,7 +1,7 @@
 package com.multiteam.modules.schedule;
 
 import com.multiteam.modules.clinic.dto.ClinicDTO;
-import com.multiteam.modules.patient.dto.PatientDTO;
+import com.multiteam.modules.patient.controller.dto.PatientDTO;
 
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
