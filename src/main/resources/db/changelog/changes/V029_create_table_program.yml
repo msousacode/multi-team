@@ -1,0 +1,95 @@
+databaseChangeLog:
+  - changeSet:
+      id: V029
+      author: michael
+      changes:
+        - createTable:
+            tableName: programs
+            columns:
+              - column:
+                  name: program_id
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: program_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mark
+                  type: tinyint
+              - column:
+                  name: ability
+                  type: tinyint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: protocol
+                  type: tinyint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: targets_by_session
+                  type: tinyint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: attempt_by_session
+                  type: tinyint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: definition
+                  type: varchar(10000)
+              - column:
+                  name: procedure
+                  type: varchar(10000)
+              - column:
+                  name: learning_criterion
+                  type: varchar(10000)
+              - column:
+                  name: materials
+                  type: varchar(10000)
+              - column:
+                  name: observation
+                  type: varchar(10000)
+              - column:
+                  name: correction_quantity_by_session
+                  type: tinyint
+              - column:
+                  name: correction_percentage_attempts
+                  type: tinyint
+              - column:
+                  name: evolution_quantity_by_session
+                  type: tinyint
+              - column:
+                  name: evolution_percentage_attempts
+                  type: tinyint
+              - column:
+                  name: tenant_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(50)
+              - column:
+                  name: created_date
+                  type: timestamp
+                  constraints:
+                    updatable: false
+              - column:
+                  name: last_modified_by
+                  type: varchar(50)
+              - column:
+                  name: last_modified_date
+                  type: timestamp
+        - addForeignKeyConstraint:
+            baseColumnNames: tenant_id
+            baseTableName: programs
+            constraintName: fk_programs_users
+            referencedColumnNames: user_id
+            referencedTableName: users

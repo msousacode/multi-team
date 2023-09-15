@@ -1,0 +1,73 @@
+databaseChangeLog:
+  - changeSet:
+      id: V030
+      author: michael
+      changes:
+        - createTable:
+            tableName: behaviors
+            columns:
+              - column:
+                  name: behavior_id
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: behavior_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_execution
+                  type: tinyint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: situation
+                  type: tinyint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: observation
+                  type: varchar(5000)
+              - column:
+                  name: start_date
+                  type: timestamp
+              - column:
+                  name: end_date
+                  type: timestamp
+              - column:
+                  name: acquired_date
+                  type: timestamp
+              - column:
+                  name: maintenance_count
+                  type: tinyint
+              - column:
+                  name: tenant_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: program_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: tenant_id
+            baseTableName: users
+            constraintName: fk_programs_users
+            referencedColumnNames: user_id
+            referencedTableName: users
+        - addForeignKeyConstraint:
+            baseColumnNames: program_id
+            baseTableName: behaviors
+            constraintName: fk_behaviors_programs
+            referencedColumnNames: program_id
+            referencedTableName: programs
