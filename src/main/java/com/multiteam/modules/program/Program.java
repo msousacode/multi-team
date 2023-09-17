@@ -2,11 +2,13 @@ package com.multiteam.modules.program;
 
 import com.multiteam.core.models.Tenantable;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.UUID;
 
+@NoArgsConstructor
 @Setter
 @Getter
 @Entity
