@@ -18,7 +18,7 @@ public enum AbilityEnum {
     private final String description;
     private final Integer value;
 
-    private static final Map<String, AbilityEnum> lookup = new HashMap<>();
+    private static final Map<Integer, AbilityEnum> lookup = new HashMap<>();
 
     AbilityEnum(String description, Integer value) {
         this.description = description;
@@ -27,13 +27,12 @@ public enum AbilityEnum {
 
     static {
         for (AbilityEnum s : AbilityEnum.values()) {
-            lookup.put(s.getDescription(), s);
+            lookup.put(s.getValue(), s);
         }
     }
 
-    public static AbilityEnum get(String name) {
-        var value = lookup.get(name);
-        Assert.notNull(value, "specialty not can be null");
-        return value;
+    public static AbilityEnum get(Integer value) {
+        Assert.notNull(value, "ability not can be null");
+        return lookup.get(value);
     }
 }

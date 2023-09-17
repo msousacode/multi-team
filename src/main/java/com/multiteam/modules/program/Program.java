@@ -24,19 +24,19 @@ public class Program extends Tenantable {
     private String programName;
 
     @Column(name = "mark")
-    private String mark;
+    private Integer mark;
 
     @Column(name = "ability")
-    private String ability;
+    private Integer ability;
 
     @Column(name = "protocol")
-    private String protocol;
+    private Integer protocol;
 
     @Column(name = "targets_by_session")
-    private String targetsBySession;
+    private Integer targetsBySession;
 
     @Column(name = "attempt_by_session")
-    private String attemptBySession;
+    private Integer attemptBySession;
 
     @Column(name = "definition")
     private String definition;
@@ -57,13 +57,13 @@ public class Program extends Tenantable {
     private Integer evolutionQuantityBySession;
 
     @Column(name = "evolution_percentage_attempts")
-    private Double evolutionPercentageAttempts;
+    private Integer evolutionPercentageAttempts;
 
     @Column(name = "correction_quantity_by_session")
     private Integer correctionQuantityBySession;
 
     @Column(name = "correction_percentage_attempts")
-    private Double correctionPercentageAttempts;
+    private Integer correctionPercentageAttempts;
 
     @Column(name = "active")
     private Boolean active;

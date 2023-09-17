@@ -1,5 +1,7 @@
 package com.multiteam.modules.program;
 
+import com.multiteam.core.enums.AbilityEnum;
+import com.multiteam.core.enums.ProtocolEnum;
 import com.multiteam.modules.program.dto.ProgramDTO;
 import com.multiteam.modules.program.repository.BehaviorRepository;
 import com.multiteam.modules.program.repository.ProgramRepository;
@@ -23,6 +25,10 @@ public class ProgramService {
     public boolean createProgram(ProgramDTO programDTO) {
 
         Program program = ProgramMapper.MAPPER.toEntity(programDTO);
+
+        program.setAbility(AbilityEnum.get(program.getAbility()).getValue());
+        program.setProtocol(ProtocolEnum.get(program.getProtocol()).getValue());
+        program.setActive(true);
 
         programRepository.save(program);
 
