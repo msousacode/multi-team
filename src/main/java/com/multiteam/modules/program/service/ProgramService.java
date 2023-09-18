@@ -1,14 +1,17 @@
-package com.multiteam.modules.program;
+package com.multiteam.modules.program.service;
 
 import com.multiteam.core.enums.AbilityEnum;
 import com.multiteam.core.enums.ProtocolEnum;
+import com.multiteam.modules.program.Program;
 import com.multiteam.modules.program.dto.ProgramDTO;
+import com.multiteam.modules.program.mapper.ProgramMapper;
 import com.multiteam.modules.program.repository.BehaviorRepository;
 import com.multiteam.modules.program.repository.ProgramRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,8 +41,8 @@ public class ProgramService {
         return Boolean.TRUE;
     }
 
-    public List<Program> getAll() {
-        return programRepository.findAll();
+    public Page<Program> getAll(Pageable pageable) {
+        return programRepository.findAll(pageable);
     }
 
     public Optional<Program> getById(UUID programId) {

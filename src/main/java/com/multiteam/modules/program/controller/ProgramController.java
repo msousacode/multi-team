@@ -1,13 +1,17 @@
-package com.multiteam.modules.program;
+package com.multiteam.modules.program.controller;
 
+import com.multiteam.modules.program.mapper.ProgramMapper;
+import com.multiteam.modules.program.service.ProgramService;
 import com.multiteam.modules.program.dto.ProgramDTO;
 import com.multiteam.modules.program.dto.ProgramListDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -45,9 +49,14 @@ public class ProgramController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProgramListDTO>> getAll() {
-        var programs = programService.getAll().stream().map(ProgramListDTO::new).toList();
-        return ResponseEntity.ok(programs);
+    public ResponseEntity<Page<ProgramListDTO>> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size,
+            @RequestParam(value = "sort", defaultValue = "programName") String sort,
+            @RequestParam(value = "direction", defaultValue = "ASC") String direction) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(programService.getAll(PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(direction), sort)))
+                        .map(ProgramListDTO::new));
     }
 
     @GetMapping("/{programId}")

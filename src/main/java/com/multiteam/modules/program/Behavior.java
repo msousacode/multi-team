@@ -23,10 +23,10 @@ public class Behavior extends Tenantable {
     private String behaviorName;
 
     @Column(name = "order_execution")
-    private String orderExecution;
+    private Integer orderExecution;
 
     @Column(name = "situation")
-    private String situation;
+    private Integer situation;
 
     @Column(name = "observation")
     private String observation;
