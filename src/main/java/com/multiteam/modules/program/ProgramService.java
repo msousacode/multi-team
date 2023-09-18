@@ -8,6 +8,7 @@ import com.multiteam.modules.program.repository.ProgramRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 
 @Service
@@ -35,4 +36,7 @@ public class ProgramService {
         return Boolean.TRUE;
     }
 
+    public List<Program> getAll() {
+        return programRepository.findAll();
+    }
 }

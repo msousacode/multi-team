@@ -3,7 +3,7 @@ package com.multiteam.modules.program.dto;
 import java.util.UUID;
 
 public record ProgramDTO(
-        UUID id,
+        UUID programId,
         String programName,
         Integer mark,
         Integer ability,

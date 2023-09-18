@@ -1,13 +1,14 @@
 package com.multiteam.modules.program;
 
+import com.multiteam.modules.clinic.dto.ClinicDTO;
 import com.multiteam.modules.program.dto.ProgramDTO;
+import com.multiteam.modules.program.dto.ProgramListDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -32,5 +33,11 @@ public class ProgramController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProgramListDTO>> getAll() {
+        var programs = programService.getAll().stream().map(ProgramListDTO::new).toList();
+        return ResponseEntity.ok(programs);
     }
 }

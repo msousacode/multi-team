@@ -10,4 +10,6 @@ public interface ProgramMapper {
     ProgramMapper MAPPER = Mappers.getMapper(ProgramMapper.class);
 
     Program toEntity(ProgramDTO programDTO);
+
+    ProgramDTO toDTO(Program programDTO);
 }
