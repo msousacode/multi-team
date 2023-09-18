@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -38,5 +40,24 @@ public class ProgramService {
 
     public List<Program> getAll() {
         return programRepository.findAll();
+    }
+
+    public Optional<Program> getById(UUID programId) {
+        return programRepository.findById(programId);
+    }
+
+    @Transactional
+    public Boolean updateProgram(ProgramDTO programDTO) {
+
+        var optional = getById(programDTO.programId());
+
+        if(optional.isPresent()) {
+            var result = ProgramMapper.MAPPER.toEntity(programDTO);
+            result.setId(programDTO.programId());
+            result.setActive(true);
+            programRepository.save(result);
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 }
