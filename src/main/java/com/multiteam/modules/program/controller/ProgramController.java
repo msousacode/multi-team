@@ -1,5 +1,6 @@
 package com.multiteam.modules.program.controller;
 
+import com.multiteam.modules.program.dto.CurriculumFolderDTO;
 import com.multiteam.modules.program.mapper.ProgramMapper;
 import com.multiteam.modules.program.service.ProgramService;
 import com.multiteam.modules.program.dto.ProgramDTO;
@@ -64,5 +65,10 @@ public class ProgramController {
         return programService.getById(programId)
                 .map(program -> ResponseEntity.status(HttpStatus.OK).body(ProgramMapper.MAPPER.toDTO(program)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @PostMapping("/patient/{patientId}/curriculum")
+    public ResponseEntity<Void> createCurriculum(@PathVariable("patientId") UUID patientId, @RequestBody CurriculumFolderDTO curriculumDTO) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }

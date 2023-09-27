@@ -2,6 +2,7 @@ package com.multiteam.modules.professional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import com.multiteam.core.utils.Select;
 import com.multiteam.modules.professional.dto.ProfessionalDTO;
 import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentRequest;
 import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentView;
@@ -56,7 +57,15 @@ public class ProfessionalController {
     }
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_PROFESSIONAL_READ')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL', 'SUPERVISOR')")
+  @GetMapping
+  public ResponseEntity<List<Select>> getProfessional() {
+    var professionals = professionalService.getProfessionals().stream()
+            .map(i -> Select.toSelect(i.getName(), i.getId().toString())).toList();
+    return ResponseEntity.ok(professionals);
+  }
+
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL', 'SUPERVISOR')")
   @GetMapping("/clinic/{clinicId}")
   public ResponseEntity<Page<ProfessionalDTO>> getAllProfessionals(
       @PathVariable("clinicId") final UUID clinicId,
@@ -69,7 +78,7 @@ public class ProfessionalController {
             PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(direction), sort))));
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_PROFESSIONAL_READ')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL', 'SUPERVISOR')")
   @GetMapping("/{professionalId}")
   public ResponseEntity<ProfessionalDTO> getProfessional(
       @PathVariable("professionalId") final UUID professionalId) {
@@ -89,7 +98,7 @@ public class ProfessionalController {
     }
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL', 'SUPERVISOR')")
   @PostMapping("/use-treatments")
   public ResponseEntity<List<ProfessionalUseTreatmentView>> getProfessionalsUseTreatment(
       @RequestBody ProfessionalUseTreatmentRequest professionalUseTreatmentDTO) {
@@ -97,7 +106,7 @@ public class ProfessionalController {
         professionalService.getProfessionalsUseTreatment(professionalUseTreatmentDTO));
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL', 'SUPERVISOR')")
   @GetMapping("/user/{userId}")
   public ResponseEntity<?> getProfessionalIdByUserId(@PathVariable("userId") final UUID userId) {
     return professionalService.getProfessionalByUserId(userId)
