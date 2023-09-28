@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: V032
+      author: michael
+      changes:
+        - createTable:
+            tableName: professionals_folders
+            columns:
+              - column:
+                  name: professional_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: folder_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: folder_id
+            baseTableName: professionals_folders
+            constraintName: fk_professionals_folders_folders
+            referencedColumnNames: folder_id
+            referencedTableName: folders
+        - addForeignKeyConstraint:
+            baseColumnNames: professional_id
+            baseTableName: professionals_folders
+            constraintName: fk_professionals_folders_professionals
+            referencedColumnNames: professional_id
+            referencedTableName: professionals
