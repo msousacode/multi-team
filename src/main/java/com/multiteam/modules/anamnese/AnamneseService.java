@@ -40,7 +40,7 @@ public class AnamneseService {
     @Transactional
     public Boolean createAnamnese(final AnamneseRequest anamneseDTO) {
 
-        var patient = patientService.findOneById(anamneseDTO.patientId());
+        var patient = patientService.getPatientById(anamneseDTO.patientId());
 
         if (patient.isEmpty()) {
             logger.error("patient not found. Verify if patient exists, patientId: {}", anamneseDTO.patientId());

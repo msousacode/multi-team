@@ -3,8 +3,10 @@ package com.multiteam.modules.patient;
 import static com.multiteam.core.enums.AuthProviderEnum.local;
 
 import com.multiteam.core.context.TenantContext;
+import com.multiteam.core.enums.ApplicationError;
 import com.multiteam.core.enums.SexEnum;
 import com.multiteam.core.enums.UserEnum;
+import com.multiteam.core.exception.ResourceNotFoundException;
 import com.multiteam.core.service.EmailService;
 import com.multiteam.modules.patient.controller.dto.PatientDTO;
 import com.multiteam.modules.patient.controller.dto.PatientFilter;
@@ -80,8 +82,9 @@ public class PatientService {
     return Boolean.TRUE;
   }
 
-  public Optional<Patient> findOneById(final UUID patientId) {
-    return patientRepository.findOneById(patientId);
+  public Optional<Patient> getPatientById(final UUID patientId) {
+    return Optional.ofNullable(patientRepository.findOneById(patientId)
+            .orElseThrow(() -> new ResourceNotFoundException(String.format(ApplicationError.RESOURCE_NOT_FOUND.getMessage(), patientId))));
   }
 
   public Page<PatientDTO> findAllTreatmentAndSituationProgressByProfessionalId(final PatientFilter patientFilter, Pageable pageable) {

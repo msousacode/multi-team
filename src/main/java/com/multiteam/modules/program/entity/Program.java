@@ -1,4 +1,4 @@
-package com.multiteam.modules.program;
+package com.multiteam.modules.program.entity;
 
 import com.multiteam.core.models.Tenantable;
 import lombok.Getter;

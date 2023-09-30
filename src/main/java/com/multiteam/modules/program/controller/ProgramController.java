@@ -1,6 +1,6 @@
 package com.multiteam.modules.program.controller;
 
-import com.multiteam.modules.program.dto.CurriculumFolderDTO;
+import com.multiteam.modules.program.dto.FolderDTO;
 import com.multiteam.modules.program.mapper.ProgramMapper;
 import com.multiteam.modules.program.service.ProgramService;
 import com.multiteam.modules.program.dto.ProgramDTO;
@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -67,8 +68,12 @@ public class ProgramController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @PostMapping("/patient/{patientId}/curriculum")
-    public ResponseEntity<Void> createCurriculum(@PathVariable("patientId") UUID patientId, @RequestBody CurriculumFolderDTO curriculumDTO) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    @PostMapping("/patient/{patientId}/folder")
+    public ResponseEntity<Boolean> createFolder(@PathVariable("patientId") final UUID patientId, @RequestBody FolderDTO folderDTO) {
+        if (programService.createFolder(patientId, folderDTO)) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }

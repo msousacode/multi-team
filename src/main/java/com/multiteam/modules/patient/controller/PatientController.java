@@ -72,7 +72,7 @@ public class PatientController {
 
     @GetMapping("{patientId}")
     public ResponseEntity<PatientDTO> getPatient(@PathVariable("patientId") final UUID patientId) {
-        var optionalPatient = patientService.findOneById(patientId).map(PatientDTO::fromPatientDTO);
+        var optionalPatient = patientService.getPatientById(patientId).map(PatientDTO::fromPatientDTO);
         return optionalPatient
                 .map(patient -> ResponseEntity.status(HttpStatus.OK).body(patient))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());

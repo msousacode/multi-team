@@ -73,7 +73,7 @@ public class DocumentService {
       String filenameExtension) {
     Document document = new Document();
 
-    var patient = patientService.findOneById(patientId);
+    var patient = patientService.getPatientById(patientId);
 
     if (patient.isEmpty()) {
       throw new BadRequestException(

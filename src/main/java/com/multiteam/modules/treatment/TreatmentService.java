@@ -197,7 +197,7 @@ public class TreatmentService {
     }
 
     private Optional<Patient> getPatient(final TreatmentRequest treatmentDTO) {
-        var patient = patientService.findOneById(treatmentDTO.patientId());
+        var patient = patientService.getPatientById(treatmentDTO.patientId());
         if (patient.isEmpty()) {
             logger.error("patient not found. It is necessary to have a patient to include the treatment");
             return Optional.empty();

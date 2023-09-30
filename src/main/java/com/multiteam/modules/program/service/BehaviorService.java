@@ -3,7 +3,7 @@ package com.multiteam.modules.program.service;
 import com.multiteam.core.enums.ApplicationError;
 import com.multiteam.core.enums.TargetSituationEnum;
 import com.multiteam.core.exception.ResourceNotFoundException;
-import com.multiteam.modules.program.Behavior;
+import com.multiteam.modules.program.entity.Behavior;
 import com.multiteam.modules.program.dto.BehaviorDTO;
 import com.multiteam.modules.program.mapper.BehaviorMapper;
 import com.multiteam.modules.program.repository.BehaviorRepository;

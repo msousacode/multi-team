@@ -206,4 +206,8 @@ public class ProfessionalService {
     public List<Professional> getProfessionals() {
         return professionalRepository.findAll();
     }
+
+    public List<Professional> getProfessionalsInBatch(List<UUID> professionalsId) {
+        return professionalRepository.findAllById(professionalsId);
+    }
 }

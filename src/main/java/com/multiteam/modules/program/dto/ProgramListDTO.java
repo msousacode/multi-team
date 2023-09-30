@@ -2,7 +2,7 @@ package com.multiteam.modules.program.dto;
 
 import com.multiteam.core.enums.AbilityEnum;
 import com.multiteam.core.enums.ProtocolEnum;
-import com.multiteam.modules.program.Program;
+import com.multiteam.modules.program.entity.Program;
 
 import java.util.UUID;
 

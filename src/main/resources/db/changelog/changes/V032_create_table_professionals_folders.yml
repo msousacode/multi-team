@@ -7,6 +7,13 @@ databaseChangeLog:
             tableName: professionals_folders
             columns:
               - column:
+                  name: professionals_folders_id
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
                   name: professional_id
                   type: uuid
                   constraints:
