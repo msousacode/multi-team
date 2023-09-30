@@ -67,13 +67,4 @@ public class ProgramController {
                 .map(program -> ResponseEntity.status(HttpStatus.OK).body(ProgramMapper.MAPPER.toDTO(program)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
-
-    @PostMapping("/patient/{patientId}/folder")
-    public ResponseEntity<Boolean> createFolder(@PathVariable("patientId") final UUID patientId, @RequestBody FolderDTO folderDTO) {
-        if (programService.createFolder(patientId, folderDTO)) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
 }

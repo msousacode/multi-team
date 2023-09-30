@@ -5,7 +5,6 @@ import com.multiteam.core.enums.SpecialtyEnum;
 import com.multiteam.core.enums.UserEnum;
 import com.multiteam.core.models.EmailVO;
 import com.multiteam.core.service.EmailService;
-import com.multiteam.core.utils.ObjectMapperUtils;
 import com.multiteam.modules.clinic.ClinicService;
 import com.multiteam.modules.professional.dto.ProfessionalDTO;
 import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentRequest;
@@ -209,5 +208,9 @@ public class ProfessionalService {
 
     public List<Professional> getProfessionalsInBatch(List<UUID> professionalsId) {
         return professionalRepository.findAllById(professionalsId);
+    }
+
+    public List<Professional> getProfessionalsFoldersById(UUID folderId) {
+        return professionalRepository.findAllByFoldersId(folderId);
     }
 }

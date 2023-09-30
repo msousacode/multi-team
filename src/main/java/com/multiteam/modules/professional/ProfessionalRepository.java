@@ -48,4 +48,6 @@ public interface ProfessionalRepository extends TenantableRepository<Professiona
     List<Professional> getAllProfessionalsByClinics(@Param("professionals") List<UUID> professionals);
 
     Optional<Professional> findProfessionalByUser_Id(UUID professionalId);
+
+    List<Professional> findAllByFoldersId(UUID folderId);
 }
