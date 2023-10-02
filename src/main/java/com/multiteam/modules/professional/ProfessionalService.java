@@ -201,4 +201,20 @@ public class ProfessionalService {
     public Optional<Professional> getProfessionalByUserId(final UUID userId) {
         return professionalRepository.findProfessionalByUser_Id(userId);
     }
+
+    public List<Professional> getProfessionals() {
+        return professionalRepository.findAll();
+    }
+
+    public List<Professional> getProfessionalsInBatch(List<UUID> professionalsId) {
+        return professionalRepository.findAllById(professionalsId);
+    }
+
+    public List<Professional> getProfessionalsFoldersById(UUID folderId) {
+        return professionalRepository.findAllByFoldersId(folderId);
+    }
+
+    public void findProgramsByIdInBacth(List<UUID> programs) {
+
+    }
 }

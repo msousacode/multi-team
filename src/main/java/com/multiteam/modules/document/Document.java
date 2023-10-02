@@ -2,7 +2,7 @@ package com.multiteam.modules.document;
 
 import com.multiteam.core.enums.DocumentType;
 import com.multiteam.core.models.Auditable;
-import com.multiteam.modules.patient.Patient;
+import com.multiteam.modules.patient.model.Patient;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;

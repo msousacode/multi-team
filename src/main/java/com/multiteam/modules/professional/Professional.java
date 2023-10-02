@@ -3,27 +3,20 @@ package com.multiteam.modules.professional;
 import com.multiteam.core.enums.SpecialtyEnum;
 import com.multiteam.core.models.Tenantable;
 import com.multiteam.modules.clinic.Clinic;
+import com.multiteam.modules.program.entity.Folder;
 import com.multiteam.modules.treatment.TreatmentProfessional;
 import com.multiteam.modules.user.User;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.Assert;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "professionals")
 public class Professional extends Tenantable {
@@ -72,6 +65,13 @@ public class Professional extends Tenantable {
             inverseJoinColumns = @JoinColumn(name = "clinic_id"))
     private List<Clinic> clinics;
 
+    @ManyToMany
+    @JoinTable(
+            name = "professionals_folders",
+            joinColumns = @JoinColumn(name = "professional_id"),
+            inverseJoinColumns = @JoinColumn(name = "folder_id"))
+    private List<Folder> folders;
+
     public Professional() {
         super();
     }
@@ -86,42 +86,6 @@ public class Professional extends Tenantable {
         this.active = builder.active;
         this.clinics = builder.clinics;
         this.user = builder.user;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public SpecialtyEnum getSpecialty() {
-        return specialty;
-    }
-
-    public String getCellPhone() {
-        return cellPhone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public List<Clinic> getClinics() {
-        return clinics;
-    }
-
-    public Set<TreatmentProfessional> getProfessionals() {
-        return professionals;
-    }
-
-    public User getUser() {
-        return user;
     }
 
     public static class Builder {

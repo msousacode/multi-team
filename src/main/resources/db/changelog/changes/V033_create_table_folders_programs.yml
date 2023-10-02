@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: V033
+      author: michael
+      changes:
+        - createTable:
+            tableName: folders_programs
+            columns:
+              - column:
+                  name: folders_programs_id
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: program_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: folder_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: folder_id
+            baseTableName: folders_programs
+            constraintName: fk_folders_programs_folders
+            referencedColumnNames: folder_id
+            referencedTableName: folders
+        - addForeignKeyConstraint:
+            baseColumnNames: program_id
+            baseTableName: folders_programs
+            constraintName: fk_folders_programs_programs
+            referencedColumnNames: program_id
+            referencedTableName: programs

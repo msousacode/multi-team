@@ -1,4 +1,4 @@
-package com.multiteam.modules.patient;
+package com.multiteam.modules.patient.model;
 
 import com.multiteam.core.enums.SexEnum;
 import com.multiteam.core.models.Tenantable;

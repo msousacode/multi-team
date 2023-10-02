@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: V026
+      author: michael
+      changes:
+        - createTable:
+            tableName: evolution_parameters
+            columns:
+              - column:
+                  name: parameter_id
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: patient_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(50)
+              - column:
+                  name: created_date
+                  type: timestamp
+                  constraints:
+                    updatable: false
+              - column:
+                  name: last_modified_by
+                  type: varchar(50)
+              - column:
+                  name: last_modified_date
+                  type: timestamp
+        - addForeignKeyConstraint:
+            baseColumnNames: patient_id
+            baseTableName: inappropriate_behaviors
+            constraintName: fk_evolution_parameters_patients
+            referencedColumnNames: patient_id
+            referencedTableName: patients

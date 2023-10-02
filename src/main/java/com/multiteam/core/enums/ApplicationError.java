@@ -7,7 +7,8 @@ public enum ApplicationError {
   CONFLICT_CURRENT_DATE("Não é possível agendar para uma data menor do que a data atual. Revise o agendamento."),
   PATIENT_NOT_FOUND("Patient not found"),
   PROFESSIONAL_OR_CLINIC_NOT_CAN_BE_EMPTY("Professional or Clinic not can be empty"),
-  S3_EXCEPTION("An exception occured while uploading the file");
+  S3_EXCEPTION("An exception occured while uploading the file"),
+  RESOURCE_NOT_FOUND("Não foi possível localizar o recurso uuid: %s");
 
   final String message;
 

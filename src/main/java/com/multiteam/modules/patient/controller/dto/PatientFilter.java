@@ -1,4 +1,4 @@
-package com.multiteam.modules.patient.dto;
+package com.multiteam.modules.patient.controller.dto;
 
 import java.util.UUID;
 

@@ -6,7 +6,7 @@ import com.multiteam.core.enums.ScheduleEnum;
 import com.multiteam.core.exception.ScheduleException;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.clinic.ClinicService;
-import com.multiteam.modules.patient.Patient;
+import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
@@ -56,7 +56,7 @@ public class ScheduleService {
         scheduleRequest.end());
 
     var clinic = clinicService.getClinicById(scheduleRequest.clinicId());
-    var patient = patientService.findOneById(scheduleRequest.patient().id()).orElse(null);
+    var patient = patientService.getPatientById(scheduleRequest.patient().id()).orElse(null);
     var professional = professionalService.getProfessionalById(scheduleRequest.professionalId());
 
     if (professional.isEmpty() || clinic.isEmpty()) {
@@ -157,7 +157,7 @@ public class ScheduleService {
 
     Patient patient = null;
     if (scheduleRequest.patient() != null) {
-      patient = patientService.findOneById(scheduleRequest.patient().id()).get();
+      patient = patientService.getPatientById(scheduleRequest.patient().id()).get();
       title = title.concat(patient.getName()).concat(" | Nasc: ")
           .concat(patient.getDateBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     }

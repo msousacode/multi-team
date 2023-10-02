@@ -3,8 +3,8 @@ package com.multiteam.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.multiteam.core.enums.RoleEnum;
-import com.multiteam.modules.patient.dto.PatientDTO;
-import com.multiteam.modules.patient.dto.PatientFilter;
+import com.multiteam.modules.patient.controller.dto.PatientDTO;
+import com.multiteam.modules.patient.controller.dto.PatientFilter;
 import com.multiteam.modules.professional.dto.ProfessionalDTO;
 import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestResponsePage;

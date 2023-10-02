@@ -3,7 +3,7 @@ package com.multiteam.modules.anamnese.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.multiteam.core.enums.AnamneseEnum;
 import com.multiteam.modules.anamnese.Anamnese;
-import com.multiteam.modules.patient.dto.PatientDTO;
+import com.multiteam.modules.patient.controller.dto.PatientDTO;
 import com.multiteam.modules.user.UserDTO;
 
 import java.time.LocalDateTime;

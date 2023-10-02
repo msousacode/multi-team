@@ -2,7 +2,7 @@ package com.multiteam.modules.anamnese;
 
 import com.multiteam.core.enums.AnamneseEnum;
 import com.multiteam.core.models.Tenantable;
-import com.multiteam.modules.patient.Patient;
+import com.multiteam.modules.patient.model.Patient;
 import org.springframework.util.Assert;
 
 import javax.persistence.Column;
