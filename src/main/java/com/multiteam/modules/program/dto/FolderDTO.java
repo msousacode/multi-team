@@ -11,7 +11,8 @@ public record FolderDTO(
         UUID patientId,
         String patientName,
         String folderName,
-        List<Select> professionals
+        List<Select> professionals,
+        List<UUID> programs
 ) {
     public FolderDTO(Folder folder, List<Select> selects) {
         this(
@@ -19,7 +20,8 @@ public record FolderDTO(
                 folder.getPatient().getId(),
                 folder.getPatient().getName(),
                 folder.getFolderName(),
-                selects
+                selects,
+                List.of()
         );
     }
 }

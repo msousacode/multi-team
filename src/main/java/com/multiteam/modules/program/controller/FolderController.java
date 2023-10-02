@@ -30,9 +30,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class FolderController {
 
     private final FolderService folderService;
+    private final ProgramService programService;
 
-    public FolderController(FolderService folderService) {
+    public FolderController(FolderService folderService, ProgramService programService) {
         this.folderService = folderService;
+        this.programService = programService;
     }
 
 
@@ -56,6 +58,15 @@ public class FolderController {
     @PostMapping("/patient/{patientId}")
     public ResponseEntity<Boolean> createFolder(@PathVariable("patientId") final UUID patientId, @RequestBody FolderDTO folderDTO) {
         if (folderService.createFolder(patientId, folderDTO)) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PutMapping("/{folderId}")
+    public ResponseEntity<Void> updateFolder(@PathVariable("folderId") final UUID folderId, @RequestBody FolderDTO folderDTO) {
+        if (folderService.updateFolder(folderId, folderDTO)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

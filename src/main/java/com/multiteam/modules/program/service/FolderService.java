@@ -1,12 +1,15 @@
 package com.multiteam.modules.program.service;
 
+import com.multiteam.core.exception.ResourceNotFoundException;
 import com.multiteam.core.utils.Select;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
 import com.multiteam.modules.program.dto.FolderDTO;
 import com.multiteam.modules.program.entity.Folder;
+import com.multiteam.modules.program.entity.FolderProgram;
 import com.multiteam.modules.program.entity.ProfessionalFolder;
+import com.multiteam.modules.program.repository.FolderProgramRepository;
 import com.multiteam.modules.program.repository.FolderRepository;
 import com.multiteam.modules.program.repository.ProfessionalFolderRepository;
 import com.multiteam.modules.program.repository.ProgramRepository;
@@ -24,19 +27,25 @@ import java.util.UUID;
 public class FolderService {
 
     private final PatientService patientService;
+    private final ProgramService programService;
     private final ProfessionalService professionalService;
     private final FolderRepository folderRepository;
     private final ProfessionalFolderRepository professionalFolderRepository;
+    private final FolderProgramRepository folderProgramRepository;
 
     public FolderService(
             PatientService patientService,
             ProfessionalService professionalService,
+            ProgramService programService,
             FolderRepository folderRepository,
-            ProfessionalFolderRepository professionalFolderRepository) {
+            ProfessionalFolderRepository professionalFolderRepository,
+            FolderProgramRepository folderProgramRepository) {
         this.patientService = patientService;
+        this.programService = programService;
         this.professionalService = professionalService;
         this.folderRepository = folderRepository;
         this.professionalFolderRepository = professionalFolderRepository;
+        this.folderProgramRepository = folderProgramRepository;
     }
 
     @Transactional
@@ -80,5 +89,24 @@ public class FolderService {
         var folder = folderRepository.findById(folderId);
 
         return Optional.ofNullable(new FolderDTO(folder.get(), selects));
+    }
+
+    @Transactional
+    public boolean updateFolder(UUID folderId, FolderDTO folderDTO) {
+
+        var folder = folderRepository.findById(folderId).orElseThrow(() -> new ResourceNotFoundException("Folder not found"));
+
+        var programs = programService.findProgramsByIdInBacth(folderDTO.programs());
+
+        var foldersPrograms = programs.stream().map(program -> {
+            var folderPrograms = new FolderProgram();
+            folderPrograms.setFolder(folder);
+            folderPrograms.setProgram(program);
+            return folderPrograms;
+        }).toList();
+
+        folderProgramRepository.saveAll(foldersPrograms);
+
+        return true;
     }
 }

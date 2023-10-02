@@ -213,4 +213,8 @@ public class ProfessionalService {
     public List<Professional> getProfessionalsFoldersById(UUID folderId) {
         return professionalRepository.findAllByFoldersId(folderId);
     }
+
+    public void findProgramsByIdInBacth(List<UUID> programs) {
+
+    }
 }
