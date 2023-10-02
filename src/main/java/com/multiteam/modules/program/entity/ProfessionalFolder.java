@@ -1,5 +1,6 @@
 package com.multiteam.modules.program.entity;
 
+import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.professional.Professional;
 import lombok.Getter;
@@ -26,4 +27,8 @@ public class ProfessionalFolder {
     @ManyToOne
     @JoinColumn(name = "professional_id", referencedColumnName = "professional_id", nullable = false)
     private Professional professional;
+
+    @Column(name = "situation")
+    @Enumerated(EnumType.STRING)
+    private SituationEnum situation;
 }

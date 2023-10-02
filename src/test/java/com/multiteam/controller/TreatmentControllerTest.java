@@ -1,20 +1,6 @@
 package com.multiteam.controller;
 
-import com.multiteam.core.enums.RoleEnum;
-import com.multiteam.core.enums.SituationEnum;
-import com.multiteam.modules.treatment.dto.TreatmentRequest;
-import com.multiteam.modules.treatment.dto.TreatmentResponse;
-import com.multiteam.util.ConstantsTest;
 import com.multiteam.util.RestTemplateBase;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.net.URI;
-import java.time.LocalDate;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

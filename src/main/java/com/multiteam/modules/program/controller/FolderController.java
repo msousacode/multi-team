@@ -1,5 +1,6 @@
 package com.multiteam.modules.program.controller;
 
+import com.multiteam.core.utils.Select;
 import com.multiteam.modules.program.dto.FolderDTO;
 import com.multiteam.modules.program.dto.FolderListDTO;
 import com.multiteam.modules.program.dto.ProgramDTO;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -39,9 +41,16 @@ public class FolderController {
 
 
     @GetMapping("/{folderId}")
-    public ResponseEntity<FolderDTO> getFolderById(@PathVariable("folderId") UUID folderId) {
+    public ResponseEntity<FolderDTO> getFolderById(@PathVariable("folderId") final UUID folderId) {
         return folderService.getFolderById(folderId)
                 .map(folderDTO -> ResponseEntity.ok(folderDTO)).orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<List<Select>> getFolderByPatientId(@PathVariable("patientId") final UUID patientId) {
+        var folders = folderService.getFolderByPatientId(patientId).stream()
+                .map(folder -> Select.toSelect(folder.getFolderName(), folder.getId().toString())).toList();
+        return ResponseEntity.ok(folders);
     }
 
     @GetMapping

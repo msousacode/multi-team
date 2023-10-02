@@ -1,5 +1,6 @@
 package com.multiteam.modules.program.service;
 
+import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.exception.ResourceNotFoundException;
 import com.multiteam.core.utils.Select;
 import com.multiteam.modules.patient.PatientService;
@@ -12,9 +13,7 @@ import com.multiteam.modules.program.entity.ProfessionalFolder;
 import com.multiteam.modules.program.repository.FolderProgramRepository;
 import com.multiteam.modules.program.repository.FolderRepository;
 import com.multiteam.modules.program.repository.ProfessionalFolderRepository;
-import com.multiteam.modules.program.repository.ProgramRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +21,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 public class FolderService {
@@ -69,6 +69,7 @@ public class FolderService {
             ProfessionalFolder professionalFolder = new ProfessionalFolder();
             professionalFolder.setFolder(folderSaved);
             professionalFolder.setProfessional(professional);
+            professionalFolder.setSituation(SituationEnum.NAO_ALOCADA);
 
             professionalFolderRepository.save(professionalFolder);
         });
@@ -108,5 +109,14 @@ public class FolderService {
         folderProgramRepository.saveAll(foldersPrograms);
 
         return true;
+    }
+
+    public List<Folder> getFolderByPatientId(UUID patientId) {
+        return folderRepository.findByPatient_Id(patientId);
+    }
+
+    @Transactional
+    public void updateSituationFolder(List<UUID> folderIds, SituationEnum situation) {
+        professionalFolderRepository.updateSituationFolder(folderIds, situation);
     }
 }

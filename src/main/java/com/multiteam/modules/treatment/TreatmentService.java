@@ -2,6 +2,7 @@ package com.multiteam.modules.treatment;
 
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.exception.BadRequestException;
+import com.multiteam.core.utils.Select;
 import com.multiteam.modules.annotation.AnnotationService;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.guest.Guest;
@@ -9,9 +10,11 @@ import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
+import com.multiteam.modules.program.entity.Folder;
+import com.multiteam.modules.program.service.FolderService;
 import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
 import com.multiteam.modules.treatment.dto.TreatmentSearch;
-import com.multiteam.modules.treatment.dto.TreatmentRequest;
+import com.multiteam.modules.treatment.dto.TreatmentPostDTO;
 import com.multiteam.modules.treatment.dto.TreatmentResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,11 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class TreatmentService {
@@ -37,34 +36,36 @@ public class TreatmentService {
     private final PatientService patientService;
     private final ProfessionalService professionalService;
     private final AnnotationService annotationService;
+    private final FolderService folderService;
 
     public TreatmentService(
             TreatmentRepository treatmentRepository,
             TreatementProfessionalRepository treatementProfessionalRepository,
             @Lazy PatientService patientService,
             @Lazy ProfessionalService professionalService,
-            @Lazy AnnotationService annotationService) {
+            @Lazy AnnotationService annotationService,
+            @Lazy FolderService folderService) {
         this.treatmentRepository = treatmentRepository;
         this.treatmentProfessionalRepository = treatementProfessionalRepository;
         this.patientService = patientService;
         this.professionalService = professionalService;
         this.annotationService = annotationService;
+        this.folderService = folderService;
     }
 
     @Transactional
-    public Boolean createTreatment(final TreatmentRequest treatmentDTO) {
-        logger.info("include treatment to patient id {}", treatmentDTO.patientId());
-        var patient = getPatient(treatmentDTO);
-        var professionals = getProfessional(treatmentDTO);//TODO Buscar profissionais
+    public Boolean createTreatment(UUID patientId, final TreatmentPostDTO treatmentDTO) {
 
-        if (patient.isEmpty() || professionals.isEmpty()) {
-            logger.error("patient or professional cannot be empty");
-            throw new BadRequestException("patient or professional cannot be empty");
-        }
+        var patient = patientService.getPatientById(patientId);
+
+        List<UUID> folderIds = new ArrayList<>();
+        treatmentDTO.folders().forEach(i -> folderIds.add(UUID.fromString(i.getCode())));
+
+        folderService.updateSituationFolder(folderIds, SituationEnum.EM_COLETA);
 
         var builder = new Treatment.Builder(
                 null,
-                SituationEnum.get(treatmentDTO.situation()),//TODO Ajustar para conveter a partir do DTO
+                SituationEnum.ANDAMENTO,
                 treatmentDTO.initialDate(),
                 patient.get())
                 .finalDate(treatmentDTO.finalDate())
@@ -75,7 +76,7 @@ public class TreatmentService {
         var treatment = treatmentRepository.save(builder);
 
         //Salva o vínculo entre Tratamento, Profissional e Clínica
-        saveRelationshipTreatmentProfessional(professionals, treatment);
+        //saveRelationshipTreatmentProfessional(professionals, treatment);
 
         logger.info("successfully included treatment id: {}", treatment.getId());
 
@@ -83,7 +84,7 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean updateTreatment(final TreatmentRequest treatmentRequest) {
+    public Boolean updateTreatment(final TreatmentPostDTO treatmentRequest) {
 
         var treatment = treatmentRepository.findById(treatmentRequest.id());
 
@@ -92,13 +93,12 @@ public class TreatmentService {
             return Boolean.FALSE;
         }
 
-        var patient = getPatient(treatmentRequest);
-        var professionals = getProfessional(treatmentRequest);
-
-        if (patient.isEmpty() || professionals.isEmpty()) {
-            logger.error("patient or professional cannot be empty");
-            throw new BadRequestException("patient or professional cannot be empty or null");
-        }
+        //var patient = getPatient(treatmentRequest);
+//
+        //if (patient.isEmpty() || professionals.isEmpty()) {
+        //    logger.error("patient or professional cannot be empty");
+        //    throw new BadRequestException("patient or professional cannot be empty or null");
+        //}
 
         var builder = new Treatment.Builder(
                 treatment.get().getId(),
@@ -115,7 +115,7 @@ public class TreatmentService {
 
         var treatmentSaved = treatmentRepository.save(builder);
 
-        saveRelationshipTreatmentProfessional(professionals, treatmentSaved);
+        //saveRelationshipTreatmentProfessional(professionals, treatmentSaved);
 
         logger.info("successfully updated treatment");
 
@@ -196,23 +196,10 @@ public class TreatmentService {
         return Optional.of(TreatmentEditResponse.fromTreatmentEditResponse(treatment.get(), clinics, professionals));
     }
 
-    private Optional<Patient> getPatient(final TreatmentRequest treatmentDTO) {
-        var patient = patientService.getPatientById(treatmentDTO.patientId());
-        if (patient.isEmpty()) {
-            logger.error("patient not found. It is necessary to have a patient to include the treatment");
-            return Optional.empty();
-        }
-        return patient;
-    }
-
-    private List<Professional> getProfessional(final TreatmentRequest treatmentDTO) {
-        return professionalService.getAllProfessionalsByClinics(treatmentDTO.professionals());
-    }
-
     private void saveRelationshipTreatmentProfessional(List<Professional> professionals, Treatment treatment) {
         professionals.forEach(professional -> {
             professional.getClinics().forEach(clinic -> {
-                var treatmentProfessional = new TreatmentProfessional(null, treatment, professional, clinic, SituationEnum.ANDAMENTO);
+                var treatmentProfessional = new TreatmentProfessional(null, treatment, professional, clinic, SituationEnum.NAO_ALOCADA);
                 treatmentProfessionalRepository.save(treatmentProfessional);
             });
         });

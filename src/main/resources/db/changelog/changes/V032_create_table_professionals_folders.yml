@@ -23,6 +23,11 @@ databaseChangeLog:
                   type: uuid
                   constraints:
                     nullable: false
+              - column:
+                  name: situation
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
         - addForeignKeyConstraint:
             baseColumnNames: folder_id
             baseTableName: professionals_folders

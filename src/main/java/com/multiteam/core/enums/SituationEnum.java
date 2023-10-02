@@ -7,10 +7,12 @@ import java.util.Map;
 
 public enum SituationEnum {
     ANDAMENTO("ANDAMENTO"),
-    CANCELADO("CANCELADO"),
-    PAUSADO("PAUSADO"),
+    NAO_ALOCADA("NÃO ALOCADA"),
+    EM_COLETA("EM COLETA"),
+    CANCELADO("CANCELADA"),
+    PAUSADO("PAUSADA"),
     CONCLUIDO("CONCLUÍDO"),
-    INATIVO("INATIVO");
+    INATIVO("INATIVA");
 
 
     private final String description;
