@@ -16,8 +16,10 @@ public record TreatmentAnnotationDTO(
     public TreatmentAnnotationDTO(Annotation annotation) {
         this(
                 annotation.getId(),
-                annotation.getTreatmentProfessional().getProfessional().getName(),
-                annotation.getTreatmentProfessional().getProfessional().getSpecialty().getName(),
+                null,
+                null,
+                //annotation.getTreatmentProfessional().getProfessional().getName(),
+                //annotation.getTreatmentProfessional().getProfessional().getSpecialty().getName(),
                 annotation.getCreatedDate()
         );
     }

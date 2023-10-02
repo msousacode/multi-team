@@ -20,11 +20,4 @@ public interface PatientRepository extends TenantableRepository<Patient> {
 
   Page<Patient> findAllByNameContainingIgnoreCaseAndActiveIsTrue(String patientName, Pageable pageable);
 
-  @Query("""
-      SELECT DISTINCT p FROM Patient p
-      JOIN p.treatments t
-      JOIN t.treatmentProfessionals tps
-      WHERE tps.professional.id = :professionalId
-      """)
-  List<Patient> findAllTreatmentAndSituationProgressByProfessionalId(UUID professionalId);
 }

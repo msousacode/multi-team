@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: V034
+      author: michael
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            tableName: treatments_professionals

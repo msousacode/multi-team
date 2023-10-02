@@ -125,7 +125,7 @@ public class ProfessionalService {
             return Boolean.FALSE;
         }
 
-        professional.get().getProfessionals().forEach(t -> treatmentService.inactiveTreatment(t.getTreatment().getId()));
+        //professional.get().getProfessionals().forEach(t -> treatmentService.inactiveTreatment(t.getTreatment().getId()));
         logger.info("treatments associated with professional {} has been inactivated", professionalId);
 
         professionalRepository.professionalInactive(professional.get().getId(), tenantContext.getTenantId());

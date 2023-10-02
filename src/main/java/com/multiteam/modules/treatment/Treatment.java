@@ -57,9 +57,6 @@ public class Treatment extends Tenantable {
       inverseJoinColumns = @JoinColumn(name = "guest_id"))
   private Set<Guest> guests;
 
-  @OneToMany(mappedBy = "treatment")
-  private Set<TreatmentProfessional> treatmentProfessionals;
-
   public UUID getId() {
     return id;
   }
@@ -90,10 +87,6 @@ public class Treatment extends Tenantable {
 
   public Set<Guest> getGuests() {
     return guests;
-  }
-
-  public Set<TreatmentProfessional> getTreatmentProfessionals() {
-    return treatmentProfessionals;
   }
 
   public void addGuestsInTreatment(Guest guest) {

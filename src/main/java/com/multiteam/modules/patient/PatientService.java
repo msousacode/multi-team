@@ -1,7 +1,5 @@
 package com.multiteam.modules.patient;
 
-import static com.multiteam.core.enums.AuthProviderEnum.local;
-
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.ApplicationError;
 import com.multiteam.core.enums.SexEnum;
@@ -14,15 +12,17 @@ import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.patient.repository.PatientRepository;
 import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.user.UserService;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.Optional;
+import java.util.UUID;
+
+import static com.multiteam.core.enums.AuthProviderEnum.local;
 
 @Service
 public class PatientService {
@@ -134,9 +134,5 @@ public class PatientService {
       logger.error("error occurred while updating the patient: {}", patientDTO.id());
       return Boolean.FALSE;
     }
-  }
-
-  public List<Patient> findAllTreatmentAndSituationProgressByProfessionalId(UUID professionalId) {
-    return patientRepository.findAllTreatmentAndSituationProgressByProfessionalId(professionalId);
   }
 }

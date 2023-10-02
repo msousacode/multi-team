@@ -37,15 +37,6 @@ public record TreatmentResponse(
         );
     }
 
-    public static TreatmentResponse fromTreatmentResponse(Treatment treatment) {
-        List<ProfessionalInTreatment> list = new ArrayList<>();
-        treatment.getTreatmentProfessionals().forEach(i -> list.add(
-                new ProfessionalInTreatment(i.getTreatment().getId(), i.getId(),
-                        i.getProfessional().getName(), i.getProfessional().getSpecialty().getName(),
-                        i.getTreatment().getSituation())));
-        return new TreatmentResponse(treatment, list);
-    }
-
     public record ProfessionalInTreatment(
             UUID treatmentId,
             UUID professionalId,
