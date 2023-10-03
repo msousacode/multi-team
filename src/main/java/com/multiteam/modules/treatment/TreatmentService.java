@@ -98,11 +98,9 @@ public class TreatmentService {
 
         //Buscar Tratatamentos vinculados aos programas.
 
-
-
-
         if (filter.patientId() != null) {
-            //return treatmentRepository.findAllByPatient_IdAndActiveIsTrue(filter.patientId(), pageable).map(TreatmentResponse::fromTreatmentResponse);
+            return treatmentRepository.findAllByPatient_IdAndActiveIsTrue(filter.patientId(), pageable).map(TreatmentListDTO::new);
+
         }
         //return treatmentRepository.findAllByPatient_NameContainingIgnoreCaseAndActiveIsTrue(filter.patientName(), pageable).map(TreatmentResponse::fromTreatmentResponse);
         return Page.empty();

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum TreatmentEnum {
-    INICIADA("INICIADA"),
+    ANDAMENTO("ANDAMENTO"),
     CANCELADA("CANCELADA"),
     PAUSADA("PAUSADA"),
     CONCLUIDA("CONCLUÍDA"),

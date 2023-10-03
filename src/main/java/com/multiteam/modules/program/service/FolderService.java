@@ -9,10 +9,10 @@ import com.multiteam.modules.professional.ProfessionalService;
 import com.multiteam.modules.program.dto.FolderDTO;
 import com.multiteam.modules.program.entity.Folder;
 import com.multiteam.modules.program.entity.FolderProgram;
-import com.multiteam.modules.program.entity.ProfessionalFolder;
+import com.multiteam.modules.program.entity.FolderProfessional;
 import com.multiteam.modules.program.repository.FolderProgramRepository;
 import com.multiteam.modules.program.repository.FolderRepository;
-import com.multiteam.modules.program.repository.ProfessionalFolderRepository;
+import com.multiteam.modules.program.repository.FolderProfessionalRepository;
 import com.multiteam.modules.treatment.Treatment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +22,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Service
 public class FolderService {
@@ -31,7 +30,7 @@ public class FolderService {
     private final ProgramService programService;
     private final ProfessionalService professionalService;
     private final FolderRepository folderRepository;
-    private final ProfessionalFolderRepository professionalFolderRepository;
+    private final FolderProfessionalRepository professionalFolderRepository;
     private final FolderProgramRepository folderProgramRepository;
 
     public FolderService(
@@ -39,7 +38,7 @@ public class FolderService {
             ProfessionalService professionalService,
             ProgramService programService,
             FolderRepository folderRepository,
-            ProfessionalFolderRepository professionalFolderRepository,
+            FolderProfessionalRepository professionalFolderRepository,
             FolderProgramRepository folderProgramRepository) {
         this.patientService = patientService;
         this.programService = programService;
@@ -67,7 +66,7 @@ public class FolderService {
 
         professionals.forEach(professional -> {
 
-            ProfessionalFolder professionalFolder = new ProfessionalFolder();
+            FolderProfessional professionalFolder = new FolderProfessional();
             professionalFolder.setFolder(folderSaved);
             professionalFolder.setProfessional(professional);
             professionalFolder.setSituation(SituationEnum.NAO_ALOCADA);

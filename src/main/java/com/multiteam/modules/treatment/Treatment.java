@@ -4,13 +4,18 @@ import com.multiteam.core.enums.TreatmentEnum;
 import com.multiteam.core.models.Tenantable;
 import com.multiteam.modules.guest.Guest;
 import com.multiteam.modules.patient.model.Patient;
+import com.multiteam.modules.program.entity.Folder;
+import lombok.Getter;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+@Getter
 @Entity
 @Table(name = "treatments")
 public class Treatment extends Tenantable {
@@ -46,37 +51,8 @@ public class Treatment extends Tenantable {
       inverseJoinColumns = @JoinColumn(name = "guest_id"))
   private Set<Guest> guests;
 
-  public UUID getId() {
-    return id;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public TreatmentEnum getSituation() {
-    return situation;
-  }
-
-  public LocalDate getInitialDate() {
-    return initialDate;
-  }
-
-  public LocalDate getFinalDate() {
-    return finalDate;
-  }
-
-  public boolean isActive() {
-    return active;
-  }
-
-  public Patient getPatient() {
-    return patient;
-  }
-
-  public Set<Guest> getGuests() {
-    return guests;
-  }
+  @OneToMany(mappedBy = "treatment")
+  private List<Folder> folders = new ArrayList<>();
 
   public void addGuestsInTreatment(Guest guest) {
     this.guests.add(guest);
