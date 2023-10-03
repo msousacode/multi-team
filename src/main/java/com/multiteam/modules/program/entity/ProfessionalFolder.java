@@ -12,12 +12,12 @@ import java.util.UUID;
 @Setter
 @Getter
 @Entity
-@Table(name = "professionals_folders")
+@Table(name = "folders_professionals")
 public class ProfessionalFolder {
 
     @Id
     @GeneratedValue
-    @Column(name = "professionals_folders_id")
+    @Column(name = "folders_professionals_id")
     private UUID id;
 
     @ManyToOne

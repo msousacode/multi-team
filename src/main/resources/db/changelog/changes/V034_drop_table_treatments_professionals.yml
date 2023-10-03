@@ -2,6 +2,9 @@ databaseChangeLog:
   - changeSet:
       id: V034
       author: michael
+      preConditions:
+        - tableExists:
+            tableName: treatments_professionals
       changes:
         - dropTable:
             cascadeConstraints: true

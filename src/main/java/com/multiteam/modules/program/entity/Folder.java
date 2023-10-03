@@ -3,6 +3,7 @@ package com.multiteam.modules.program.entity;
 import com.multiteam.core.models.Auditable;
 import com.multiteam.core.models.Tenantable;
 import com.multiteam.modules.patient.model.Patient;
+import com.multiteam.modules.treatment.Treatment;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,4 +30,8 @@ public class Folder extends Auditable {
     @ManyToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", nullable = false)
     private Patient patient;
+
+    @ManyToOne
+    @JoinColumn(name = "treatment_id", referencedColumnName = "treatment_id")
+    private Treatment treatment;
 }

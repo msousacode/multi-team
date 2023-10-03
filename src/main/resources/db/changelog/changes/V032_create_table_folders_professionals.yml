@@ -4,10 +4,10 @@ databaseChangeLog:
       author: michael
       changes:
         - createTable:
-            tableName: professionals_folders
+            tableName: folders_professionals
             columns:
               - column:
-                  name: professionals_folders_id
+                  name: folders_professionals_id
                   type: uuid
                   defaultValue: uuid_generate_v4()
                   constraints:
@@ -30,13 +30,13 @@ databaseChangeLog:
                     nullable: false
         - addForeignKeyConstraint:
             baseColumnNames: folder_id
-            baseTableName: professionals_folders
-            constraintName: fk_professionals_folders_folders
+            baseTableName: folders_professionals
+            constraintName: fk_folders_professionals_folders
             referencedColumnNames: folder_id
             referencedTableName: folders
         - addForeignKeyConstraint:
             baseColumnNames: professional_id
-            baseTableName: professionals_folders
-            constraintName: fk_professionals_folders_professionals
+            baseTableName: folders_professionals
+            constraintName: fk_folders_professionals_professionals
             referencedColumnNames: professional_id
             referencedTableName: professionals

@@ -13,6 +13,7 @@ import com.multiteam.modules.program.entity.ProfessionalFolder;
 import com.multiteam.modules.program.repository.FolderProgramRepository;
 import com.multiteam.modules.program.repository.FolderRepository;
 import com.multiteam.modules.program.repository.ProfessionalFolderRepository;
+import com.multiteam.modules.treatment.Treatment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -118,5 +119,12 @@ public class FolderService {
     @Transactional
     public void updateSituationFolder(List<UUID> folderIds, SituationEnum situation) {
         professionalFolderRepository.updateSituationFolder(folderIds, situation);
+    }
+
+    @Transactional
+    public void updateRelationshipFolderProfessional(List<UUID> folderIds, Treatment treatment) {
+        var folders = folderRepository.findAllById(folderIds);
+        folders.forEach(folder -> folder.setTreatment(treatment));
+        folderRepository.saveAll(folders);
     }
 }

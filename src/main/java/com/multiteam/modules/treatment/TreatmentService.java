@@ -1,21 +1,17 @@
 package com.multiteam.modules.treatment;
 
 import com.multiteam.core.enums.SituationEnum;
-import com.multiteam.core.exception.BadRequestException;
-import com.multiteam.core.utils.Select;
+import com.multiteam.core.enums.TreatmentEnum;
 import com.multiteam.modules.annotation.AnnotationService;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.guest.Guest;
-import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.patient.PatientService;
-import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
-import com.multiteam.modules.program.entity.Folder;
 import com.multiteam.modules.program.service.FolderService;
 import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
-import com.multiteam.modules.treatment.dto.TreatmentSearch;
+import com.multiteam.modules.treatment.dto.TreatmentSearchDTO;
 import com.multiteam.modules.treatment.dto.TreatmentPostDTO;
-import com.multiteam.modules.treatment.dto.TreatmentResponse;
+import com.multiteam.modules.treatment.dto.TreatmentListDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Lazy;
@@ -33,20 +29,14 @@ public class TreatmentService {
 
     private final TreatmentRepository treatmentRepository;
     private final PatientService patientService;
-    private final ProfessionalService professionalService;
-    private final AnnotationService annotationService;
     private final FolderService folderService;
 
     public TreatmentService(
             TreatmentRepository treatmentRepository,
             @Lazy PatientService patientService,
-            @Lazy ProfessionalService professionalService,
-            @Lazy AnnotationService annotationService,
             @Lazy FolderService folderService) {
         this.treatmentRepository = treatmentRepository;
         this.patientService = patientService;
-        this.professionalService = professionalService;
-        this.annotationService = annotationService;
         this.folderService = folderService;
     }
 
@@ -55,14 +45,9 @@ public class TreatmentService {
 
         var patient = patientService.getPatientById(patientId);
 
-        List<UUID> folderIds = new ArrayList<>();
-        treatmentDTO.folders().forEach(i -> folderIds.add(UUID.fromString(i.getCode())));
-
-        folderService.updateSituationFolder(folderIds, SituationEnum.EM_COLETA);
-
         var builder = new Treatment.Builder(
                 null,
-                SituationEnum.ANDAMENTO,
+                TreatmentEnum.get(treatmentDTO.situation()),
                 treatmentDTO.initialDate(),
                 patient.get())
                 .finalDate(treatmentDTO.finalDate())
@@ -71,6 +56,13 @@ public class TreatmentService {
                 .build();
 
         var treatment = treatmentRepository.save(builder);
+
+        List<UUID> folderIds = new ArrayList<>();
+        treatmentDTO.folders().forEach(i -> folderIds.add(UUID.fromString(i.getCode())));
+
+        folderService.updateSituationFolder(folderIds, SituationEnum.EM_COLETA);
+
+        folderService.updateRelationshipFolderProfessional(folderIds, treatment);
 
         logger.info("successfully included treatment id: {}", treatment.getId());
 
@@ -89,7 +81,7 @@ public class TreatmentService {
 
         var builder = new Treatment.Builder(
                 treatment.get().getId(),
-                SituationEnum.get(treatmentRequest.situation()),
+                TreatmentEnum.get(treatmentRequest.situation()),
                 treatmentRequest.initialDate(),
                 treatment.get().getPatient())
                 .description(treatmentRequest.observation())
@@ -102,7 +94,13 @@ public class TreatmentService {
         return Boolean.TRUE;
     }
 
-    public Page<TreatmentResponse> getAllTreatments(final TreatmentSearch filter, Pageable pageable) {
+    public Page<TreatmentListDTO> getAllTreatments(final TreatmentSearchDTO filter, Pageable pageable) {
+
+        //Buscar Tratatamentos vinculados aos programas.
+
+
+
+
         if (filter.patientId() != null) {
             //return treatmentRepository.findAllByPatient_IdAndActiveIsTrue(filter.patientId(), pageable).map(TreatmentResponse::fromTreatmentResponse);
         }

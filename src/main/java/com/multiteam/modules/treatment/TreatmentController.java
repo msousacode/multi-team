@@ -1,9 +1,9 @@
 package com.multiteam.modules.treatment;
 
 import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
-import com.multiteam.modules.treatment.dto.TreatmentSearch;
+import com.multiteam.modules.treatment.dto.TreatmentSearchDTO;
 import com.multiteam.modules.treatment.dto.TreatmentPostDTO;
-import com.multiteam.modules.treatment.dto.TreatmentResponse;
+import com.multiteam.modules.treatment.dto.TreatmentListDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -48,8 +48,8 @@ public class TreatmentController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<Page<TreatmentResponse>> getAllTreatments(
-            @RequestBody TreatmentSearch search,
+    public ResponseEntity<Page<TreatmentListDTO>> getAllTreatments(
+            @RequestBody TreatmentSearchDTO search,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "100") int size,
             @RequestParam(value = "sort", defaultValue = "createdDate") String sort,

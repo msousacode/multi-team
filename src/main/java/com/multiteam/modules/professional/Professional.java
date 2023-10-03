@@ -62,7 +62,7 @@ public class Professional extends Tenantable {
 
     @ManyToMany
     @JoinTable(
-            name = "professionals_folders",
+            name = "folders_professionals",
             joinColumns = @JoinColumn(name = "professional_id"),
             inverseJoinColumns = @JoinColumn(name = "folder_id"))
     private List<Folder> folders;

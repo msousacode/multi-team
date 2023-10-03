@@ -1,26 +1,15 @@
 package com.multiteam.modules.treatment;
 
-import com.multiteam.core.enums.SituationEnum;
+import com.multiteam.core.enums.TreatmentEnum;
 import com.multiteam.core.models.Tenantable;
 import com.multiteam.modules.guest.Guest;
 import com.multiteam.modules.patient.model.Patient;
+import org.springframework.util.Assert;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import org.springframework.util.Assert;
 
 @Entity
 @Table(name = "treatments")
@@ -36,7 +25,7 @@ public class Treatment extends Tenantable {
 
   @Column(name = "situation")
   @Enumerated(EnumType.STRING)
-  private SituationEnum situation;
+  private TreatmentEnum situation;
 
   @Column(name = "initial_date")
   private LocalDate initialDate;
@@ -65,7 +54,7 @@ public class Treatment extends Tenantable {
     return description;
   }
 
-  public SituationEnum getSituation() {
+  public TreatmentEnum getSituation() {
     return situation;
   }
 
@@ -96,7 +85,7 @@ public class Treatment extends Tenantable {
   public Treatment() {
   }
 
-  public Treatment(UUID id, SituationEnum situation, Patient patient) {
+  public Treatment(UUID id, TreatmentEnum situation, Patient patient) {
     this.id = id;
     this.situation = situation;
     this.patient = patient;
@@ -117,7 +106,7 @@ public class Treatment extends Tenantable {
 
     //mandatory
     private UUID id;
-    private final SituationEnum situation;
+    private final TreatmentEnum situation;
     private final LocalDate initialDate;
     private final Patient patient;
 
@@ -129,7 +118,7 @@ public class Treatment extends Tenantable {
 
     public Builder(
         UUID id,
-        final SituationEnum situation,
+        final TreatmentEnum situation,
         final LocalDate initialDate,
         final Patient patient) {
 
