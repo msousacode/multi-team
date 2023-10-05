@@ -45,11 +45,9 @@ public class UserService {
         var password = UUID.randomUUID().toString().substring(0, 10);
 
         var role1 = roleRepository.findByRole(RoleEnum.ROLE_GUEST);
-        var role2 = roleRepository.findByRole(RoleEnum.PERM_TREATMENT_READ);
-        var role3 = roleRepository.findByRole(RoleEnum.PERM_SCHEDULE_READ);
 
         var user = new User.Builder(null, tenantContext.getTenantId(), name, email, true)
-                .roles(List.of(role1, role2, role3))
+                .roles(List.of(role1))
                 .provider(providerEnum)
                 .password(new BCryptPasswordEncoder().encode(password))
                 .userType(userEnum)

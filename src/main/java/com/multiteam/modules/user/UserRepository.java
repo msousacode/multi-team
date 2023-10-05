@@ -21,10 +21,6 @@ public interface UserRepository extends TenantableRepository<User> {
     @DisableTenantFilter
     Optional<User> findByEmail(String email);
 
-    @Modifying
-    @Query("UPDATE User u SET u.tenantId = :tenantId WHERE u.id = :userId")
-    void updateTenantIdMyUser(@Param("tenantId") UUID tenantId, @Param("userId") UUID userId);
-
     Page<User> findAllByTenantIdAndActiveIsTrue(UUID tenantId, Pageable pageable);
 
     Optional<User> findByTenantIdAndId(UUID tenantId, UUID userId);
