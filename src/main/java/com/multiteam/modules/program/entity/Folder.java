@@ -23,6 +23,9 @@ public class Folder extends Auditable {
     @Column(name = "folder_id")
     private UUID id;
 
+    @Column(name = "code")
+    private Integer code;
+
     @Column(name = "folder_name")
     private String folderName;
 

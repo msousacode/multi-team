@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: V035
+      author: michael
+      changes:
+        - addColumn:
+              tableName: programs
+              columns:
+                - column:
+                    name: code
+                    type: int
+        - addAutoIncrement:
+            columnName: code
+            incrementBy: 1
+            startWith: 100
+            tableName: programs
+        - addColumn:
+            tableName: treatments
+            columns:
+              - column:
+                  name: code
+                  type: int
+        - addColumn:
+            tableName: folders
+            columns:
+              - column:
+                  name: code
+                  type: int
+        - addAutoIncrement:
+            columnName: code
+            incrementBy: 1
+            startWith: 100
+            tableName: folders
+

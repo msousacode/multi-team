@@ -10,12 +10,22 @@ import java.util.stream.Collectors;
 
 public record FolderListDTO(
         UUID folderId,
+        Integer code,
         String folderName,
+        String patientName,
+        Boolean active,
         SituationEnum situation,
         String professionals
 ) {
     public FolderListDTO(Folder folder) {
-        this(folder.getId(), folder.getFolderName(), folder.getFolderProfessional().get(0).getSituation(), toConcat(folder.getFolderProfessional()));
+        this(
+            folder.getId(),
+            folder.getCode(),
+            folder.getFolderName(),
+            folder.getPatient().getName(),
+            folder.getActive(),
+            folder.getFolderProfessional().get(0).getSituation(),
+            toConcat(folder.getFolderProfessional()));
     }
 
     private static String toConcat(List<FolderProfessional> folderProfessional) {
