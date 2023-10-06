@@ -34,6 +34,7 @@ public class UserController {
     this.userService = userService;
   }
 
+
   @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @PutMapping
   public ResponseEntity<?> updateUser(@RequestBody final UserDTO userDTO) {
@@ -45,6 +46,16 @@ public class UserController {
   }
 
   @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+  @PutMapping
+  public ResponseEntity<?> createUser(@RequestBody final UserDTO userDTO) {
+    if (userService.updateUser(userDTO)) {
+      return ResponseEntity.status(HttpStatus.OK).build();
+    } else {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+  }
+
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL', 'SUPERVISOR')")
   @GetMapping
   public ResponseEntity<Page<UserDTO>> getAllUsers(
       @RequestParam(defaultValue = "0") int page,
@@ -56,7 +67,7 @@ public class UserController {
             PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(direction), sort))));
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'SUPERVISOR')")
   @GetMapping("/{userId}")
   public ResponseEntity<UserDTO> getUser(@PathVariable("userId") final UUID userId) {
     return userService.getUser(userId)
