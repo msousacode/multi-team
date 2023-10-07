@@ -44,10 +44,10 @@ public class UserService {
 
         var password = UUID.randomUUID().toString().substring(0, 10);
 
-        var role1 = roleRepository.findByRole(RoleEnum.ROLE_GUEST);
+        var defaultRole = roleRepository.findByRole(RoleEnum.ROLE_SCHEDULE);
 
         var user = new User.Builder(null, tenantContext.getTenantId(), name, email, true)
-                .roles(List.of(role1))
+                .roles(List.of(defaultRole))
                 .provider(providerEnum)
                 .password(new BCryptPasswordEncoder().encode(password))
                 .userType(userEnum)

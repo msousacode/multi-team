@@ -53,7 +53,7 @@ public class PatientService {
   public Boolean createPatient(final PatientDTO patientDTO) {
 
     var user = userService.createUser(patientDTO.name(), patientDTO.email(), local,
-        UserEnum.PACIENTE);
+        UserEnum.USER);
 
     if (user == null) {
       logger.error("An error occurred while creating the user, email: {}", patientDTO.email());
