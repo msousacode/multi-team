@@ -3,7 +3,6 @@ package com.multiteam.modules.treatment.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.multiteam.core.enums.TreatmentEnum;
 import com.multiteam.modules.program.dto.FolderListDTO;
-import com.multiteam.modules.program.dto.ProgramListDTO;
 import com.multiteam.modules.treatment.Treatment;
 
 import java.time.LocalDate;

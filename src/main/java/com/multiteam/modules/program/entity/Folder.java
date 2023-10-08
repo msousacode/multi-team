@@ -1,8 +1,6 @@
 package com.multiteam.modules.program.entity;
 
 import com.multiteam.core.models.Auditable;
-import com.multiteam.core.models.Tenantable;
-import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.treatment.Treatment;
 import lombok.Getter;
@@ -23,7 +21,7 @@ public class Folder extends Auditable {
     @Column(name = "folder_id")
     private UUID id;
 
-    @Column(name = "code")
+    @Column(name = "code", insertable = false, updatable = false)
     private Integer code;
 
     @Column(name = "folder_name")

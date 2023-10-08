@@ -1,13 +1,9 @@
 package com.multiteam.modules.program.controller;
 
 import com.multiteam.core.utils.Select;
-import com.multiteam.modules.program.dto.FolderDTO;
 import com.multiteam.modules.program.dto.FolderListDTO;
-import com.multiteam.modules.program.dto.ProgramDTO;
-import com.multiteam.modules.program.dto.ProgramListDTO;
-import com.multiteam.modules.program.entity.Folder;
-import com.multiteam.modules.program.mapper.ProgramMapper;
-import com.multiteam.modules.program.repository.FolderRepository;
+import com.multiteam.modules.program.dto.FolderPostDTO;
+import com.multiteam.modules.program.dto.FolderPutDTO;
 import com.multiteam.modules.program.service.FolderService;
 import com.multiteam.modules.program.service.ProgramService;
 import org.springframework.data.domain.Page;
@@ -41,7 +37,7 @@ public class FolderController {
 
 
     @GetMapping("/{folderId}")
-    public ResponseEntity<FolderDTO> getFolderById(@PathVariable("folderId") final UUID folderId) {
+    public ResponseEntity<FolderListDTO> getFolderById(@PathVariable("folderId") final UUID folderId) {
         return folderService.getFolderById(folderId)
                 .map(folderDTO -> ResponseEntity.ok(folderDTO)).orElse(ResponseEntity.notFound().build());
     }
@@ -65,17 +61,22 @@ public class FolderController {
     }
 
     @PostMapping("/patient/{patientId}")
-    public ResponseEntity<Boolean> createFolder(@PathVariable("patientId") final UUID patientId, @RequestBody FolderDTO folderDTO) {
-        if (folderService.createFolder(patientId, folderDTO)) {
+    public ResponseEntity<Boolean> createFolder(
+            @PathVariable("patientId") final UUID patientId,
+            @RequestBody FolderPostDTO folderPostDTO) {
+        if (folderService.createFolder(patientId, folderPostDTO)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
-    @PutMapping("/{folderId}")
-    public ResponseEntity<Void> updateFolder(@PathVariable("folderId") final UUID folderId, @RequestBody FolderDTO folderDTO) {
-        if (folderService.updateFolder(folderId, folderDTO)) {
+    @PutMapping("/{folderId}/patient/{patientId}")
+    public ResponseEntity<Void> updateFolder(
+            @PathVariable("folderId") final UUID folderId,
+            @PathVariable("patientId") final UUID patientId,
+            @RequestBody FolderPutDTO folderPutDTO) {
+        if (folderService.updateFolder(folderId, patientId, folderPutDTO)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

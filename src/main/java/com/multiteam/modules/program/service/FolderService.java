@@ -6,19 +6,23 @@ import com.multiteam.core.utils.Select;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
-import com.multiteam.modules.program.dto.FolderDTO;
+import com.multiteam.modules.program.dto.FolderListDTO;
+import com.multiteam.modules.program.dto.FolderPostDTO;
+import com.multiteam.modules.program.dto.FolderPutDTO;
+import com.multiteam.modules.program.dto.ProgramDTO;
 import com.multiteam.modules.program.entity.Folder;
-import com.multiteam.modules.program.entity.FolderProgram;
 import com.multiteam.modules.program.entity.FolderProfessional;
+import com.multiteam.modules.program.entity.FolderProgram;
+import com.multiteam.modules.program.repository.FolderProfessionalRepository;
 import com.multiteam.modules.program.repository.FolderProgramRepository;
 import com.multiteam.modules.program.repository.FolderRepository;
-import com.multiteam.modules.program.repository.FolderProfessionalRepository;
 import com.multiteam.modules.treatment.Treatment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -49,30 +53,18 @@ public class FolderService {
     }
 
     @Transactional
-    public Boolean createFolder(UUID patientId, FolderDTO folderDTO) {
+    public Boolean createFolder(UUID patientId, FolderPostDTO folderPostDTO) {
 
         var patient = patientService.getPatientById(patientId);
 
         Folder folder = new Folder();
-        folder.setFolderName(folderDTO.folderName());
+        folder.setFolderName(folderPostDTO.folderName());
         folder.setActive(true);
         folder.setPatient(patient.get());
 
         var folderSaved = folderRepository.save(folder);
 
-        List<UUID> professionalsId = folderDTO.professionals().stream().map(p -> UUID.fromString(p.getCode())).toList();
-
-        List<Professional> professionals = professionalService.getProfessionalsInBatch(professionalsId);
-
-        professionals.forEach(professional -> {
-
-            FolderProfessional professionalFolder = new FolderProfessional();
-            professionalFolder.setFolder(folderSaved);
-            professionalFolder.setProfessional(professional);
-            professionalFolder.setSituation(SituationEnum.NAO_ALOCADA);
-
-            professionalFolderRepository.save(professionalFolder);
-        });
+        salveRelationshipProfessionalFolder(folderSaved, folderPostDTO.professionals());
 
         return Boolean.TRUE;
     }
@@ -81,7 +73,7 @@ public class FolderService {
         return folderRepository.findAll(pageable);
     }
 
-    public Optional<FolderDTO> getFolderById(UUID folderId) {
+    public Optional<FolderListDTO> getFolderById(UUID folderId) {
 
         var professionals = professionalService.getProfessionalsFoldersById(folderId);
 
@@ -89,16 +81,34 @@ public class FolderService {
 
         var folder = folderRepository.findById(folderId);
 
-        return Optional.ofNullable(new FolderDTO(folder.get(), selects));
+        var folderProgram = folderProgramRepository.findAllByFolder_Id(folderId);
+
+        var programs = folderProgram.stream().map(program -> program.getProgram()).toList();
+
+        return Optional.ofNullable(new FolderListDTO(folder.get(), selects, programs));
     }
 
     @Transactional
-    public boolean updateFolder(UUID folderId, FolderDTO folderDTO) {
+    public boolean updateFolder(UUID folderId, UUID patientId, FolderPutDTO folderDTO) {
 
         var folder = folderRepository.findById(folderId).orElseThrow(() -> new ResourceNotFoundException("Folder not found"));
 
-        var programs = programService.findProgramsByIdInBacth(folderDTO.programs());
+        var patient = patientService.getPatientById(patientId);
 
+        folder.setFolderName(folderDTO.folderName());
+        folder.setPatient(patient.get());
+
+        salveRelationshipProfessionalFolder(folder, folderDTO.professionals());
+        saveProgramas(folderDTO, folder);
+
+        return true;
+    }
+
+    private void saveProgramas(FolderPutDTO folderDTO, Folder folder) {
+
+        var uuids = folderDTO.programs();
+
+        var programs = programService.findProgramsByIdInBacth(uuids);
         var foldersPrograms = programs.stream().map(program -> {
             var folderPrograms = new FolderProgram();
             folderPrograms.setFolder(folder);
@@ -106,9 +116,9 @@ public class FolderService {
             return folderPrograms;
         }).toList();
 
-        folderProgramRepository.saveAll(foldersPrograms);
+        folderProgramRepository.deleteByFolder_Id(folder.getId());
 
-        return true;
+        folderProgramRepository.saveAll(foldersPrograms);
     }
 
     public List<Folder> getFolderByPatientId(UUID patientId) {
@@ -125,5 +135,19 @@ public class FolderService {
         var folders = folderRepository.findAllById(folderIds);
         folders.forEach(folder -> folder.setTreatment(treatment));
         folderRepository.saveAll(folders);
+    }
+
+    private void salveRelationshipProfessionalFolder(Folder folder, List<Select> selects) {
+        List<UUID> uuids = selects.stream().map(p -> UUID.fromString(p.getCode())).toList();
+        List<Professional> professionals = professionalService.getProfessionalsInBatch(uuids);
+        professionals.forEach(professional -> {
+            FolderProfessional professionalFolder = new FolderProfessional();
+            professionalFolder.setFolder(folder);
+            professionalFolder.setProfessional(professional);
+            professionalFolder.setSituation(SituationEnum.NAO_ALOCADA);
+
+            professionalFolderRepository.deleteByFolder_Id(folder.getId());
+            professionalFolderRepository.save(professionalFolder);
+        });
     }
 }

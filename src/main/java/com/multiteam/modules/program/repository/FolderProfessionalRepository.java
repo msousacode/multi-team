@@ -16,4 +16,6 @@ public interface FolderProfessionalRepository extends JpaRepository<FolderProfes
     @Modifying
     @Query(value = "update FolderProfessional pf set pf.situation = :situation where pf.folder.id in :folderIds")
     void updateSituationFolder(List<UUID> folderIds, SituationEnum situation);
+
+    void deleteByFolder_Id(UUID id);
 }

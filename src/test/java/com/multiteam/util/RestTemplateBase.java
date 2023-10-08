@@ -88,18 +88,6 @@ public class RestTemplateBase {
         } else if (role.equals(RoleEnum.ROLE_GUEST)) {
             authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_GUEST"));
 
-        } else if (role.equals(RoleEnum.PERM_TREATMENT_WRITE)) {
-            authorities = Arrays.asList(new SimpleGrantedAuthority("PERM_TREATMENT_WRITE"));
-
-        } else if (role.equals(RoleEnum.PERM_TREATMENT_READ)) {
-            authorities = Arrays.asList(new SimpleGrantedAuthority("PERM_TREATMENT_READ"));
-
-        } else if (role.equals(RoleEnum.PERM_PATIENT_WRITE)) {
-            authorities = Arrays.asList(new SimpleGrantedAuthority("PERM_PATIENT_WRITE"));
-
-        } else if (role.equals(RoleEnum.PERM_PATIENT_READ)) {
-            authorities = Arrays.asList(new SimpleGrantedAuthority("PERM_PATIENT_READ"));
-
         } else {
             throw new BadRequestException("role mandatory");
         }
