@@ -21,8 +21,6 @@ databaseChangeLog:
               - column:
                   name: order_execution
                   type: tinyint
-                  constraints:
-                    nullable: false
               - column:
                   name: situation
                   type: tinyint
