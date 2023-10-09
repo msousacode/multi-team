@@ -16,18 +16,6 @@ databaseChangeLog:
         - sql:
             sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'ROLE_SCHEDULE');"
         - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_TREATMENT_READ');"
+            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'ROLE_SUPERVISOR');"
         - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_TREATMENT_WRITE');"
-        - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_PATIENT_READ');"
-        - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_PATIENT_WRITE');"
-        - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_SCHEDULE_READ');"
-        - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_SCHEDULE_WRITE');"
-        - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_ANAMNESE_READ');"
-        - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_ANAMNESE_WRITE');"
+            sql: "INSERT INTO public.users (user_id, name, email, password, image_url, email_verified, provider, active, tenant_id, user_type) VALUES('61a9c194-386d-46e1-ab9d-d26d6d50a1fc'::uuid, 'abateam', 'abateam@abateam.com', '', '', true, 'local', true, '61a9c194-386d-46e1-ab9d-d26d6d50a1fc'::uuid, 'OWNER');"

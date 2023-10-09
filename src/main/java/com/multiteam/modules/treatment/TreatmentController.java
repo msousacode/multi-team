@@ -1,9 +1,9 @@
 package com.multiteam.modules.treatment;
 
 import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
-import com.multiteam.modules.treatment.dto.TreatmentSearch;
-import com.multiteam.modules.treatment.dto.TreatmentRequest;
-import com.multiteam.modules.treatment.dto.TreatmentResponse;
+import com.multiteam.modules.treatment.dto.TreatmentSearchDTO;
+import com.multiteam.modules.treatment.dto.TreatmentPostDTO;
+import com.multiteam.modules.treatment.dto.TreatmentListDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -38,9 +38,9 @@ public class TreatmentController {
         this.treatmentService = treatmentService;
     }
 
-    @PostMapping
-    public ResponseEntity<?> createTreatment(@RequestBody final TreatmentRequest treatmentDTO) {
-        if (treatmentService.createTreatment(treatmentDTO)) {
+    @PostMapping("/patient/{patientId}")
+    public ResponseEntity<?> createTreatment(@PathVariable("patientId") UUID patientId, @RequestBody final TreatmentPostDTO treatmentDTO) {
+        if (treatmentService.createTreatment(patientId, treatmentDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -48,8 +48,8 @@ public class TreatmentController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<Page<TreatmentResponse>> getAllTreatments(
-            @RequestBody TreatmentSearch search,
+    public ResponseEntity<Page<TreatmentListDTO>> getAllTreatments(
+            @RequestBody TreatmentSearchDTO search,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "100") int size,
             @RequestParam(value = "sort", defaultValue = "createdDate") String sort,
@@ -67,7 +67,7 @@ public class TreatmentController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> updateTreatment(@RequestBody final TreatmentRequest treatmentRequest) {
+    public ResponseEntity<Void> updateTreatment(@RequestBody final TreatmentPostDTO treatmentRequest) {
         if (treatmentService.updateTreatment(treatmentRequest)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {

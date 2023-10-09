@@ -1,6 +1,5 @@
 package com.multiteam.modules.program.controller;
 
-import com.multiteam.modules.program.dto.FolderDTO;
 import com.multiteam.modules.program.mapper.ProgramMapper;
 import com.multiteam.modules.program.service.ProgramService;
 import com.multiteam.modules.program.dto.ProgramDTO;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;

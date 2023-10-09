@@ -2,19 +2,12 @@ package com.multiteam.modules.annotation;
 
 import com.multiteam.core.models.Auditable;
 import com.multiteam.modules.annotation.dto.AnnotationDetailDTO;
-import com.multiteam.modules.treatment.TreatmentProfessional;
-import java.time.LocalDateTime;
-import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -33,10 +26,6 @@ public class Annotation extends Auditable {
   @Column(name = "active")
   private Boolean active;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "treatment_professional_id")
-  private TreatmentProfessional treatmentProfessional;
-
   @Column(name = "observation")
   private String observation;
 
@@ -49,18 +38,15 @@ public class Annotation extends Auditable {
   public Annotation() {
   }
 
-  public Annotation(UUID id, String annotation, Boolean active,
-      TreatmentProfessional treatmentProfessional, String observation, LocalDateTime dateInitial,
+  public Annotation(UUID id, String annotation, Boolean active, String observation, LocalDateTime dateInitial,
       LocalDateTime dateEnd) {
     this.id = id;
     this.annotation = annotation;
     this.active = active;
-    this.treatmentProfessional = treatmentProfessional;
   }
 
-  public static Annotation toAnnoation(AnnotationDetailDTO annotationDTO, TreatmentProfessional treatmentProfessional) {
+  public static Annotation toAnnoation(AnnotationDetailDTO annotationDTO) {
     Annotation annotation = new Annotation();
-    annotation.setTreatmentProfessional(treatmentProfessional);
     annotation.setAnnotation(annotationDTO.annotation());
     annotation.setObservation(annotationDTO.observation());
     annotation.setDateInitial(LocalDateTime.of(annotationDTO.dateStart(), annotationDTO.hourStart()));

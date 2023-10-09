@@ -2,7 +2,7 @@ package com.multiteam.modules.treatment.dto;
 
 import java.util.UUID;
 
-public record TreatmentSearch(
+public record TreatmentSearchDTO(
         UUID patientId,
         String patientName
 ) {

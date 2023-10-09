@@ -20,6 +20,9 @@ public class Program extends Tenantable {
     @Column(name = "program_id")
     private UUID id;
 
+    @Column(name = "code", insertable = false, updatable = false)//Faz o campo ser read-only
+    private Integer code;
+
     @Column(name = "program_name")
     private String programName;
 

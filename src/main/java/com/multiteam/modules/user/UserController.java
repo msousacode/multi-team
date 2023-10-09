@@ -2,7 +2,11 @@ package com.multiteam.modules.user;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import com.multiteam.core.enums.AuthProviderEnum;
+import com.multiteam.core.enums.UserEnum;
 import com.multiteam.modules.role.Role;
+
+import java.security.Provider;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -11,14 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping(
     path = "/v1/users",
@@ -34,6 +31,7 @@ public class UserController {
     this.userService = userService;
   }
 
+
   @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @PutMapping
   public ResponseEntity<?> updateUser(@RequestBody final UserDTO userDTO) {
@@ -45,6 +43,14 @@ public class UserController {
   }
 
   @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+  @PostMapping
+  public ResponseEntity<User> createUser(@RequestBody final UserDTO userDTO) {
+      return ResponseEntity.status(
+              HttpStatus.OK).body(userService.createUser(userDTO.name(), userDTO.email(), AuthProviderEnum.local, UserEnum.USER)
+      );
+  }
+
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL', 'SUPERVISOR')")
   @GetMapping
   public ResponseEntity<Page<UserDTO>> getAllUsers(
       @RequestParam(defaultValue = "0") int page,
@@ -56,7 +62,7 @@ public class UserController {
             PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(direction), sort))));
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'SUPERVISOR')")
   @GetMapping("/{userId}")
   public ResponseEntity<UserDTO> getUser(@PathVariable("userId") final UUID userId) {
     return userService.getUser(userId)

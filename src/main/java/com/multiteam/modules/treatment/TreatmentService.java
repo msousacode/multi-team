@@ -1,18 +1,17 @@
 package com.multiteam.modules.treatment;
 
 import com.multiteam.core.enums.SituationEnum;
-import com.multiteam.core.exception.BadRequestException;
+import com.multiteam.core.enums.TreatmentEnum;
 import com.multiteam.modules.annotation.AnnotationService;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.guest.Guest;
-import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.patient.PatientService;
-import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
+import com.multiteam.modules.program.service.FolderService;
 import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
-import com.multiteam.modules.treatment.dto.TreatmentSearch;
-import com.multiteam.modules.treatment.dto.TreatmentRequest;
-import com.multiteam.modules.treatment.dto.TreatmentResponse;
+import com.multiteam.modules.treatment.dto.TreatmentSearchDTO;
+import com.multiteam.modules.treatment.dto.TreatmentPostDTO;
+import com.multiteam.modules.treatment.dto.TreatmentListDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Lazy;
@@ -21,11 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class TreatmentService {
@@ -33,38 +28,26 @@ public class TreatmentService {
     private static final Logger logger = LogManager.getLogger(TreatmentService.class);
 
     private final TreatmentRepository treatmentRepository;
-    private final TreatementProfessionalRepository treatmentProfessionalRepository;
     private final PatientService patientService;
-    private final ProfessionalService professionalService;
-    private final AnnotationService annotationService;
+    private final FolderService folderService;
 
     public TreatmentService(
             TreatmentRepository treatmentRepository,
-            TreatementProfessionalRepository treatementProfessionalRepository,
             @Lazy PatientService patientService,
-            @Lazy ProfessionalService professionalService,
-            @Lazy AnnotationService annotationService) {
+            @Lazy FolderService folderService) {
         this.treatmentRepository = treatmentRepository;
-        this.treatmentProfessionalRepository = treatementProfessionalRepository;
         this.patientService = patientService;
-        this.professionalService = professionalService;
-        this.annotationService = annotationService;
+        this.folderService = folderService;
     }
 
     @Transactional
-    public Boolean createTreatment(final TreatmentRequest treatmentDTO) {
-        logger.info("include treatment to patient id {}", treatmentDTO.patientId());
-        var patient = getPatient(treatmentDTO);
-        var professionals = getProfessional(treatmentDTO);//TODO Buscar profissionais
+    public Boolean createTreatment(UUID patientId, final TreatmentPostDTO treatmentDTO) {
 
-        if (patient.isEmpty() || professionals.isEmpty()) {
-            logger.error("patient or professional cannot be empty");
-            throw new BadRequestException("patient or professional cannot be empty");
-        }
+        var patient = patientService.getPatientById(patientId);
 
         var builder = new Treatment.Builder(
                 null,
-                SituationEnum.get(treatmentDTO.situation()),//TODO Ajustar para conveter a partir do DTO
+                TreatmentEnum.get(treatmentDTO.situation()),
                 treatmentDTO.initialDate(),
                 patient.get())
                 .finalDate(treatmentDTO.finalDate())
@@ -74,8 +57,12 @@ public class TreatmentService {
 
         var treatment = treatmentRepository.save(builder);
 
-        //Salva o vínculo entre Tratamento, Profissional e Clínica
-        saveRelationshipTreatmentProfessional(professionals, treatment);
+        List<UUID> folderIds = new ArrayList<>();
+        treatmentDTO.folders().forEach(i -> folderIds.add(UUID.fromString(i.getCode())));
+
+        folderService.updateSituationFolder(folderIds, SituationEnum.EM_COLETA);
+
+        folderService.updateRelationshipFolderProfessional(folderIds, treatment);
 
         logger.info("successfully included treatment id: {}", treatment.getId());
 
@@ -83,7 +70,7 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean updateTreatment(final TreatmentRequest treatmentRequest) {
+    public Boolean updateTreatment(final TreatmentPostDTO treatmentRequest) {
 
         var treatment = treatmentRepository.findById(treatmentRequest.id());
 
@@ -92,17 +79,9 @@ public class TreatmentService {
             return Boolean.FALSE;
         }
 
-        var patient = getPatient(treatmentRequest);
-        var professionals = getProfessional(treatmentRequest);
-
-        if (patient.isEmpty() || professionals.isEmpty()) {
-            logger.error("patient or professional cannot be empty");
-            throw new BadRequestException("patient or professional cannot be empty or null");
-        }
-
         var builder = new Treatment.Builder(
                 treatment.get().getId(),
-                SituationEnum.get(treatmentRequest.situation()),
+                TreatmentEnum.get(treatmentRequest.situation()),
                 treatmentRequest.initialDate(),
                 treatment.get().getPatient())
                 .description(treatmentRequest.observation())
@@ -110,23 +89,21 @@ public class TreatmentService {
                 .active(treatment.get().isActive())
                 .build();
 
-        //inactive professionals of treatment
-        treatmentProfessionalRepository.inactiveRelationshipTreatementAndProfessionalByTreatment_Id(SituationEnum.INATIVO, treatment.get().getId());
-
-        var treatmentSaved = treatmentRepository.save(builder);
-
-        saveRelationshipTreatmentProfessional(professionals, treatmentSaved);
-
         logger.info("successfully updated treatment");
 
         return Boolean.TRUE;
     }
 
-    public Page<TreatmentResponse> getAllTreatments(final TreatmentSearch filter, Pageable pageable) {
+    public Page<TreatmentListDTO> getAllTreatments(final TreatmentSearchDTO filter, Pageable pageable) {
+
+        //Buscar Tratatamentos vinculados aos programas.
+
         if (filter.patientId() != null) {
-            return treatmentRepository.findAllByPatient_IdAndActiveIsTrue(filter.patientId(), pageable).map(TreatmentResponse::fromTreatmentResponse);
+            return treatmentRepository.findAllByPatient_IdAndActiveIsTrue(filter.patientId(), pageable).map(TreatmentListDTO::new);
+
         }
-        return treatmentRepository.findAllByPatient_NameContainingIgnoreCaseAndActiveIsTrue(filter.patientName(), pageable).map(TreatmentResponse::fromTreatmentResponse);
+        //return treatmentRepository.findAllByPatient_NameContainingIgnoreCaseAndActiveIsTrue(filter.patientName(), pageable).map(TreatmentResponse::fromTreatmentResponse);
+        return Page.empty();
     }
 
     @Transactional
@@ -137,9 +114,6 @@ public class TreatmentService {
         if (treatment.isEmpty()) {
             return Boolean.FALSE;
         }
-
-        //inactive professionals of treatment
-        treatmentProfessionalRepository.inactiveRelationshipTreatementAndProfessionalByTreatment_Id(SituationEnum.INATIVO, treatmentId);
 
         //exclude all guests TODO será usado futuramente release 2 quando houver a funcionalidade de convidados
         //treatment.get().getGuests().removeAll(treatment.get().getGuests());
@@ -159,11 +133,6 @@ public class TreatmentService {
         });
     }
 
-    public List<TreatmentResponse> getAllTreatmentsByGuestId(UUID guestId) {
-        //return treatmentRepository.getAllTreatmentsByGuestId(guestId);
-        return List.of();
-    }
-
     @Transactional
     public void excludeTreatmentByPatientId(final UUID patientId) {
         var treatments = treatmentRepository.findAllTreatments(patientId);
@@ -181,44 +150,6 @@ public class TreatmentService {
         Set<UUID> professionals = new HashSet<>();
         Set<Clinic> clinics = new HashSet<>();
 
-        var treatmentProfessionals = treatment.get().getTreatmentProfessionals();
-
-        treatmentProfessionals.forEach(treatmentProfessional -> {
-            if(treatmentProfessional.getActive()) {
-                professionals.add(treatmentProfessional.getProfessional().getId());
-            }
-            //get clinics utilizando o clinicId da clinica em que o tratamento esta alocado.
-            clinics.addAll(treatmentProfessional.getProfessional().getClinics());
-        });
-
-        //pequisa as clinicas e alimenta o objeto clinics.addAll()
-
         return Optional.of(TreatmentEditResponse.fromTreatmentEditResponse(treatment.get(), clinics, professionals));
-    }
-
-    private Optional<Patient> getPatient(final TreatmentRequest treatmentDTO) {
-        var patient = patientService.getPatientById(treatmentDTO.patientId());
-        if (patient.isEmpty()) {
-            logger.error("patient not found. It is necessary to have a patient to include the treatment");
-            return Optional.empty();
-        }
-        return patient;
-    }
-
-    private List<Professional> getProfessional(final TreatmentRequest treatmentDTO) {
-        return professionalService.getAllProfessionalsByClinics(treatmentDTO.professionals());
-    }
-
-    private void saveRelationshipTreatmentProfessional(List<Professional> professionals, Treatment treatment) {
-        professionals.forEach(professional -> {
-            professional.getClinics().forEach(clinic -> {
-                var treatmentProfessional = new TreatmentProfessional(null, treatment, professional, clinic, SituationEnum.ANDAMENTO);
-                treatmentProfessionalRepository.save(treatmentProfessional);
-            });
-        });
-    }
-
-    public Optional<Treatment> findTreatment(UUID treatmentId) {
-        return treatmentRepository.findById(treatmentId);
     }
 }

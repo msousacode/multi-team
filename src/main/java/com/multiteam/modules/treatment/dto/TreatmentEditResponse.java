@@ -2,6 +2,7 @@ package com.multiteam.modules.treatment.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.multiteam.core.enums.SituationEnum;
+import com.multiteam.core.enums.TreatmentEnum;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.clinic.dto.ClinicDTO;
 import com.multiteam.modules.treatment.Treatment;
@@ -15,7 +16,7 @@ public record TreatmentEditResponse(
         UUID id,
         Set<ClinicDTO> clinics,
         Set<UUID> professionals,
-        SituationEnum situation,
+        TreatmentEnum situation,
         @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate initialDate,
         @JsonFormat(pattern = "yyyy-MM-dd")

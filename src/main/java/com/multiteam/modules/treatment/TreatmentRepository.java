@@ -13,8 +13,6 @@ import java.util.UUID;
 @Repository
 public interface TreatmentRepository extends TenantableRepository<Treatment> {
 
-    Page<Treatment> findAllByPatient_IdAndActiveIsTrue(UUID patientId, Pageable pageable);
-
     @Query("""
             SELECT t FROM Treatment t
             JOIN t.patient p
@@ -27,4 +25,6 @@ public interface TreatmentRepository extends TenantableRepository<Treatment> {
     void inactiveTreatment(UUID treatmentId);
 
     Page<Treatment> findAllByPatient_NameContainingIgnoreCaseAndActiveIsTrue(String patientName, Pageable pageable);
+
+    Page<Treatment> findAllByPatient_IdAndActiveIsTrue(UUID patientId, Pageable pageable);
 }

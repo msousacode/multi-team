@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public record ProgramListDTO(
         UUID programId,
+        Integer code,
         String programName,
         String ability,
         String protocol
@@ -15,6 +16,7 @@ public record ProgramListDTO(
     public ProgramListDTO(Program program) {
         this(
                 program.getId(),
+                program.getCode(),
                 program.getProgramName(),
                 AbilityEnum.get(program.getAbility()).getDescription(),
                 ProtocolEnum.get(program.getProtocol()).getDescription()

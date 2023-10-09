@@ -1,6 +1,6 @@
 package com.multiteam.modules.program.entity;
 
-import com.multiteam.modules.patient.model.Patient;
+import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.modules.professional.Professional;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,19 +11,23 @@ import java.util.UUID;
 @Setter
 @Getter
 @Entity
-@Table(name = "professionals_folders")
-public class ProfessionalFolder {
+@Table(name = "folders_professionals")
+public class FolderProfessional {
 
     @Id
     @GeneratedValue
-    @Column(name = "professionals_folders_id")
+    @Column(name = "folders_professionals_id")
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "folder_id", referencedColumnName = "folder_id", nullable = false)
     private Folder folder;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "professional_id", referencedColumnName = "professional_id", nullable = false)
     private Professional professional;
+
+    @Column(name = "situation")
+    @Enumerated(EnumType.STRING)
+    private SituationEnum situation;
 }

@@ -18,7 +18,8 @@ public record ProgramDTO(
         Integer correctionQuantityBySession,
         Integer correctionPercentageAttempts,
         Integer evolutionQuantityBySession,
-        Integer evolutionPercentageAttempts
+        Integer evolutionPercentageAttempts,
+        Integer code
 ) {
 }
 

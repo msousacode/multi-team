@@ -4,22 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.multiteam.core.enums.AuthProviderEnum;
 import com.multiteam.core.enums.UserEnum;
 import com.multiteam.modules.role.Role;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "users")
 public class User {
@@ -84,102 +78,6 @@ public class User {
         this.roles = builder.roles;
         this.password = builder.password;
         this.userType = builder.userType;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public Boolean getEmailVerified() {
-        return emailVerified;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public AuthProviderEnum getProvider() {
-        return provider;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public void setProvisionalPassword(String provisionalPassword) {
-        this.provisionalPassword = provisionalPassword;
-    }
-
-    public String getProvisionalPassword() {
-        return provisionalPassword;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public UUID getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(UUID tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public UserEnum getUserType() {
-        return userType;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setEmailVerified(Boolean emailVerified) {
-        this.emailVerified = emailVerified;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setProvider(AuthProviderEnum provider) {
-        this.provider = provider;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public void setUserType(UserEnum userType) {
-        this.userType = userType;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
     }
 
     @Override

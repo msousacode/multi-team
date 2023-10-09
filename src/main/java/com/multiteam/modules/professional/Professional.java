@@ -4,7 +4,6 @@ import com.multiteam.core.enums.SpecialtyEnum;
 import com.multiteam.core.models.Tenantable;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.program.entity.Folder;
-import com.multiteam.modules.treatment.TreatmentProfessional;
 import com.multiteam.modules.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +11,6 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Setter
@@ -42,9 +40,6 @@ public class Professional extends Tenantable {
     @Column(name = "active")
     private boolean active;
 
-    @OneToMany(mappedBy = "professional")
-    private Set<TreatmentProfessional> professionals;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -67,7 +62,7 @@ public class Professional extends Tenantable {
 
     @ManyToMany
     @JoinTable(
-            name = "professionals_folders",
+            name = "folders_professionals",
             joinColumns = @JoinColumn(name = "professional_id"),
             inverseJoinColumns = @JoinColumn(name = "folder_id"))
     private List<Folder> folders;
@@ -100,9 +95,6 @@ public class Professional extends Tenantable {
         private final List<Clinic> clinics;
         private final User user;
 
-        //optional
-        private Set<TreatmentProfessional> professionals;
-
         public Builder(
                 UUID id,
                 final String name,
@@ -132,11 +124,6 @@ public class Professional extends Tenantable {
             this.active = active;
             this.clinics = clinics;
             this.user = user;
-        }
-
-        public Builder professionals(Set<TreatmentProfessional> professionals) {
-            this.professionals = professionals;
-            return this;
         }
 
         public Professional build() {

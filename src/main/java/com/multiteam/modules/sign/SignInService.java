@@ -71,10 +71,11 @@ public class SignInService {
         Role role = roleRepository.findByRole(RoleEnum.ROLE_OWNER);
         signUpDTO.roles().add(role);
 
-        UUID provisionalTenantId = UUID.fromString("61a9c194-386d-46e1-ab9d-d26d6d50a1fc");//TODO ver isso aqui
+        //Usuário default utilizado para preencher o tenantId provisóriamente.
+        var userMain = userRepository.findByEmail("abateam@abateam.com");
 
         var builder = new User.Builder(
-                null, provisionalTenantId, signUpDTO.name(), signUpDTO.email(), true)
+                null, userMain.get().getId(), signUpDTO.name(), signUpDTO.email(), true)
                 .provider(AuthProviderEnum.local)
                 .password(new BCryptPasswordEncoder().encode(signUpDTO.password()))
                 .roles(signUpDTO.roles())
@@ -82,7 +83,11 @@ public class SignInService {
                 .build();
 
         var result = userRepository.save(builder);
-        userRepository.updateTenantIdMyUser(result.getId(), result.getId());
+
+        //Atualização do tenantId definitivo.
+        result.setTenantId(result.getId());
+
+        userRepository.save(result);
     }
 
     public TokenDTO infoToken(final String token) {

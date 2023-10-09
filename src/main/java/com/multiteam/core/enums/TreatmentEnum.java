@@ -5,20 +5,18 @@ import org.springframework.util.Assert;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum SituationEnum {
+public enum TreatmentEnum {
     ANDAMENTO("ANDAMENTO"),
-    NAO_ALOCADA("NÃO ALOCADA"),
-    EM_COLETA("EM COLETA"),
-    CANCELADO("CANCELADA"),
-    PAUSADO("PAUSADA"),
-    CONCLUIDO("CONCLUÍDO"),
-    INATIVO("INATIVA");
+    CANCELADA("CANCELADA"),
+    PAUSADA("PAUSADA"),
+    CONCLUIDA("CONCLUÍDA"),
+    INATIVA("INATIVA");
 
 
     private final String description;
-    private static final Map<String, SituationEnum> lookup = new HashMap<>();
+    private static final Map<String, TreatmentEnum> lookup = new HashMap<>();
 
-    SituationEnum(String description) {
+    TreatmentEnum(String description) {
         this.description = description;
     }
 
@@ -27,12 +25,12 @@ public enum SituationEnum {
     }
 
     static {
-        for (SituationEnum s : SituationEnum.values()) {
+        for (TreatmentEnum s : TreatmentEnum.values()) {
             lookup.put(s.getDescription(), s);
         }
     }
 
-    public static SituationEnum get(String name) {
+    public static TreatmentEnum get(String name) {
         var value = lookup.get(name);
         Assert.notNull(value, "situation type not can be null");
         return value;

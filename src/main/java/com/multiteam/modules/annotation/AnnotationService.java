@@ -1,16 +1,10 @@
 package com.multiteam.modules.annotation;
 
 import com.multiteam.core.exception.ProfessionalException;
-import com.multiteam.core.exception.TreatmentException;
 import com.multiteam.modules.annotation.dto.AnnotationDTO;
 import com.multiteam.modules.annotation.dto.AnnototionSearch;
 import com.multiteam.modules.professional.ProfessionalService;
-import com.multiteam.modules.treatment.TreatementProfessionalRepository;
 import com.multiteam.modules.treatment.dto.TreatmentAnnotationDTO;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -19,6 +13,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AnnotationService {
@@ -30,15 +28,12 @@ public class AnnotationService {
 
   private final AnnotationRepository annotationRepository;
   private final ProfessionalService professionalService;
-  private final TreatementProfessionalRepository treatementProfessionalRepository;
 
   public AnnotationService(
       AnnotationRepository annotationRepository,
-      ProfessionalService professionalService,
-      TreatementProfessionalRepository treatementProfessionalRepository) {
+      ProfessionalService professionalService) {
     this.annotationRepository = annotationRepository;
     this.professionalService = professionalService;
-    this.treatementProfessionalRepository = treatementProfessionalRepository;
   }
 
   @Transactional
@@ -55,22 +50,23 @@ public class AnnotationService {
       throw new ProfessionalException(
           "Apenas profissionais podem realizar anotações no tratamento");
     }
+/*
+    var treatmentprofessional = treatementprofessionalrepository.findbytreatment_idandprofessional_id(
+        treatmentid, professional.get().getid());
 
-    var treatmentProfessional = treatementProfessionalRepository.findByTreatment_IdAndProfessional_Id(
-        treatmentId, professional.get().getId());
-
-    if (treatmentProfessional.isEmpty()) {
+    if (treatmentprofessional.isempty()) {
       logger.error("treatment not found or professional not added in treatment");
-      throw new TreatmentException("treatment not found or professional not added in treatment");
+      throw new treatmentexception("treatment not found or professional not added in treatment");
     }
 
-    var annotations = annotationDTO.annotations().stream()
-        .map(e -> Annotation.toAnnoation(e, treatmentProfessional.get())).collect(
-            Collectors.toList());
+    var annotations = annotationdto.annotations().stream()
+        .map(e -> annotation.toannoation(e, treatmentprofessional.get())).collect(
+            collectors.tolist());
 
-    annotationRepository.deleteAllByTreatmentProfessional_Id(treatmentProfessional.get().getId());
+    annotationrepository.deleteallbytreatmentprofessional_id(treatmentprofessional.get().getid());
 
-    annotationRepository.saveAll(annotations);
+    annotationrepository.saveall(annotations);
+    */
   }
 
   @Transactional
