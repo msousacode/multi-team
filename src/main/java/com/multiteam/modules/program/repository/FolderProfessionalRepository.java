@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -17,5 +18,8 @@ public interface FolderProfessionalRepository extends JpaRepository<FolderProfes
     @Query(value = "update FolderProfessional pf set pf.situation = :situation where pf.folder.id in :folderIds")
     void updateSituationFolder(List<UUID> folderIds, SituationEnum situation);
 
-    void deleteByFolder_Id(UUID id);
+    @Query(value = "select count(pf) from FolderProfessional pf where pf.folder.id = :folderId and pf.professional.id = :professionalId")
+    Integer findByFolderIdAndProfessionalId(UUID folderId, UUID professionalId);
+
+    List<FolderProfessional> findAllByFolder_Id(UUID id);
 }

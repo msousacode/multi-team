@@ -1,15 +1,14 @@
 package com.multiteam.modules.program.service;
 
 import com.multiteam.core.enums.SituationEnum;
+import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.core.exception.ResourceNotFoundException;
 import com.multiteam.core.utils.Select;
 import com.multiteam.modules.patient.PatientService;
-import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
 import com.multiteam.modules.program.dto.FolderListDTO;
 import com.multiteam.modules.program.dto.FolderPostDTO;
 import com.multiteam.modules.program.dto.FolderPutDTO;
-import com.multiteam.modules.program.dto.ProgramDTO;
 import com.multiteam.modules.program.entity.Folder;
 import com.multiteam.modules.program.entity.FolderProfessional;
 import com.multiteam.modules.program.entity.FolderProgram;
@@ -22,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -55,16 +53,20 @@ public class FolderService {
     @Transactional
     public Boolean createFolder(UUID patientId, FolderPostDTO folderPostDTO) {
 
+        if(folderPostDTO.professionals().isEmpty()) {
+            throw new BadRequestException("Deve existir no mínimo 1 profissional vinculado a pasta curricular.");
+        }
+
         var patient = patientService.getPatientById(patientId);
 
-        Folder folder = new Folder();
-        folder.setFolderName(folderPostDTO.folderName());
-        folder.setActive(true);
-        folder.setPatient(patient.get());
+        Folder newFolder = new Folder();
+        newFolder.setFolderName(folderPostDTO.folderName());
+        newFolder.setActive(true);
+        newFolder.setPatient(patient.get());
 
-        var folderSaved = folderRepository.save(folder);
+        var folder = folderRepository.save(newFolder);
 
-        salveRelationshipProfessionalFolder(folderSaved, folderPostDTO.professionals());
+        salveRelationshipFolderProfessional(folder, folderPostDTO.professionals());
 
         return Boolean.TRUE;
     }
@@ -98,7 +100,7 @@ public class FolderService {
         folder.setFolderName(folderDTO.folderName());
         folder.setPatient(patient.get());
 
-        salveRelationshipProfessionalFolder(folder, folderDTO.professionals());
+        salveRelationshipFolderProfessional(folder, folderDTO.professionals());
         saveProgramas(folderDTO, folder);
 
         return true;
@@ -137,17 +139,31 @@ public class FolderService {
         folderRepository.saveAll(folders);
     }
 
-    private void salveRelationshipProfessionalFolder(Folder folder, List<Select> selects) {
-        List<UUID> uuids = selects.stream().map(p -> UUID.fromString(p.getCode())).toList();
-        List<Professional> professionals = professionalService.getProfessionalsInBatch(uuids);
-        professionals.forEach(professional -> {
-            FolderProfessional professionalFolder = new FolderProfessional();
-            professionalFolder.setFolder(folder);
-            professionalFolder.setProfessional(professional);
-            professionalFolder.setSituation(SituationEnum.NAO_ALOCADA);
+    private void salveRelationshipFolderProfessional(Folder folder, List<Select> professionals) {
 
-            professionalFolderRepository.deleteByFolder_Id(folder.getId());
-            professionalFolderRepository.save(professionalFolder);
+        var professionalsUUIDs = professionals.stream().map(p -> UUID.fromString(p.getCode())).toList();
+
+        var professionalsResult = professionalService.getProfessionalsInBatch(professionalsUUIDs);
+
+        var foldersProfessionals = professionalFolderRepository.findAllByFolder_Id(folder.getId());
+
+        foldersProfessionals.forEach(fp -> {
+            if(!professionalsUUIDs.contains(fp.getProfessional().getId())) {
+                professionalFolderRepository.deleteById(fp.getId());
+            }
+        });
+
+        professionalsResult.forEach(p -> {
+            var isRelated = professionalFolderRepository.findByFolderIdAndProfessionalId(folder.getId(), p.getId());
+
+            if(isRelated == 0) {
+                FolderProfessional professionalFolder = new FolderProfessional();
+                professionalFolder.setFolder(folder);
+                professionalFolder.setProfessional(p);
+                professionalFolder.setSituation(SituationEnum.NAO_ALOCADA);
+
+                professionalFolderRepository.save(professionalFolder);
+            }
         });
     }
 }
