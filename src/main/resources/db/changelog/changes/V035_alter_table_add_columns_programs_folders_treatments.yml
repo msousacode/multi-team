@@ -20,6 +20,11 @@ databaseChangeLog:
               - column:
                   name: code
                   type: int
+        - addAutoIncrement:
+            columnName: code
+            incrementBy: 1
+            startWith: 100
+            tableName: treatments
         - addColumn:
             tableName: folders
             columns:

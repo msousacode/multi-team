@@ -28,6 +28,9 @@ public class Treatment extends Tenantable {
   @Column(name = "description")
   private String description;
 
+  @Column(name = "code", insertable = false, updatable = false)
+  private String code;
+
   @Column(name = "situation")
   @Enumerated(EnumType.STRING)
   private TreatmentEnum situation;
