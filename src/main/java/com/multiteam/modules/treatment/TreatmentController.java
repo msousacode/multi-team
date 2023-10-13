@@ -1,6 +1,6 @@
 package com.multiteam.modules.treatment;
 
-import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
+import com.multiteam.modules.treatment.dto.TreatmentEditDTO;
 import com.multiteam.modules.treatment.dto.TreatmentSearchDTO;
 import com.multiteam.modules.treatment.dto.TreatmentPostDTO;
 import com.multiteam.modules.treatment.dto.TreatmentListDTO;
@@ -60,7 +60,7 @@ public class TreatmentController {
     }
 
     @GetMapping("/{treatmentId}")
-    public ResponseEntity<TreatmentEditResponse> getTreatment(
+    public ResponseEntity<TreatmentEditDTO> getTreatment(
             @PathVariable("treatmentId") UUID treatmentId) {
         return treatmentService.getTreatment(treatmentId)
                 .map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());

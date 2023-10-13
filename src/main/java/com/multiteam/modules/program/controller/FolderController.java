@@ -42,13 +42,6 @@ public class FolderController {
                 .map(folderDTO -> ResponseEntity.ok(folderDTO)).orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/patient/{patientId}")
-    public ResponseEntity<List<Select>> getFolderByPatientId(@PathVariable("patientId") final UUID patientId) {
-        var folders = folderService.getFolderByPatientId(patientId).stream()
-                .map(folder -> Select.toSelect(folder.getFolderName(), folder.getId().toString())).toList();
-        return ResponseEntity.ok(folders);
-    }
-
     @GetMapping
     public ResponseEntity<Page<FolderListDTO>> getAll(
             @RequestParam(defaultValue = "0") int page,

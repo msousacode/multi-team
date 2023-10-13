@@ -2,13 +2,12 @@ package com.multiteam.modules.treatment;
 
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.enums.TreatmentEnum;
-import com.multiteam.modules.annotation.AnnotationService;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.guest.Guest;
 import com.multiteam.modules.patient.PatientService;
-import com.multiteam.modules.professional.ProfessionalService;
+import com.multiteam.modules.program.entity.Folder;
 import com.multiteam.modules.program.service.FolderService;
-import com.multiteam.modules.treatment.dto.TreatmentEditResponse;
+import com.multiteam.modules.treatment.dto.TreatmentEditDTO;
 import com.multiteam.modules.treatment.dto.TreatmentSearchDTO;
 import com.multiteam.modules.treatment.dto.TreatmentPostDTO;
 import com.multiteam.modules.treatment.dto.TreatmentListDTO;
@@ -139,7 +138,7 @@ public class TreatmentService {
         treatments.forEach(t -> inactiveTreatment(t.getId()));
     }
 
-    public Optional<TreatmentEditResponse> getTreatment(final UUID treatmentId) {
+    public Optional<TreatmentEditDTO> getTreatment(final UUID treatmentId) {
         var treatment = treatmentRepository.findOneById(treatmentId);
 
         if (treatment.isEmpty()) {
@@ -149,7 +148,8 @@ public class TreatmentService {
 
         Set<UUID> professionals = new HashSet<>();
         Set<Clinic> clinics = new HashSet<>();
+        List<Folder> folders = folderService.getFolderByPatientId(treatment.get().getPatient().getId());
 
-        return Optional.of(TreatmentEditResponse.fromTreatmentEditResponse(treatment.get(), clinics, professionals));
+        return Optional.of(TreatmentEditDTO.toDTO(treatment.get(), clinics, professionals, folders));
     }
 }
