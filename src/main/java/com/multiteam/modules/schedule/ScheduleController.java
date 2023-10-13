@@ -31,7 +31,7 @@ public class ScheduleController {
     this.scheduleService = scheduleService;
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_SCHEDULE_WRITE')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @PostMapping
   public ResponseEntity<?> createSchedule(@RequestBody final ScheduleRequest scheduleRequest) {
     if (scheduleService.createSchedule(scheduleRequest)) {
@@ -41,13 +41,13 @@ public class ScheduleController {
     }
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_SCHEDULE_READ')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @GetMapping("/clinic/{clinicId}")
   public List<ScheduleResponse> getAllById(@PathVariable("clinicId") final UUID clinicId) {
     return scheduleService.getAllById(clinicId);
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_SCHEDULE_READ')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @GetMapping("/{scheduleId}")
   public ResponseEntity<ScheduleResponse> getSchedule(
       @PathVariable("scheduleId") final UUID scheduleId) {
@@ -56,7 +56,7 @@ public class ScheduleController {
         .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_SCHEDULE_WRITE')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @PutMapping
   public ResponseEntity<?> updateSchedule(@RequestBody final ScheduleRequest scheduleRequest) {
     if (scheduleService.updateSchedule(scheduleRequest)) {
@@ -66,7 +66,7 @@ public class ScheduleController {
     }
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_SCHEDULE_WRITE')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @DeleteMapping("/{scheduleId}")
   public ResponseEntity<Void> inactiveSchedule(@PathVariable("scheduleId") final UUID scheduleId) {
     scheduleService.inactiveSchedule(scheduleId);

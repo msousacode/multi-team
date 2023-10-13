@@ -1,9 +1,5 @@
 databaseChangeLog:
   - changeSet:
       id: V023
-      author: michael
-      changes:
-        - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_DOCUMENT_READ');"
-        - sql:
-            sql: "INSERT INTO public.roles (role_id, role) VALUES(uuid_generate_v4(), 'PERM_DOCUMENT_WRITE');"
+      author: michael #Exclusão da cria das migrations PERM_DOCUMENT
+

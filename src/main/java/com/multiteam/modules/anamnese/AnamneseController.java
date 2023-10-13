@@ -33,7 +33,7 @@ public class AnamneseController {
     this.anamneseService = anamneseService;
   }
 
-  @PreAuthorize("hasAuthority('PERM_ANAMNESE_WRITE')")
+  @PreAuthorize("hasAuthority('ROLE_PROFESSIONAL')")
   @PostMapping
   public ResponseEntity<?> createAnamnese(@RequestBody final AnamneseRequest anamneseDTO) {
     if (anamneseService.createAnamnese(anamneseDTO)) {
@@ -43,14 +43,14 @@ public class AnamneseController {
     }
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_ANAMNESE_READ')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @GetMapping("/patient/{patientId}")
   public ResponseEntity<List<AnamneseResponse>> getAllAnamneses(
       @PathVariable("patientId") final UUID patientId) {
     return ResponseEntity.ok(anamneseService.getAllAnamneses(patientId));
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_ANAMNESE_READ')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @GetMapping("/{anamneseId}")
   public ResponseEntity<AnamneseReportResponse> getAnamneseReport(
       @PathVariable("anamneseId") final UUID anamneseId) {
@@ -60,7 +60,7 @@ public class AnamneseController {
         .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
   }
 
-  @PreAuthorize("hasAuthority('PERM_ANAMNESE_WRITE')")
+  @PreAuthorize("hasAuthority('ROLE_PROFESSIONAL')")
   @DeleteMapping("/{anamneseId}")
   public ResponseEntity<?> inactiveAnamnese(@PathVariable("anamneseId") final UUID anamneseId) {
     if (anamneseService.inactiveAnamnese(anamneseId)) {

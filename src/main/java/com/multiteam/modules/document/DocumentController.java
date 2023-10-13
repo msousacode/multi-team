@@ -31,7 +31,7 @@ public class DocumentController {
     this.documentService = documentService;
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAuthority('PERM_DOCUMENT_WRITE')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @PostMapping(value = "/upload/patient/{patientId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Boolean> uploadDocument(
       @PathVariable("patientId") final UUID patientId,
@@ -44,7 +44,7 @@ public class DocumentController {
     }
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_DOCUMENT_READ', 'PERM_DOCUMENT_WRITE')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @PostMapping("/search")
   public ResponseEntity<Page<DocumentDTO>> getDocumentsSearch(
       @RequestBody final DocumentSearch documentSearch,
@@ -58,7 +58,7 @@ public class DocumentController {
     return ResponseEntity.ok(document.map(DocumentDTO::new));
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN') or hasAnyAuthority('PERM_DOCUMENT_READ', 'PERM_DOCUMENT_WRITE')")
+  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @GetMapping("/download/{documentId}/key/{nameKey}")
   public ResponseEntity<UrlPreSignedDTO> generatePresignedUrl(
       @PathVariable("documentId") final UUID documentId,
