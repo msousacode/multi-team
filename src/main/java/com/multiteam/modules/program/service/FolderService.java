@@ -79,15 +79,13 @@ public class FolderService {
 
         var professionals = professionalService.getProfessionalsFoldersById(folderId);
 
-        List<Select> selects = professionals.stream().map(i -> Select.toSelect(i.getName(), i.getId().toString())).toList();
-
         var folder = folderRepository.findById(folderId);
 
         var folderProgram = folderProgramRepository.findAllByFolder_Id(folderId);
 
         var programs = folderProgram.stream().map(program -> program.getProgram()).toList();
 
-        return Optional.ofNullable(new FolderListDTO(folder.get(), selects, programs));
+        return Optional.ofNullable(new FolderListDTO(folder.get(), programs));
     }
 
     @Transactional

@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum SituationEnum {
-    ANDAMENTO("ANDAMENTO"),
-    NAO_ALOCADA("NÃO ALOCADA"),
-    EM_COLETA("EM COLETA"),
-    CANCELADO("CANCELADA"),
-    PAUSADO("PAUSADA"),
-    CONCLUIDO("CONCLUÍDO"),
-    INATIVO("INATIVA");
+    ANDAMENTO("Andamento"),
+    NAO_ALOCADA("Não alocada"),
+    EM_COLETA("Em coleta"),
+    CANCELADO("Cancelada"),
+    PAUSADO("Pausada"),
+    CONCLUIDO("Concluída"),
+    INATIVO("Inativa");
 
 
     private final String description;

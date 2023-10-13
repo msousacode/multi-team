@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
 @RequestMapping(
     path = "/v1/anamneses",
     produces = APPLICATION_JSON_VALUE,
@@ -33,7 +34,6 @@ public class AnamneseController {
     this.anamneseService = anamneseService;
   }
 
-  @PreAuthorize("hasAuthority('ROLE_PROFESSIONAL')")
   @PostMapping
   public ResponseEntity<?> createAnamnese(@RequestBody final AnamneseRequest anamneseDTO) {
     if (anamneseService.createAnamnese(anamneseDTO)) {
@@ -43,14 +43,12 @@ public class AnamneseController {
     }
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @GetMapping("/patient/{patientId}")
   public ResponseEntity<List<AnamneseResponse>> getAllAnamneses(
       @PathVariable("patientId") final UUID patientId) {
     return ResponseEntity.ok(anamneseService.getAllAnamneses(patientId));
   }
 
-  @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @GetMapping("/{anamneseId}")
   public ResponseEntity<AnamneseReportResponse> getAnamneseReport(
       @PathVariable("anamneseId") final UUID anamneseId) {
@@ -60,7 +58,6 @@ public class AnamneseController {
         .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
   }
 
-  @PreAuthorize("hasAuthority('ROLE_PROFESSIONAL')")
   @DeleteMapping("/{anamneseId}")
   public ResponseEntity<?> inactiveAnamnese(@PathVariable("anamneseId") final UUID anamneseId) {
     if (anamneseService.inactiveAnamnese(anamneseId)) {

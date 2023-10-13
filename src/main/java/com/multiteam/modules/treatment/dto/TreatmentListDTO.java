@@ -11,6 +11,7 @@ import java.util.UUID;
 
 public record TreatmentListDTO(
         UUID id,
+        Integer code,
         TreatmentEnum situation,
         @JsonFormat(pattern = "dd/MM/yyyy")
         LocalDate initialDate,
@@ -21,6 +22,7 @@ public record TreatmentListDTO(
     public TreatmentListDTO(Treatment treatment) {
         this(
                 treatment.getId(),
+                treatment.getCode(),
                 treatment.getSituation(),
                 treatment.getInitialDate(),
                 treatment.getFinalDate(),

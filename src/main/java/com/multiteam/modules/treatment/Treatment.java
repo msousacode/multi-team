@@ -29,7 +29,7 @@ public class Treatment extends Tenantable {
   private String description;
 
   @Column(name = "code", insertable = false, updatable = false)
-  private String code;
+  private Integer code;
 
   @Column(name = "situation")
   @Enumerated(EnumType.STRING)
