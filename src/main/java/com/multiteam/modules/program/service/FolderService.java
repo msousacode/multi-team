@@ -131,7 +131,7 @@ public class FolderService {
     }
 
     @Transactional
-    public void updateRelationshipFolderProfessional(List<UUID> folderIds, Treatment treatment) {
+    public void updateRelationshipFolderTreatment(List<UUID> folderIds, Treatment treatment) {
         var folders = folderRepository.findAllById(folderIds);
         folders.forEach(folder -> folder.setTreatment(treatment));
         folderRepository.saveAll(folders);
@@ -163,5 +163,9 @@ public class FolderService {
                 professionalFolderRepository.save(professionalFolder);
             }
         });
+    }
+
+    public List<Folder> getFoldersByIds(List<UUID> uuids) {
+        return folderRepository.findAllById(uuids);
     }
 }

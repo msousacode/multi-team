@@ -61,7 +61,7 @@ public class TreatmentService {
 
         folderService.updateSituationFolder(folderIds, SituationEnum.EM_COLETA);
 
-        folderService.updateRelationshipFolderProfessional(folderIds, treatment);
+        folderService.updateRelationshipFolderTreatment(folderIds, treatment);
 
         logger.info("successfully included treatment id: {}", treatment.getId());
 
@@ -69,24 +69,28 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean updateTreatment(final TreatmentPostDTO treatmentRequest) {
+    public Boolean updateTreatment(TreatmentPostDTO treatmentPostDTO) {
 
-        var treatment = treatmentRepository.findById(treatmentRequest.id());
+        var treatment = treatmentRepository.findById(treatmentPostDTO.id());
 
         if (treatment.isEmpty()) {
-            logger.error("error when updating treatment id: {}", treatmentRequest.id());
+            logger.error("error when updating treatment id: {}", treatmentPostDTO.id());
             return Boolean.FALSE;
         }
 
-        var builder = new Treatment.Builder(
-                treatment.get().getId(),
-                TreatmentEnum.get(treatmentRequest.situation()),
-                treatmentRequest.initialDate(),
-                treatment.get().getPatient())
-                .description(treatmentRequest.observation())
-                .finalDate(treatmentRequest.finalDate())
-                .active(treatment.get().isActive())
-                .build();
+        var uuids = treatmentPostDTO.folders().stream().map(folder -> UUID.fromString(folder.getCode())).toList();
+        var folders = folderService.getFoldersByIds(uuids);
+
+        treatment.get().setDescription(treatmentPostDTO.observation());
+        treatment.get().setInitialDate(treatmentPostDTO.initialDate());
+        treatment.get().setFinalDate(treatmentPostDTO.finalDate());
+        treatment.get().setFolders(folders);
+
+        treatmentRepository.save(treatment.get());
+
+        folderService.updateSituationFolder(uuids, SituationEnum.EM_COLETA);
+
+        folderService.updateRelationshipFolderTreatment(uuids, treatment.get());
 
         logger.info("successfully updated treatment");
 
@@ -119,7 +123,6 @@ public class TreatmentService {
         //treatmentRepository.save(treatment.get());
 
         //inactive treatment
-        treatmentRepository.inactiveTreatment(treatmentId);
 
         return Boolean.TRUE;
     }
