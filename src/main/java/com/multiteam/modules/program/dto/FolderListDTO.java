@@ -16,7 +16,7 @@ public record FolderListDTO(
         String patientName,
         UUID patientId,
         Boolean active,
-        String situation,
+        SituationEnum situation,
         List<ProgramDTO> programs,
         List<Select> professionals
 ) {
@@ -28,7 +28,7 @@ public record FolderListDTO(
                 folder.getPatient().getName(),
                 folder.getPatient().getId(),
                 folder.getActive(),
-                folder.getFolderProfessional().get(0).getSituation().getDescription(),
+                folder.getFolderProfessional().get(0).getSituation(),
                 List.of(),
                 SelectProfessionals(folder));
     }
@@ -41,7 +41,7 @@ public record FolderListDTO(
                 folder.getPatient().getName(),
                 folder.getPatient().getId(),
                 folder.getActive(),
-                folder.getFolderProfessional().get(0).getSituation().getDescription(),
+                folder.getFolderProfessional().get(0).getSituation(),
                 programs.stream().map(program -> ProgramMapper.MAPPER.toDTO(program)).toList(),
                 SelectProfessionals(folder)
         );

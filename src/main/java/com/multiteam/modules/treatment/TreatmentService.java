@@ -84,6 +84,7 @@ public class TreatmentService {
         var foldersAllocated = treatmentPostDTO.foldersAllocated().stream().map(folder -> UUID.fromString(folder.getCode())).toList();
         var foldersUnallocated = treatmentPostDTO.foldersUnallocated().stream().map(folder -> UUID.fromString(folder.getCode())).toList();
 
+        treatment.get().setSituation(TreatmentEnum.get(treatmentPostDTO.situation()));
         treatment.get().setDescription(treatmentPostDTO.observation());
         treatment.get().setInitialDate(treatmentPostDTO.initialDate());
         treatment.get().setFinalDate(treatmentPostDTO.finalDate());

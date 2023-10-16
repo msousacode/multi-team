@@ -3,6 +3,7 @@ package com.multiteam.modules.program.service;
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.core.exception.ResourceNotFoundException;
+import com.multiteam.core.utils.ObjectMapperUtils;
 import com.multiteam.core.utils.Select;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.ProfessionalService;
@@ -171,5 +172,9 @@ public class FolderService {
 
     public List<Folder> getFoldersByIds(List<UUID> uuids) {
         return folderRepository.findAllById(uuids);
+    }
+
+    public List<Folder> fetchFoldersByPatient(UUID patientId) {
+        return folderRepository.findByPatient_Id(patientId);
     }
 }
