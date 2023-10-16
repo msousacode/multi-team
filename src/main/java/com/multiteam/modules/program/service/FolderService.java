@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -122,7 +123,10 @@ public class FolderService {
     }
 
     public List<Folder> getFolderByPatientId(UUID patientId) {
-        return folderRepository.findByPatient_Id(patientId);
+        var folders = folderRepository.findByPatient_Id(patientId);
+        List<Folder> uniqueFolders = new ArrayList<>();
+        folders.stream().distinct().forEach(uniqueFolders::add);
+        return uniqueFolders;
     }
 
     @Transactional

@@ -11,7 +11,8 @@ public record TreatmentPostDTO(
         String observation,
         String situation,
         LocalDate finalDate,
-        List<Select> folders,
-        LocalDate initialDate
+        LocalDate initialDate,
+        List<Select> foldersAllocated,
+        List<Select> foldersUnallocated
 ) {
 }

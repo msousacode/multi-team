@@ -57,10 +57,22 @@ public record TreatmentEditDTO(
                 if(fp.getSituation().equals(SituationEnum.EM_COLETA)){
                     allocatedList.add(Select.toSelect(folder.getFolderName(), folder.getId().toString()));
                 } else {
-                    unallocatedList.add(Select.toSelect(folder.getFolderName(), folder.getId().toString()));
+                    var unallocated = Select.toSelect(folder.getFolderName(), folder.getId().toString());
+                    unallocatedList.add(unallocated);
                 }
             });
         }
-        return new TreatmentEditDTO(treatment, clinics, professionals, unallocatedList, allocatedList);
+
+        //Remove duplicidade se houver
+        var uniqueUnallocatedList = unallocatedList.stream().collect(
+                Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Select::getCode))),
+                ArrayList::new));
+
+        //Remove duplicidade se houver
+        var uniqueAllocatedList = allocatedList.stream().collect(
+                Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Select::getCode))),
+                        ArrayList::new));
+
+        return new TreatmentEditDTO(treatment, clinics, professionals, uniqueUnallocatedList, uniqueAllocatedList);
     }
 }

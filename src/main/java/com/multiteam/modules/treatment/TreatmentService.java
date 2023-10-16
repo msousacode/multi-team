@@ -2,6 +2,7 @@ package com.multiteam.modules.treatment;
 
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.enums.TreatmentEnum;
+import com.multiteam.core.utils.Select;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.guest.Guest;
 import com.multiteam.modules.patient.PatientService;
@@ -40,28 +41,30 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean createTreatment(UUID patientId, final TreatmentPostDTO treatmentDTO) {
+    public Boolean createTreatment(UUID patientId, final TreatmentPostDTO treatmentPostDTO) {
 
         var patient = patientService.getPatientById(patientId);
 
         var builder = new Treatment.Builder(
                 null,
-                TreatmentEnum.get(treatmentDTO.situation()),
-                treatmentDTO.initialDate(),
+                TreatmentEnum.get(treatmentPostDTO.situation()),
+                treatmentPostDTO.initialDate(),
                 patient.get())
-                .finalDate(treatmentDTO.finalDate())
-                .description(treatmentDTO.observation())
+                .finalDate(treatmentPostDTO.finalDate())
+                .description(treatmentPostDTO.observation())
                 .active(true)
                 .build();
 
         var treatment = treatmentRepository.save(builder);
 
-        List<UUID> folderIds = new ArrayList<>();
-        treatmentDTO.folders().forEach(i -> folderIds.add(UUID.fromString(i.getCode())));
+        var foldersAllocated = treatmentPostDTO.foldersAllocated().stream().map(folder -> UUID.fromString(folder.getCode())).toList();
+        var foldersUnallocated = treatmentPostDTO.foldersUnallocated().stream().map(folder -> UUID.fromString(folder.getCode())).toList();
 
-        folderService.updateSituationFolder(folderIds, SituationEnum.EM_COLETA);
+        folderService.updateRelationshipFolderTreatment(foldersAllocated, treatment);
+        folderService.updateRelationshipFolderTreatment(foldersUnallocated, treatment);
 
-        folderService.updateRelationshipFolderTreatment(folderIds, treatment);
+        folderService.updateSituationFolder(foldersAllocated, SituationEnum.EM_COLETA);
+        folderService.updateSituationFolder(foldersUnallocated, SituationEnum.NAO_ALOCADA);
 
         logger.info("successfully included treatment id: {}", treatment.getId());
 
@@ -78,19 +81,20 @@ public class TreatmentService {
             return Boolean.FALSE;
         }
 
-        var uuids = treatmentPostDTO.folders().stream().map(folder -> UUID.fromString(folder.getCode())).toList();
-        var folders = folderService.getFoldersByIds(uuids);
+        var foldersAllocated = treatmentPostDTO.foldersAllocated().stream().map(folder -> UUID.fromString(folder.getCode())).toList();
+        var foldersUnallocated = treatmentPostDTO.foldersUnallocated().stream().map(folder -> UUID.fromString(folder.getCode())).toList();
 
         treatment.get().setDescription(treatmentPostDTO.observation());
         treatment.get().setInitialDate(treatmentPostDTO.initialDate());
         treatment.get().setFinalDate(treatmentPostDTO.finalDate());
-        treatment.get().setFolders(folders);
 
         treatmentRepository.save(treatment.get());
 
-        folderService.updateSituationFolder(uuids, SituationEnum.EM_COLETA);
+        folderService.updateRelationshipFolderTreatment(foldersAllocated, treatment.get());
+        folderService.updateRelationshipFolderTreatment(foldersUnallocated, treatment.get());
 
-        folderService.updateRelationshipFolderTreatment(uuids, treatment.get());
+        folderService.updateSituationFolder(foldersAllocated, SituationEnum.EM_COLETA);
+        folderService.updateSituationFolder(foldersUnallocated, SituationEnum.NAO_ALOCADA);
 
         logger.info("successfully updated treatment");
 
