@@ -3,7 +3,6 @@ package com.multiteam.modules.program.service;
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.core.exception.ResourceNotFoundException;
-import com.multiteam.core.utils.ObjectMapperUtils;
 import com.multiteam.core.utils.Select;
 import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.professional.ProfessionalService;
@@ -13,9 +12,11 @@ import com.multiteam.modules.program.dto.FolderPutDTO;
 import com.multiteam.modules.program.entity.Folder;
 import com.multiteam.modules.program.entity.FolderProfessional;
 import com.multiteam.modules.program.entity.FolderProgram;
+import com.multiteam.modules.program.entity.FolderTreatment;
 import com.multiteam.modules.program.repository.FolderProfessionalRepository;
 import com.multiteam.modules.program.repository.FolderProgramRepository;
 import com.multiteam.modules.program.repository.FolderRepository;
+import com.multiteam.modules.program.repository.FolderTreatmentRepository;
 import com.multiteam.modules.treatment.Treatment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +37,7 @@ public class FolderService {
     private final FolderRepository folderRepository;
     private final FolderProfessionalRepository professionalFolderRepository;
     private final FolderProgramRepository folderProgramRepository;
+    private final FolderTreatmentRepository folderTreatmentRepository;
 
     public FolderService(
             PatientService patientService,
@@ -43,13 +45,15 @@ public class FolderService {
             ProgramService programService,
             FolderRepository folderRepository,
             FolderProfessionalRepository professionalFolderRepository,
-            FolderProgramRepository folderProgramRepository) {
+            FolderProgramRepository folderProgramRepository,
+            FolderTreatmentRepository folderTreatmentRepository) {
         this.patientService = patientService;
         this.programService = programService;
         this.professionalService = professionalService;
         this.folderRepository = folderRepository;
         this.professionalFolderRepository = professionalFolderRepository;
         this.folderProgramRepository = folderProgramRepository;
+        this.folderTreatmentRepository = folderTreatmentRepository;
     }
 
     @Transactional
@@ -136,10 +140,10 @@ public class FolderService {
     }
 
     @Transactional
-    public void updateRelationshipFolderTreatment(List<UUID> folderIds, Treatment treatment) {
+    public void createRelationshipFolderTreatment(List<UUID> folderIds, Treatment treatment) {
         var folders = folderRepository.findAllById(folderIds);
-        folders.forEach(folder -> folder.setTreatment(treatment));
-        folderRepository.saveAll(folders);
+        List<FolderTreatment> folderTreatments = folders.stream().map(folder -> FolderTreatment.getInstance(folder, treatment)).toList();
+        folderTreatmentRepository.saveAll(folderTreatments);
     }
 
     private void salveRelationshipFolderProfessional(Folder folder, List<Select> professionals) {

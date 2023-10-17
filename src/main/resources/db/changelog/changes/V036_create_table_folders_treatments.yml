@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: V036
+      author: michael
+      changes:
+        - createTable:
+            tableName: folders_treatments
+            columns:
+              - column:
+                  name: folders_treatments_id
+                  type: uuid
+                  defaultValue: uuid_generate_v4()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: treatment_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: folder_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: folder_id
+            baseTableName: folders_treatments
+            constraintName: fk_folders_treatments_folders
+            referencedColumnNames: folder_id
+            referencedTableName: folders
+        - addForeignKeyConstraint:
+            baseColumnNames: treatment_id
+            baseTableName: folders_treatments
+            constraintName: fk_folders_treatments_treatments
+            referencedColumnNames: treatment_id
+            referencedTableName: treatments

@@ -2,7 +2,6 @@ package com.multiteam.modules.treatment;
 
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.enums.TreatmentEnum;
-import com.multiteam.core.utils.Select;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.guest.Guest;
 import com.multiteam.modules.patient.PatientService;
@@ -41,11 +40,11 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Boolean createTreatment(UUID patientId, final TreatmentPostDTO treatmentPostDTO) {
+    public Boolean createTreatment(UUID patientId, TreatmentPostDTO treatmentPostDTO) {
 
         var patient = patientService.getPatientById(patientId);
 
-        var builder = new Treatment.Builder(
+        var treatmentBuilder = new Treatment.Builder(
                 null,
                 TreatmentEnum.get(treatmentPostDTO.situation()),
                 treatmentPostDTO.initialDate(),
@@ -55,13 +54,13 @@ public class TreatmentService {
                 .active(true)
                 .build();
 
-        var treatment = treatmentRepository.save(builder);
+        var treatment = treatmentRepository.save(treatmentBuilder);
 
         var foldersAllocated = treatmentPostDTO.foldersAllocated().stream().map(folder -> UUID.fromString(folder.getCode())).toList();
         var foldersUnallocated = treatmentPostDTO.foldersUnallocated().stream().map(folder -> UUID.fromString(folder.getCode())).toList();
 
-        folderService.updateRelationshipFolderTreatment(foldersAllocated, treatment);
-        folderService.updateRelationshipFolderTreatment(foldersUnallocated, treatment);
+        folderService.createRelationshipFolderTreatment(foldersAllocated, treatment);
+        folderService.createRelationshipFolderTreatment(foldersUnallocated, treatment);
 
         folderService.updateSituationFolder(foldersAllocated, SituationEnum.EM_COLETA);
         folderService.updateSituationFolder(foldersUnallocated, SituationEnum.NAO_ALOCADA);
@@ -91,8 +90,8 @@ public class TreatmentService {
 
         treatmentRepository.save(treatment.get());
 
-        folderService.updateRelationshipFolderTreatment(foldersAllocated, treatment.get());
-        folderService.updateRelationshipFolderTreatment(foldersUnallocated, treatment.get());
+        folderService.createRelationshipFolderTreatment(foldersAllocated, treatment.get());
+        folderService.createRelationshipFolderTreatment(foldersUnallocated, treatment.get());
 
         folderService.updateSituationFolder(foldersAllocated, SituationEnum.EM_COLETA);
         folderService.updateSituationFolder(foldersUnallocated, SituationEnum.NAO_ALOCADA);
@@ -156,7 +155,7 @@ public class TreatmentService {
 
         Set<UUID> professionals = new HashSet<>();
         Set<Clinic> clinics = new HashSet<>();
-        List<Folder> folders = folderService.getFolderByPatientId(treatment.get().getPatient().getId());
+        List<Folder> folders = treatment.get().getFolders().stream().toList();
 
         return Optional.of(TreatmentEditDTO.toDTO(treatment.get(), clinics, professionals, folders));
     }

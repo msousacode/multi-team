@@ -24,11 +24,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: treatment_id
-                  type: uuid
-                  constraints:
-                    nullable: true
-              - column:
                   name: active
                   type: boolean
                   defaultValueBoolean: true
@@ -54,9 +49,3 @@ databaseChangeLog:
             constraintName: fk_folders_patients
             referencedColumnNames: patient_id
             referencedTableName: patients
-        - addForeignKeyConstraint:
-            baseColumnNames: treatment_id
-            baseTableName: folders
-            constraintName: fk_folders_treatments
-            referencedColumnNames: treatment_id
-            referencedTableName: treatments

@@ -56,8 +56,11 @@ public class Treatment extends Tenantable {
       inverseJoinColumns = @JoinColumn(name = "guest_id"))
   private Set<Guest> guests;
 
-  @OneToMany(mappedBy = "treatment")
-  private List<Folder> folders = new ArrayList<>();
+  @ManyToMany
+  @JoinTable(name = "folders_treatments",
+          joinColumns = @JoinColumn(name = "treatment_id"),
+          inverseJoinColumns = @JoinColumn(name = "folder_id"))
+  private Set<Folder> folders;
 
   public void addGuestsInTreatment(Guest guest) {
     this.guests.add(guest);
