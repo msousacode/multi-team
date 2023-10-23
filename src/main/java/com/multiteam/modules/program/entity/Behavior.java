@@ -3,6 +3,9 @@ package com.multiteam.modules.program.entity;
 import com.multiteam.core.models.Tenantable;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -43,8 +46,8 @@ public class Behavior extends Tenantable {
     @Column(name = "maintenance_count")
     private Integer maintenanceCount;
 
-    @ManyToOne
-    @JoinColumn(name = "program_id", referencedColumnName = "program_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "program_id", referencedColumnName = "program_id")
     private Program program;
 
     @Column(name = "active")

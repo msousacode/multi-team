@@ -65,4 +65,9 @@ public class ProgramService {
     public List<Program> findProgramsByIdInBacth(List<UUID> programsIds) {
         return programRepository.findAllById(programsIds);
     }
+
+    @Transactional
+    public void delete(UUID programId) {
+        programRepository.deleteById(programId);
+    }
 }

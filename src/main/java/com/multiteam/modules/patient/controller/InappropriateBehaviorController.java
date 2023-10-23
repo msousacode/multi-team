@@ -13,7 +13,7 @@ import java.util.UUID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RequestMapping(
-        path = "/v1/behaviors",
+        path = "/v1/inappropriate-behaviors",
         produces = APPLICATION_JSON_VALUE
 )
 @RestController

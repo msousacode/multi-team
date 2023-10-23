@@ -34,10 +34,6 @@ public class Folder extends Auditable {
     @JoinColumn(name = "patient_id", referencedColumnName = "patient_id", nullable = false)
     private Patient patient;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "treatment_id", referencedColumnName = "treatment_id")
-    private Treatment treatment;
-
     @ManyToMany
     @JoinTable(
             name = "folders_professionals",

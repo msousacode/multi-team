@@ -8,6 +8,7 @@ import com.multiteam.modules.program.dto.BehaviorDTO;
 import com.multiteam.modules.program.mapper.BehaviorMapper;
 import com.multiteam.modules.program.repository.BehaviorRepository;
 import com.multiteam.modules.program.repository.ProgramRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -61,13 +62,7 @@ public class BehaviorService {
     }
 
     @Transactional
-    public boolean deleteBehavior(UUID programId, List<BehaviorDTO> behaviorDTO) {
-        List uuids = new ArrayList<>();
-
-        behaviorDTO.forEach(dto -> uuids.add(dto.id()));
-
-        behaviorRepository.deleteAllByIdInBatch(uuids);
-
-        return Boolean.TRUE;
+    public void deleteBehavior(UUID behaviorId) {
+        behaviorRepository.delete(behaviorId);
     }
 }

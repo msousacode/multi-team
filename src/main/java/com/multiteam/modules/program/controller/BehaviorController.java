@@ -54,14 +54,9 @@ public class BehaviorController {
         return ResponseEntity.ok(behaviorService.getAll(programId).stream().map(i -> BehaviorMapper.MAPPER.toDTO(i)).toList());
     }
 
-    @PostMapping("/program/{programId}/delete")
-    public ResponseEntity<Void> createBehavior(
-            @PathVariable("programId") final UUID programId,
-            @RequestBody List<BehaviorDTO> behaviorDTO) {
-        if (behaviorService.deleteBehavior(programId, behaviorDTO)) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    @DeleteMapping("/{behaviorId}")
+    public ResponseEntity<Void> delete(@PathVariable("behaviorId") UUID behaviorId) {
+        behaviorService.deleteBehavior(behaviorId);
+        return ResponseEntity.ok().build();
     }
 }

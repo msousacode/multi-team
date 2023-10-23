@@ -65,4 +65,10 @@ public class ProgramController {
                 .map(program -> ResponseEntity.status(HttpStatus.OK).body(ProgramMapper.MAPPER.toDTO(program)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
+
+    @DeleteMapping("/{programId}")
+    public ResponseEntity<Void> delete(@PathVariable("programId") UUID programId) {
+        programService.delete(programId);
+        return ResponseEntity.ok().build();
+    }
 }
