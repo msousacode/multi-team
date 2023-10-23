@@ -10,6 +10,8 @@ import com.multiteam.modules.patient.controller.dto.PatientDTO;
 import com.multiteam.modules.patient.controller.dto.PatientFilter;
 import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.patient.repository.PatientRepository;
+import com.multiteam.modules.program.entity.FolderProfessional;
+import com.multiteam.modules.program.repository.FolderProfessionalRepository;
 import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.user.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,21 +35,21 @@ public class PatientService {
   private final PatientRepository patientRepository;
   private final TreatmentService treatmentService;
   private final UserService userService;
-  private final EmailService emailService;
   private final TenantContext tenantContext;
+  private final FolderProfessionalRepository folderProfessionalRepository;
 
   public PatientService(
       final PatientRepository patientRepository,
       final TreatmentService treatmentService,
       final UserService userService,
-      final EmailService emailService,
-      final TenantContext tenantContext
+      final TenantContext tenantContext,
+      final FolderProfessionalRepository folderProfessionalRepository
   ) {
     this.patientRepository = patientRepository;
     this.treatmentService = treatmentService;
     this.userService = userService;
-    this.emailService = emailService;
     this.tenantContext = tenantContext;
+    this.folderProfessionalRepository = folderProfessionalRepository;
   }
 
   @Transactional
@@ -90,6 +93,11 @@ public class PatientService {
   public Page<PatientDTO> findAllTreatmentAndSituationProgressByProfessionalId(final PatientFilter patientFilter, Pageable pageable) {
     return patientRepository.findAllByNameContainingIgnoreCaseAndActiveIsTrue(patientFilter.patientName(),
         pageable).map(PatientDTO::fromPatientDTO);
+  }
+
+  public List<Patient> findPatientsInTreatment(UUID professionalId) {
+    var folderProfessionalList = folderProfessionalRepository.findPatientsInTreatment(professionalId);
+    return folderProfessionalList.stream().map(fp -> fp.getFolder().getPatient()).toList();
   }
 
   @Transactional

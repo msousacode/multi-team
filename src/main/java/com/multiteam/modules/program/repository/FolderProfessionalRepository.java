@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -22,4 +21,14 @@ public interface FolderProfessionalRepository extends JpaRepository<FolderProfes
     Integer findByFolderIdAndProfessionalId(UUID folderId, UUID professionalId);
 
     List<FolderProfessional> findAllByFolder_Id(UUID id);
+
+    @Query("""
+            select fp from FolderProfessional fp
+            join fp.professional pr on fp.professional.id = pr.id
+            join fp.folder fo on fo.id = fp.folder.id
+            join fo.patient pa on pa.id = fo.patient.id
+            where pr.id = :professionalId            
+            and pa.active = true
+            """)
+    List<FolderProfessional> findPatientsInTreatment(UUID professionalId);
 }

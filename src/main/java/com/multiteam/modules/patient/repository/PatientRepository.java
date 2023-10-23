@@ -19,5 +19,4 @@ public interface PatientRepository extends TenantableRepository<Patient> {
   void inactivePatient(UUID patientId, UUID tenantId);
 
   Page<Patient> findAllByNameContainingIgnoreCaseAndActiveIsTrue(String patientName, Pageable pageable);
-
 }
