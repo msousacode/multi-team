@@ -2,25 +2,21 @@ package com.multiteam.modules.patient.model;
 
 import com.multiteam.core.enums.SexEnum;
 import com.multiteam.core.models.Tenantable;
+import com.multiteam.modules.program.entity.Folder;
 import com.multiteam.modules.treatment.Treatment;
 import com.multiteam.modules.user.User;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.util.Assert;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import org.springframework.util.Assert;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "patients")
 public class Patient extends Tenantable {
@@ -59,6 +55,9 @@ public class Patient extends Tenantable {
   @OneToMany(mappedBy = "patient")
   private List<Treatment> treatments = new ArrayList<>();
 
+  @OneToMany(mappedBy = "patient")
+  private List<Folder> folders = new ArrayList<>();
+
   public Patient() {
   }
 
@@ -72,82 +71,6 @@ public class Patient extends Tenantable {
     this.user = builder.user;
     this.cellPhone = builder.cellPhone;
     this.cpf = builder.cpf;
-  }
-
-  public UUID getId() {
-    return id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public SexEnum getSex() {
-    return sex;
-  }
-
-  public Integer getAge() {
-    return age;
-  }
-
-  public boolean isActive() {
-    return active;
-  }
-
-  public LocalDate getDateBirth() {
-    return dateBirth;
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public String getCellPhone() {
-    return cellPhone;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public void setSex(SexEnum sex) {
-    this.sex = sex;
-  }
-
-  public String getCpf() {
-    return cpf;
-  }
-
-  public void setCpf(String cpf) {
-    this.cpf = cpf;
-  }
-
-  public void setDateBirth(LocalDate dateBirth) {
-    this.dateBirth = dateBirth;
-  }
-
-  public void setAge(Integer age) {
-    this.age = age;
-  }
-
-  public void setActive(boolean active) {
-    this.active = active;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
-
-  public void setCellPhone(String cellPhone) {
-    this.cellPhone = cellPhone;
-  }
-
-  public List<Treatment> getTreatments() {
-    return treatments;
-  }
-
-  public void setTreatments(List<Treatment> treatments) {
-    this.treatments = treatments;
   }
 
   public static class Builder {

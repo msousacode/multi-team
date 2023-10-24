@@ -13,4 +13,6 @@ public interface FolderProgramRepository extends JpaRepository<FolderProgram, UU
     void deleteByFolder_Id(UUID folderId);
 
     List<FolderProgram> findAllByFolder_Id(UUID folderId);
+
+    List<FolderProgram> findAllByFolder_Patient_Id(UUID patientId);
 }

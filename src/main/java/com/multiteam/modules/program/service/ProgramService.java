@@ -5,6 +5,7 @@ import com.multiteam.core.enums.ProtocolEnum;
 import com.multiteam.modules.program.dto.ProgramDTO;
 import com.multiteam.modules.program.entity.Program;
 import com.multiteam.modules.program.mapper.ProgramMapper;
+import com.multiteam.modules.program.repository.FolderProgramRepository;
 import com.multiteam.modules.program.repository.ProgramRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +21,11 @@ import java.util.UUID;
 public class ProgramService {
 
     private final ProgramRepository programRepository;
+    private final FolderProgramRepository folderProgramRepository;
 
-    public ProgramService(ProgramRepository programRepository            ) {
+    public ProgramService(ProgramRepository programRepository, FolderProgramRepository folderProgramRepository) {
         this.programRepository = programRepository;
+        this.folderProgramRepository = folderProgramRepository;
     }
 
     @Transactional
@@ -39,6 +42,7 @@ public class ProgramService {
         return Boolean.TRUE;
     }
 
+    //TODO vai ter que mexer
     public Page<Program> getAll(Pageable pageable) {
         return programRepository.findAll(pageable);
     }
@@ -69,5 +73,10 @@ public class ProgramService {
     @Transactional
     public void delete(UUID programId) {
         programRepository.deleteById(programId);
+    }
+
+    public List<Program> findProgramsInCollect(UUID patientId) {
+        var folderProgram = folderProgramRepository.findAllByFolder_Patient_Id(patientId);
+        return List.of();
     }
 }

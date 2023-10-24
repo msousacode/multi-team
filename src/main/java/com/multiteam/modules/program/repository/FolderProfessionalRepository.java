@@ -27,7 +27,8 @@ public interface FolderProfessionalRepository extends JpaRepository<FolderProfes
             join fp.professional pr on fp.professional.id = pr.id
             join fp.folder fo on fo.id = fp.folder.id
             join fo.patient pa on pa.id = fo.patient.id
-            where pr.id = :professionalId            
+            where pr.id = :professionalId
+            and fp.situation = 'EM_COLETA'            
             and pa.active = true
             """)
     List<FolderProfessional> findPatientsInTreatment(UUID professionalId);

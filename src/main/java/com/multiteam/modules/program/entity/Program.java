@@ -72,4 +72,7 @@ public class Program extends Tenantable {
 
     @Column(name = "active")
     private Boolean active;
+
+    @OneToMany(mappedBy = "program")
+    public List<Behavior> behaviors = new ArrayList<>();
 }

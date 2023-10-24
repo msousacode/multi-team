@@ -40,4 +40,11 @@ public class Folder extends Auditable {
             joinColumns = @JoinColumn(name = "folder_id"),
             inverseJoinColumns = @JoinColumn(name = "folders_professionals_id"))
     private List<FolderProfessional> folderProfessional;
+
+    @ManyToMany
+    @JoinTable(
+            name = "folders_programs",
+            joinColumns = @JoinColumn(name = "folder_id"),
+            inverseJoinColumns = @JoinColumn(name = "folders_programs_id"))
+    private List<FolderProgram> folderPrograms;
 }

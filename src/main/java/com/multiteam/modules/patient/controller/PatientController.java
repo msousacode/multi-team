@@ -87,10 +87,10 @@ public class PatientController {
         }
     }
 
-    @GetMapping("/professional/{professionalId}")
-    public ResponseEntity<List<PatientDTO>> getAllPatients(
+    @GetMapping("/professional/{professionalId}/mobile")
+    public ResponseEntity<List<PatientDTO>> findPatientsInTreatment(
             @PathVariable("professionalId") final UUID professionalId) {
-        var patients = patientService.findPatientsInTreatment(professionalId).stream().map(PatientDTO::fromPatientDTO).toList();
+        var patients = patientService.findPatientsInTreatment(professionalId).stream().map(patient -> new PatientDTO(patient, patient.getFolders())).toList();
         return ResponseEntity.status(HttpStatus.OK).body(patients);
     }
 }
