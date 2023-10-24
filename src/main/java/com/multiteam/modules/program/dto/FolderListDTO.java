@@ -29,8 +29,8 @@ public record FolderListDTO(
                 folder.getPatient().getId(),
                 folder.getActive(),
                 folder.getFolderProfessional().get(0).getSituation(),
-                List.of(),
-                SelectProfessionals(folder));
+                folder.getFolderPrograms().stream().map(program -> new ProgramDTO(program.getProgram())).toList(),
+                selectProfessionals(folder));
     }
 
     public FolderListDTO(Folder folder, List<Program> programs) {
@@ -43,11 +43,11 @@ public record FolderListDTO(
                 folder.getActive(),
                 folder.getFolderProfessional().get(0).getSituation(),
                 programs.stream().map(program -> ProgramMapper.MAPPER.toDTO(program)).toList(),
-                SelectProfessionals(folder)
+                selectProfessionals(folder)
         );
     }
 
-    private static List<Select> SelectProfessionals(Folder folder) {
+    public static List<Select> selectProfessionals(Folder folder) {
         return folder.getFolderProfessional().stream().map(i -> Select.toSelect(i.getProfessional().getName(), i.getProfessional().getId().toString())).toList();
     }
 }

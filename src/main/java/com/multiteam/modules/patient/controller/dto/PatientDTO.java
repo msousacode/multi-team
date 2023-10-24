@@ -1,7 +1,9 @@
 package com.multiteam.modules.patient.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.multiteam.core.utils.Select;
 import com.multiteam.modules.patient.model.Patient;
+import com.multiteam.modules.program.dto.FolderListDTO;
 import com.multiteam.modules.program.dto.ProgramDTO;
 import com.multiteam.modules.program.entity.Folder;
 import com.multiteam.modules.treatment.Treatment;
@@ -24,7 +26,7 @@ public record PatientDTO(
         String cpf,
         String treatmentObservation,
         UUID treatmentId,
-        List<ProgramDTO> programs
+        List<FolderListDTO> folders
 ) {
 
     private PatientDTO(Patient patient) {
@@ -43,7 +45,7 @@ public record PatientDTO(
         );
     }
 
-    public PatientDTO(Patient patient, List<Folder> folders) {
+    public PatientDTO(Patient patient, List<Folder> foldersList) {
         this(
                 patient.getId(),
                 patient.getName(),
@@ -55,17 +57,8 @@ public record PatientDTO(
                 patient.getCpf(),
                 patient.getTreatments().isEmpty() ? null : buildTreatment(patient.getTreatments().get(0)),
                 patient.getTreatments().isEmpty() ? null : patient.getTreatments().get(0).getId(),
-                extractProgramas(folders)
+                foldersList.stream().map(FolderListDTO::new).toList()
         );
-    }
-
-    private static List<ProgramDTO> extractProgramas(List<Folder> folders) {
-        List<ProgramDTO> programsDto = new ArrayList<>();
-
-        for(Folder folder : folders) {
-            programsDto = folder.getFolderPrograms().stream().map(program -> new ProgramDTO(program.getProgram())).toList();
-        }
-        return programsDto;
     }
 
     public static PatientDTO fromPatientDTO(Patient patient) {
