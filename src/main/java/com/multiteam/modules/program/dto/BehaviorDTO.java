@@ -14,7 +14,10 @@ public record BehaviorDTO(
         LocalDateTime startDate,
         LocalDateTime endDate,
         LocalDateTime acquiredDate,
-        Integer maintenanceCount
+        Integer maintenanceCount,
+        Boolean time,
+        String question
+
 ) {
     public BehaviorDTO(Behavior behavior) {
         this(
@@ -26,7 +29,9 @@ public record BehaviorDTO(
                 behavior.getStartDate(),
                 behavior.getEndDate(),
                 behavior.getAcquiredDate(),
-                behavior.getMaintenanceCount()
+                behavior.getMaintenanceCount(),
+                behavior.getTime(),
+                behavior.getQuestion()
         );
     }
 }

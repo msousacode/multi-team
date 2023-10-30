@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: V037
+      author: michael
+      changes:
+        - addColumn:
+              tableName: behaviors
+              columns:
+                - column:
+                    name: collect_time
+                    type: boolean
+                - column:
+                    name: question
+                    type: varchar(255)
+                - column:
+                    name: collection_date
+                    type: timestamp

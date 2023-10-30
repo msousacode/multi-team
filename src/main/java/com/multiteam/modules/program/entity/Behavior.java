@@ -52,4 +52,13 @@ public class Behavior extends Tenantable {
 
     @Column(name = "active")
     private Boolean active;
+
+    @Column(name = "collect_time", columnDefinition = "false")
+    private Boolean time;
+
+    @Column(name = "question")
+    private String question;
+
+    @Column(name = "collection_date")
+    private LocalDateTime collectionDate;
 }
