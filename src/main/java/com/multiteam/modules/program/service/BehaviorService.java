@@ -55,6 +55,8 @@ public class BehaviorService {
 
         optional.setBehaviorName(behaviorDTO.behaviorName());
         optional.setObservation(behaviorDTO.observation());
+        optional.setQuestion(behaviorDTO.question());
+        optional.setTime(behaviorDTO.time());
 
         behaviorRepository.save(optional);
 

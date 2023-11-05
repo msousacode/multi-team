@@ -9,11 +9,8 @@ import java.util.Map;
 @Getter
 public enum ProtocolEnum {
 
-    PROTOCOLO_OBJETIVOS_METAS("Protocolo de Objetivos e Metas", 1),
-    PROTOCOLO_ABC("Protocolo ABC", 2),
-    PROTOCOLO_CERTO_ERRADO("Protocolo Certo/Errado", 3),
-    PROTOCOLO_OCORRENCIA_RESPOSTA("Protocolo de Ocorrência de Respostas", 4),
-    PROTOCOLO_MANUTENCAO("Protocolo de Manutenção", 5);
+    PROTOCOLO_ABC("Protocolo ABC", 1),
+    PROTOCOLO_OCORRENCIA_RESPOSTA("Protocolo de Ocorrência de Respostas", 2);
 
     private final String description;
     private final Integer value;
