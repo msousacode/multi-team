@@ -28,17 +28,11 @@ public class Program extends Tenantable {
     @Column(name = "program_name")
     private String programName;
 
-    @Column(name = "mark")
-    private Integer mark;
-
     @Column(name = "ability")
     private Integer ability;
 
     @Column(name = "protocol")
     private Integer protocol;
-
-    @Column(name = "targets_by_session")
-    private Integer targetsBySession;
 
     @Column(name = "attempt_by_session")
     private Integer attemptBySession;
@@ -57,18 +51,6 @@ public class Program extends Tenantable {
 
     @Column(name = "observation")
     private String observation;
-
-    @Column(name = "evolution_quantity_by_session")
-    private Integer evolutionQuantityBySession;
-
-    @Column(name = "evolution_percentage_attempts")
-    private Integer evolutionPercentageAttempts;
-
-    @Column(name = "correction_quantity_by_session")
-    private Integer correctionQuantityBySession;
-
-    @Column(name = "correction_percentage_attempts")
-    private Integer correctionPercentageAttempts;
 
     @Column(name = "active")
     private Boolean active;

@@ -3,8 +3,10 @@ package com.multiteam.modules.program.service;
 import com.multiteam.core.enums.AbilityEnum;
 import com.multiteam.core.enums.ProtocolEnum;
 import com.multiteam.modules.program.dto.ProgramDTO;
+import com.multiteam.modules.program.dto.ProgramPostDTO;
 import com.multiteam.modules.program.entity.Program;
 import com.multiteam.modules.program.mapper.ProgramMapper;
+import com.multiteam.modules.program.mapper.ProgramPostMapper;
 import com.multiteam.modules.program.repository.FolderProgramRepository;
 import com.multiteam.modules.program.repository.ProgramRepository;
 import org.springframework.data.domain.Page;
@@ -29,9 +31,9 @@ public class ProgramService {
     }
 
     @Transactional
-    public boolean createProgram(ProgramDTO programDTO) {
+    public boolean createProgram(ProgramPostDTO programDTO) {
 
-        Program program = ProgramMapper.MAPPER.toEntity(programDTO);
+        Program program = ProgramPostMapper.MAPPER.toEntity(programDTO);
 
         program.setAbility(AbilityEnum.get(program.getAbility()).getValue());
         program.setProtocol(ProtocolEnum.get(program.getProtocol()).getValue());

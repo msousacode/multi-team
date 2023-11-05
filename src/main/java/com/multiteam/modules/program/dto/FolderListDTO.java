@@ -4,7 +4,7 @@ import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.utils.Select;
 import com.multiteam.modules.program.entity.Folder;
 import com.multiteam.modules.program.entity.Program;
-import com.multiteam.modules.program.mapper.ProgramMapper;
+import com.multiteam.modules.program.mapper.ProgramPostMapper;
 
 import java.util.List;
 import java.util.UUID;
@@ -42,7 +42,7 @@ public record FolderListDTO(
                 folder.getPatient().getId(),
                 folder.getActive(),
                 folder.getFolderProfessional().get(0).getSituation(),
-                programs.stream().map(program -> ProgramMapper.MAPPER.toDTO(program)).toList(),
+                programs.stream().map(program -> ProgramPostMapper.MAPPER.toDTO(program)).toList(),
                 selectProfessionals(folder)
         );
     }

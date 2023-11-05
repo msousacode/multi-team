@@ -41,7 +41,7 @@ public class PatientController {
 
     @PostMapping
     public ResponseEntity<?> createPatient(
-            @RequestBody final PatientDTO patientDTO) {
+            @RequestBody PatientDTO patientDTO) {
         if (patientService.createPatient(patientDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {

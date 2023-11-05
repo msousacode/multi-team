@@ -19,20 +19,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: mark
-                  type: tinyint
-              - column:
                   name: ability
                   type: tinyint
                   constraints:
                     nullable: false
               - column:
                   name: protocol
-                  type: tinyint
-                  constraints:
-                    nullable: false
-              - column:
-                  name: targets_by_session
                   type: tinyint
                   constraints:
                     nullable: false
@@ -56,18 +48,6 @@ databaseChangeLog:
               - column:
                   name: observation
                   type: varchar(10000)
-              - column:
-                  name: correction_quantity_by_session
-                  type: tinyint
-              - column:
-                  name: correction_percentage_attempts
-                  type: tinyint
-              - column:
-                  name: evolution_quantity_by_session
-                  type: tinyint
-              - column:
-                  name: evolution_percentage_attempts
-                  type: tinyint
               - column:
                   name: tenant_id
                   type: uuid

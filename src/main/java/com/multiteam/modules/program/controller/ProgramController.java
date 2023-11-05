@@ -1,9 +1,10 @@
 package com.multiteam.modules.program.controller;
 
-import com.multiteam.modules.program.mapper.ProgramMapper;
-import com.multiteam.modules.program.service.ProgramService;
 import com.multiteam.modules.program.dto.ProgramDTO;
 import com.multiteam.modules.program.dto.ProgramListDTO;
+import com.multiteam.modules.program.dto.ProgramPostDTO;
+import com.multiteam.modules.program.mapper.ProgramPostMapper;
+import com.multiteam.modules.program.service.ProgramService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -32,7 +32,7 @@ public class ProgramController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createProgram(@RequestBody ProgramDTO programDTO) {
+    public ResponseEntity<Void> createProgram(@RequestBody ProgramPostDTO programDTO) {
         if (programService.createProgram(programDTO)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
@@ -63,7 +63,7 @@ public class ProgramController {
     @GetMapping("/{programId}")
     public ResponseEntity<ProgramDTO> getById(@PathVariable("programId") final UUID programId) {
         return programService.getById(programId)
-                .map(program -> ResponseEntity.status(HttpStatus.OK).body(ProgramMapper.MAPPER.toDTO(program)))
+                .map(program -> ResponseEntity.status(HttpStatus.OK).body(ProgramPostMapper.MAPPER.toDTO(program)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 

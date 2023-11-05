@@ -2,10 +2,9 @@ package com.multiteam.modules.program.dto;
 
 import com.multiteam.modules.program.entity.Program;
 
-import java.util.List;
 import java.util.UUID;
 
-public record ProgramDTO(
+public record ProgramPostDTO(
         UUID programId,
         String programName,
         Integer ability,
@@ -16,10 +15,9 @@ public record ProgramDTO(
         String learningCriterion,
         String materials,
         String observation,
-        Integer code,
-        List<BehaviorDTO> behaviors
+        Integer code
 ) {
-    public ProgramDTO(Program program) {
+    public ProgramPostDTO(Program program) {
         this(
                 program.getId(),
                 program.getProgramName(),
@@ -31,8 +29,7 @@ public record ProgramDTO(
                 program.getLearningCriterion(),
                 program.getMaterials(),
                 program.getObservation(),
-                program.getCode(),
-                program.getBehaviors().stream().map(BehaviorDTO::new).toList()
+                program.getCode()
         );
     }
 }
