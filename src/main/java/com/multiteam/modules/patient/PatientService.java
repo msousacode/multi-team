@@ -66,7 +66,6 @@ public class PatientService {
     var builder = new Patient.Builder(
         patientDTO.name(),
         SexEnum.get(patientDTO.sex()),
-        patientDTO.cpf(),
         patientDTO.age(),
         patientDTO.dateBirth(),
         user)
@@ -95,9 +94,10 @@ public class PatientService {
         pageable).map(PatientDTO::fromPatientDTO);
   }
 
-  public List<Patient> findPatientsInTreatment(UUID professionalId) {
+  public List<PatientDTO> findPatientsInTreatment(UUID professionalId) {
     var folderProfessionalList = folderProfessionalRepository.findPatientsInTreatment(professionalId);
-    return folderProfessionalList.stream().map(fp -> fp.getFolder().getPatient()).toList();
+    var folders = folderProfessionalList.stream().map(p -> p.getFolder()).toList();
+    return folderProfessionalList.stream().map(patient -> new PatientDTO(patient.getFolder().getPatient(), folders)).toList();
   }
 
   @Transactional

@@ -33,9 +33,6 @@ public class Patient extends Tenantable {
   @Enumerated(EnumType.STRING)
   private SexEnum sex;
 
-  @Column(name = "cpf")
-  private String cpf;
-
   @Column(name = "date_birth")
   private LocalDate dateBirth;
 
@@ -70,7 +67,6 @@ public class Patient extends Tenantable {
     this.dateBirth = builder.dateBirth;
     this.user = builder.user;
     this.cellPhone = builder.cellPhone;
-    this.cpf = builder.cpf;
   }
 
   public static class Builder {
@@ -78,7 +74,6 @@ public class Patient extends Tenantable {
     //mandatory
     private UUID id;
     private final String name;
-    private final String cpf;
     private final SexEnum sex;
     private final Integer age;
     private boolean active;
@@ -88,19 +83,17 @@ public class Patient extends Tenantable {
     //optional
     private String cellPhone;
 
-    public Builder(final String name, final SexEnum sex, final String cpf, final Integer age,
+    public Builder(final String name, final SexEnum sex, final Integer age,
         final LocalDate dateBirth, final User user) {
 
       Assert.notNull(dateBirth, "value dateBirth cannot be null");
       Assert.notNull(user, "user cannot be null");
-      Assert.notNull(cpf, "cpf cannot be null");
       Assert.isTrue(!name.isEmpty(), "patient name cannot be empty");
       Assert.notNull(sex, "patient sex cannot be null");
       Assert.notNull(age, "patient age cannot be null");
 
       this.name = name;
       this.sex = sex;
-      this.cpf = cpf;
       this.age = age;
       this.dateBirth = dateBirth;
       this.user = user;

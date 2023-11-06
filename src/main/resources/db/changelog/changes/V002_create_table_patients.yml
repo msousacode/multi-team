@@ -19,12 +19,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: cpf
-                  type: varchar(20)
-                  constraints:
-                    nullable: false
-                    unique: true
-              - column:
                   name: sex
                   type: varchar(20)
               - column:
