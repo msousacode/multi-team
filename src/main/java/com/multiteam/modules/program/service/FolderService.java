@@ -5,6 +5,7 @@ import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.core.exception.ResourceNotFoundException;
 import com.multiteam.core.utils.Select;
 import com.multiteam.modules.patient.PatientService;
+import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
 import com.multiteam.modules.program.dto.FolderListDTO;
 import com.multiteam.modules.program.dto.FolderPostDTO;
@@ -59,7 +60,7 @@ public class FolderService {
     @Transactional
     public Boolean createFolder(UUID patientId, FolderPostDTO folderPostDTO) {
 
-        if(folderPostDTO.professionals().isEmpty()) {
+        if (folderPostDTO.professionals().isEmpty()) {
             throw new BadRequestException("Deve existir no mínimo 1 profissional vinculado a pasta curricular.");
         }
 
@@ -154,24 +155,40 @@ public class FolderService {
 
         var foldersProfessionals = professionalFolderRepository.findAllByFolder_Id(folder.getId());
 
-        foldersProfessionals.forEach(fp -> {
-            if(!professionalsUUIDs.contains(fp.getProfessional().getId())) {
-                professionalFolderRepository.deleteById(fp.getId());
-            }
-        });
+        var professionalDeleted = deleteProfessionalIfNecessary(professionalsUUIDs, foldersProfessionals);
 
-        professionalsResult.forEach(p -> {
-            var isRelated = professionalFolderRepository.findByFolderIdAndProfessionalId(folder.getId(), p.getId());
+        //Remove da lista os profissionais deletados.
+        professionalsResult.removeAll(professionalDeleted);
 
-            if(isRelated == 0) {
+        saveFolderProfessional(folder, professionalsResult);
+    }
+
+    private void saveFolderProfessional(Folder folder, List<Professional> professionalsResult) {
+        professionalsResult.forEach(professional -> {
+            if (verifyIfProfessionalIsPresentInTable(folder, professional).isEmpty()) {
                 FolderProfessional professionalFolder = new FolderProfessional();
                 professionalFolder.setFolder(folder);
-                professionalFolder.setProfessional(p);
-                professionalFolder.setSituation(SituationEnum.NAO_ALOCADA);
+                professionalFolder.setProfessional(professional);
+                professionalFolder.setSituation(SituationEnum.EM_COLETA);
 
                 professionalFolderRepository.save(professionalFolder);
             }
         });
+    }
+
+    private List<FolderProfessional> verifyIfProfessionalIsPresentInTable(Folder folder, Professional p) {
+        return professionalFolderRepository.findByFolderIdAndProfessionalId(folder.getId(), p.getId());
+    }
+
+    private List<Professional> deleteProfessionalIfNecessary(List<UUID> professionalsUUIDs, List<FolderProfessional> foldersProfessionals) {
+        List<Professional> professionalsDeleted = new ArrayList<>();
+        foldersProfessionals.forEach(fp -> {
+            if (!professionalsUUIDs.contains(fp.getProfessional().getId())) {
+                professionalFolderRepository.deleteById(fp.getId());
+                professionalsDeleted.add(fp.getProfessional());
+            }
+        });
+        return professionalsDeleted;
     }
 
     public List<Folder> getFoldersByIds(List<UUID> uuids) {

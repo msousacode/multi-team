@@ -72,8 +72,8 @@ public class FolderController {
 
     @PutMapping("/{folderId}/patient/{patientId}")
     public ResponseEntity<Void> updateFolder(
-            @PathVariable("folderId") final UUID folderId,
-            @PathVariable("patientId") final UUID patientId,
+            @PathVariable("folderId") UUID folderId,
+            @PathVariable("patientId") UUID patientId,
             @RequestBody FolderPutDTO folderPutDTO) {
         if (folderService.updateFolder(folderId, patientId, folderPutDTO)) {
             return ResponseEntity.status(HttpStatus.OK).build();
