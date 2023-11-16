@@ -2,15 +2,12 @@ package com.multiteam.modules.program.dto;
 
 import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.utils.Select;
-import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.program.entity.Folder;
-import com.multiteam.modules.program.entity.Program;
-import com.multiteam.modules.program.mapper.ProgramPostMapper;
 
 import java.util.List;
 import java.util.UUID;
 
-public record FolderListDTO(
+public record FolderListBasicInformationDTO(
         UUID folderId,
         Integer code,
         String folderName,
@@ -18,10 +15,9 @@ public record FolderListDTO(
         UUID patientId,
         Boolean active,
         SituationEnum situation,
-        List<ProgramDTO> programs,
         List<Select> professionals
 ) {
-    public FolderListDTO(Folder folder) {
+    public FolderListBasicInformationDTO(Folder folder) {
         this(
                 folder.getId(),
                 folder.getCode(),
@@ -30,22 +26,7 @@ public record FolderListDTO(
                 folder.getPatient().getId(),
                 folder.getActive(),
                 folder.getFolderProfessional().isEmpty() ? null : folder.getFolderProfessional().get(0).getSituation(),
-                folder.getFolderPrograms().stream().map(program -> new ProgramDTO(program.getProgram())).toList(),
                 selectProfessionals(folder));
-    }
-
-    public FolderListDTO(Folder folder, List<Program> programs) {
-        this(
-                folder.getId(),
-                folder.getCode(),
-                folder.getFolderName(),
-                folder.getPatient().getName(),
-                folder.getPatient().getId(),
-                folder.getActive(),
-                folder.getFolderProfessional().get(0).getSituation(),
-                programs.stream().map(program -> ProgramPostMapper.MAPPER.toDTO(program)).toList(),
-                selectProfessionals(folder)
-        );
     }
 
     public static List<Select> selectProfessionals(Folder folder) {

@@ -66,7 +66,7 @@ public class ScheduleService {
 
     String title = generateTitle(professional.get(), scheduleRequest, patient);
 
-    if (scheduleRequest.repeatEvent()) {
+    if (scheduleRequest.repeatEvent() != null) {
       var targetDays = discoveryTargetDays(scheduleRequest);
       String finalTitle = title;
 

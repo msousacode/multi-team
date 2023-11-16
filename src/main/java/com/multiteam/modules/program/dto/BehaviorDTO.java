@@ -3,9 +3,10 @@ package com.multiteam.modules.program.dto;
 import com.multiteam.modules.program.entity.Behavior;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 import java.util.UUID;
 
-public record BehaviorDTO(
+public record   BehaviorDTO(
         UUID id,
         String behaviorName,
         Integer orderExecution,
@@ -16,7 +17,10 @@ public record BehaviorDTO(
         LocalDateTime acquiredDate,
         Integer maintenanceCount,
         Boolean time,
-        String question
+        String question,
+        String response,
+        UUID auxId,
+        UUID programId
 
 ) {
     public BehaviorDTO(Behavior behavior) {
@@ -31,7 +35,10 @@ public record BehaviorDTO(
                 behavior.getAcquiredDate(),
                 behavior.getMaintenanceCount(),
                 behavior.getTime(),
-                behavior.getQuestion()
+                behavior.getQuestion(),
+                null,
+                UUID.randomUUID(),
+                behavior.getProgram().getId()
         );
     }
 }

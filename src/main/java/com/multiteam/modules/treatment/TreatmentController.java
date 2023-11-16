@@ -29,7 +29,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         produces = APPLICATION_JSON_VALUE
 )
 @RestController
-@PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
+@PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL', 'SUPERVISOR')")
 public class TreatmentController {
 
     private final TreatmentService treatmentService;
@@ -46,6 +46,18 @@ public class TreatmentController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    /*@PostMapping("/search")
+    public ResponseEntity<Page<TreatmentListDTO>> getAllTreatments(
+            @RequestBody TreatmentSearchDTO search,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size,
+            @RequestParam(value = "sort", defaultValue = "createdDate") String sort,
+            @RequestParam(value = "direction", defaultValue = "DESC") String direction
+    ) {
+        return ResponseEntity.ok(treatmentService.getAllTreatments(search,
+                PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(direction), sort))));
+    }*/
 
     @PostMapping("/search")
     public ResponseEntity<Page<TreatmentListDTO>> getAllTreatments(
