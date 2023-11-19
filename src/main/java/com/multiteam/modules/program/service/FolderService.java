@@ -169,7 +169,7 @@ public class FolderService {
                 FolderProfessional professionalFolder = new FolderProfessional();
                 professionalFolder.setFolder(folder);
                 professionalFolder.setProfessional(professional);
-                professionalFolder.setSituation(SituationEnum.EM_COLETA);
+                professionalFolder.setSituation(SituationEnum.NAO_ALOCADA);
 
                 professionalFolderRepository.save(professionalFolder);
             }
@@ -195,7 +195,7 @@ public class FolderService {
         return folderRepository.findAllById(uuids);
     }
 
-    public List<Folder> fetchFoldersByPatient(UUID patientId) {
+    public List<Folder> getFoldersByPatient(UUID patientId) {
         return folderRepository.findByPatient_Id(patientId);
     }
 }

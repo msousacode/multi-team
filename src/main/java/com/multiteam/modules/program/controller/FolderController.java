@@ -1,6 +1,8 @@
 package com.multiteam.modules.program.controller;
 
+import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.utils.Select;
+import com.multiteam.modules.program.dto.FolderGridDTO;
 import com.multiteam.modules.program.dto.FolderListDTO;
 import com.multiteam.modules.program.dto.FolderPostDTO;
 import com.multiteam.modules.program.dto.FolderPutDTO;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,9 +46,22 @@ public class FolderController {
     }
 
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<List<Select>> fetchFoldersByPatient(@PathVariable("patientId") UUID patientId) {
-        return ResponseEntity.ok(folderService.fetchFoldersByPatient(patientId).stream()
-                .map(folder -> Select.toSelect(folder.getFolderName(), folder.getId().toString())).toList());
+    public ResponseEntity<FolderGridDTO> getFoldersByPatient(@PathVariable("patientId") UUID patientId) {
+
+        var folders = folderService.getFoldersByPatient(patientId);
+
+        List<Select> allocated = new ArrayList<>();
+        List<Select> unallocated = new ArrayList<>();
+
+        folders.forEach(folder -> folder.getFolderProfessional().forEach(folderProfessional -> {
+            if(SituationEnum.NAO_ALOCADA.equals(folderProfessional.getSituation())) {
+               unallocated.add(Select.toSelect(folder.getFolderName(), folder.getId().toString()));
+            } else if(SituationEnum.EM_COLETA.equals(folderProfessional.getSituation())){
+                allocated.add(Select.toSelect(folder.getFolderName(), folder.getId().toString()));
+            }
+        }));
+
+        return ResponseEntity.ok(new FolderGridDTO(allocated, unallocated));
     }
 
     @GetMapping
