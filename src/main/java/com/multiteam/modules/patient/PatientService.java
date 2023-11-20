@@ -96,8 +96,7 @@ public class PatientService {
 
   public List<PatientDTO> findPatientsInTreatment(UUID professionalId) {
     var folderProfessionalList = folderProfessionalRepository.findPatientsInTreatment(professionalId);
-    var folders = folderProfessionalList.stream().map(p -> p.getFolder()).toList();
-    return folderProfessionalList.stream().map(patient -> new PatientDTO(patient.getFolder().getPatient(), folders)).toList();
+    return folderProfessionalList.stream().map(patient -> new PatientDTO(patient.getFolder().getPatient(), patient.getFolder().getPatient().getFolders())).toList();
   }
 
   @Transactional
