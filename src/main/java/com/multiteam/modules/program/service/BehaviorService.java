@@ -1,18 +1,18 @@
 package com.multiteam.modules.program.service;
 
+import com.google.common.collect.FluentIterable;
 import com.multiteam.core.enums.ApplicationError;
 import com.multiteam.core.enums.TargetSituationEnum;
 import com.multiteam.core.exception.ResourceNotFoundException;
-import com.multiteam.modules.program.entity.Behavior;
 import com.multiteam.modules.program.dto.BehaviorDTO;
+import com.multiteam.modules.program.entity.Behavior;
+import com.multiteam.modules.program.entity.BehaviorCollect;
 import com.multiteam.modules.program.mapper.BehaviorMapper;
 import com.multiteam.modules.program.repository.BehaviorRepository;
 import com.multiteam.modules.program.repository.ProgramRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,11 +20,16 @@ import java.util.UUID;
 public class BehaviorService {
 
     private final BehaviorRepository behaviorRepository;
+    private final BehaviorCollectService behaviorCollectService;
     private final ProgramRepository programRepository;
 
-    public BehaviorService(BehaviorRepository behaviorRepository, ProgramRepository programRepository) {
+    public BehaviorService(
+            BehaviorRepository behaviorRepository,
+            BehaviorCollectService behaviorCollectService,
+            ProgramRepository programRepository) {
         this.behaviorRepository = behaviorRepository;
         this.programRepository = programRepository;
+        this.behaviorCollectService = behaviorCollectService;
     }
 
     @Transactional
@@ -66,5 +71,9 @@ public class BehaviorService {
     @Transactional
     public void deleteBehavior(UUID behaviorId) {
         behaviorRepository.delete(behaviorId);
+    }
+
+    public List<BehaviorCollect> getCollectsByPatientId(UUID patientId) {
+        return behaviorCollectService.getCollectsByPatientId(patientId);
     }
 }

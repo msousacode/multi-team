@@ -62,7 +62,7 @@ public class ProgramController {
 
     @GetMapping("/{programId}")
     public ResponseEntity<ProgramDTO> getById(@PathVariable("programId") final UUID programId) {
-        return programService.getById(programId)
+        return programService.findProgramById(programId)
                 .map(program -> ResponseEntity.status(HttpStatus.OK).body(ProgramPostMapper.MAPPER.toDTO(program)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }

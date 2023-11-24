@@ -49,14 +49,14 @@ public class ProgramService {
         return programRepository.findAll(pageable);
     }
 
-    public Optional<Program> getById(UUID programId) {
+    public Optional<Program> findProgramById(UUID programId) {
         return programRepository.findById(programId);
     }
 
     @Transactional
     public Boolean updateProgram(ProgramDTO programDTO) {
 
-        var optional = getById(programDTO.programId());
+        var optional = findProgramById(programDTO.programId());
 
         if(optional.isPresent()) {
             var result = ProgramMapper.MAPPER.toEntity(programDTO);

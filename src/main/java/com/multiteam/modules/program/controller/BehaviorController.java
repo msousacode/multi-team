@@ -1,7 +1,9 @@
 package com.multiteam.modules.program.controller;
 
 import com.multiteam.modules.program.dto.BehaviorDTO;
+import com.multiteam.modules.program.mapper.BehaviorCollectMapper;
 import com.multiteam.modules.program.mapper.BehaviorMapper;
+import com.multiteam.modules.program.service.BehaviorCollectService;
 import com.multiteam.modules.program.service.BehaviorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +24,18 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class BehaviorController {
 
     private BehaviorService behaviorService;
+    private BehaviorCollectService behaviorCollectService;
 
-    public BehaviorController(final BehaviorService behaviorService) {
+    public BehaviorController(
+            BehaviorService behaviorService,
+            BehaviorCollectService behaviorCollectService) {
         this.behaviorService = behaviorService;
+        this.behaviorCollectService = behaviorCollectService;
     }
 
     @PostMapping("/program/{programId}")
     public ResponseEntity<Void> createBehavior(
-            @PathVariable("programId" ) final UUID programId,
+            @PathVariable("programId" ) UUID programId,
             @RequestBody BehaviorDTO behaviorDTO) {
         if (behaviorService.createBehavior(programId, behaviorDTO)) {
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -58,5 +64,10 @@ public class BehaviorController {
     public ResponseEntity<Void> delete(@PathVariable("behaviorId") UUID behaviorId) {
         behaviorService.deleteBehavior(behaviorId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/patient/{patientId}/collects")
+    public ResponseEntity<List<BehaviorDTO>> getCollectsByPatientId(@PathVariable("patientId") UUID patientId) {
+        return ResponseEntity.ok(behaviorService.getCollectsByPatientId(patientId).stream().map(i -> BehaviorCollectMapper.MAPPER.toDTO(i)).toList());
     }
 }

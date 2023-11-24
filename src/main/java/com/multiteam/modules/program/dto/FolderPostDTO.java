@@ -12,17 +12,17 @@ public record FolderPostDTO(
         UUID patientId,
         String patientName,
         String folderName,
-        List<Select> professionals
-        //List<ProgramDTO> programs
+        List<Select> professionals,
+        List<UUID> programs
 ) {
-    public FolderPostDTO(Folder folder, List<Select> selects, List<Program> programs) {
+    public FolderPostDTO(Folder folder, List<Select> selects, List<UUID> programs) {
         this(
                 folder.getId(),
                 folder.getPatient().getId(),
                 folder.getPatient().getName(),
                 folder.getFolderName(),
-                selects
-                //programs.stream().map(program -> ProgramMapper.MAPPER.toDTO(program)).toList()
+                selects,
+                programs
         );
     }
 }

@@ -5,6 +5,7 @@ import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.core.exception.ResourceNotFoundException;
 import com.multiteam.core.utils.Select;
 import com.multiteam.modules.patient.PatientService;
+import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
 import com.multiteam.modules.program.dto.FolderListDTO;
@@ -39,6 +40,7 @@ public class FolderService {
     private final FolderProfessionalRepository professionalFolderRepository;
     private final FolderProgramRepository folderProgramRepository;
     private final FolderTreatmentRepository folderTreatmentRepository;
+    private final BehaviorCollectService behaviorCollectService;
 
     public FolderService(
             PatientService patientService,
@@ -47,7 +49,8 @@ public class FolderService {
             FolderRepository folderRepository,
             FolderProfessionalRepository professionalFolderRepository,
             FolderProgramRepository folderProgramRepository,
-            FolderTreatmentRepository folderTreatmentRepository) {
+            FolderTreatmentRepository folderTreatmentRepository,
+            BehaviorCollectService behaviorCollectService) {
         this.patientService = patientService;
         this.programService = programService;
         this.professionalService = professionalService;
@@ -55,6 +58,7 @@ public class FolderService {
         this.professionalFolderRepository = professionalFolderRepository;
         this.folderProgramRepository = folderProgramRepository;
         this.folderTreatmentRepository = folderTreatmentRepository;
+        this.behaviorCollectService = behaviorCollectService;
     }
 
     @Transactional
@@ -126,6 +130,8 @@ public class FolderService {
         folderProgramRepository.deleteByFolder_Id(folder.getId());
 
         folderProgramRepository.saveAll(foldersPrograms);
+
+        behaviorCollectService.createBehaviorCollect(uuids, folder.getPatient());
     }
 
     public List<Folder> getFolderByPatientId(UUID patientId) {

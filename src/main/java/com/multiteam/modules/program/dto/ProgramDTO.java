@@ -1,7 +1,9 @@
 package com.multiteam.modules.program.dto;
 
 import com.multiteam.modules.program.entity.Behavior;
+import com.multiteam.modules.program.entity.BehaviorCollect;
 import com.multiteam.modules.program.entity.Program;
+import com.multiteam.modules.program.mapper.BehaviorCollectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +20,7 @@ public record ProgramDTO(
         String learningCriterion,
         String materials,
         String observation,
-        Integer code,
-        List<BehaviorDTO> behaviors
+        Integer code
 ) {
     public ProgramDTO(Program program) {
         this(
@@ -33,20 +34,8 @@ public record ProgramDTO(
                 program.getLearningCriterion(),
                 program.getMaterials(),
                 program.getObservation(),
-                program.getCode(),
-                behaviorsClones(program.getBehaviors(), program.getAttemptBySession())
+                program.getCode()
         );
-    }
-
-    /**
-     * Clona as listas de comportamentos para apresentar no front end.
-     */
-    private static List<BehaviorDTO> behaviorsClones(List<Behavior> behaviors, Integer attemptBySession) {
-        List<BehaviorDTO> list = new ArrayList<>();
-        for(var i = 0; i <= attemptBySession; i++) {
-            list.addAll(behaviors.stream().map(BehaviorDTO::new).toList());
-        }
-        return list;
     }
 }
 

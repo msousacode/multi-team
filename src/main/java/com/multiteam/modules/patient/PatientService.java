@@ -10,8 +10,11 @@ import com.multiteam.modules.patient.controller.dto.PatientDTO;
 import com.multiteam.modules.patient.controller.dto.PatientFilter;
 import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.patient.repository.PatientRepository;
+import com.multiteam.modules.program.dto.BehaviorDTO;
 import com.multiteam.modules.program.entity.FolderProfessional;
+import com.multiteam.modules.program.mapper.BehaviorCollectMapper;
 import com.multiteam.modules.program.repository.FolderProfessionalRepository;
+import com.multiteam.modules.program.service.BehaviorCollectService;
 import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.user.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -32,24 +35,28 @@ public class PatientService {
 
   private final Logger logger = LogManager.getLogger(PatientService.class);
 
-  private final PatientRepository patientRepository;
-  private final TreatmentService treatmentService;
-  private final UserService userService;
   private final TenantContext tenantContext;
+
+  private final PatientRepository patientRepository;
   private final FolderProfessionalRepository folderProfessionalRepository;
+  private final UserService userService;
+  private final TreatmentService treatmentService;
+  private final BehaviorCollectService behaviorCollectService;
 
   public PatientService(
       final PatientRepository patientRepository,
       final TreatmentService treatmentService,
       final UserService userService,
       final TenantContext tenantContext,
-      final FolderProfessionalRepository folderProfessionalRepository
+      final FolderProfessionalRepository folderProfessionalRepository,
+      final BehaviorCollectService behaviorCollectService
   ) {
     this.patientRepository = patientRepository;
     this.treatmentService = treatmentService;
     this.userService = userService;
     this.tenantContext = tenantContext;
     this.folderProfessionalRepository = folderProfessionalRepository;
+    this.behaviorCollectService = behaviorCollectService;
   }
 
   @Transactional
@@ -96,7 +103,14 @@ public class PatientService {
 
   public List<PatientDTO> findPatientsInTreatment(UUID professionalId) {
     var folderProfessionalList = folderProfessionalRepository.findPatientsInTreatment(professionalId);
-    return folderProfessionalList.stream().map(patient -> new PatientDTO(patient.getFolder().getPatient(), patient.getFolder().getPatient().getFolders())).toList();
+    return folderProfessionalList.stream().map(patient -> new PatientDTO(
+            patient.getFolder().getPatient(),
+            patient.getFolder().getPatient().getFolders(),
+            getBehaviors(patient))).toList();
+  }
+
+  private List<BehaviorDTO> getBehaviors(FolderProfessional patient) {
+    return behaviorCollectService.getCollectsByPatientId(patient.getFolder().getPatient().getId()).stream().map(behavior -> BehaviorCollectMapper.MAPPER.toDTO(behavior)).toList();
   }
 
   @Transactional
