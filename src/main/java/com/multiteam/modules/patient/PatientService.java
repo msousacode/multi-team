@@ -110,7 +110,7 @@ public class PatientService {
   }
 
   private List<BehaviorDTO> getBehaviors(FolderProfessional patient) {
-    return behaviorCollectService.getCollectsByPatientId(patient.getFolder().getPatient().getId()).stream().map(behavior -> BehaviorCollectMapper.MAPPER.toDTO(behavior)).toList();
+    return behaviorCollectService.getCollectsByPatientId(patient.getFolder().getPatient().getId(), patient.getFolder().getId()).stream().map(behavior -> BehaviorCollectMapper.MAPPER.toDTO(behavior)).toList();
   }
 
   @Transactional

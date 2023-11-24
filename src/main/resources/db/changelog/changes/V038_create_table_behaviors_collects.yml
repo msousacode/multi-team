@@ -69,6 +69,11 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: folder_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
                   name: active
                   type: boolean
                   defaultValueBoolean: true

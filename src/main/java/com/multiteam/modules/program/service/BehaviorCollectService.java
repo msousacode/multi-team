@@ -28,23 +28,27 @@ public class BehaviorCollectService {
     public void createBehaviorCollect(List<UUID> programUUIDs, Patient patient) {
         List<BehaviorCollect> behaviorCollects = new ArrayList<>();
 
-        programUUIDs.forEach(programId -> {
 
-            var program = programService.findProgramById(programId);
+        var programs = programService.findProgramsByIdInBacth(programUUIDs);
 
-            program.get().getBehaviors().forEach(behavior -> {
-                var behaviorCollect = BehaviorCollectMapper.MAPPER.toEntity(behavior);
-                behaviorCollect.setPatient(patient);
-                behaviorCollect.setBehavior(behavior);
-                behaviorCollect.setProgramId(programId);
-                behaviorCollects.add(behaviorCollect);
+        programs.forEach(program -> {
+
+            program.getBehaviors().forEach(behavior -> {
+                patient.getFolders().forEach(folder -> {
+                    var behaviorCollect = BehaviorCollectMapper.MAPPER.toEntity(behavior);
+                    behaviorCollect.setPatient(patient);
+                    behaviorCollect.setBehavior(behavior);
+                    behaviorCollect.setProgramId(program.getId());
+                    behaviorCollect.setFolderId(folder.getId());
+                    behaviorCollects.add(behaviorCollect);
+                });
             });
         });
 
         behaviorCollectRepository.saveAll(behaviorCollects);
     }
 
-    public List<BehaviorCollect> getCollectsByPatientId(UUID patientId) {
-        return behaviorCollectRepository.findAllByPatient_Id(patientId);
+    public List<BehaviorCollect> getCollectsByPatientId(UUID patientId, UUID folderId) {
+        return behaviorCollectRepository.findAllByPatientIdAndFolderId(patientId, folderId);
     }
 }

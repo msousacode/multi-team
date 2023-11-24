@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Repository
@@ -32,5 +33,5 @@ public interface FolderProfessionalRepository extends JpaRepository<FolderProfes
             and fp.situation = 'EM_COLETA'            
             and pa.active = true
             """)
-    List<FolderProfessional> findPatientsInTreatment(UUID professionalId);
+    Set<FolderProfessional> findPatientsInTreatment(UUID professionalId);
 }

@@ -15,6 +15,7 @@ public interface BehaviorCollectMapper {
     @Mapping(target = "id", ignore = true)
     BehaviorCollect toEntity(Behavior behavior);
 
+    @Mapping(target = "behaviorId", source = "id")
     @Mapping(target = "patientId", source = "patient.id")
     BehaviorDTO toDTO(BehaviorCollect behaviorCollect);
 }

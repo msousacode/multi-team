@@ -73,7 +73,7 @@ public class BehaviorService {
         behaviorRepository.delete(behaviorId);
     }
 
-    public List<BehaviorCollect> getCollectsByPatientId(UUID patientId) {
-        return behaviorCollectService.getCollectsByPatientId(patientId);
+    public List<BehaviorCollect> getCollectsByPatientId(UUID patientId, UUID folderId) {
+        return behaviorCollectService.getCollectsByPatientId(patientId, folderId);
     }
 }

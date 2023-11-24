@@ -69,4 +69,7 @@ public class BehaviorCollect extends Tenantable {
 
     @Column(name = "program_id", updatable = false)
     private UUID programId;
+
+    @Column(name = "folder_id", updatable = false)
+    private UUID folderId;
 }

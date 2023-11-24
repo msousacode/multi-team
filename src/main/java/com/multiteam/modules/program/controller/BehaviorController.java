@@ -66,8 +66,8 @@ public class BehaviorController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/patient/{patientId}/collects")
+    /*@GetMapping("/patient/{patientId}/collects")
     public ResponseEntity<List<BehaviorDTO>> getCollectsByPatientId(@PathVariable("patientId") UUID patientId) {
         return ResponseEntity.ok(behaviorService.getCollectsByPatientId(patientId).stream().map(i -> BehaviorCollectMapper.MAPPER.toDTO(i)).toList());
-    }
+    }*/
 }
