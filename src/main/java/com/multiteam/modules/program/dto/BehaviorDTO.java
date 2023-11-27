@@ -18,6 +18,5 @@ public record BehaviorDTO(
         String response,
         UUID patientId,
         UUID programId
-
 ) {
 }

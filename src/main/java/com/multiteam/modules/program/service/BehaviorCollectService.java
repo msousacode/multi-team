@@ -28,7 +28,6 @@ public class BehaviorCollectService {
     public void createBehaviorCollect(List<UUID> programUUIDs, Patient patient) {
         List<BehaviorCollect> behaviorCollects = new ArrayList<>();
 
-
         var programs = programService.findProgramsByIdInBacth(programUUIDs);
 
         programs.forEach(program -> {
@@ -50,5 +49,14 @@ public class BehaviorCollectService {
 
     public List<BehaviorCollect> getCollectsByPatientId(UUID patientId, UUID folderId) {
         return behaviorCollectRepository.findAllByPatientIdAndFolderId(patientId, folderId);
+    }
+
+    public List<BehaviorCollect> findAllById(List<UUID> behaviorsUUIDs) {
+        return behaviorCollectRepository.findAllById(behaviorsUUIDs);
+    }
+
+    @Transactional
+    public void saveAll(List<BehaviorCollect> behaviorsCollect) {
+        behaviorCollectRepository.saveAll(behaviorsCollect);
     }
 }

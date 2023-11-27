@@ -5,7 +5,6 @@ import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.core.exception.ResourceNotFoundException;
 import com.multiteam.core.utils.Select;
 import com.multiteam.modules.patient.PatientService;
-import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
 import com.multiteam.modules.program.dto.FolderListDTO;
@@ -128,7 +127,6 @@ public class FolderService {
         }).toList();
 
         folderProgramRepository.deleteByFolder_Id(folder.getId());
-
         folderProgramRepository.saveAll(foldersPrograms);
 
         behaviorCollectService.createBehaviorCollect(uuids, folder.getPatient());

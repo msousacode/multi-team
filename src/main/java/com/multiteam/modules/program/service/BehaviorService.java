@@ -1,10 +1,10 @@
 package com.multiteam.modules.program.service;
 
-import com.google.common.collect.FluentIterable;
 import com.multiteam.core.enums.ApplicationError;
 import com.multiteam.core.enums.TargetSituationEnum;
 import com.multiteam.core.exception.ResourceNotFoundException;
 import com.multiteam.modules.program.dto.BehaviorDTO;
+import com.multiteam.modules.program.dto.BehaviorResponseCollectDTO;
 import com.multiteam.modules.program.entity.Behavior;
 import com.multiteam.modules.program.entity.BehaviorCollect;
 import com.multiteam.modules.program.mapper.BehaviorMapper;
@@ -73,7 +73,22 @@ public class BehaviorService {
         behaviorRepository.delete(behaviorId);
     }
 
-    public List<BehaviorCollect> getCollectsByPatientId(UUID patientId, UUID folderId) {
-        return behaviorCollectService.getCollectsByPatientId(patientId, folderId);
+    @Transactional
+    public boolean syncBehaviorsCollect(List<BehaviorResponseCollectDTO> behaviorsDTOs) {
+
+        List<UUID> behaviorsUUIDs = behaviorsDTOs.stream().map(BehaviorResponseCollectDTO::behaviorId).toList();
+
+        List<BehaviorCollect> behaviorsCollect = behaviorCollectService.findAllById(behaviorsUUIDs);
+
+        behaviorsDTOs.forEach(behaviorResponseCollectDTO -> {
+            behaviorsCollect.forEach(behavior -> {
+                if(behaviorResponseCollectDTO.behaviorId().equals(behavior.getId()))
+                    behavior.setResponse(behaviorResponseCollectDTO.response());
+            });
+        });
+
+        behaviorCollectService.saveAll(behaviorsCollect);
+
+        return true;
     }
 }

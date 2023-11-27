@@ -1,6 +1,7 @@
 package com.multiteam.modules.program.controller;
 
 import com.multiteam.modules.program.dto.BehaviorDTO;
+import com.multiteam.modules.program.dto.BehaviorResponseCollectDTO;
 import com.multiteam.modules.program.mapper.BehaviorCollectMapper;
 import com.multiteam.modules.program.mapper.BehaviorMapper;
 import com.multiteam.modules.program.service.BehaviorCollectService;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'SUPERVISOR')")
+@PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'SUPERVISOR', 'PROFESSIONAL')")
 @RequestMapping(
         path = "/v1/behaviors",
         produces = APPLICATION_JSON_VALUE
@@ -64,6 +65,15 @@ public class BehaviorController {
     public ResponseEntity<Void> delete(@PathVariable("behaviorId") UUID behaviorId) {
         behaviorService.deleteBehavior(behaviorId);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/sync")
+    public ResponseEntity<Void> syncBehaviorsCollect(@RequestBody List<BehaviorResponseCollectDTO> behaviorsCollect) {
+        if (behaviorService.syncBehaviorsCollect(behaviorsCollect)) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     /*@GetMapping("/patient/{patientId}/collects")
