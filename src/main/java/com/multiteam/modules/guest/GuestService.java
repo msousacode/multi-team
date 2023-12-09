@@ -1,16 +1,19 @@
 package com.multiteam.modules.guest;
 
 
-import com.multiteam.core.enums.AuthProviderEnum;
+import com.multiteam.core.enums.RelationshipEnum;
 import com.multiteam.core.exception.TreatmentException;
+import com.multiteam.modules.guest.dto.GuestPostDTO;
+import com.multiteam.modules.guest.mapper.GuestMapper;
+import com.multiteam.modules.patient.PatientService;
 import com.multiteam.modules.treatment.TreatmentService;
-import com.multiteam.modules.user.User;
 import com.multiteam.modules.user.UserRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,47 +22,30 @@ public class GuestService {
     private final GuestRespository guestRespository;
     private final TreatmentService treatmentService;
     private final UserRepository userRepository;
+    private final PatientService patientService;
 
     public GuestService(
             GuestRespository guestRespository,
             TreatmentService treatmentService,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            PatientService patientService) {
         this.guestRespository = guestRespository;
         this.treatmentService = treatmentService;
         this.userRepository = userRepository;
+        this.patientService = patientService;
     }
 
     @Transactional
-    public Boolean createGuest(GuestRequest guestRequest) {
+    public Boolean createGuest(GuestPostDTO guestPostDTO, UUID patientId) {
 
-        var treatment = treatmentService.getAllTreatments(null, Pageable.ofSize(10));
+        var patient = patientService.getPatientById(patientId);
+        var guest = GuestMapper.MAPPER.toEntity(guestPostDTO);
 
-        if(guestRequest.ownerId() == null) {
-            //throw new OwnerException("value ownerId cannot be null");
-        }
+        guest.setPatient(patient.get());
+        guest.setActive(true);
 
-        if (treatment.isEmpty()) {
-            return Boolean.FALSE;
-        } else {
-            var user = new User.Builder(null, null, guestRequest.name(), guestRequest.email(), true).provider(AuthProviderEnum.local).build();
+        guestRespository.save(guest);
 
-            var userResult = userRepository.save(user);
-
-            var builder = new Guest.Builder(
-                    null,
-                    guestRequest.name(),
-                    guestRequest.middleName(),
-                    guestRequest.relationship(),
-                    guestRequest.cellPhone(),
-                    guestRequest.email(),
-                    true,
-                    userResult)
-                    .build();
-
-            var guest = guestRespository.save(builder);
-
-            treatmentService.includeGuestInTreatment(guest, null);
-        }
         return Boolean.TRUE;
     }
 
@@ -84,7 +70,7 @@ public class GuestService {
     }
 
     @Modifying
-    public Boolean updateGuest(GuestRequest guestRequest) {
+    public Boolean updateGuest(GuestPostDTO guestRequest) {
 
         var result = guestRespository.findById(guestRequest.id());
 
@@ -92,19 +78,12 @@ public class GuestService {
             return Boolean.FALSE;
         }
 
-        var builder = new Guest.Builder(
-                result.get().getId(),
-                guestRequest.name(),
-                guestRequest.middleName(),
-                guestRequest.relationship(),
-                guestRequest.cellPhone(),
-                guestRequest.email(),
-                guestRequest.active(),
-                result.get().getUser())
-                .build();
-
-        guestRespository.save(builder);
+        guestRespository.save(null);
 
         return Boolean.TRUE;
+    }
+
+    public List<Guest> getAllGuests(UUID patientId) {
+        return guestRespository.findAllByPatient_Id(patientId);
     }
 }

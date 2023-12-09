@@ -1,10 +1,14 @@
 package com.multiteam.modules.guest;
 
+import com.multiteam.core.enums.RelationshipEnum;
+import com.multiteam.modules.guest.dto.GuestDTO;
+import com.multiteam.modules.guest.dto.GuestPostDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -23,20 +27,21 @@ public class GuestController {
         this.guestService = guestService;
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
-    @PostMapping
-    public ResponseEntity<?> createGuest(@RequestBody GuestRequest guestRequest) {
+    @GetMapping("/{patientId}")
+    public ResponseEntity<List<?>> getAllGuests(@PathVariable("patientId") UUID patientId) {
+        var guests = guestService.getAllGuests(patientId).stream().map(guest -> new GuestDTO(guest.getName(), RelationshipEnum.getValue(guest.getRelationship()).name(), guest.isActive())).toList();
+        return ResponseEntity.ok(guests);
+    }
 
-        if (guestService.createGuest(guestRequest)) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
+    @PostMapping("/patient/{patientId}")
+    public ResponseEntity<?> createGuest(@RequestBody GuestPostDTO guestPostDTO, @PathVariable UUID patientId) {
+        return guestService.createGuest(guestPostDTO, patientId) ? ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
     @PutMapping
-    public ResponseEntity<?> updateGuest(@RequestBody GuestRequest guestRequest) {
+    public ResponseEntity<?> updateGuest(@RequestBody GuestPostDTO guestRequest) {
 
         if (guestService.updateGuest(guestRequest)) {
             return ResponseEntity.status(HttpStatus.OK).build();

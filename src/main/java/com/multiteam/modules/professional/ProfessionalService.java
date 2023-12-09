@@ -11,6 +11,7 @@ import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentRequest;
 import com.multiteam.modules.professional.dto.ProfessionalUseTreatmentView;
 import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.user.User;
+import com.multiteam.modules.user.UserDTO;
 import com.multiteam.modules.user.UserService;
 import com.sendgrid.helpers.mail.objects.Content;
 import org.apache.logging.log4j.LogManager;
@@ -70,7 +71,9 @@ public class ProfessionalService {
             return Boolean.FALSE;
         }
 
-        var user = userService.createUser(professionalDTO.name(), professionalDTO.email(), local, UserEnum.USER);
+        var newUserDto = new UserDTO(null, professionalDTO.name(), professionalDTO.email(), true, null, UserEnum.USER.name());
+
+        var user = userService.createUser(newUserDto, local);
 
         var builder = new Professional.Builder(
                 null,

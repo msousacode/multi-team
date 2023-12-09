@@ -44,9 +44,9 @@ public class UserController {
 
   @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
   @PostMapping
-  public ResponseEntity<User> createUser(@RequestBody final UserDTO userDTO) {
+  public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO) {
       return ResponseEntity.status(
-              HttpStatus.OK).body(userService.createUser(userDTO.name(), userDTO.email(), AuthProviderEnum.local, UserEnum.USER)
+              HttpStatus.OK).body(userService.createUser(userDTO, AuthProviderEnum.local)
       );
   }
 

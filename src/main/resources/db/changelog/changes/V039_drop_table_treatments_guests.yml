@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: V039
+      author: michael
+      preConditions:
+        - tableExists:
+            tableName: treatments_guests
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            tableName: treatments_guests

@@ -2,7 +2,6 @@ package com.multiteam.modules.user;
 
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.AuthProviderEnum;
-import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.UserEnum;
 import com.multiteam.modules.role.Role;
 import com.multiteam.modules.role.RoleRepository;
@@ -40,17 +39,19 @@ public class UserService {
     }
 
     @Transactional
-    public User createUser(final String name, final String email, final AuthProviderEnum providerEnum, final UserEnum userEnum) {
+    public User createUser(UserDTO userDTO, AuthProviderEnum providerEnum) {
 
         var password = UUID.randomUUID().toString().substring(0, 10);
 
-        var defaultRole = roleRepository.findByRole(RoleEnum.ROLE_SCHEDULE);
+        List<UUID> rolesUUIDs = userDTO.roles().stream().map(roleId -> UUID.fromString(roleId)).toList();
 
-        var user = new User.Builder(null, tenantContext.getTenantId(), name, email, true)
-                .roles(List.of(defaultRole))
+        var defaultRoles = roleRepository.findAllById(rolesUUIDs);
+
+        var user = new User.Builder(null, tenantContext.getTenantId(), userDTO.name(), userDTO.email(), true)
+                .roles(defaultRoles)
                 .provider(providerEnum)
                 .password(new BCryptPasswordEncoder().encode(password))
-                .userType(userEnum)
+                .userType(UserEnum.USER)
                 .build();
 
         user.setProvisionalPassword(password);

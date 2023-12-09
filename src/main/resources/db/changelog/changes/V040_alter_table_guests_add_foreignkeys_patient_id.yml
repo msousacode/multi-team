@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: V040
+      author: michael
+      changes:
+        - addColumn:
+            tableName: guests
+            columns:
+              - column:
+                  name: patient_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: patient_id
+            baseTableName: guests
+            constraintName: fk_patients_guests
+            referencedColumnNames: patient_id
+            referencedTableName: patients
