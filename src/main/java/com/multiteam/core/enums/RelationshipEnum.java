@@ -1,7 +1,12 @@
 package com.multiteam.core.enums;
 
-import java.util.Arrays;
+import lombok.Getter;
+import org.springframework.util.Assert;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public enum RelationshipEnum {
     PAI(1, "Pai"),
     MAE(2, "Mãe"),
@@ -12,12 +17,21 @@ public enum RelationshipEnum {
     public final int code;
     public final String name;
 
+    private static final Map<Integer, RelationshipEnum> lookup = new HashMap<>();
+
     RelationshipEnum(int code, String name) {
         this.code = code;
         this.name = name;
     }
 
-    public static RelationshipEnum getValue(int code) {
-        return Arrays.stream(RelationshipEnum.values()).findFirst().filter(i -> i.code == code).get();
+    static {
+        for (RelationshipEnum type : RelationshipEnum.values()) {
+            lookup.put(type.getCode(), type);
+        }
+    }
+
+    public static RelationshipEnum getValue(Integer value) {
+        Assert.notNull(value, "enum not can be null");
+        return lookup.get(value);
     }
 }

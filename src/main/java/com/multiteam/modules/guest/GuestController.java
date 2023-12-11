@@ -27,7 +27,7 @@ public class GuestController {
         this.guestService = guestService;
     }
 
-    @GetMapping("/{patientId}")
+    @GetMapping("/patient/{patientId}")
     public ResponseEntity<List<?>> getAllGuests(@PathVariable("patientId") UUID patientId) {
         var guests = guestService.getAllGuests(patientId).stream().map(guest -> new GuestDTO(guest.getName(), RelationshipEnum.getValue(guest.getRelationship()).name(), guest.isActive())).toList();
         return ResponseEntity.ok(guests);
