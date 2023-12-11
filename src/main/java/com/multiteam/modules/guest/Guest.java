@@ -39,6 +39,10 @@ public class Guest {
     @JoinColumn(name = "patient_id", referencedColumnName = "patient_id")
     private Patient patient;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Guest() {}
 
     public Guest(Builder builder) {

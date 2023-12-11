@@ -93,9 +93,10 @@ public class SignInService {
     public TokenDTO infoToken(final String token) {
         logger.info("check token {}", token);
         var userInfo = jwtService.openToken(token);
+        var roles = jwtService.extractRoles(token);
 
         logger.info("valid token {}", token);
-        return new TokenDTO(userInfo.get("userId"), userInfo.get("userName"));
+        return new TokenDTO(userInfo.get("userId"), userInfo.get("userName"), roles);
     }
 
     @Transactional

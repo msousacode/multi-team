@@ -2,11 +2,10 @@ package com.multiteam.modules.patient;
 
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.ApplicationError;
-import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.SexEnum;
 import com.multiteam.core.enums.UserEnum;
 import com.multiteam.core.exception.ResourceNotFoundException;
-import com.multiteam.core.service.EmailService;
+import com.multiteam.modules.guest.GuestService;
 import com.multiteam.modules.patient.controller.dto.PatientDTO;
 import com.multiteam.modules.patient.controller.dto.PatientFilter;
 import com.multiteam.modules.patient.model.Patient;
@@ -21,6 +20,7 @@ import com.multiteam.modules.user.UserDTO;
 import com.multiteam.modules.user.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -44,6 +44,7 @@ public class PatientService {
     private final UserService userService;
     private final TreatmentService treatmentService;
     private final BehaviorCollectService behaviorCollectService;
+    private final GuestService guestService;
 
     public PatientService(
             final PatientRepository patientRepository,
@@ -51,7 +52,8 @@ public class PatientService {
             final UserService userService,
             final TenantContext tenantContext,
             final FolderProfessionalRepository folderProfessionalRepository,
-            final BehaviorCollectService behaviorCollectService
+            final BehaviorCollectService behaviorCollectService,
+            @Lazy final GuestService guestService
     ) {
         this.patientRepository = patientRepository;
         this.treatmentService = treatmentService;
@@ -59,6 +61,7 @@ public class PatientService {
         this.tenantContext = tenantContext;
         this.folderProfessionalRepository = folderProfessionalRepository;
         this.behaviorCollectService = behaviorCollectService;
+        this.guestService = guestService;
     }
 
     @Transactional
@@ -158,5 +161,17 @@ public class PatientService {
             logger.error("error occurred while updating the patient: {}", patientDTO.id());
             return Boolean.FALSE;
         }
+    }
+
+    public List<PatientDTO> getCardToCollectsResponsible(UUID userId) {
+
+        var patientId = guestService.findGuestByUserId(userId).get().getPatient().getId();
+
+        var folderProfessionalList = folderProfessionalRepository.getCardToCollectsResponsible(patientId);
+
+        return folderProfessionalList.stream().map(patient -> new PatientDTO(
+                patient.getFolder().getPatient(),
+                patient.getFolder().getPatient().getFolders(),
+                getBehaviors(patient))).toList();
     }
 }

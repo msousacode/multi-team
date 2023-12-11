@@ -2,6 +2,8 @@ package com.multiteam.core.service;
 
 import com.multiteam.core.models.UserPrincipal;
 import com.multiteam.modules.professional.ProfessionalService;
+import com.multiteam.modules.role.Role;
+import com.multiteam.modules.user.User;
 import com.multiteam.modules.user.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -15,14 +17,7 @@ import io.jsonwebtoken.security.SignatureException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import org.apache.logging.log4j.LogManager;
@@ -90,16 +85,24 @@ public class JwtService {
     }
 
     public Map<String, String> openToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
-        String userId = claims.getSubject();
-
-        var user = userService.getUserById(UUID.fromString(userId));
+        var user = extractUserToken(token);
 
         Map<String, String> userInfo = new HashMap<>();
-        userInfo.put("userId", userId);
+        userInfo.put("userId", user.getId().toString());
         userInfo.put("userName", user.getName());
 
         return userInfo;
+    }
+
+    private User extractUserToken(String token) {
+        Claims claims = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
+        String userId = claims.getSubject();
+        return userService.getUserById(UUID.fromString(userId));
+    }
+
+    public List<String> extractRoles(String token) {
+        var user = extractUserToken(token);
+        return user.getRoles().stream().map(role -> role.getRole().name()).toList();
     }
 
     public Boolean validateToken(String authToken) {

@@ -3,6 +3,8 @@ package com.multiteam.modules.guest;
 import com.multiteam.core.enums.RelationshipEnum;
 import com.multiteam.modules.guest.dto.GuestDTO;
 import com.multiteam.modules.guest.dto.GuestPostDTO;
+import com.multiteam.modules.patient.PatientService;
+import com.multiteam.modules.patient.controller.dto.PatientDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,16 +17,19 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RequestMapping(
         path = "/v1/guests",
-        produces = APPLICATION_JSON_VALUE,
-        consumes = APPLICATION_JSON_VALUE
+        produces = APPLICATION_JSON_VALUE
 )
 @RestController
 public class GuestController {
 
     private final GuestService guestService;
+    private final PatientService patientService;
 
-    public GuestController(GuestService guestService) {
+    public GuestController(
+            GuestService guestService,
+            PatientService patientService) {
         this.guestService = guestService;
+        this.patientService = patientService;
     }
 
     @GetMapping("/patient/{patientId}")
@@ -33,7 +38,7 @@ public class GuestController {
         return ResponseEntity.ok(guests);
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @PostMapping("/patient/{patientId}")
     public ResponseEntity<?> createGuest(@RequestBody GuestPostDTO guestPostDTO, @PathVariable UUID patientId) {
         return guestService.createGuest(guestPostDTO, patientId) ? ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -59,5 +64,13 @@ public class GuestController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @PreAuthorize("hasAnyRole('GUEST')")
+    @GetMapping("/user/{userId}/patients/mobile")
+    public ResponseEntity<List<PatientDTO>> findPatientsByResponsible(
+            @PathVariable("userId") UUID userId) {
+        var patients = patientService.getCardToCollectsResponsible(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(patients);
     }
 }

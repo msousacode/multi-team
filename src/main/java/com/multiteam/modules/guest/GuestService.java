@@ -1,7 +1,6 @@
 package com.multiteam.modules.guest;
 
 
-import com.multiteam.core.enums.RelationshipEnum;
 import com.multiteam.core.exception.TreatmentException;
 import com.multiteam.modules.guest.dto.GuestPostDTO;
 import com.multiteam.modules.guest.mapper.GuestMapper;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -39,12 +39,16 @@ public class GuestService {
     public Boolean createGuest(GuestPostDTO guestPostDTO, UUID patientId) {
 
         var patient = patientService.getPatientById(patientId);
+        var user = userRepository.getUserById(guestPostDTO.id());
         var guest = GuestMapper.MAPPER.toEntity(guestPostDTO);
 
         guest.setPatient(patient.get());
+        guest.setUser(user);
         guest.setActive(true);
 
         guestRespository.save(guest);
+
+        //TODO enviar a senha via e-mail para o responsável.
 
         return Boolean.TRUE;
     }
@@ -85,5 +89,9 @@ public class GuestService {
 
     public List<Guest> getAllGuests(UUID patientId) {
         return guestRespository.findAllByPatient_Id(patientId);
+    }
+
+    public Optional<Guest> findGuestByUserId(UUID userId) {
+        return guestRespository.findByUser_Id(userId);
     }
 }

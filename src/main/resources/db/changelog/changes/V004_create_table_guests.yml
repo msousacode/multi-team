@@ -37,14 +37,3 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   defaultValue: true
-              - column:
-                  name: credential_id
-                  type: uuid
-                  constraints:
-                    nullable: false
-        - addForeignKeyConstraint:
-            baseColumnNames: credential_id
-            baseTableName: guests
-            constraintName: fk_guests_credentials
-            referencedColumnNames: credential_id
-            referencedTableName: credentials
