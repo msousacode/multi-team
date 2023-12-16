@@ -17,6 +17,7 @@ public record BehaviorDTO(
         String question,
         String response,
         UUID patientId,
-        UUID programId
+        UUID programId,
+        Boolean responsible
 ) {
 }

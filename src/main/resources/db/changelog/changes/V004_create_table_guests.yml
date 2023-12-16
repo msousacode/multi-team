@@ -37,3 +37,8 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   defaultValue: true
+              - column:
+                  name: credential_id
+                  type: uuid
+                  constraints:
+                    nullable: false

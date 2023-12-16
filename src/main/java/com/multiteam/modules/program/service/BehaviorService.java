@@ -43,6 +43,7 @@ public class BehaviorService {
         behavior.setProgram(program);
         behavior.setActive(true);
         behavior.setSituation(TargetSituationEnum.NAO_INICIADO.getValue());
+        behavior.setResponsible(behaviorDTO.responsible());
         behaviorRepository.save(behavior);
 
         return Boolean.TRUE;

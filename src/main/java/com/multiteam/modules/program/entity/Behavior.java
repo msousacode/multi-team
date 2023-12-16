@@ -53,6 +53,9 @@ public class Behavior extends Tenantable {
     @Column(name = "active")
     private Boolean active;
 
+    @Column(name = "responsible")//Flag para liberar o programa alvo para os responsávis no app.
+    private Boolean responsible;
+
     @Column(name = "collect_time", columnDefinition = "false")
     private Boolean time;
 
