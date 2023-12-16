@@ -30,4 +30,10 @@ public class FolderProfessional {
     @Column(name = "situation")
     @Enumerated(EnumType.STRING)
     private SituationEnum situation;
+
+    public FolderProfessional(){}
+
+    public FolderProfessional(Folder folder) {
+        this.folder = folder;
+    }
 }

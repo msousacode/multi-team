@@ -12,8 +12,10 @@ import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.patient.repository.PatientRepository;
 import com.multiteam.modules.program.dto.BehaviorDTO;
 import com.multiteam.modules.program.entity.FolderProfessional;
+import com.multiteam.modules.program.entity.FolderTreatment;
 import com.multiteam.modules.program.mapper.BehaviorCollectMapper;
 import com.multiteam.modules.program.repository.FolderProfessionalRepository;
+import com.multiteam.modules.program.repository.FolderTreatmentRepository;
 import com.multiteam.modules.program.service.BehaviorCollectService;
 import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.user.UserDTO;
@@ -45,6 +47,7 @@ public class PatientService {
     private final TreatmentService treatmentService;
     private final BehaviorCollectService behaviorCollectService;
     private final GuestService guestService;
+    private final FolderTreatmentRepository folderTreatmentRepository;
 
     public PatientService(
             final PatientRepository patientRepository,
@@ -53,8 +56,9 @@ public class PatientService {
             final TenantContext tenantContext,
             final FolderProfessionalRepository folderProfessionalRepository,
             final BehaviorCollectService behaviorCollectService,
-            @Lazy final GuestService guestService
-    ) {
+            @Lazy final GuestService guestService,
+            final FolderTreatmentRepository folderTreatmentRepository
+            ) {
         this.patientRepository = patientRepository;
         this.treatmentService = treatmentService;
         this.userService = userService;
@@ -62,6 +66,7 @@ public class PatientService {
         this.folderProfessionalRepository = folderProfessionalRepository;
         this.behaviorCollectService = behaviorCollectService;
         this.guestService = guestService;
+        this.folderTreatmentRepository = folderTreatmentRepository;
     }
 
     @Transactional
@@ -167,11 +172,11 @@ public class PatientService {
 
         var patientId = guestService.findGuestByUserId(userId).get().getPatient().getId();
 
-        var folderProfessionalList = folderProfessionalRepository.getCardToCollectsResponsible(patientId);
+        var folderProfessionalList = folderTreatmentRepository.getCardToCollectsResponsible(patientId);
 
         return folderProfessionalList.stream().map(patient -> new PatientDTO(
                 patient.getFolder().getPatient(),
                 patient.getFolder().getPatient().getFolders(),
-                getBehaviors(patient))).toList();
+                getBehaviors(new FolderProfessional(patient.getFolder())))).toList();
     }
 }

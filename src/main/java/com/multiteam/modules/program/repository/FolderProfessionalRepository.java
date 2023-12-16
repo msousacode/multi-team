@@ -34,15 +34,4 @@ public interface FolderProfessionalRepository extends JpaRepository<FolderProfes
             and pa.active = true
             """)
     Set<FolderProfessional> findPatientsInTreatment(UUID professionalId);
-
-    @Query("""
-            select fp from FolderProfessional fp
-            join fp.professional pr on fp.professional.id = pr.id
-            join fp.folder fo on fo.id = fp.folder.id
-            join fo.patient pa on pa.id = fo.patient.id
-            where pa.id = :patientId
-            and fp.situation = 'EM_COLETA'
-            and pa.active = true
-            """)
-    Set<FolderProfessional> getCardToCollectsResponsible(UUID patientId);
 }
