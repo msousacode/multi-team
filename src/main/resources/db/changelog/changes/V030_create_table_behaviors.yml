@@ -71,6 +71,9 @@ databaseChangeLog:
               - column:
                   name: last_modified_date
                   type: timestamp
+              - column:
+                  name: responsible
+                  type: boolean
         - addForeignKeyConstraint:
             baseColumnNames: tenant_id
             baseTableName: users

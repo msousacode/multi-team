@@ -2,6 +2,7 @@ package com.multiteam.modules.user;
 
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.AuthProviderEnum;
+import com.multiteam.core.enums.RoleEnum;
 import com.multiteam.core.enums.UserEnum;
 import com.multiteam.modules.role.Role;
 import com.multiteam.modules.role.RoleRepository;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,7 +45,13 @@ public class UserService {
 
         var password = UUID.randomUUID().toString().substring(0, 10);
 
-        List<UUID> rolesUUIDs = userDTO.roles().stream().map(roleId -> UUID.fromString(roleId)).toList();
+        List<UUID> rolesUUIDs = new ArrayList<>();
+
+        if(userDTO.roles() == null) {
+            rolesUUIDs.add(roleRepository.findByRole(RoleEnum.ROLE_SCHEDULE).getId());
+        } else {
+            rolesUUIDs = userDTO.roles().stream().map(roleId -> UUID.fromString(roleId)).toList();
+        }
 
         var defaultRoles = roleRepository.findAllById(rolesUUIDs);
 

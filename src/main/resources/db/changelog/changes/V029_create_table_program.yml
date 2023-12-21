@@ -73,9 +73,6 @@ databaseChangeLog:
                   defaultValueBoolean: true
                   constraints:
                     nullable: false
-              - column:
-                  name: responsible
-                  type: boolean
         - addForeignKeyConstraint:
             baseColumnNames: tenant_id
             baseTableName: programs
