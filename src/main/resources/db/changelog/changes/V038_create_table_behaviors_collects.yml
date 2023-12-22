@@ -11,7 +11,7 @@ databaseChangeLog:
                   type: uuid
                   defaultValue: uuid_generate_v4()
                   constraints:
-                    primaryKey: true
+                    primaryKey: false
                     nullable: false
               - column:
                   name: behavior_name
