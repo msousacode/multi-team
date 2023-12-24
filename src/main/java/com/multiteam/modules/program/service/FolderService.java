@@ -126,7 +126,6 @@ public class FolderService {
             return folderPrograms;
         }).toList();
 
-        folderProgramRepository.deleteByFolder_Id(folder.getId());
         folderProgramRepository.saveAll(foldersPrograms);
 
         behaviorCollectService.createBehaviorCollect(uuids, folder.getPatient());
