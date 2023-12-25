@@ -201,4 +201,9 @@ public class FolderService {
     public List<Folder> getFoldersByPatient(UUID patientId) {
         return folderRepository.findByPatient_Id(patientId);
     }
+
+    @Transactional
+    public void deleteProgramFolder(UUID programId, UUID folderId) {
+        folderProgramRepository.deleteByFolder_IdAndProgram_Id(folderId, programId);
+    }
 }

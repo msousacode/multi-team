@@ -54,9 +54,9 @@ public class FolderController {
         List<Select> unallocated = new ArrayList<>();
 
         folders.forEach(folder -> folder.getFolderProfessional().forEach(folderProfessional -> {
-            if(SituationEnum.NAO_ALOCADA.equals(folderProfessional.getSituation())) {
-               unallocated.add(Select.toSelect(folder.getFolderName(), folder.getId().toString()));
-            } else if(SituationEnum.EM_COLETA.equals(folderProfessional.getSituation())){
+            if (SituationEnum.NAO_ALOCADA.equals(folderProfessional.getSituation())) {
+                unallocated.add(Select.toSelect(folder.getFolderName(), folder.getId().toString()));
+            } else if (SituationEnum.EM_COLETA.equals(folderProfessional.getSituation())) {
                 allocated.add(Select.toSelect(folder.getFolderName(), folder.getId().toString()));
             }
         }));
@@ -96,5 +96,13 @@ public class FolderController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @DeleteMapping("/{folderId}/program/{programId}")
+    public ResponseEntity<Void> deleteProgramFolder(
+            @PathVariable("programId") UUID programId,
+            @PathVariable("folderId") UUID folderId) {
+        folderService.deleteProgramFolder(programId, folderId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
