@@ -152,4 +152,8 @@ public class TreatmentService {
 
         return Optional.of(TreatmentEditDTO.toDTO(treatment.get(), clinics, professionals, folders));
     }
+
+    public Optional<Treatment> findTreatmentById(UUID treatmentId) {
+        return treatmentRepository.findOneById(treatmentId);
+    }
 }

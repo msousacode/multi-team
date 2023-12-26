@@ -1,20 +1,21 @@
 package com.multiteam.modules.annotation.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.UUID;
 
 public record AnnotationDetailDTO(
+        @NotNull(message = "data da anotação não deve ser nula")
+        LocalDate dateInitial,
 
-    UUID treatmentId,
-    LocalDate dateStart,
-    LocalTime hourStart,
-    LocalDate dateEnd,
-    LocalTime hourEnd,
-    String annotation,
-    String observation,
-    boolean sync,
-    String status
+        @NotBlank(message = "A anotação não de estar em branco")
+        String annotation,
+
+        @NotBlank(message = "A observação não de estar em branco")
+        String observation,
+
+        boolean sync,
+
+        String status
 ) {
-
 }

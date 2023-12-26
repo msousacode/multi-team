@@ -9,6 +9,7 @@ import com.multiteam.modules.patient.controller.dto.PatientFilter;
 import java.util.List;
 import java.util.UUID;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -25,10 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping(
-        path = "/v1/patients",
-        produces = APPLICATION_JSON_VALUE
-)
+@RequestMapping(path = "/v1/patients", produces = APPLICATION_JSON_VALUE)
 @RestController
 @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
 public class PatientController {
@@ -40,8 +38,7 @@ public class PatientController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPatient(
-            @RequestBody PatientDTO patientDTO) {
+    public ResponseEntity<?> createPatient(@RequestBody PatientDTO patientDTO) {
         if (patientService.createPatient(patientDTO)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
@@ -88,8 +85,7 @@ public class PatientController {
     }
 
     @GetMapping("/professional/{professionalId}/mobile")
-    public ResponseEntity<List<PatientDTO>> findPatientsInTreatment(
-            @PathVariable("professionalId") final UUID professionalId) {
+    public ResponseEntity<List<PatientDTO>> findPatientsInTreatment(@PathVariable("professionalId") @NotNull UUID professionalId) {
         var patients = patientService.findPatientsInTreatment(professionalId);
         return ResponseEntity.status(HttpStatus.OK).body(patients);
     }

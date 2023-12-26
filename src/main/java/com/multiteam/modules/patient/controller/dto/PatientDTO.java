@@ -19,7 +19,6 @@ public record PatientDTO(
         Integer age,
         @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate dateBirth,
-        UUID treatmentId,
         List<FolderListDTO> folders,
         List<BehaviorDTO> behaviors
 ) {
@@ -33,7 +32,6 @@ public record PatientDTO(
                 patient.getSex().getDescription(),
                 patient.getAge(),
                 patient.getDateBirth(),
-                patient.getTreatments().isEmpty() ? null : patient.getTreatments().get(0).getId(),
                 List.of(),
                 List.of()
         );
@@ -48,7 +46,6 @@ public record PatientDTO(
                 patient.getSex().getDescription(),
                 patient.getAge(),
                 patient.getDateBirth(),
-                patient.getTreatments().isEmpty() ? null : patient.getTreatments().get(0).getId(),
                 foldersList.stream().map(FolderListDTO::new).toList(),
                 behaviors
         );
