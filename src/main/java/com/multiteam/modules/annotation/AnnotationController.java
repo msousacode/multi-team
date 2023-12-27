@@ -37,7 +37,7 @@ public class AnnotationController {
 
     @PreAuthorize("hasRole('PROFESSIONAL')")
     @PostMapping("/treatment/{treatmentId}/mobile")
-    public ResponseEntity<Void> syncAnnotations(@PathVariable("treatmentId") @NotNull UUID treatmentId, @Valid @RequestBody AnnotationDTO annotationDTO) {
+    public ResponseEntity<Void> syncAnnotations(@PathVariable("treatmentId") @NotNull UUID treatmentId, @Valid @RequestBody List<AnnotationDTO> annotationDTO) {
         annotationService.syncAnnotations(annotationDTO, treatmentId);
         return ResponseEntity.ok().build();
     }

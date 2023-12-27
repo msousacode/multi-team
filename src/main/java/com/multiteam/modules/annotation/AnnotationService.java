@@ -46,7 +46,7 @@ public class AnnotationService {
     }
 
     @Transactional
-    public void syncAnnotations(AnnotationDTO annotationDTO, @NotNull UUID treatmentId) {
+    public void syncAnnotations(List<AnnotationDTO> annotationDTO, @NotNull UUID treatmentId) {
         var principal = AuthenticationUtil.getPrincipalAuthenticaded();
         var professional = professionalService.getProfessionalByUserId(UUID.fromString(principal.toString()));
 
@@ -55,11 +55,14 @@ public class AnnotationService {
             throw new ProfessionalException(String.format(ERROR_USUARIO_ISNOT_PROFESSIONAL, principal));
         }
 
-        var annotations = annotationDTO.annotations().stream().map(AnnotationMapper.MAPPER::toEntity).toList();
+        var annotations = annotationDTO.stream().map(AnnotationMapper.MAPPER::toEntity).toList();
 
         var treatment = treatmentService.findTreatmentById(treatmentId).orElseThrow(() -> new ResourceNotFoundException("Tratamento não econtrado"));
 
-        annotations.forEach(annotation -> annotation.setTreatment(treatment));
+        annotations.forEach(annotation -> {
+            annotation.setTreatment(treatment);
+            annotation.setActive(true);
+        });
 
         annotationRepository.saveAll(annotations);
     }

@@ -19,11 +19,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: treatment_professional_id
-                  type: uuid
-                  constraints:
-                    nullable: false
-              - column:
                   name: active
                   type: boolean
                   defaultValueBoolean: true
@@ -41,9 +36,14 @@ databaseChangeLog:
               - column:
                   name: last_modified_date
                   type: timestamp
+              - column:
+                  name: treatment_id
+                  type: uuid
+                  constraints:
+                    nullable: false
         - addForeignKeyConstraint:
-            baseColumnNames: treatment_professional_id
+            baseColumnNames: treatment_id
             baseTableName: annotations
-            constraintName: fk_annotations_treatments_professionals
-            referencedColumnNames: treatment_professional_id
-            referencedTableName: treatments_professionals
+            constraintName: fk_annotations_treatments
+            referencedColumnNames: treatment_id
+            referencedTableName: treatments

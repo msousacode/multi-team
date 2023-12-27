@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -30,10 +31,7 @@ public class Annotation extends Auditable {
   private String observation;
 
   @Column(name = "date_initial")
-  private LocalDateTime dateInitial;
-
-  @Column(name = "date_end")
-  private LocalDateTime dateEnd;
+  private LocalDate dateInitial;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "treatment_id", referencedColumnName = "treatment_id")

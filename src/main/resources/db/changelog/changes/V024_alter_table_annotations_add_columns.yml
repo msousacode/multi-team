@@ -14,9 +14,4 @@ databaseChangeLog:
                   type: timestamp
                   constraints:
                     nullable: false
-              - column:
-                  name: date_end
-                  type: timestamp
-                  constraints:
-                    nullable: false
 
