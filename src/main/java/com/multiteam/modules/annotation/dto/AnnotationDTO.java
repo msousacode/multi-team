@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public record AnnotationDTO(
 
@@ -18,6 +19,9 @@ public record AnnotationDTO(
         @NotBlank(message = "A observação não de estar em branco")
         String observation,
 
-        boolean sync
+        boolean sync,
+
+        @NotNull(message = "Id do tratamento não deve ser nulo")
+        UUID treatmentId
 ) {
 }

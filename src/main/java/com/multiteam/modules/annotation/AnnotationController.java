@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+@PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
 @RestController
 @RequestMapping(path = "/v1/annotations", produces = APPLICATION_JSON_VALUE)
 @Validated
@@ -35,35 +36,30 @@ public class AnnotationController {
         this.annotationService = annotationService;
     }
 
-    @PreAuthorize("hasRole('PROFESSIONAL')")
-    @PostMapping("/treatment/{treatmentId}/mobile")
-    public ResponseEntity<Void> syncAnnotations(@PathVariable("treatmentId") @NotNull UUID treatmentId, @Valid @RequestBody List<AnnotationDTO> annotationDTO) {
-        annotationService.syncAnnotations(annotationDTO, treatmentId);
+    @PostMapping("/sync")
+    public ResponseEntity<Void> syncAnnotations(@Valid @RequestBody List<AnnotationDTO> annotationDTO) {
+        annotationService.syncAnnotations(annotationDTO);
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasRole('PROFESSIONAL')")
     @PutMapping
     public ResponseEntity<Void> upddateAnnotation(@RequestBody AnnotationDTO annotationDTO) {
         return annotationService.updateAnnotation(annotationDTO) ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
     @PostMapping("/search")
     public ResponseEntity<List<TreatmentAnnotationDTO>> getAllAnnotations(
             @RequestBody final AnnototionSearch search) {
         return ResponseEntity.ok(annotationService.getAllAnnotations(search));
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
     @GetMapping("/{treatmentProfessionalId}")
     public ResponseEntity<AnnotationDTO> getAnnotation(
             @PathVariable("treatmentProfessionalId") final UUID treatmentProfessionalId) {
         return ResponseEntity.ok(annotationService.getAnnotation(treatmentProfessionalId));
     }
 
-    @PreAuthorize("hasRole('PROFESSIONAL')")
     @DeleteMapping("/{annotationId}")
     public ResponseEntity<?> inactiveAnnotation(
             @PathVariable("annotationId") final UUID annotationId) {

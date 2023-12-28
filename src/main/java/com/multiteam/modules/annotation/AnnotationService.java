@@ -22,8 +22,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AnnotationService {
@@ -46,7 +49,7 @@ public class AnnotationService {
     }
 
     @Transactional
-    public void syncAnnotations(List<AnnotationDTO> annotationDTO, @NotNull UUID treatmentId) {
+    public void syncAnnotations(List<AnnotationDTO> annotationDTO) {
         var principal = AuthenticationUtil.getPrincipalAuthenticaded();
         var professional = professionalService.getProfessionalByUserId(UUID.fromString(principal.toString()));
 
@@ -57,11 +60,13 @@ public class AnnotationService {
 
         var annotations = annotationDTO.stream().map(AnnotationMapper.MAPPER::toEntity).toList();
 
-        var treatment = treatmentService.findTreatmentById(treatmentId).orElseThrow(() -> new ResourceNotFoundException("Tratamento não econtrado"));
+        var treatmentUUIDs = annotationDTO.stream().map(AnnotationDTO::treatmentId).collect(Collectors.toSet());
 
-        annotations.forEach(annotation -> {
-            annotation.setTreatment(treatment);
-            annotation.setActive(true);
+        treatmentUUIDs.forEach(uuid -> {
+            annotations.forEach(annotation -> {
+                annotation.setTreatment(treatmentService.findTreatmentById(uuid).orElseThrow(() -> new ResourceNotFoundException("Tratamento não econtrado")));
+                annotation.setActive(true);
+            });
         });
 
         annotationRepository.saveAll(annotations);
