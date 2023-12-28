@@ -19,9 +19,11 @@ public record AnnotationDTO(
         @NotBlank(message = "A observação não de estar em branco")
         String observation,
 
-        boolean sync,
+        int sync,
 
         @NotNull(message = "Id do tratamento não deve ser nulo")
-        UUID treatmentId
+        UUID treatmentId,
+
+        Integer annotationMobileId
 ) {
 }

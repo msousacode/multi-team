@@ -3,6 +3,7 @@ package com.multiteam.modules.annotation.mapper;
 import com.multiteam.modules.annotation.Annotation;
 import com.multiteam.modules.annotation.dto.AnnotationDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper

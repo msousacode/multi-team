@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Setter
@@ -36,4 +35,10 @@ public class Annotation extends Auditable {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "treatment_id", referencedColumnName = "treatment_id")
   private Treatment treatment;
+
+  @Column(name = "annotation_mobileId")
+  private Integer annotationMobileId;
+
+  @Transient
+  private Integer sync;
 }

@@ -1,7 +1,6 @@
 package com.multiteam.modules.annotation;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
+import com.multiteam.core.enums.AnnotationSync;
 import com.multiteam.core.exception.ProfessionalException;
 import com.multiteam.core.exception.ResourceNotFoundException;
 import com.multiteam.core.utils.AuthenticationUtil;
@@ -13,18 +12,13 @@ import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.treatment.dto.TreatmentAnnotationDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -62,31 +56,36 @@ public class AnnotationService {
 
         var treatmentUUIDs = annotationDTO.stream().map(AnnotationDTO::treatmentId).collect(Collectors.toSet());
 
-        treatmentUUIDs.forEach(uuid -> {
-            annotations.forEach(annotation -> {
-                annotation.setTreatment(treatmentService.findTreatmentById(uuid).orElseThrow(() -> new ResourceNotFoundException("Tratamento não econtrado")));
-                annotation.setActive(true);
-            });
-        });
+        treatmentUUIDs.forEach(uuid -> annotations.forEach(annotation -> {
+            annotation.setTreatment(treatmentService.findTreatmentById(uuid).orElseThrow(() -> new ResourceNotFoundException("Tratamento não econtrado")));
+            annotation.setActive(true);
 
-        annotationRepository.saveAll(annotations);
+            if (annotation.getSync().equals(AnnotationSync.INATIVAR.getSync())) {
+                deleteAnnotation(annotation.getAnnotationMobileId(), annotation.getTreatment().getId());
+
+            } else if (annotation.getSync().equals(AnnotationSync.ATUALIZAR.getSync())) {
+
+                var result = findAnnotation(annotation.getAnnotationMobileId(), annotation.getTreatment().getId());
+                result.setAnnotation(annotation.getAnnotation());
+                result.setObservation(annotation.getObservation());
+                result.setDateInitial(annotation.getDateInitial());
+
+                annotationRepository.save(result);
+
+            } else {
+                annotationRepository.save(annotation);
+            }
+        }));
     }
 
-    @Transactional
-    public Boolean updateAnnotation(final AnnotationDTO annotationDTO) {
-
-    /*var annotationResult = annotationRepository.findById(annotationDTO.treatmentId());
-
-    if (annotationResult.isEmpty()) {
-      logger.warn("annotation not found treatment_professional_id: {}",
-          annotationDTO.treatmentId());
-      return Boolean.FALSE;
+    private Annotation findAnnotation(Integer annotationMobileId, UUID treatmentId) {
+        var principal = AuthenticationUtil.getPrincipalAuthenticaded();
+        return annotationRepository.findAnnotation(annotationMobileId, treatmentId, principal + "").get();
     }
 
-    //annotationResult.get().setAnnotation(annotationDTO.annotation());
-    annotationRepository.save(annotationResult.get());
-*/
-        return Boolean.TRUE;
+    private void deleteAnnotation(Integer annotationMobileId, UUID treatmentId) {
+        var principal = AuthenticationUtil.getPrincipalAuthenticaded();
+        annotationRepository.deleteAnnotation(annotationMobileId, treatmentId, principal + "");
     }
 
     @Transactional
@@ -99,10 +98,5 @@ public class AnnotationService {
         Specification<Annotation> spec = AnnotationSpecification.findAllAnnotations(search);
         var list = annotationRepository.findAll(spec);
         return list.stream().map(TreatmentAnnotationDTO::new).toList();
-    }
-
-    public AnnotationDTO getAnnotation(final UUID treatmentProfessionalId) {
-        return null;//annotationRepository.findById(treatmentProfessionalId)
-        //.map(AnnotationDTO::new).orElse(null);
     }
 }

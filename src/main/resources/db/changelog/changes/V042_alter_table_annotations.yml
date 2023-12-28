@@ -7,14 +7,5 @@ databaseChangeLog:
             tableName: annotations
             columns:
               - column:
-                  name: treatment_id
-                  type: uuid
-                  defaultValue: uuid_generate_v4()
-                  constraints:
-                    nullable: false
-        - addForeignKeyConstraint:
-            baseColumnNames: treatment_id
-            baseTableName: annotations
-            constraintName: fk_annotations_treatments
-            referencedColumnNames: treatment_id
-            referencedTableName: treatments
+                  name: annotation_mobile_id
+                  type: int
