@@ -17,10 +17,7 @@ import java.util.UUID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'SUPERVISOR', 'PROFESSIONAL')")
-@RequestMapping(
-        path = "/v1/behaviors",
-        produces = APPLICATION_JSON_VALUE
-)
+@RequestMapping(path = "/v1/behaviors", produces = APPLICATION_JSON_VALUE)
 @RestController
 public class BehaviorController {
 

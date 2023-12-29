@@ -5,6 +5,6 @@ databaseChangeLog:
       changes:
         - addPrimaryKey:
             tableName: behaviors_collect
-            columnNames: behavior_id, patient_id, folder_id # Com essa regra o sistema não permite persistir programas em duplicidade dentro da pasta curricular do aprendiz.
+            columnNames: behavior_collect_id, behavior_id, patient_id, folder_id # Com essa regra o sistema não permite persistir programas em duplicidade dentro da pasta curricular do aprendiz.
             constraintName: fk_unique_behavior
             clustered: true #Cria os indices clusterizados para ser uma chave composta

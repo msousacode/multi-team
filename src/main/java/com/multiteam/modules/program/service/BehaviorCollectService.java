@@ -34,12 +34,15 @@ public class BehaviorCollectService {
 
             program.getBehaviors().forEach(behavior -> {
                 patient.getFolders().forEach(folder -> {
-                    var behaviorCollect = BehaviorCollectMapper.MAPPER.toEntity(behavior);
-                    behaviorCollect.setPatient(patient);
-                    behaviorCollect.setBehavior(behavior);
-                    behaviorCollect.setProgramId(program.getId());
-                    behaviorCollect.setFolderId(folder.getId());
-                    behaviorCollects.add(behaviorCollect);
+
+                    for(int i = 0; i <= behavior.getOrderExecution(); i++){
+                        var behaviorCollect = BehaviorCollectMapper.MAPPER.toEntity(behavior);
+                        behaviorCollect.setPatient(patient);
+                        behaviorCollect.setBehavior(behavior);
+                        behaviorCollect.setProgramId(program.getId());
+                        behaviorCollect.setFolderId(folder.getId());
+                        behaviorCollects.add(behaviorCollect);
+                    }
                 });
             });
         });

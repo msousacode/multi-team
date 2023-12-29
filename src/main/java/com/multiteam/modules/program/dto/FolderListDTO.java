@@ -7,7 +7,9 @@ import com.multiteam.modules.program.entity.Program;
 import com.multiteam.modules.program.mapper.ProgramPostMapper;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public record FolderListDTO(
         UUID folderId,
@@ -17,7 +19,7 @@ public record FolderListDTO(
         UUID patientId,
         Boolean active,
         SituationEnum situation,
-        List<ProgramDTO> programs,
+        Set<ProgramDTO> programs,
         List<Select> professionals,
         UUID treatmentId
 ) {
@@ -43,7 +45,7 @@ public record FolderListDTO(
                 folder.getPatient().getId(),
                 folder.getActive(),
                 folder.getFolderProfessional().get(0).getSituation(),
-                programs.stream().map(program -> ProgramPostMapper.MAPPER.toDTO(program)).toList(),
+                programs.stream().map(program -> ProgramPostMapper.MAPPER.toDTO(program)).collect(Collectors.toSet()),
                 selectProfessionals(folder),
                 null
         );
@@ -62,10 +64,14 @@ public record FolderListDTO(
                 folder.getPatient().getId(),
                 folder.getActive(),
                 folder.getFolderProfessional().isEmpty() ? null : folder.getFolderProfessional().get(0).getSituation(),
-                folder.getFolderPrograms().stream().map(program -> new ProgramDTO(program.getProgram())).toList(),
+                folder.getFolderPrograms().stream().map(program -> new ProgramDTO(program.getProgram())).collect(Collectors.toSet()),
                 selectProfessionals(folder),
-                folder.getFolderTreatments().stream().filter(folderTreatment -> folder.getId() == folderTreatment.getFolder().getId()).findFirst().get().getTreatment().getId()
+                getId(folder)
         );
+    }
+
+    private static UUID getId(Folder folder) {
+        return !folder.getFolderTreatments().isEmpty() ? folder.getFolderTreatments().stream().filter(folderTreatment -> folder.getId() == folderTreatment.getFolder().getId()).findFirst().get().getTreatment().getId() : null;
     }
 }
 
