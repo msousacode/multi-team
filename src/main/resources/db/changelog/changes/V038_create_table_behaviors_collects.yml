@@ -80,6 +80,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: responsible
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
                   name: created_by
                   type: varchar(50)
               - column:

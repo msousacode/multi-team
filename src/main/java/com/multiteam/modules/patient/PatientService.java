@@ -12,7 +12,6 @@ import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.patient.repository.PatientRepository;
 import com.multiteam.modules.program.dto.BehaviorDTO;
 import com.multiteam.modules.program.entity.FolderProfessional;
-import com.multiteam.modules.program.entity.FolderTreatment;
 import com.multiteam.modules.program.mapper.BehaviorCollectMapper;
 import com.multiteam.modules.program.repository.FolderProfessionalRepository;
 import com.multiteam.modules.program.repository.FolderTreatmentRepository;
@@ -113,15 +112,16 @@ public class PatientService {
     }
 
     public List<PatientDTO> findPatientsInTreatment(UUID professionalId) {
+        boolean isResponsible = false;
         var folderProfessionalList = folderProfessionalRepository.findPatientsInTreatment(professionalId);
         return folderProfessionalList.stream().map(patient -> new PatientDTO(
                 patient.getFolder().getPatient(),
                 patient.getFolder().getPatient().getFolders(),
-                getBehaviors(patient))).toList();
+                getBehaviors(patient, isResponsible))).toList();
     }
 
-    private List<BehaviorDTO> getBehaviors(FolderProfessional patient) {
-        return behaviorCollectService.getCollectsByPatientId(patient.getFolder().getPatient().getId(), patient.getFolder().getId()).stream().map(behavior -> BehaviorCollectMapper.MAPPER.toDTO(behavior)).toList();
+    private List<BehaviorDTO> getBehaviors(FolderProfessional patient, boolean isResponsable) {
+        return behaviorCollectService.getCollectsByPatientId(patient.getFolder().getPatient().getId(), patient.getFolder().getId(), isResponsable).stream().map(behavior -> BehaviorCollectMapper.MAPPER.toDTO(behavior)).toList();
     }
 
     @Transactional
@@ -170,6 +170,8 @@ public class PatientService {
 
     public List<PatientDTO> getCardToCollectsResponsible(UUID userId) {
 
+        boolean isResponsible = true;
+
         var patientId = guestService.findGuestByUserId(userId).get().getPatient().getId();
 
         var folderProfessionalList = folderTreatmentRepository.getCardToCollectsResponsible(patientId);
@@ -177,6 +179,6 @@ public class PatientService {
         return folderProfessionalList.stream().map(patient -> new PatientDTO(
                 patient.getFolder().getPatient(),
                 patient.getFolder().getPatient().getFolders(),
-                getBehaviors(new FolderProfessional(patient.getFolder())))).toList();
+                getBehaviors(new FolderProfessional(patient.getFolder()), isResponsible))).toList();
     }
 }

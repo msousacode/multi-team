@@ -17,7 +17,7 @@ public interface FolderTreatmentRepository extends JpaRepository<FolderTreatment
             join ft.folder fo on ft.folder.id = fo.id
             join fo.patient pa on pa.id = fo.patient.id
             where pa.id = :patientId
-            and ft.treatment.situation = 'EM_COLETA'
+            and ft.treatment.situation = 'ANDAMENTO'
             and pa.active = true
             """)
     Set<FolderTreatment> getCardToCollectsResponsible(UUID patientId);

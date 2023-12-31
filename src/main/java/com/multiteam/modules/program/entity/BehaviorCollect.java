@@ -55,6 +55,9 @@ public class BehaviorCollect extends Tenantable {
     @Column(name = "active")
     private Boolean active;
 
+    @Column(name = "responsible")
+    private Boolean responsible = false;
+
     @Column(name = "collect_time", columnDefinition = "false")
     private Boolean time;
 

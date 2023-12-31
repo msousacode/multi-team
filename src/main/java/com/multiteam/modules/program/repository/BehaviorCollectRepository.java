@@ -11,6 +11,6 @@ import java.util.UUID;
 @Repository
 public interface BehaviorCollectRepository extends JpaRepository<BehaviorCollect, UUID> {
 
-    @Query(value = "select bc from BehaviorCollect bc where bc.patient.id = :patientId and bc.folderId = :folderId")
-    List<BehaviorCollect> findAllByPatientIdAndFolderId(UUID patientId, UUID folderId);
+    @Query(value = "select bc from BehaviorCollect bc where bc.patient.id = :patientId and bc.folderId = :folderId and bc.responsible = :isResponsible")
+    List<BehaviorCollect> findAllByPatientIdAndFolderId(UUID patientId, UUID folderId, boolean isResponsible);
 }

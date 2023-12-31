@@ -36,12 +36,20 @@ public class BehaviorCollectService {
                 patient.getFolders().forEach(folder -> {
 
                     for(int i = 0; i <= behavior.getOrderExecution(); i++){
+
                         var behaviorCollect = BehaviorCollectMapper.MAPPER.toEntity(behavior);
                         behaviorCollect.setPatient(patient);
                         behaviorCollect.setBehavior(behavior);
                         behaviorCollect.setProgramId(program.getId());
                         behaviorCollect.setFolderId(folder.getId());
+                        behaviorCollect.setResponsible(false);
+
                         behaviorCollects.add(behaviorCollect);
+
+                        if(behavior.getResponsible()){
+                            behaviorCollect.setResponsible(true);
+                            behaviorCollects.add(behaviorCollect);
+                        }
                     }
                 });
             });
@@ -50,8 +58,8 @@ public class BehaviorCollectService {
         behaviorCollectRepository.saveAll(behaviorCollects);
     }
 
-    public List<BehaviorCollect> getCollectsByPatientId(UUID patientId, UUID folderId) {
-        return behaviorCollectRepository.findAllByPatientIdAndFolderId(patientId, folderId);
+    public List<BehaviorCollect> getCollectsByPatientId(UUID patientId, UUID folderId, boolean isResponsable) {
+        return behaviorCollectRepository.findAllByPatientIdAndFolderId(patientId, folderId, isResponsable);
     }
 
     public List<BehaviorCollect> findAllById(List<UUID> behaviorsUUIDs) {
