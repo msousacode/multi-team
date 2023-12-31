@@ -1,5 +1,7 @@
 package com.multiteam.modules.program.dto;
 
+import com.multiteam.core.enums.AbilityEnum;
+import com.multiteam.core.enums.ProtocolEnum;
 import com.multiteam.modules.program.entity.Behavior;
 import com.multiteam.modules.program.entity.BehaviorCollect;
 import com.multiteam.modules.program.entity.Program;
@@ -12,8 +14,8 @@ import java.util.UUID;
 public record ProgramDTO(
         UUID programId,
         String programName,
-        Integer ability,
-        Integer protocol,
+        String ability,
+        String protocol,
         Integer attemptBySession,
         String definition,
         String procedure,
@@ -26,8 +28,8 @@ public record ProgramDTO(
         this(
                 program.getId(),
                 program.getProgramName(),
-                program.getAbility(),
-                program.getProtocol(),
+                AbilityEnum.get(program.getAbility()).getDescription(),
+                ProtocolEnum.get(program.getProtocol()).getDescription(),
                 program.getAttemptBySession(),
                 program.getDefinition(),
                 program.getProcedure(),

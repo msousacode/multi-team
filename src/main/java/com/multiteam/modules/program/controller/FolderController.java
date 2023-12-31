@@ -23,10 +23,7 @@ import java.util.UUID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
-@RequestMapping(
-        path = "/v1/folders",
-        produces = APPLICATION_JSON_VALUE
-)
+@RequestMapping(path = "/v1/folders", produces = APPLICATION_JSON_VALUE)
 @RestController
 public class FolderController {
 

@@ -6,7 +6,7 @@ import java.util.UUID;
 public record BehaviorDTO(
         UUID behaviorId,
         String behaviorName,
-        Integer orderExecution,
+        Integer orderExecution,//Ordem de execução é utilizada para sinalizar a quantidade de alvos por sessão.
         Integer situation,
         String observation,
         LocalDateTime startDate,

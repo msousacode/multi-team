@@ -23,19 +23,7 @@ public record FolderListDTO(
         List<Select> professionals,
         UUID treatmentId
 ) {
-    /*  public FolderListDTO(Folder folder) {
-          this(
-                  folder.getId(),
-                  folder.getCode(),
-                  folder.getFolderName(),
-                  folder.getPatient().getName(),
-                  folder.getPatient().getId(),
-                  folder.getActive(),
-                  folder.getFolderProfessional().isEmpty() ? null : folder.getFolderProfessional().get(0).getSituation(),
-                  folder.getFolderPrograms().stream().map(program -> new ProgramDTO(program.getProgram())).toList(),
-                  selectProfessionals(folder));
-      }
-  */
+
     public FolderListDTO(Folder folder, List<Program> programs) {
         this(
                 folder.getId(),
@@ -45,7 +33,7 @@ public record FolderListDTO(
                 folder.getPatient().getId(),
                 folder.getActive(),
                 folder.getFolderProfessional().get(0).getSituation(),
-                programs.stream().map(program -> ProgramPostMapper.MAPPER.toDTO(program)).collect(Collectors.toSet()),
+                programs.stream().map(program -> new ProgramDTO(program)).collect(Collectors.toSet()),
                 selectProfessionals(folder),
                 null
         );
