@@ -52,7 +52,7 @@ public record FolderListDTO(
                 folder.getPatient().getId(),
                 folder.getActive(),
                 folder.getFolderProfessional().isEmpty() ? null : folder.getFolderProfessional().get(0).getSituation(),
-                folder.getFolderPrograms().stream().map(program -> new ProgramDTO(program.getProgram())).collect(Collectors.toSet()),
+                folder.getFolderPrograms().stream().map(program -> ProgramPostMapper.MAPPER.toDTO(program.getProgram())).collect(Collectors.toSet()),
                 selectProfessionals(folder),
                 getId(folder)
         );
