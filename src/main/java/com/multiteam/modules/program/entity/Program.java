@@ -34,9 +34,6 @@ public class Program extends Tenantable {
     @Column(name = "protocol")
     private Integer protocol;
 
-    @Column(name = "attempt_by_session")
-    private Integer attemptBySession;
-
     @Column(name = "definition")
     private String definition;
 

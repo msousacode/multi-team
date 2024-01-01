@@ -29,11 +29,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: attempt_by_session
-                  type: tinyint
-                  constraints:
-                    nullable: false
-              - column:
                   name: definition
                   type: varchar(10000)
               - column:
