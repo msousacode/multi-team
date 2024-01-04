@@ -1,6 +1,7 @@
 package com.multiteam.modules.guest;
 
 
+import com.multiteam.core.exception.ApiException;
 import com.multiteam.core.exception.TreatmentException;
 import com.multiteam.modules.guest.dto.GuestPostDTO;
 import com.multiteam.modules.guest.mapper.GuestMapper;
@@ -10,6 +11,7 @@ import com.multiteam.modules.user.UserRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -38,6 +40,8 @@ public class GuestService {
     @Transactional
     public Boolean createGuest(GuestPostDTO guestPostDTO, UUID patientId) {
 
+        Assert.isTrue(guestRespository.findGuestByEmail(guestPostDTO.email()).isEmpty(), "O responsável pode pode estar vinculado a dois aprendizes");//TODO no futurdo isso deverá ser resolvido de modo a permitir que um responsável acompanhe mais de um aprendiz.
+
         var patient = patientService.getPatientById(patientId);
         var user = userRepository.getUserById(guestPostDTO.id());
         var guest = GuestMapper.MAPPER.toEntity(guestPostDTO);
@@ -48,7 +52,7 @@ public class GuestService {
 
         guestRespository.save(guest);
 
-        //TODO enviar a senha via e-mail para o responsável.
+        //TODO enviar a senha via e-mail para o responsável realizar o primeiro acesso.
 
         return Boolean.TRUE;
     }

@@ -15,10 +15,7 @@ import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@RequestMapping(
-        path = "/v1/guests",
-        produces = APPLICATION_JSON_VALUE
-)
+@RequestMapping(path = "/v1/guests", produces = APPLICATION_JSON_VALUE)
 @RestController
 public class GuestController {
 
@@ -38,7 +35,7 @@ public class GuestController {
         return ResponseEntity.ok(guests);
     }
 
-    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
     @PostMapping("/patient/{patientId}")
     public ResponseEntity<?> createGuest(@RequestBody GuestPostDTO guestPostDTO, @PathVariable UUID patientId) {
         return guestService.createGuest(guestPostDTO, patientId) ? ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

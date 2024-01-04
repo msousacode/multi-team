@@ -47,7 +47,7 @@ public class PatientController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updatePatient(@RequestBody final PatientDTO patientDTO) {
+    public ResponseEntity<?> updatePatient(@RequestBody PatientDTO patientDTO) {
         if (patientService.updatePatient(patientDTO)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {

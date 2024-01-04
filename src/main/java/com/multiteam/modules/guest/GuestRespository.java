@@ -12,4 +12,6 @@ public interface GuestRespository extends JpaRepository<Guest, UUID> {
     List<Guest> findAllByPatient_Id(UUID patientId);
 
     Optional<Guest> findByUser_Id(UUID userId);
+
+    Optional<Guest> findGuestByEmail(String email);
 }

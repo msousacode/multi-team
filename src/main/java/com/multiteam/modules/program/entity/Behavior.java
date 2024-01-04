@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.jetbrains.annotations.Contract;
 import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
@@ -25,8 +26,8 @@ public class Behavior extends Tenantable {
     @Column(name = "behavior_name")
     private String behaviorName;
 
-    @Column(name = "order_execution")
-    private Integer orderExecution;
+    @Column(name = "order_execution", columnDefinition = "int default 1")
+    private Integer orderExecution;//default 1 quantas vezes o alvo será aplicado no programa
 
     @Column(name = "situation")
     private Integer situation;
@@ -53,10 +54,10 @@ public class Behavior extends Tenantable {
     @Column(name = "active")
     private Boolean active;
 
-    @Column(name = "responsible")//Flag para liberar o programa alvo para os responsávis no app.
+    @Column(name = "responsible", columnDefinition = "boolean default 'false'")
     private Boolean responsible;
 
-    @Column(name = "collect_time", columnDefinition = "false")
+    @Column(name = "collect_time")
     private Boolean time;
 
     @Column(name = "question")
@@ -64,4 +65,8 @@ public class Behavior extends Tenantable {
 
     @Column(name = "collection_date")
     private LocalDateTime collectionDate;
+
+    public void setOrderExecution(Integer orderExecution) {
+        this.orderExecution = orderExecution == null ? 1 : orderExecution;
+    }
 }

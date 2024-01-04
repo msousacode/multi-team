@@ -32,9 +32,7 @@ public class BehaviorController {
     }
 
     @PostMapping("/program/{programId}")
-    public ResponseEntity<Void> createBehavior(
-            @PathVariable("programId" ) UUID programId,
-            @RequestBody BehaviorDTO behaviorDTO) {
+    public ResponseEntity<Void> createBehavior(@PathVariable("programId" ) UUID programId, @RequestBody BehaviorDTO behaviorDTO) {
         if (behaviorService.createBehavior(programId, behaviorDTO)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
