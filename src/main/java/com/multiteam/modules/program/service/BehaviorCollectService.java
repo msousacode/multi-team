@@ -37,18 +37,30 @@ public class BehaviorCollectService {
 
                     for(int i = 0; i <= behavior.getOrderExecution(); i++){
 
-                        var behaviorCollect = BehaviorCollectMapper.MAPPER.toEntity(behavior);
-                        behaviorCollect.setPatient(patient);
-                        behaviorCollect.setBehavior(behavior);
-                        behaviorCollect.setProgramId(program.getId());
-                        behaviorCollect.setFolderId(folder.getId());
-                        behaviorCollect.setResponsible(false);
+                        /**
+                         * Cria o comportamento para coleta do profissional
+                         */
+                        var behaviorProfessional = BehaviorCollectMapper.MAPPER.toEntity(behavior);
+                        behaviorProfessional.setPatient(patient);
+                        behaviorProfessional.setBehavior(behavior);
+                        behaviorProfessional.setProgramId(program.getId());
+                        behaviorProfessional.setFolderId(folder.getId());
+                        behaviorProfessional.setResponsible(false);
 
-                        behaviorCollects.add(behaviorCollect);
+                        behaviorCollects.add(behaviorProfessional);
 
                         if(behavior.getResponsible()){
-                            behaviorCollect.setResponsible(true);
-                            behaviorCollects.add(behaviorCollect);
+                            /**
+                             * Cria o comportamento para coleta do responsável
+                             */
+                            var behaviorResponsible = BehaviorCollectMapper.MAPPER.toEntity(behavior);
+                            behaviorResponsible.setPatient(patient);
+                            behaviorResponsible.setBehavior(behavior);
+                            behaviorResponsible.setProgramId(program.getId());
+                            behaviorResponsible.setFolderId(folder.getId());
+                            behaviorResponsible.setResponsible(true);
+
+                            behaviorCollects.add(behaviorResponsible);
                         }
                     }
                 });

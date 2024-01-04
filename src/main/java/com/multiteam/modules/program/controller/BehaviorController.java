@@ -43,9 +43,7 @@ public class BehaviorController {
     }
 
     @PutMapping("/{behaviorId}")
-    public ResponseEntity<Void> updateBehavior(
-            @PathVariable("behaviorId" ) final UUID behaviorId,
-            @RequestBody BehaviorDTO behaviorDTO) {
+    public ResponseEntity<Void> updateBehavior(@PathVariable("behaviorId" ) UUID behaviorId, @RequestBody BehaviorDTO behaviorDTO) {
         if (behaviorService.updateBehavior(behaviorId, behaviorDTO)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
