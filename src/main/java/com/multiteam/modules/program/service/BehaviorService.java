@@ -43,8 +43,8 @@ public class BehaviorService {
         behavior.setProgram(program);
         behavior.setActive(true);
         behavior.setSituation(TargetSituationEnum.NAO_INICIADO.getValue());
-        behavior.setResponsible(behaviorDTO.responsible() != null && behaviorDTO.responsible() ? behaviorDTO.responsible() : false);
-        behavior.setTime(behaviorDTO.time() != null && behaviorDTO.time() ? behaviorDTO.time(): false);
+        behavior.setResponsible(behaviorDTO.responsible());
+        behavior.setTime(behaviorDTO.time());
 
         behaviorRepository.save(behavior);
 

@@ -3,10 +3,6 @@ package com.multiteam.modules.program.entity;
 import com.multiteam.core.models.Tenantable;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.jetbrains.annotations.Contract;
-import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -54,7 +50,7 @@ public class Behavior extends Tenantable {
     @Column(name = "active")
     private Boolean active;
 
-    @Column(name = "responsible", columnDefinition = "boolean default 'false'")
+    @Column(name = "responsible")
     private Boolean responsible;
 
     @Column(name = "collect_time")
@@ -68,5 +64,13 @@ public class Behavior extends Tenantable {
 
     public void setOrderExecution(Integer orderExecution) {
         this.orderExecution = orderExecution == null ? 1 : orderExecution;
+    }
+
+    public void setResponsible(Boolean responsible) {
+        this.responsible = responsible == null ? false : responsible;
+    }
+
+    public void setTime(Boolean time) {
+        this.time = time == null ? false : time;
     }
 }
