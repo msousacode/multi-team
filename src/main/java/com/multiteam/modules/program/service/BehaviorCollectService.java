@@ -1,7 +1,10 @@
 package com.multiteam.modules.program.service;
 
 import com.multiteam.modules.patient.model.Patient;
+import com.multiteam.modules.program.entity.Behavior;
 import com.multiteam.modules.program.entity.BehaviorCollect;
+import com.multiteam.modules.program.entity.Folder;
+import com.multiteam.modules.program.entity.Program;
 import com.multiteam.modules.program.mapper.BehaviorCollectMapper;
 import com.multiteam.modules.program.repository.BehaviorCollectRepository;
 import org.springframework.stereotype.Service;
@@ -25,7 +28,7 @@ public class BehaviorCollectService {
     }
 
     @Transactional
-    public void createBehaviorCollect(List<UUID> programUUIDs, Patient patient) {
+    public void createBehaviorCollect(List<UUID> programUUIDs, Folder folder) {
         List<BehaviorCollect> behaviorCollects = new ArrayList<>();
 
         var programs = programService.findProgramsByIdInBacth(programUUIDs);
@@ -33,41 +36,32 @@ public class BehaviorCollectService {
         programs.forEach(program -> {
 
             program.getBehaviors().forEach(behavior -> {
-                patient.getFolders().forEach(folder -> {
 
-                    for(int i = 0; i <= behavior.getOrderExecution(); i++){
-
-                        /**
-                         * Cria o comportamento para coleta do profissional
-                         */
-                        var behaviorProfessional = BehaviorCollectMapper.MAPPER.toEntity(behavior);
-                        behaviorProfessional.setPatient(patient);
-                        behaviorProfessional.setBehavior(behavior);
-                        behaviorProfessional.setProgramId(program.getId());
-                        behaviorProfessional.setFolderId(folder.getId());
-                        behaviorProfessional.setResponsible(false);
-
-                        behaviorCollects.add(behaviorProfessional);
-
-                        if(behavior.getResponsible()){
-                            /**
-                             * Cria o comportamento para coleta do responsável
-                             */
-                            var behaviorResponsible = BehaviorCollectMapper.MAPPER.toEntity(behavior);
-                            behaviorResponsible.setPatient(patient);
-                            behaviorResponsible.setBehavior(behavior);
-                            behaviorResponsible.setProgramId(program.getId());
-                            behaviorResponsible.setFolderId(folder.getId());
-                            behaviorResponsible.setResponsible(true);
-
-                            behaviorCollects.add(behaviorResponsible);
-                        }
+                for (int i = 0; i < behavior.getOrderExecution(); i++) {
+                    BehaviorCollect behaviorCollect = new BehaviorCollect();
+                    if (!behavior.getResponsible()) {
+                        /**Cria o comportamento para coleta do profissional*/
+                        behaviorCollect = buildBehaviorCollect(folder, program, behavior, false);
+                    } else {
+                        /**Cria o comportamento para coleta do responsável*/
+                        behaviorCollect = buildBehaviorCollect(folder, program, behavior, true);
                     }
-                });
+                    behaviorCollects.add(behaviorCollect);
+                }
             });
         });
 
         behaviorCollectRepository.saveAll(behaviorCollects);
+    }
+
+    private static BehaviorCollect buildBehaviorCollect(Folder folder, Program program, Behavior behavior, Boolean isResponsible) {
+        var behaviorCollect = BehaviorCollectMapper.MAPPER.toEntity(behavior);
+        behaviorCollect.setPatient(folder.getPatient());
+        behaviorCollect.setBehavior(behavior);
+        behaviorCollect.setProgramId(program.getId());
+        behaviorCollect.setFolderId(program.getId());
+        behaviorCollect.setResponsible(isResponsible);
+        return behaviorCollect;
     }
 
     public List<BehaviorCollect> getCollectsByPatientId(UUID patientId, UUID folderId, boolean isResponsable) {

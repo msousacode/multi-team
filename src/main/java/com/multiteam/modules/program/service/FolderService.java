@@ -128,7 +128,7 @@ public class FolderService {
 
         folderProgramRepository.saveAll(foldersPrograms);
 
-        behaviorCollectService.createBehaviorCollect(uuids, folder.getPatient());
+        behaviorCollectService.createBehaviorCollect(uuids, folder);
     }
 
     public List<Folder> getFolderByPatientId(UUID patientId) {
