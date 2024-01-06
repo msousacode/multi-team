@@ -27,8 +27,6 @@ public class AnnotationService {
 
     private final Logger logger = LogManager.getLogger(Annotation.class);
 
-    private final static String ERROR_USUARIO_ISNOT_PROFESSIONAL = "O usuário %s não é um profissional. Somente profissionais podem realizar anotações no tratamento";
-
     private final AnnotationRepository annotationRepository;
     private final ProfessionalService professionalService;
     private final TreatmentService treatmentService;
@@ -44,13 +42,6 @@ public class AnnotationService {
 
     @Transactional
     public void syncAnnotations(List<AnnotationDTO> annotationDTO) {
-        var principal = AuthenticationUtil.getPrincipalAuthenticaded();
-        var professional = professionalService.getProfessionalByUserId(UUID.fromString(principal.toString()));
-
-        if (professional.isEmpty()) {
-            logger.error(String.format(ERROR_USUARIO_ISNOT_PROFESSIONAL, principal));
-            throw new ProfessionalException(String.format(ERROR_USUARIO_ISNOT_PROFESSIONAL, principal));
-        }
 
         var annotations = annotationDTO.stream().map(AnnotationMapper.MAPPER::toEntity).toList();
 

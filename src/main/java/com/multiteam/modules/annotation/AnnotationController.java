@@ -26,6 +26,7 @@ public class AnnotationController {
         this.annotationService = annotationService;
     }
 
+    @PreAuthorize("hasRole('GUEST')")
     @PostMapping("/sync")
     public ResponseEntity<Void> syncAnnotations(@Valid @RequestBody List<AnnotationDTO> annotationDTO) {
         annotationService.syncAnnotations(annotationDTO);

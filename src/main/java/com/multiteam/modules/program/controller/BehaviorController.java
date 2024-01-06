@@ -60,6 +60,7 @@ public class BehaviorController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('GUEST')")
     @PostMapping("/sync")
     public ResponseEntity<Void> syncBehaviorsCollect(@RequestBody List<BehaviorResponseCollectDTO> behaviorsCollect) {
         if (behaviorService.syncBehaviorsCollect(behaviorsCollect)) {

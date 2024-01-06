@@ -59,7 +59,7 @@ public class BehaviorCollectService {
         behaviorCollect.setPatient(folder.getPatient());
         behaviorCollect.setBehavior(behavior);
         behaviorCollect.setProgramId(program.getId());
-        behaviorCollect.setFolderId(program.getId());
+        behaviorCollect.setFolderId(folder.getId());
         behaviorCollect.setResponsible(isResponsible);
         return behaviorCollect;
     }
