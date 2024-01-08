@@ -34,12 +34,24 @@ public class AnnotationController {
     }
 
     @DeleteMapping("/{annotationId}")
-    public ResponseEntity<?> inactiveAnnotation(
+    public ResponseEntity<Void> inactiveAnnotation(
             @PathVariable("annotationId") final UUID annotationId) {
         annotationService.inactiveAnnotation(annotationId);
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{annotationId}")
+    public ResponseEntity<AnnotationListDTO> findAnnotation(@PathVariable UUID annotationId) {
+        return ResponseEntity.ok(annotationService.find(annotationId));
+    }
+
+    @PutMapping("/{annotationId}")
+    public ResponseEntity<Void> update(@PathVariable UUID annotationId, @RequestBody AnnotationListDTO dto) {
+        annotationService.update(annotationId, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    //TODO depois implementar paginação nas annotations.
     /*
     @GetMapping("/treatment/{treatmentId}")
     public ResponseEntity<Page<AnnotationOfTreatment>> find(@PathVariable UUID treatmentId,

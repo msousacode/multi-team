@@ -76,8 +76,21 @@ public class AnnotationService {
     }
 
     public List<AnnotationListDTO> findAnnotations(UUID treatmentId) {
-        return annotationRepository.findAllByTreatment_Id(treatmentId).stream().map(a ->
+        return annotationRepository.findAllByTreatment_IdAndActiveIsTrue(treatmentId).stream().map(a ->
             new AnnotationListDTO().toDTO(a, userService.getUser(UUID.fromString(a.getCreatedBy())).get())
         ).toList();
+    }
+
+    public AnnotationListDTO find(UUID annotationId) {
+        var annotation = annotationRepository.findById(annotationId).get();
+        return new AnnotationListDTO().toDTO(annotation, userService.getUser(UUID.fromString(annotation.getCreatedBy())).get());
+    }
+
+    @Transactional
+    public void update(UUID annotationId, AnnotationListDTO dto) {
+        var annotation = annotationRepository.findById(annotationId).get();
+        annotation.setObservation(dto.getObservation());
+        annotation.setAnnotation(dto.getAnnotation());
+        annotationRepository.save(annotation);
     }
 }
