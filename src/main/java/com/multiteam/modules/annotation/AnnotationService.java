@@ -1,20 +1,11 @@
 package com.multiteam.modules.annotation;
 
 import com.multiteam.core.enums.AnnotationSync;
-import com.multiteam.core.exception.ProfessionalException;
 import com.multiteam.core.exception.ResourceNotFoundException;
 import com.multiteam.core.utils.AuthenticationUtil;
 import com.multiteam.modules.annotation.dto.AnnotationDTO;
-import com.multiteam.modules.annotation.dto.AnnototionSearch;
 import com.multiteam.modules.annotation.mapper.AnnotationMapper;
-import com.multiteam.modules.professional.ProfessionalService;
 import com.multiteam.modules.treatment.TreatmentService;
-import com.multiteam.modules.treatment.dto.TreatmentAnnotationDTO;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,18 +16,13 @@ import java.util.stream.Collectors;
 @Service
 public class AnnotationService {
 
-    private final Logger logger = LogManager.getLogger(Annotation.class);
-
     private final AnnotationRepository annotationRepository;
-    private final ProfessionalService professionalService;
     private final TreatmentService treatmentService;
 
     public AnnotationService(
             AnnotationRepository annotationRepository,
-            ProfessionalService professionalService,
             TreatmentService treatmentService) {
         this.annotationRepository = annotationRepository;
-        this.professionalService = professionalService;
         this.treatmentService = treatmentService;
     }
 
@@ -71,7 +57,7 @@ public class AnnotationService {
 
     private Annotation findAnnotation(Integer annotationMobileId, UUID treatmentId) {
         var principal = AuthenticationUtil.getPrincipalAuthenticaded();
-        return annotationRepository.findAnnotation(annotationMobileId, treatmentId, principal + "").get();
+        return annotationRepository.findAnnotationByTreatment(annotationMobileId, treatmentId, principal + "").get();
     }
 
     private void deleteAnnotation(Integer annotationMobileId, UUID treatmentId) {
@@ -81,13 +67,10 @@ public class AnnotationService {
 
     @Transactional
     public void inactiveAnnotation(final UUID annotationId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         annotationRepository.inactiveAnnotation(annotationId);
     }
 
-    public List<TreatmentAnnotationDTO> getAllAnnotations(final AnnototionSearch search) {
-        Specification<Annotation> spec = AnnotationSpecification.findAllAnnotations(search);
-        var list = annotationRepository.findAll(spec);
-        return list.stream().map(TreatmentAnnotationDTO::new).toList();
+    public List<AnnotationDTO> findAnnotations(UUID treatmentId) {
+        return annotationRepository.findAll().stream().map(AnnotationMapper.MAPPER::toDTO).toList();
     }
 }
