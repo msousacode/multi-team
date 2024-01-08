@@ -4,8 +4,10 @@ import com.multiteam.core.enums.AnnotationSync;
 import com.multiteam.core.exception.ResourceNotFoundException;
 import com.multiteam.core.utils.AuthenticationUtil;
 import com.multiteam.modules.annotation.dto.AnnotationDTO;
+import com.multiteam.modules.annotation.dto.AnnotationListDTO;
 import com.multiteam.modules.annotation.mapper.AnnotationMapper;
 import com.multiteam.modules.treatment.TreatmentService;
+import com.multiteam.modules.user.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,12 +20,15 @@ public class AnnotationService {
 
     private final AnnotationRepository annotationRepository;
     private final TreatmentService treatmentService;
+    private final UserService userService;
 
     public AnnotationService(
             AnnotationRepository annotationRepository,
-            TreatmentService treatmentService) {
+            TreatmentService treatmentService,
+            UserService userService) {
         this.annotationRepository = annotationRepository;
         this.treatmentService = treatmentService;
+        this.userService = userService;
     }
 
     @Transactional
@@ -70,7 +75,9 @@ public class AnnotationService {
         annotationRepository.inactiveAnnotation(annotationId);
     }
 
-    public List<AnnotationDTO> findAnnotations(UUID treatmentId) {
-        return annotationRepository.findAll().stream().map(AnnotationMapper.MAPPER::toDTO).toList();
+    public List<AnnotationListDTO> findAnnotations(UUID treatmentId) {
+        return annotationRepository.findAllByTreatment_Id(treatmentId).stream().map(a ->
+            new AnnotationListDTO().toDTO(a, userService.getUser(UUID.fromString(a.getCreatedBy())).get())
+        ).toList();
     }
 }

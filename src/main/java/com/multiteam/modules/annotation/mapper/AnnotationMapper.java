@@ -11,6 +11,4 @@ public interface AnnotationMapper {
     AnnotationMapper MAPPER = Mappers.getMapper(AnnotationMapper.class);
 
     Annotation toEntity(AnnotationDTO dto);
-
-    AnnotationDTO toDTO(Annotation annotation);
 }

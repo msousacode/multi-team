@@ -1,10 +1,12 @@
 package com.multiteam.modules.annotation;
 
+import com.google.common.collect.FluentIterable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,4 +23,6 @@ public interface AnnotationRepository extends JpaRepository<Annotation, UUID> {
 
   @Query("select a from Annotation a WHERE a.annotationMobileId = :annotationMobileId AND a.treatment.id = :treatmentId AND a.createdBy = :principal")
   Optional<Annotation> findAnnotationByTreatment(Integer annotationMobileId, UUID treatmentId, String principal);
+
+  List<Annotation> findAllByTreatment_Id(UUID treatmentId);
 }

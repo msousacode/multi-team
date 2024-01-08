@@ -1,6 +1,7 @@
 package com.multiteam.modules.annotation;
 
 import com.multiteam.modules.annotation.dto.AnnotationDTO;
+import com.multiteam.modules.annotation.dto.AnnotationListDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,7 +53,7 @@ public class AnnotationController {
     }*/
 
     @GetMapping("/treatment/{treatmentId}")
-    public ResponseEntity<List<AnnotationDTO>> find(@PathVariable UUID treatmentId) {
+    public ResponseEntity<List<AnnotationListDTO>> find(@PathVariable UUID treatmentId) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(annotationService.findAnnotations(treatmentId));

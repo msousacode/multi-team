@@ -30,7 +30,7 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final TenantContext tenantContext;
 
-    public UserService(final UserRepository userRepository, final RoleRepository roleRepository, final TenantContext tenantContext) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, TenantContext tenantContext) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.tenantContext = tenantContext;
