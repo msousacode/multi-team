@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping(path = "/v1/patients", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/patients")
 @RestController
 @PreAuthorize("hasAnyRole('OWNER', 'ADMIN', 'PROFESSIONAL')")
 public class PatientController {

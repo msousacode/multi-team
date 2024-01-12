@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@Deprecated(forRemoval = true)
 @RequestMapping(
         path = "/v1/reinforcers",
         produces = APPLICATION_JSON_VALUE
