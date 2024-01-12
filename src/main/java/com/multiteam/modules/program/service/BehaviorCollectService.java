@@ -1,15 +1,16 @@
 package com.multiteam.modules.program.service;
 
-import com.multiteam.modules.patient.model.Patient;
 import com.multiteam.modules.program.entity.Behavior;
 import com.multiteam.modules.program.entity.BehaviorCollect;
 import com.multiteam.modules.program.entity.Folder;
 import com.multiteam.modules.program.entity.Program;
 import com.multiteam.modules.program.mapper.BehaviorCollectMapper;
 import com.multiteam.modules.program.repository.BehaviorCollectRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -75,5 +76,13 @@ public class BehaviorCollectService {
     @Transactional
     public void saveAll(List<BehaviorCollect> behaviorsCollect) {
         behaviorCollectRepository.saveAll(behaviorsCollect);
+    }
+
+    public List<BehaviorCollect> findBehaviorsCollects(UUID programId) {
+        return behaviorCollectRepository.findAllByProgramId(programId);
+    }
+
+    public Integer findResponseCount(LocalDateTime collectionDate, String responseType) {
+        return behaviorCollectRepository.findAllByCollectionDateAndResponse(collectionDate, responseType).size();
     }
 }

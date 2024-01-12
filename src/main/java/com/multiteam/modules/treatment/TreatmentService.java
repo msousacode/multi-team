@@ -4,7 +4,7 @@ import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.enums.TreatmentEnum;
 import com.multiteam.modules.clinic.Clinic;
 import com.multiteam.modules.guest.Guest;
-import com.multiteam.modules.patient.PatientService;
+import com.multiteam.modules.patient.service.PatientService;
 import com.multiteam.modules.program.entity.Folder;
 import com.multiteam.modules.program.service.FolderService;
 import com.multiteam.modules.treatment.dto.TreatmentEditDTO;

@@ -3,7 +3,7 @@ package com.multiteam.modules.guest;
 import com.multiteam.core.enums.RelationshipEnum;
 import com.multiteam.modules.guest.dto.GuestDTO;
 import com.multiteam.modules.guest.dto.GuestPostDTO;
-import com.multiteam.modules.patient.PatientService;
+import com.multiteam.modules.patient.service.PatientService;
 import com.multiteam.modules.patient.controller.dto.PatientDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

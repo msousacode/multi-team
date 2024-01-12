@@ -4,7 +4,7 @@ import com.multiteam.core.enums.SituationEnum;
 import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.core.exception.ResourceNotFoundException;
 import com.multiteam.core.utils.Select;
-import com.multiteam.modules.patient.PatientService;
+import com.multiteam.modules.patient.service.PatientService;
 import com.multiteam.modules.professional.Professional;
 import com.multiteam.modules.professional.ProfessionalService;
 import com.multiteam.modules.program.dto.FolderListDTO;
@@ -205,5 +205,9 @@ public class FolderService {
     @Transactional
     public void deleteProgramFolder(UUID programId, UUID folderId) {
         folderProgramRepository.deleteByFolder_IdAndProgram_Id(folderId, programId);
+    }
+
+    public List<Folder> findAllByPatientId(UUID patientId) {
+        return folderRepository.findByPatient_Id(patientId);
     }
 }

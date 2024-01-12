@@ -5,7 +5,7 @@ import com.multiteam.core.enums.AnamneseEnum;
 import com.multiteam.modules.anamnese.dto.AnamneseRequest;
 import com.multiteam.modules.anamnese.dto.AnamneseReportResponse;
 import com.multiteam.modules.anamnese.dto.AnamneseResponse;
-import com.multiteam.modules.patient.PatientService;
+import com.multiteam.modules.patient.service.PatientService;
 import com.multiteam.modules.user.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

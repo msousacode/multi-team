@@ -1,11 +1,10 @@
 package com.multiteam.modules.guest;
 
 
-import com.multiteam.core.exception.ApiException;
 import com.multiteam.core.exception.TreatmentException;
 import com.multiteam.modules.guest.dto.GuestPostDTO;
 import com.multiteam.modules.guest.mapper.GuestMapper;
-import com.multiteam.modules.patient.PatientService;
+import com.multiteam.modules.patient.service.PatientService;
 import com.multiteam.modules.treatment.TreatmentService;
 import com.multiteam.modules.user.UserRepository;
 import org.springframework.data.domain.Pageable;

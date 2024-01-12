@@ -9,7 +9,7 @@ import com.multiteam.core.enums.ApplicationError;
 import com.multiteam.core.enums.DocumentType;
 import com.multiteam.core.exception.BadRequestException;
 import com.multiteam.modules.document.dto.DocumentSearch;
-import com.multiteam.modules.patient.PatientService;
+import com.multiteam.modules.patient.service.PatientService;
 import com.multiteam.modules.treatment.TreatmentService;
 import java.io.IOException;
 import java.net.URL;

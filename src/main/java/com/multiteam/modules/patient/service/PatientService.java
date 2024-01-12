@@ -1,4 +1,4 @@
-package com.multiteam.modules.patient;
+package com.multiteam.modules.patient.service;
 
 import com.multiteam.core.context.TenantContext;
 import com.multiteam.core.enums.ApplicationError;

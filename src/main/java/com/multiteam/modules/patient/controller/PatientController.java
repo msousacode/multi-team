@@ -1,8 +1,6 @@
 package com.multiteam.modules.patient.controller;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
-import com.multiteam.modules.patient.PatientService;
+import com.multiteam.modules.patient.service.PatientService;
 import com.multiteam.modules.patient.controller.dto.PatientDTO;
 import com.multiteam.modules.patient.controller.dto.PatientFilter;
 

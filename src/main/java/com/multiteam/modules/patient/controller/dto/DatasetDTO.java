@@ -10,8 +10,8 @@ import java.util.List;
 public class DatasetDTO {
     private String label;
     private List<Integer> data;
-    private boolean fill;
+    private boolean fill = false;
     private String backgroundColor;
     private String borderColor;
-    private double tension;
+    private double tension = 0.4;
 }
