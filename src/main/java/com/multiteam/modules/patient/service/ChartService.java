@@ -7,12 +7,15 @@ import com.multiteam.modules.program.service.BehaviorCollectService;
 import com.multiteam.modules.program.service.FolderService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 public class ChartService {
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
 
     private final BehaviorCollectService behaviorCollectService;
     private final FolderService folderService;
@@ -25,70 +28,76 @@ public class ChartService {
     }
 
     public ChartDTO findChart(UUID patientId) {
+        List<BehaviorCollect> behaviorCollects = getBehaviorCollects(patientId);
 
-        // Criar um formato personalizado
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
+        Set<LocalDateTime> dateCollects = behaviorCollects.stream()
+                .map(BehaviorCollect::getCollectionDate)
+                .collect(Collectors.toSet());
 
-        //1 - Todos os folders do aprendiz TODO filtrar somente as pastas diferentes de NAO_ALOCADO
-        var folders = folderService.getFolderByPatientId(patientId);
+        List<LocalDateTime> dateCollectsSorted = dateCollects.stream()
+                .sorted(Comparator.naturalOrder())
+                .collect(Collectors.toList());
 
-        List<BehaviorCollect> behaviorCollects = new ArrayList<>();
+        Map<String, List<Integer>> organizedData = organizeData(dateCollectsSorted);
 
-        folders.forEach(folder ->
-                folder.getFolderPrograms()
-                        .forEach(
-                                p -> behaviorCollects.addAll(behaviorCollectService.findBehaviorsCollects(p.getProgram().getId()))
-                        )
-        );
-
-        var chart = new ChartDTO();
-        chart.setTitle("Titulo");
-
-        behaviorCollects.forEach(behaviorCollect -> {
-
-            var dataSetNaoFez = new DatasetDTO();
-            dataSetNaoFez.setBackgroundColor("rgb(247, 59, 70)");
-            dataSetNaoFez.setBorderColor("rgb(247, 59, 70)");
-
-            var dataSetSemAjuda = new DatasetDTO();
-            dataSetSemAjuda.setBackgroundColor("rgb(70, 134, 0)");
-            dataSetSemAjuda.setBorderColor("rgb(70, 134, 0)");
-
-            var dataSetComAjuda = new DatasetDTO();
-            dataSetComAjuda.setBackgroundColor("rgb(255, 205, 86)");
-            dataSetComAjuda.setBorderColor("rgb(255, 205, 86)");
-
-            //constroi as labels
-            Set<String> labels = new HashSet<>();
-
-            List<Integer> countNaoFez = new ArrayList<>();
-            List<Integer> countSemAjuda = new ArrayList<>();
-            List<Integer> countComAjuda = new ArrayList<>();
-
-            behaviorCollects.forEach(b -> {
-
-                labels.add(b.getCollectionDate().format(formatter));
-
-                countNaoFez.add(behaviorCollectService.findResponseCount(b.getCollectionDate(), "nao-fez"));
-
-                countSemAjuda.add(behaviorCollectService.findResponseCount(b.getCollectionDate(), "sem-ajuda"));
-
-                countComAjuda.add(behaviorCollectService.findResponseCount(b.getCollectionDate(), "com-ajuda"));
-            });
-
-            dataSetComAjuda.setLabel("Com Ajuda");
-            dataSetComAjuda.setData(countComAjuda);
-
-            dataSetSemAjuda.setLabel("Sem Ajuda");
-            dataSetSemAjuda.setData(countSemAjuda);
-
-            dataSetNaoFez.setLabel("Não Fez");
-            dataSetNaoFez.setData(countNaoFez);
-
-            chart.setLabels(labels);
-            chart.setDatasets(List.of(dataSetNaoFez, dataSetSemAjuda, dataSetComAjuda));
-        });
+        ChartDTO chart = createChart("Titulo", organizedData);
 
         return chart;
+    }
+
+    private List<BehaviorCollect> getBehaviorCollects(UUID patientId) {
+        return folderService.getFolderByPatientId(patientId).stream()
+                .flatMap(folder -> folder.getFolderPrograms().stream())
+                .flatMap(program -> behaviorCollectService.findBehaviorsCollects(program.getProgram().getId()).stream())
+                .collect(Collectors.toList());
+    }
+
+    private Map<String, List<Integer>> organizeData(List<LocalDateTime> dateCollects) {
+        Map<String, List<Integer>> organizedData = new HashMap<>();
+
+        dateCollects.forEach(date -> {
+            List<Integer> counts = Arrays.asList(
+                    behaviorCollectService.findResponseCount(date, "nao-fez"),
+                    behaviorCollectService.findResponseCount(date, "sem-ajuda"),
+                    behaviorCollectService.findResponseCount(date, "com-ajuda")
+            );
+
+            organizedData.put(date.format(formatter), counts);
+        });
+
+        return organizedData;
+    }
+
+    private ChartDTO createChart(String title, Map<String, List<Integer>> organizedData) {
+        ChartDTO chart = new ChartDTO();
+        chart.setTitle(title);
+
+        List<Integer> naoFez = new ArrayList<>();
+        List<Integer> comAjuda = new ArrayList<>();
+        List<Integer> semAjuda = new ArrayList<>();
+
+        organizedData.forEach((date, values) -> {
+            naoFez.add(values.get(0));
+            semAjuda.add(values.get(1));
+            comAjuda.add(values.get(2));
+        });
+
+        DatasetDTO dataSetNaoFez = createDataset("Não Ajuda", "rgb(247, 59, 70)", naoFez);
+        DatasetDTO dataSetSemAjuda = createDataset("Sem Ajuda", "rgb(70, 134, 0)", semAjuda);
+        DatasetDTO dataSetComAjuda = createDataset("Com Ajuda", "rgb(255, 205, 86)", comAjuda);
+
+        chart.setLabels(new HashSet<>(organizedData.keySet()));
+        chart.setDatasets(List.of(dataSetNaoFez, dataSetSemAjuda, dataSetComAjuda));
+
+        return chart;
+    }
+
+    private DatasetDTO createDataset(String label, String color, List<Integer> data) {
+        DatasetDTO dataset = new DatasetDTO();
+        dataset.setLabel(label);
+        dataset.setBackgroundColor(color);
+        dataset.setBorderColor(color);
+        dataset.setData(data);
+        return dataset;
     }
 }

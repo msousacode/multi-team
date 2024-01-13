@@ -6,7 +6,6 @@ import com.multiteam.modules.program.entity.Folder;
 import com.multiteam.modules.program.entity.Program;
 import com.multiteam.modules.program.mapper.BehaviorCollectMapper;
 import com.multiteam.modules.program.repository.BehaviorCollectRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -79,7 +78,7 @@ public class BehaviorCollectService {
     }
 
     public List<BehaviorCollect> findBehaviorsCollects(UUID programId) {
-        return behaviorCollectRepository.findAllByProgramId(programId);
+        return behaviorCollectRepository.findAllByProgramIdOrderByCollectionDateAsc(programId);
     }
 
     public Integer findResponseCount(LocalDateTime collectionDate, String responseType) {

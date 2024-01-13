@@ -15,7 +15,7 @@ public interface BehaviorCollectRepository extends JpaRepository<BehaviorCollect
     @Query(value = "select bc from BehaviorCollect bc where bc.patient.id = :patientId and bc.folderId = :folderId and bc.responsible = :isResponsible")
     List<BehaviorCollect> findAllByPatientIdAndFolderId(UUID patientId, UUID folderId, boolean isResponsible);
 
-    List<BehaviorCollect> findAllByProgramId(UUID programId);
+    List<BehaviorCollect> findAllByProgramIdOrderByCollectionDateAsc(UUID programId);
 
     List<BehaviorCollect> findAllByCollectionDateAndResponse(LocalDateTime collectionDate, String responseType);
 }
